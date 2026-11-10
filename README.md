@@ -1,0 +1,160 @@
+# OPH-FEP-Synergetics
+
+Executable correspondences, obstructions and complementarities across three
+programs that all claim to describe how a bounded part of a world comes to
+agree with itself:
+
+- **Observer Patch Holography** (OPH) — an executable observer on a twelve-port
+  icosahedral carrier with a native integer repair law.
+- **The Free Energy Principle** (FEP) — variational free energy, Bayes-optimal
+  perception, and conditional independence at a Markov blanket.
+- **Fuller's Synergetics** — quadray coordinates, the isotropic vector matrix,
+  the cuboctahedral vector equilibrium, and rational tetravolumes.
+
+The project's purpose is to say precisely which of the three-way identifications
+survive an executable test, which are obstructed, and which are complementary
+rather than equivalent. Every claim in this repository is a probe that either
+passes or fails, and the failing direction is reported as a result rather than
+hidden as a gap.
+
+## What runs
+
+```
+oph-fep-synergetics verify                 # all 23 correspondence probes
+oph-fep-synergetics verify --json          # the same, as a machine-readable report
+oph-fep-synergetics verify --key pr01-obstruction
+oph-fep-synergetics sources                # pins, licences and reuse policy
+oph-fep-synergetics sources --vault-root /path/to/vault   # check live checkouts
+oph-fep-synergetics values                 # every number the manuscript may quote
+oph-fep-synergetics carrier                # carrier counts, gap, shell sizes
+oph-fep-synergetics geometry               # IVM moves, shell counts, volumes
+```
+
+`verify` exits non-zero when any probe fails, and exits `2` on a misspelled key
+so that a typo cannot pass as an empty run.
+
+## Install
+
+```
+uv venv --python 3.15 .venv
+uv pip install --python .venv/bin/python -e ".[dev]"
+```
+
+The only runtime dependency is `numpy`. `figures` (matplotlib) and `dev`
+(pytest, pytest-cov) are optional extras.
+
+## Layers
+
+| layer | module | what it holds |
+| --- | --- | --- |
+| `core` | `core/carrier.py` | OPH's twelve-port carrier, its port chart, Laplacian, spectrum and load shell |
+| | `core/repair.py` | the native seam-repair law, its conservation law and its exact energy decrease |
+| | `core/sheaf.py` | cellular sheaves, agreement energy, harmonic extension, record injectivity |
+| | `core/free_energy.py` | the linear-Gaussian free-energy dictionary and the three named surprises |
+| | `core/controls.py` | the obstruction and dynamics controls: descent census, D-stability, mediators, orbits, free-energy forms |
+| `geometry` | `geometry/quadray.py` | quadray coordinates, the A3/IVM embedding and exact tetravolumes |
+| | `geometry/lattice.py` | IVM shells, the cuboctahedral vector equilibrium, Goldberg/geodesic counts |
+| | `geometry/subdivision.py` | icosahedral subdivision and the dual count identities |
+| `analysis` | `analysis/registry.py` | the 23 registered correspondences, each with an executable probe |
+| | `analysis/provenance.py` | source pins, licence terms and reuse policy |
+| `manuscript_variables` | `manuscript_variables/values.py` | every number the prose may quote, with its source |
+
+## The registry
+
+23 entries: **8 isomorphisms**, **11 disagreements**, **4 complementarities**.
+All 23 probes pass. The full table, with the OPH / FEP / Synergetics reading of
+each entry and the values its probe asserts, is generated into
+[docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
+
+The load-bearing results are:
+
+| claim | status | evidence |
+| --- | --- | --- |
+| OPH's carrier is the kissing-twelve configuration, and its port chart is derived from OPH's own oriented faces | exact | 12 ports, 30 seams, 20 faces, five-regular; the 20 triangles of the derived graph are exactly OPH's 20 oriented faces |
+| The carrier gap is the icosahedral gap | exact | `lambda_1 = 5 - sqrt(5)`; the record-discarding shell gap is `(5 - sqrt(5)) / 60` |
+| The native repair law conserves load and lowers `sum(x^2)/2` by `(d^2 - (|d| mod 2)) / 4` | exact | checked on all 4680 shell transitions |
+| Patch agreement is the global-section condition of a cellular sheaf, and the sheaf Laplacian is the carrier Laplacian | exact | `carrier_sheaf(carrier).laplacian() == carrier.laplacian()` |
+| On the linear-Gaussian domain, constrained relative-entropy minimisation and predictive-coding perception are the same object | exact on that domain | the minimiser, the harmonic extension and the posterior mean coincide; the posterior `KL` vanishes |
+| **PR-01**: the native law is not confluent, and accepted repairs need not lower a measure | **obstructed** | 120 strict descents, 600 zero-descent mismatch-one moves, 3960 no-ops out of 4680 transitions; a one-unit walk changes state at constant energy `1/2` |
+| **"Free energy" names two different objects** | **obstructed** | the interior-minimised interface energy and the variational free energy at the posterior differ by a model-dependent constant |
+| **Eliminating an interior mediator is not free** | **obstructed** | the reduced precision is `(1/3) v v^T + epsilon I`; a sum of pairwise semidefinite terms reproduces it iff `epsilon >= 1/3` |
+| **A stationary blanket need not bound the dynamics** | **obstructed** | with a zero precision entry the internal drift is `2q eta + (q - 1) b - 2 mu`, so equal blanket statistics do not fix the internal motion |
+| **Agreement can exist and be unreachable** | **obstructed** | the clipped two-node map has the origin as its only equilibrium and a source there; the relaxation orbit stays at radius `>= 0.84` with period `~7.58` |
+| **D-stability is not free** | **obstructed** | Lyapunov form `P = (1/3)[[11,4,-8],[4,5,-2],[-8,-2,9]]`, `det P = 115/27`; at `k = 4` the Routh first column is `(1, 6, -2, 24)` and the scaled matrix has two right-half-plane roots |
+| **Finite phases are path functions** | **obstructed** | full and half-damped iteration share every answer, yet their centered contrasts after twelve steps differ by exactly `921633999 / 40000000000` |
+| Quadray geometry supplies the exact integer side of the correspondence | exact | 12 neighbour moves at squared distance 8, shells `10k^2 + 2`, rational volumes `1, 3, 4, 6, 20, 96` |
+| Equilibrium propagation supplies the parameter gradient the repair law does not define | exact | the two-settle contrast is `(theta - target) / (1 + beta)` exactly and tends to the exact gradient |
+
+## Scope
+
+This package reimplements the *software* it needs and cites everything else. It
+does not implement OPH's quantum event algebra or continuum limit, FEP's
+nonlinear or non-Gaussian cases, or Fuller's full synergetic apparatus. Four
+cautions from the review are load-bearing here and are recorded in
+[docs/SCOPE.md](docs/SCOPE.md): disambiguate "free energy"; respect OPH's
+premise discipline; do not let numerological agreement stand in for a frozen
+prediction; and keep the scale separations explicit.
+
+Two quantities in the source paper are **not independently reproducible** from
+its text and are recorded as `not-reproduced` rather than verified: the
+`35/264` port-zero occupation and the `13/15` and `1/60` move probabilities,
+which need the record/selector protocol specification.
+
+## Provenance and licences
+
+Three source programs are pinned by commit in [data/sources.json](data/sources.json)
+and reported by `oph-fep-synergetics sources`. Nothing here is relicensed.
+
+| source | licence | reuse |
+| --- | --- | --- |
+| [Observer Patch Holography](https://github.com/FloatingPragma/observer-patch-holography) | Apache-2.0 for software, CC BY-NC-SA 4.0 for papers, docs, figures, data and ledgers | reimplement the software with attribution; do not copy prose, and do not reuse the data or ledgers |
+| [FEP_Formal](https://github.com/ActiveInferenceInstitute/FEP_Formal) | CC BY 4.0 | cite the DOI and the exact topic identifiers used |
+| [QuadMath](https://github.com/docxology/quadmath) | Apache-2.0 | reuse with notice and attribution |
+
+The conventions, the embedding, the neighbour moves and the tetra-volume rule
+follow QuadMath. The port chart follows OPH's `ORIENTED_BASE_FACES` and is
+*derived* from it rather than transcribed, so the derivation is checkable. The
+comments in this repository record the commit actually read only in
+`data/sources.json`; the package's own `sources` command is the single place a
+commit is reported, and a test fails if a commit hash appears in code without
+appearing in the pin file.
+
+This project is released under the MIT licence; see [LICENSE](LICENSE).
+
+## Layout
+
+```
+data/sources.json                    pinned sources, licences, cited identifiers
+docs/CORRESPONDENCES.md              generated: the 23 entries and their probe values
+docs/MANUSCRIPT_VALUES.md            generated: every bound value
+docs/PROVENANCE.md                   the pins and the reuse rules
+docs/SCOPE.md                        what is reimplemented, what is cited, what is out
+docs/VERIFICATION.md                 the gates and how to run them
+manuscript/OUTLINE.md                the prose skeleton, with values bound by key
+scripts/render_docs.py               regenerates the two generated documents
+src/oph_fep_synergetics/             the package
+tests/                               the suite (234 tests)
+```
+
+## Tests
+
+```
+.venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
+```
+
+234 tests, no mocks, no network. The suite checks exact values rather than
+smoke behaviour: the 78-state shell and all 4680 transitions, the exact
+rational contrast, the closed-form Routh column, the Lyapunov determinant
+`115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over
+shell sites, and the exact volume ratios. Coverage is 96.15% with a 90% gate
+enforced by `pyproject.toml`.
+
+## Regenerating the documents
+
+```
+.venv/bin/python scripts/render_docs.py           # write
+.venv/bin/python scripts/render_docs.py --check   # fail when stale
+```
+
+A test runs the `--check` path, so the committed documents cannot drift from the
+registry they describe.

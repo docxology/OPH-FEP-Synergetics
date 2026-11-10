@@ -1,0 +1,17 @@
+.coverage
+.coverage.*
+coverage.xml
+coverage_project.json
+.pytest_cache/
+__pycache__/
+*.pyc
+.benchmarks/
+**/*.egg-info/
+.venv/
+htmlcov/
+.DS_Store
+.mypy_cache/
+.ruff_cache/
+# Generated analysis output is disposable; committed evidence lives under data/.
+output/*
+!output/.gitkeep

@@ -1,0 +1,175 @@
+{
+  "schema": 1,
+  "project": "oph-fep-synergetics",
+  "note": "Provenance pins for the three source programs this package maps. Every commit was read from the live local checkout with `git rev-parse HEAD` on 2026-11-10; the pins are point-in-time, not perpetual. Line references are relative to the pinned commit. This project relicenses nothing: each source keeps its own terms and the package cites rather than copies.",
+  "sources": [
+    {
+      "id": "oph",
+      "name": "Observer Patch Holography",
+      "url": "https://github.com/FloatingPragma/observer-patch-holography",
+      "checkout": "Username/FloatingPragma/observer-patch-holography",
+      "commit": "5517b0c77a6b11bc141ab663647bf7ec2b2d7661",
+      "branch": "main",
+      "license": {
+        "spdx": "Apache-2.0 AND CC-BY-NC-SA-4.0",
+        "split": [
+          {
+            "scope": "software, including Lean and the model code",
+            "spdx": "Apache-2.0",
+            "evidence": "code/LICENSE"
+          },
+          {
+            "scope": "papers, documentation, figures, data and ledgers",
+            "spdx": "CC-BY-NC-SA-4.0",
+            "evidence": "LICENSE"
+          }
+        ],
+        "evidence": "README.md section '## License'; LICENSE is the directory-specific license map"
+      },
+      "reuse_policy": "Reimplement the software with attribution. Do not copy paper, book, documentation or figure text, and do not reuse the data or ledgers.",
+      "cited_identifiers": [
+        {
+          "kind": "python",
+          "path": "model/observer/native.py",
+          "lines": "45-51",
+          "symbol": "native",
+          "role": "the native seam repair law: d = loads[a] - loads[b]; current = (d - (2*coin - 1)*(abs(d) % 2)) // 2"
+        },
+        {
+          "kind": "python",
+          "path": "evidence/observer_dynamics_20260925/oph-physics-sim/oph_fpe/dynamics/self_readback_repair_closure.py",
+          "lines": "93-114",
+          "symbol": "ORIENTED_BASE_FACES",
+          "role": "the twenty oriented faces of the twelve-port carrier; the port chart this package uses",
+          "sha256_pinned_by": "evidence/native_geometric_source_20260925/spec.json"
+        },
+        {
+          "kind": "python",
+          "path": "evidence/observer_dynamics_20260925/oph-physics-sim/oph_exact/carrier.py",
+          "lines": "126-153",
+          "symbol": "seams, laplacian",
+          "role": "the thirty unoriented seams and L = 5*I - A"
+        },
+        {
+          "kind": "python",
+          "path": "model/observer/native.py",
+          "symbol": "states",
+          "role": "the 78 total-two load configurations and the 66 binary ones"
+        },
+        {
+          "kind": "lean",
+          "path": "Lean/ObserverPatchHolography/Primitives.lean",
+          "lines": "89, 422, 1012",
+          "symbol": "demoCarrier_not_confluent",
+          "role": "the demonstration carrier that is not confluent"
+        },
+        {
+          "kind": "markdown",
+          "path": "model/PREMISES.md",
+          "lines": "95",
+          "symbol": "PR-01",
+          "role": "PR-01 'confluent terminating repair contract' is recorded as obstructed: the native seam rule waits or swaps at mismatch one, so accepted repairs need not lower a measure, and the consensus theorems hold for the integer and transactional contracts rather than the native law"
+        },
+        {
+          "kind": "markdown",
+          "path": "docs/EMPIRICAL_STATUS.md",
+          "lines": "3",
+          "symbol": "empirical status",
+          "role": "'No retained laboratory comparison selects a native record law.'"
+        }
+      ]
+    },
+    {
+      "id": "fep_formal",
+      "name": "FEP_Formal",
+      "url": "https://github.com/ActiveInferenceInstitute/FEP_Formal",
+      "checkout": "Username/ActiveInferenceInstitute/Public/fep_formal",
+      "commit": "48206d6de664966d4a721080aee76a6c3bdf3e0a",
+      "branch": "main",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "holder": "Daniel Ari Friedman",
+        "doi": "10.5281/zenodo.19699233",
+        "evidence": "LICENSE"
+      },
+      "reuse_policy": "Attribution required. Cite the DOI and the exact topic identifiers used.",
+      "cited_identifiers": [
+        {
+          "kind": "yaml",
+          "path": "config/catalogue_metadata.yaml",
+          "lines": "3-6",
+          "symbol": "schema_version, roster",
+          "role": "schema-2 roster seal, first_id fep-001 and last_id fep-168"
+        },
+        {
+          "kind": "yaml",
+          "path": "config/theorem_maturity.yaml",
+          "lines": "27",
+          "symbol": "disposition",
+          "role": "the semantic review record; dispositions live here and NOT in catalogue_metadata.yaml"
+        },
+        {
+          "kind": "markdown",
+          "path": "AGENTS.md",
+          "symbol": "Purpose",
+          "role": "'a standalone 168-topic FEP / Active Inference / Bayesian Mechanics / Information Geometry / Thermodynamics catalog with Lean 4 source'"
+        },
+        {
+          "kind": "markdown",
+          "path": "AGENTS.md",
+          "symbol": "Source of truth",
+          "role": "'config/topics.yaml ... are byte-identical, generated catalog projections; never author either by hand.' This package therefore reads catalogue_metadata.yaml, not topics.yaml."
+        }
+      ]
+    },
+    {
+      "id": "quadmath",
+      "name": "QuadMath (Synergetics)",
+      "url": "https://github.com/docxology/quadmath",
+      "checkout": "Username/docxology/Public/QuadMath",
+      "commit": "a8e335bf012a89eaddf25667ce404a0a163ebd99",
+      "branch": "main",
+      "license": {
+        "spdx": "Apache-2.0",
+        "doi": "10.5281/zenodo.16887791",
+        "evidence": "LICENSE"
+      },
+      "reuse_policy": "Apache-2.0 permits reuse with notice and attribution. This package reimplements the constants it needs and cites the source.",
+      "cited_identifiers": [
+        {
+          "kind": "python",
+          "path": "src/quadmath/core/quadray.py",
+          "lines": "173-177",
+          "symbol": "IVM_NEIGHBOR_MOVES",
+          "role": "the twelve IVM neighbor moves: sorted distinct permutations of (2, 1, 1, 0)"
+        },
+        {
+          "kind": "python",
+          "path": "src/quadmath/core/quadray.py",
+          "lines": "180-185",
+          "symbol": "DEFAULT_EMBEDDING",
+          "role": "the 3x4 quadray-to-XYZ embedding, rows (1,-1,-1,1), (1,1,-1,-1), (1,-1,1,-1)"
+        },
+        {
+          "kind": "python",
+          "path": "src/quadmath/core/quadray.py",
+          "symbol": "integer_tetra_volume",
+          "role": "IVM tetravolume as |det|/4 through Bareiss elimination; the unit tetrahedron has determinant 4 and volume 1"
+        },
+        {
+          "kind": "python",
+          "path": "src/quadmath/lattice/omni_numbering.py",
+          "lines": "51, 86",
+          "symbol": "MAX_SHELL, shell_count",
+          "role": "shell_count(k) = 10k^2 + 2 for k >= 1 with one center at k = 0; MAX_SHELL = 32"
+        },
+        {
+          "kind": "markdown",
+          "path": "docs/manuscript/03_quadray_methods.md",
+          "symbol": "volume ratios",
+          "role": "the n (vector equilibrium) is the shell of the twelve nearest IVM neighbors; the rhombic dodecahedron has tetravolume 6"
+        }
+      ]
+    }
+  ]
+}
