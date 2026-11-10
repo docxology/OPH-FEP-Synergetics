@@ -33,7 +33,7 @@ mistaken for a clean run.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-234 tests, no mocks, no network, no fixtures that fake a result. The suite runs
+245 tests, no mocks, no network, no fixtures that fake a result. The suite runs
 from a fresh process against the real code paths.
 
 | file | what it pins down |
@@ -51,6 +51,8 @@ from a fresh process against the real code paths.
 | `test_cli.py` | every subcommand, the JSON payloads, the exit codes, and the console-script declaration |
 | `test_public_api.py` | that every exported name resolves, and that no commit hash escapes the pin file |
 | `test_docs.py` | that the two generated documents are current and that the guides' relative links resolve |
+| `test_manuscript.py` | the ten section files the renderer discovers, every token resolving to a bound value and every bound value being quoted, citations equal to the bibliography in both directions, a `{#sec:…}` label on every top-level heading, the manuscript's registry table against the registry, and the figure links against the accessibility registry |
+| `test_figures.py` | that every figure builder exists and is orchestrated, and that a sample renders non-trivial PNGs plus a well-formed registry (skipped without the `figures` extra) |
 
 The provenance test builds its own temporary repository by writing a commit
 object directly with `hash-object`; it reads and writes no configured Git
@@ -59,7 +61,7 @@ identity.
 ## Coverage
 
 `pyproject.toml` enforces `fail_under = 90` with branch coverage over
-`src/oph_fep_synergetics`. The current result is **96.15%**. The remaining lines
+`src/oph_fep_synergetics`. The current result is **96.12%**. The remaining lines
 are defensive or unreachable branches (an assertion that cannot fire on a
 well-formed carrier, a guard behind a guard), not untested behaviour.
 
@@ -87,6 +89,29 @@ portable test suite: `test_cli.py` skips the live check when the vault is not
 mounted, and a temporary-directory variant asserts the `absent` path instead.
 
 A `moved` result is reported as `moved`. It is a reading, not a failure.
+
+## The manuscript gates
+
+The PDF is produced by the `docxology/template` pipeline; the commands are in
+[README.md](../README.md#the-manuscript). The manuscript's own gates run in the
+suite rather than in LaTeX, so a defect is reported by `pytest`:
+
+| gate | what it rejects |
+| --- | --- |
+| `test_every_token_resolves_to_a_bound_value` | a `{{TOKEN}}` no `BoundValue` publishes (the hydration script also exits 1) |
+| `test_the_published_value_set_is_used_except_where_documented` | a bound value the prose never quotes; the documented exception set is asserted to be exact |
+| `test_every_citation_resolves_and_every_entry_is_cited` | an undefined citation (also a hard render failure) and an uncited bibliography entry |
+| `test_every_top_level_heading_carries_a_section_label` | a heading the renderer would annotate, which it writes back into the source tree |
+| `test_the_registry_table_lists_exactly_the_registered_keys` | a manuscript registry table that drifts from `analysis/registry.py` |
+| `test_figure_links_match_the_accessibility_registry` | a figure link without a registry entry, or a missing PNG |
+| `test_figures.py` | a builder that is not orchestrated, or a registry entry without alt text |
+
+The rendered result was checked the way a reader checks it, on the artefact
+itself: 32 pages, nine figures, twelve numbered equations, three definitions and
+sixteen numbered propositions, `0` undefined citations and `0` unresolved `??`
+cross-references in `_combined_manuscript.tex`, `0` overfull boxes in
+`_combined_manuscript.log`, and all 23 registry keys present and unbroken in the
+extracted text of the PDF.
 
 ## What is deliberately not verified
 

@@ -1,0 +1,80 @@
+# Manuscript configuration — OPH / FEP / Synergetics correspondence battery.
+# This file is the configuration source of truth for the manuscript and for
+# publication metadata; it is loaded with `yaml.safe_load` by
+# `infrastructure/rendering/_pdf_title_page_config.py` and by the publishing
+# metadata extractor. Keep every value literal: the renderer rejects a
+# surviving `{{UPPER_SNAKE}}` token in this file.
+
+paper:
+  title: "Observers, Blankets, and Screens"
+  subtitle: "Executable Correspondences, Obstructions, and Complementarities across Observer Patch Holography, the Free Energy Principle, and Fuller's Synergetics"
+  version: "0.1.0"
+  date: ""  # left empty: the renderer stamps the build date
+
+authors:
+  - name: "Daniel Ari Friedman"
+    orcid: "0000-0001-6232-9096"
+    email: "daniel@activeinference.institute"
+    affiliation: "Active Inference Institute"
+    corresponding: true
+
+publication:
+  release_status: "unreleased"
+  intended_version: "0.1.0"
+  github_repository: "docxology/OPH-FEP-Synergetics"
+  repository_url: "https://github.com/docxology/OPH-FEP-Synergetics"
+  journal: ""
+  volume: ""
+  pages: ""
+  year: "2026"
+  transmission_bookends:
+    enabled: false
+
+keywords:
+  - "observer patch holography"
+  - "free energy principle"
+  - "active inference"
+  - "synergetics"
+  - "quadray coordinates"
+  - "cellular sheaves"
+  - "Markov blankets"
+  - "variational free energy"
+  - "geodesic subdivision"
+  - "reproducible research"
+
+metadata:
+  license: "MIT"
+  language: "en"
+
+# Format toggles, consumed by infrastructure/rendering/pipeline.py.
+render:
+  formats:
+    pdf: true
+    html: false
+    slides: false
+    docx: false
+    epub: false
+
+llm:
+  reviews:
+    enabled: false
+  translations:
+    enabled: false
+
+testing:
+  max_test_failures: 0
+  max_infra_test_failures: 0
+  max_project_test_failures: 0
+
+# Documentation for readers and downstream tooling; the correspondence
+# registry itself lives in code (src/oph_fep_synergetics/analysis/registry.py)
+# and is executed by `oph-fep-synergetics verify`.
+project_config:
+  registry:
+    status_vocabulary: ["exact", "exact-on-domain", "obstructed", "not-reproduced"]
+    kinds: ["isomorphism", "disagreement", "complementarity"]
+    entry_count: 23
+  sources:
+    - "Observer Patch Holography"
+    - "FEP_Formal"
+    - "QuadMath (Synergetics)"

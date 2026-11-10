@@ -455,6 +455,23 @@ def _probe_d_stability() -> tuple[bool, dict]:
     """Proposition 10: a free-energy form exists exactly at stable rests."""
     form = control_module.d_stability_free_energy_form()
     routh = control_module.routh_first_column(4.0)
+    sampled = (0.5, 1.0, 2.0, 4.0, 7.0)
+    closed_form = {
+        k: tuple(round(float(x), 9) for x in control_module.routh_first_column(k))
+        for k in sampled
+    }
+    expected = {
+        k: tuple(
+            round(float(x), 9)
+            for x in (1.0, k + 2.0, 2.0 * (10.0 - k * k) / (k + 2.0), 6.0 * k)
+        )
+        for k in sampled
+    }
+    onset = float(np.sqrt(10.0))
+    eigenvalues = sorted(
+        (complex(x) for x in control_module.d_stability_eigenvalues(4.0)),
+        key=lambda z: (z.real, z.imag),
+    )
     values = {
         "P_matches_source": form["P_matches_source"],
         "Q_matches_source": form["Q_matches_source"],
@@ -464,6 +481,13 @@ def _probe_d_stability() -> tuple[bool, dict]:
         "Q_is_antisymmetric": form["Q_is_antisymmetric"],
         "scaled_is_unstable": form["scaled_is_unstable"],
         "routh_first_column_at_k4": routh,
+        "routh_column_closed_form": closed_form == expected,
+        "routh_onset": onset,
+        "unstable_below_onset": bool(control_module.d_stability_unstable(onset - 0.01)),
+        "unstable_above_onset": bool(control_module.d_stability_unstable(onset + 0.01)),
+        "eigenvalue_real_parts": [round(z.real, 6) for z in eigenvalues],
+        "eigenvalue_imag_parts": [round(z.imag, 6) for z in eigenvalues],
+        "right_half_plane_count": sum(1 for z in eigenvalues if z.real > 1e-9),
         "charpoly_matches_closed_form": bool(
             np.allclose(
                 control_module.d_stability_charpoly(4.0),
@@ -482,6 +506,10 @@ def _probe_d_stability() -> tuple[bool, dict]:
         and abs(form["determinant"] - 115.0 / 27.0) < 1e-12
         and tuple(round(float(x), 9) for x in routh) == (1.0, 6.0, -2.0, 24.0)
         and values["charpoly_matches_closed_form"]
+        and values["routh_column_closed_form"]
+        and not values["unstable_below_onset"]
+        and values["unstable_above_onset"]
+        and values["right_half_plane_count"] == 2
         and control_module.logistic_embedding_checks()["jacobian_error"] < 1e-12
         and control_module.logistic_embedding_checks()["f_zero_norm"] < 1e-12
     )

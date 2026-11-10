@@ -42,8 +42,12 @@ EXPECTED_KEYS = {
     "schedule.affine_contrast",
     "d_stability.routh_k4",
     "d_stability.lyapunov_determinant",
+    "d_stability.routh_onset",
     "two_node.relaxation_min_radius",
     "two_node.relaxation_period",
+    "two_node.relaxation_min_radius_measured",
+    "two_node.relaxation_max_radius",
+    "two_node.relaxation_period_measured",
     "two_node.sync_min_radius",
     "ivm.neighbor_moves",
     "ivm.neighbor_squared_distance",
@@ -55,6 +59,10 @@ EXPECTED_KEYS = {
     "directed_gradient.adjoint",
     "fep_formal.topics",
     "paper.five_surprises",
+    "registry.entries",
+    "registry.isomorphisms",
+    "registry.disagreements",
+    "registry.complementarities",
 }
 
 

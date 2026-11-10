@@ -329,6 +329,13 @@ Probe values:
 - `Q_is_antisymmetric` = True
 - `scaled_is_unstable` = True
 - `routh_first_column_at_k4` = (1.0, 6.0, -2.0, 24.0)
+- `routh_column_closed_form` = True
+- `routh_onset` = 3.1622776601683795
+- `unstable_below_onset` = False
+- `unstable_above_onset` = True
+- `eigenvalue_real_parts` = (-6.288814, 0.144407, 0.144407)
+- `eigenvalue_imag_parts` = (0.0, -1.948191, 1.948191)
+- `right_half_plane_count` = 2
 - `charpoly_matches_closed_form` = True
 - `logistic_embedding` = f_zero_norm=0.0, jacobian_error=0.0
 

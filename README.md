@@ -121,6 +121,48 @@ appearing in the pin file.
 
 This project is released under the MIT licence; see [LICENSE](LICENSE).
 
+## The manuscript
+
+The paper, *Observers, Blankets, and Screens*, is a project of the
+`docxology/template` research monorepo, which owns the Pandoc and LaTeX
+pipeline. The source of truth is `manuscript/`: the render reads `config.yaml`,
+`references.bib`, the ten numbered sections and `output/figures/`, and writes
+`output/pdf/OPH-FEP-Synergetics_combined.pdf`.
+
+```
+# 1. the nine figures and their accessibility registry
+.venv/bin/python scripts/make_figures.py
+
+# 2. the tokens and the resolved tree, with the template checkout's interpreter
+cd /path/to/template
+TEMPLATE_REPO_ROOT=$PWD .venv/bin/python /path/to/project/scripts/z_generate_manuscript_variables.py
+
+# 3. the PDF (hydration already ran, so the stage's own hydration is skipped)
+.venv/bin/python scripts/pipeline/stage_03_render.py \
+    --project working/OPH-FEP-Synergetics --skip-manuscript-hydration
+```
+
+`projects/working/OPH-FEP-Synergetics` is a symlink to this checkout, which the
+pipeline resolves to its real path, so the PDF lands in this project's
+`output/pdf/`. The stage's own hydration call is skipped because it expects a
+project interpreter that passes the template's bytecode audit; step 2 does the
+same work with the interpreter that does.
+
+Three disciplines hold the manuscript together, and each one is a test:
+
+- **Every number is a token.** The prose carries `{{TOKEN}}`, never a literal,
+  and `scripts/z_generate_manuscript_variables.py` fails if a token survives
+  hydration. A test asserts that the tokens the prose uses and the values the
+  package publishes are the same set, so a number cannot be quoted without being
+  bound and a bound value cannot silently fall out of use.
+- **Every formalism is numbered by the renderer.** Definitions and propositions
+  are fenced `::: {.proposition #prop:key}` blocks referenced as `[@prop:key]`,
+  and the template's `formalism.lua` owns the counters, so no statement is
+  hand-numbered and the numbering cannot drift between editions.
+- **Every citation resolves.** Pandoc's `--natbib` resolves `[@key]` against
+  `manuscript/references.bib`. A test asserts that the cited keys and the
+  bibliography are the same set: no undefined citation, and no uncited entry.
+
 ## Layout
 
 ```
@@ -130,10 +172,12 @@ docs/MANUSCRIPT_VALUES.md            generated: every bound value
 docs/PROVENANCE.md                   the pins and the reuse rules
 docs/SCOPE.md                        what is reimplemented, what is cited, what is out
 docs/VERIFICATION.md                 the gates and how to run them
-manuscript/OUTLINE.md                the prose skeleton, with values bound by key
+manuscript/                          config.yaml, preamble.md, references.bib and ten sections
 scripts/render_docs.py               regenerates the two generated documents
+scripts/make_figures.py              renders the nine figures and their accessibility registry
+scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (234 tests)
+tests/                               the suite (245 tests)
 ```
 
 ## Tests
@@ -142,11 +186,11 @@ tests/                               the suite (234 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-234 tests, no mocks, no network. The suite checks exact values rather than
+245 tests, no mocks, no network. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over
-shell sites, and the exact volume ratios. Coverage is 96.15% with a 90% gate
+shell sites, and the exact volume ratios. Coverage is 96.12% with a 90% gate
 enforced by `pyproject.toml`.
 
 ## Regenerating the documents

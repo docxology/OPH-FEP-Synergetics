@@ -50,6 +50,7 @@ from .controls import (
     two_node_orbit_min_radius,
     two_node_relaxation_jacobian,
     two_node_relaxation_orbit,
+    two_node_relaxation_trajectory,
     two_node_sync_orbit,
 )
 from .free_energy import (
@@ -149,5 +150,6 @@ __all__ = [
     "two_node_orbit_min_radius",
     "two_node_relaxation_jacobian",
     "two_node_relaxation_orbit",
+    "two_node_relaxation_trajectory",
     "two_node_sync_orbit",
 ]

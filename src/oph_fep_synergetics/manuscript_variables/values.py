@@ -34,6 +34,39 @@ def as_dict() -> dict[str, object]:
     return {entry.key: entry.value for entry in MANUSCRIPT_VALUES}
 
 
+def format_value(value: object) -> str:
+    """Format a bound value so that it reads naturally inside a sentence.
+
+    Integers stay integers, floats keep six significant digits, sequences become
+    parenthesised tuples, and mappings become ``name value`` pairs.  The point is
+    that the manuscript never formats a number itself: it injects a token and the
+    token carries this formatting.
+    """
+    if isinstance(value, bool):
+        return "yes" if value else "no"
+    if isinstance(value, int):
+        return str(value)
+    if isinstance(value, float):
+        return f"{value:.6g}"
+    if isinstance(value, dict):
+        return ", ".join(
+            f"{str(key).replace('_', ' ')} {format_value(item)}" for key, item in value.items()
+        )
+    if isinstance(value, (tuple, list)):
+        return "(" + ", ".join(format_value(item) for item in value) + ")"
+    return str(value)
+
+
+def token_for(key: str) -> str:
+    """Return the ``TOKEN`` name a bound value is injected under."""
+    return key.upper().replace(".", "_")
+
+
+def as_tokens() -> dict[str, str]:
+    """Return the manuscript token mapping, keyed by ``TOKEN`` name."""
+    return {token_for(entry.key): format_value(entry.value) for entry in MANUSCRIPT_VALUES}
+
+
 MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     BoundValue("carrier.ports", 12, "OPH carrier (book/44-appendix-a.md:45)", "twelve"),
     BoundValue("carrier.seams", 30, "OPH carrier (book/44-appendix-a.md:45)", "thirty"),
@@ -201,4 +234,38 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         None,
         note="the first three coincide up to curvature in the linear Gaussian corner; the last two need a task",
     ),
+    BoundValue(
+        "d_stability.routh_onset",
+        3.1622776601683795,
+        "'Agreement and Surprise' Section 4.1 characteristic polynomial, derived here",
+        "sqrt(10)",
+        note="the third Routh entry is 2(10 - k^2)/(k + 2), so for k > 0 stability holds exactly when k < sqrt(10)",
+    ),
+    BoundValue(
+        "two_node.relaxation_min_radius_measured",
+        0.8400707833642703,
+        "two_node_relaxation_orbit, measured in this package",
+        None,
+        note="the source states the bound 0.84; this is the measurement the prose reports beside it",
+    ),
+    BoundValue(
+        "two_node.relaxation_max_radius",
+        1.0533912226419835,
+        "two_node_relaxation_orbit, measured in this package",
+        None,
+        note="the outer radius of the annulus that contains the relaxation orbit",
+    ),
+    BoundValue(
+        "two_node.relaxation_period_measured",
+        7.575,
+        "two_node_relaxation_orbit, measured in this package at dt = 1e-3",
+        None,
+        note="the source states 7.58; this is the measurement the prose reports beside it",
+    ),
+    BoundValue("registry.entries", 23, "analysis/registry.py CORRESPONDENCES", "23"),
+    BoundValue("registry.isomorphisms", 8, "analysis/registry.py CORRESPONDENCES", "8"),
+    BoundValue("registry.disagreements", 11, "analysis/registry.py CORRESPONDENCES", "11"),
+    BoundValue("registry.complementarities", 4, "analysis/registry.py CORRESPONDENCES", "4"),
 )
+
+MANUSCRIPT_TOKENS: dict[str, str] = as_tokens()

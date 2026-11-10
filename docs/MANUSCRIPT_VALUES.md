@@ -37,3 +37,11 @@ gives one; `Note` records what is measured rather than quoted.
 | `directed_gradient.adjoint` | (1.0, 2.0) | `-J^{-T} c` | 'Agreement and Surprise' Appendix B |  |
 | `fep_formal.topics` | 168 | `168` | FEP_Formal config/catalogue_metadata.yaml, roster fep-001 .. fep-168 |  |
 | `paper.five_surprises` | (numerical, bayesian, surprisal, critic, meaningful) |  | 'Agreement and Surprise' Table 7 | the first three coincide up to curvature in the linear Gaussian corner; the last two need a task |
+| `d_stability.routh_onset` | 3.1622776601683795 | `sqrt(10)` | 'Agreement and Surprise' Section 4.1 characteristic polynomial, derived here | the third Routh entry is 2(10 - k^2)/(k + 2), so for k > 0 stability holds exactly when k < sqrt(10) |
+| `two_node.relaxation_min_radius_measured` | 0.8400707833642703 |  | two_node_relaxation_orbit, measured in this package | the source states the bound 0.84; this is the measurement the prose reports beside it |
+| `two_node.relaxation_max_radius` | 1.0533912226419835 |  | two_node_relaxation_orbit, measured in this package | the outer radius of the annulus that contains the relaxation orbit |
+| `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | the source states 7.58; this is the measurement the prose reports beside it |
+| `registry.entries` | 23 | `23` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.isomorphisms` | 8 | `8` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.disagreements` | 11 | `11` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.complementarities` | 4 | `4` | analysis/registry.py CORRESPONDENCES |  |

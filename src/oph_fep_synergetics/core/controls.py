@@ -469,6 +469,41 @@ def two_node_orbit_min_radius(*, steps: int = 500, skip: int = 100) -> float:
     return float(np.min(np.linalg.norm(orbit[skip:], axis=1)))
 
 
+def two_node_relaxation_trajectory(
+    *,
+    start: tuple[float, float] = (0.1, 0.2),
+    dt: float = 1e-3,
+    steps: int = 100_000,
+    skip: int = 20_000,
+) -> tuple[np.ndarray, float]:
+    """Sample the relaxation orbit as an ``(n, 2)`` array plus the sample step.
+
+    This is the same integration :func:`two_node_relaxation_orbit` measures, so a
+    figure drawn from it and the radii that function reports cannot disagree.  The
+    synchronous clipped map is a different object and is not sampled here.
+    """
+    if dt <= 0.0 or steps <= 1 or skip < 0 or skip >= steps:
+        raise ValueError("invalid integration parameters")
+
+    def field(a: float, b: float) -> tuple[float, float]:
+        first, second = two_node_map((a, b))
+        return float(first) - a, float(second) - b
+
+    x, y = float(start[0]), float(start[1])
+    stride = max(1, steps // 20_000)
+    samples: list[tuple[float, float]] = []
+    for index in range(steps):
+        k1 = field(x, y)
+        k2 = field(x + 0.5 * dt * k1[0], y + 0.5 * dt * k1[1])
+        k3 = field(x + 0.5 * dt * k2[0], y + 0.5 * dt * k2[1])
+        k4 = field(x + dt * k3[0], y + dt * k3[1])
+        x += (dt / 6.0) * (k1[0] + 2.0 * k2[0] + 2.0 * k3[0] + k4[0])
+        y += (dt / 6.0) * (k1[1] + 2.0 * k2[1] + 2.0 * k3[1] + k4[1])
+        if index >= skip and index % stride == 0:
+            samples.append((x, y))
+    return np.asarray(samples, dtype=float), stride * dt
+
+
 def two_node_relaxation_orbit(
     *,
     start: tuple[float, float] = (0.1, 0.2),
@@ -488,38 +523,17 @@ def two_node_relaxation_orbit(
     The synchronous clipped map is a different object; :func:`two_node_sync_orbit`
     and :func:`two_node_orbit_min_radius` measure that one.
     """
-    if dt <= 0.0 or steps <= 1 or skip < 0 or skip >= steps:
-        raise ValueError("invalid integration parameters")
-
-    def field(a: float, b: float) -> tuple[float, float]:
-        first = 2.0 * a - 2.0 * b
-        second = 2.0 * a + 2.0 * b
-        first = -1.0 if first < -1.0 else (1.0 if first > 1.0 else first)
-        second = -1.0 if second < -1.0 else (1.0 if second > 1.0 else second)
-        return first - a, second - b
-
-    x, y = float(start[0]), float(start[1])
-    stride = max(1, steps // 20_000)
-    samples: list[tuple[float, float]] = []
-    for index in range(steps):
-        k1 = field(x, y)
-        k2 = field(x + 0.5 * dt * k1[0], y + 0.5 * dt * k1[1])
-        k3 = field(x + 0.5 * dt * k2[0], y + 0.5 * dt * k2[1])
-        k4 = field(x + dt * k3[0], y + dt * k3[1])
-        x += (dt / 6.0) * (k1[0] + 2.0 * k2[0] + 2.0 * k3[0] + k4[0])
-        y += (dt / 6.0) * (k1[1] + 2.0 * k2[1] + 2.0 * k3[1] + k4[1])
-        if index >= skip and index % stride == 0:
-            samples.append((x, y))
+    samples, sample_dt = two_node_relaxation_trajectory(start=start, dt=dt, steps=steps, skip=skip)
     radii = [math.hypot(a, b) for a, b in samples]
     anchor = samples[0]
     # Skip one relaxation time unit before looking for the first return, so the
     # search reports the fundamental period rather than a later multiple of it.
-    warmup = min(max(1, int(1.0 / (stride * dt))), len(samples) - 1)
+    warmup = min(max(1, int(1.0 / sample_dt)), len(samples) - 1)
     period = float("nan")
     for index in range(warmup, len(samples)):
         a, b = samples[index]
         if math.hypot(a - anchor[0], b - anchor[1]) < 1e-3:
-            period = float(index * stride * dt)
+            period = float(index * sample_dt)
             break
     return {
         "min_radius": min(radii),
