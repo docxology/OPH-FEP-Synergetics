@@ -39,11 +39,15 @@ or pair so that a typo cannot pass as an empty run.
 
 ```
 uv venv --python 3.15 .venv
-uv pip install --python .venv/bin/python -e ".[dev]"
+uv pip install --python .venv/bin/python -e ".[dev,figures]"
 ```
 
-The only runtime dependency is `numpy`. `figures` (matplotlib) and `dev`
-(pytest, pytest-cov) are optional extras.
+Any Python >= 3.12 works; without `uv`, `python3 -m venv .venv &&
+.venv/bin/pip install -e ".[dev,figures]"` is equivalent. The only runtime
+dependency is `numpy`; `figures` (matplotlib) and `dev` (pytest, pytest-cov) are
+optional extras. `.[dev]` alone runs the suite (the figure tests skip without
+matplotlib); the `figures` extra is what `scripts/make_figures.py` and the
+manuscript pipeline need.
 
 ## Layers
 
@@ -196,7 +200,7 @@ Three disciplines hold the manuscript together, and each one is a test:
 
 ```
 data/sources.json                    pinned sources, licences, cited identifiers
-docs/CORRESPONDENCES.md              generated: the 35 entries and their probe values
+docs/CORRESPONDENCES.md              generated: the 42 entries and their probe values
 docs/MANUSCRIPT_VALUES.md            generated: every bound value
 docs/PROVENANCE.md                   the pins and the reuse rules
 docs/SCOPE.md                        what is reimplemented, what is cited, what is out

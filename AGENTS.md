@@ -93,7 +93,7 @@ Never edit them by hand: change the registry or the values and re-render.
 .venv/bin/oph-fep-synergetics verify                  # the registry, all 42 probes
 .venv/bin/oph-fep-synergetics verify --pair oph-fep   # one pairwise ledger
 .venv/bin/oph-fep-synergetics verify --kind disagreement   # one kind of claim
-.venv/bin/oph-fep-synergetics sources --vault-root /Volumes/GitVault
+.venv/bin/oph-fep-synergetics sources --vault-root /path/to/vault
 .venv/bin/python scripts/render_docs.py               # regenerate the two documents
 .venv/bin/python scripts/render_docs.py --check       # fail when stale
 .venv/bin/python scripts/make_figures.py              # the seventeen figures and their registry
@@ -137,4 +137,8 @@ requires an interpreter that passes the template's bytecode audit.
   owns the counters, and a hand number cannot survive an edit above it.
 - Do not edit anything under `output/`: regenerate the figures, the resolved
   tokens and the PDF with the scripts and the template pipeline.
-- Do not push this repository anywhere; it is a local working copy.
+- Do not push anywhere except the published remote,
+  [docxology/OPH-FEP-Synergetics](https://github.com/docxology/OPH-FEP-Synergetics),
+  and push only through the vault's governed routes (`plan push` /
+  `github-apply`, or a `with-repo` lease for the first branch onto an empty
+  remote). Never force-push.
