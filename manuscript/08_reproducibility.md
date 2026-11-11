@@ -63,8 +63,8 @@ queried. A `moved` result is not a failure: it says the reading is historical.
 .venv/bin/oph-fep-synergetics verify --kind disagreement
 .venv/bin/oph-fep-synergetics verify --json
 
-# the pins, checked against the live vault
-.venv/bin/oph-fep-synergetics sources --vault-root /Volumes/GitVault
+# the pins, checked against the live checkouts
+.venv/bin/oph-fep-synergetics sources --vault-root /path/to/vault
 
 # the figures and their accessibility registry
 .venv/bin/python scripts/make_figures.py
@@ -72,9 +72,10 @@ queried. A `moved` result is not a failure: it says the reading is historical.
 # the generated reference documents
 .venv/bin/python scripts/render_docs.py --check
 
-# the manuscript tokens, then the PDF
-.venv/bin/python scripts/z_generate_manuscript_variables.py
-uv run python scripts/pipeline/stage_03_render.py --project working/OPH-FEP-Synergetics
+# the manuscript tokens, then the PDF; both run from the template checkout
+cd /path/to/template
+TEMPLATE_REPO_ROOT=$PWD .venv/bin/python /path/to/project/scripts/z_generate_manuscript_variables.py
+.venv/bin/python scripts/pipeline/stage_03_render.py --project working/OPH-FEP-Synergetics --skip-manuscript-hydration
 ```
 
 : The reproduction commands, in order. The plain `verify` runs all

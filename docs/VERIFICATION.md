@@ -58,7 +58,7 @@ from a fresh process against the real code paths.
 | `test_cli.py` | every subcommand, the JSON payloads, the exit codes, and the console-script declaration |
 | `test_public_api.py` | that every exported name resolves, and that no commit hash escapes the pin file |
 | `test_docs.py` | that the two generated documents are current and that the guides' relative links resolve |
-| `test_manuscript.py` | the ten section files the renderer discovers, every token resolving to a bound value and every bound value being quoted, citations equal to the bibliography in both directions, a `{#sec:…}` label on every top-level heading, the manuscript's registry table against the registry, and the figure links against the accessibility registry |
+| `test_manuscript.py` | the eleven section files the renderer discovers, every token resolving to a bound value and every bound value being quoted, citations equal to the bibliography in both directions, a `{#sec:…}` label on every top-level heading, the manuscript's registry table against the registry, and the figure links against the accessibility registry |
 | `test_figures.py` | that every figure builder exists and is orchestrated, and that a sample renders non-trivial PNGs plus a well-formed registry (skipped without the `figures` extra) |
 
 The provenance test builds its own temporary repository by writing a commit
@@ -94,6 +94,9 @@ This is a live check against the real checkouts and is therefore
 environment-dependent. It is part of the acceptance run, not part of the
 portable test suite: `test_cli.py` skips the live check when the vault is not
 mounted, and a temporary-directory variant asserts the `absent` path instead.
+The live-check test reads its root from the `OPH_FEP_VAULT_ROOT` environment
+variable when set, falling back to the author's local checkout layout; without
+a mounted root the test skips.
 
 A `moved` result is reported as `moved`. It is a reading, not a failure.
 

@@ -48,8 +48,9 @@ oph-fep-synergetics sources --json
 ```
 
 With no `--vault-root` the command reports the pins and marks every check
-`unavailable`: no location is guessed. With a vault root, each pin is compared
-against `git -C <checkout> rev-parse HEAD` and reported as:
+`unavailable`: no location is guessed. A vault root is an ordinary local
+directory beneath which the pinned checkouts live; with one given, each pin is
+compared against `git -C <checkout> rev-parse HEAD` and reported as:
 
 | status | meaning |
 | --- | --- |
@@ -91,6 +92,25 @@ file. That prevents the drift that a hand-copied hash invites.
 - No source data or ledgers, including OPH's retained evidence archives.
 - No vendored source files; the geometry conventions are reimplemented.
 - No claim that a source endorses any result here.
+
+## Unpublished and private sources
+
+Besides the three pinned repositories, the manuscript cites three unpublished
+texts: the author's own working dossier and integration proposal
+(`dossier2026`, `proposal2026`), and one third-party private draft,
+*Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium*
+(Bernhard Mueller, Pragma Research, private draft, 22 October 2026). The draft
+is cited the way its source states its claims: none of its prose is quoted, it
+is not redistributed here, and the two quantities this package could not
+reproduce from its text are recorded `not-reproduced`
+([SCOPE.md](SCOPE.md)) beside the package's own measurements.
+
+## The render pipeline
+
+The manuscript renders through the `docxology/template` research monorepo
+(Pandoc, LaTeX, the `formalism.lua` filter). This repository vendors none of
+that infrastructure and refers to it only by template-relative paths; the
+probes, the suite and the CLI need nothing from it.
 
 ## Licence of this project
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.metadata
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -12,7 +13,7 @@ from oph_fep_synergetics import __version__
 from oph_fep_synergetics.cli import main
 from oph_fep_synergetics.manuscript_variables import as_dict
 
-VAULT_ROOT = Path("/Volumes/GitVault")
+VAULT_ROOT = Path(os.environ.get("OPH_FEP_VAULT_ROOT", "/Volumes/GitVault"))
 
 
 def test_version_flag(capsys):

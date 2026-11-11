@@ -21,10 +21,11 @@ the registry and triangle figures.
 
 ## 1. One object, three languages
 
-**Entries:** `carrier-port-chart`, `sheath-agreement`, `kissing-twelve`,
-`quadray-ivm`, `tree-number`, `gmrf-independence`, `sheaf-cohomology`,
-`icosahedral-symmetry`, `eigenspace-irreducibility`, `law-equivariance`,
-`kl-lattice-metric`, `subgraph-census`, `angle-defect`, `effective-resistance`.
+**Entries:** `carrier-port-chart`, `sheaf-agreement`, `spectral-gap`,
+`shell-counts`, `kissing-twelve`, `quadray-ivm`, `tree-number`,
+`gmrf-independence`, `sheaf-cohomology`, `icosahedral-symmetry`,
+`eigenspace-irreducibility`, `law-equivariance`, `kl-lattice-metric`,
+`subgraph-census`, `angle-defect`, `effective-resistance`.
 
 The carrier is a fixed finite object: `carrier.ports` ports, `carrier.seams`
 seams, `carrier.faces` faces, every port meeting `carrier.degree` triangles.
