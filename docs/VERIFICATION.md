@@ -35,7 +35,7 @@ mistaken for a clean run.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-346 tests, no mocks, no network, no fixtures that fake a result. The suite runs
+347 tests, no mocks, no network, no fixtures that fake a result. The suite runs
 from a fresh process against the real code paths.
 
 | file | what it pins down |
@@ -120,7 +120,7 @@ suite rather than in LaTeX, so a defect is reported by `pytest`:
 | `test_render_contract.py` | a render whose cover, graphical-abstract panels or contents page are not on the pages the manuscript promises, a panel page that does not carry its own figure caption, a measured left text margin wider than the 0.5 in the manuscript claims, a registry key that does not reach the printed text, or a log with an overfull box, an undefined reference or an unresolved token |
 
 The rendered result was checked the way a reader checks it, on the artefact
-itself: 44 pages, the cover on page 1, the four graphical-abstract panels on
+itself: 45 pages, the cover on page 1, the four graphical-abstract panels on
 pages 2 to 5, the contents page at 6, and a 0.500 in left text margin measured
 from the PDF's own text bounding boxes. Each panel page carries its own figure
 caption, so no panel floated away from its figure. The body carries twenty-one
@@ -131,6 +131,17 @@ undefined citations and `0` unresolved `??` cross-references in
 all 42 registry keys present and unbroken in the extracted text of the PDF. `scripts/check_render.py` performs
 that reading and exits non-zero when any of it drifts; `test_render_contract.py`
 runs it against the rendered PDF when one is present.
+
+## Tolerances and platforms
+
+The numerical contract behind the numbers is exactness by construction. Every claim the
+registry calls exact is computed in Python integers and `fractions.Fraction`, so a pass there
+is not a tolerance but an equality. The float claims are numpy float64 values reported as
+measured, next to the closed form the source gives for the same quantity; a probe passes when
+the residual against that closed form is below `1e-12` (`1e-15` for the sandwich probes), and
+a failure means the residual is not small, not that a tolerance was widened. The suite runs on
+the author's arm64 macOS with numpy 2.x; a different platform could move a last-bit float
+residual without changing any verdict.
 
 ## What is deliberately not verified
 

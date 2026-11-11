@@ -235,7 +235,7 @@ scripts/make_figures.py              renders the twenty-two figures and their ac
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (346 tests)
+tests/                               the suite (347 tests)
 ```
 
 ## Tests
@@ -244,7 +244,7 @@ tests/                               the suite (346 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-346 tests, no mocks, no network. The suite checks exact values rather than
+347 tests, no mocks, no network. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

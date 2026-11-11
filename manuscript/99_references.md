@@ -18,3 +18,10 @@ entry type by the template's citation validator:
 uv run python -m infrastructure.reference.citation.cli validate \
     projects/working/OPH-FEP-Synergetics/manuscript/references.bib --strict
 ```
+
+The validator path above is template-internal: it resolves inside the
+`docxology/template` monorepo and does not exist in this repository, where the
+equivalent public check is the repository's own render contract,
+`scripts/check_render.py`. The pre-digital books are cited the way they can be
+verified: *Synergetics* by publisher and year, while the full text of its
+second volume is archived, with the address carried in the bibliography.

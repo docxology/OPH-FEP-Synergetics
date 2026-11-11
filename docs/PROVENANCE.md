@@ -8,7 +8,7 @@ relicensed, and no source prose or data is copied.
 `data/sources.json` (schema 1) records one entry per source:
 
 - `id`, `name`, `url`
-- `checkout` — the path relative to the vault root where the source was read
+- `checkout` — the path relative to the vault root where the source was read; the path is vault-relative and meaningless outside a vault root
 - `commit`, `branch` — the exact reading
 - `license` — an SPDX expression, with `split` terms when a repository licenses
   different scopes differently
@@ -115,6 +115,8 @@ probes, the suite and the CLI need nothing from it.
 ## Licence of this project
 
 MIT, with the third-party citations above retained. See [LICENSE](../LICENSE).
+The MIT licence covers the code and the manuscript prose in `manuscript/`; the third-party
+cited works keep their own terms.
 
 ## Editorial log
 

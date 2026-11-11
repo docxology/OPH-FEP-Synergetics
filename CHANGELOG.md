@@ -5,7 +5,7 @@
 - 42 registered correspondences (17 isomorphisms, 15 disagreements, 10
   complementarities) with executable probes; `oph-fep-synergetics verify`
   reports pass, fail, and exit-code discipline for typos as well as failures.
-- A 346-test suite with no mocks, no network, and a 90% coverage gate enforced
+- A 347-test suite with no mocks, no network, and a 90% coverage gate enforced
   by `pyproject.toml`.
 - 22 figures with an accessibility registry, and a render contract that reads
   the delivered PDF back: front-matter page placement, measured margins,
