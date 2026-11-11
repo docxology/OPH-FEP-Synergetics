@@ -40,6 +40,7 @@ from typing import Sequence
 import numpy as np
 
 from .repair import (
+    RepairStep,
     energy,
     mismatch,
     native_repair,
@@ -169,8 +170,14 @@ def mismatch_one_excursion(steps: int = 6) -> tuple[tuple[int, ...], ...]:
     return tuple(visited)
 
 
-def strict_descent_on_broken_seams() -> bool:
-    """Whether every broken-seam repair strictly lowers the quadratic energy."""
+def descent_classes_coexist() -> bool:
+    """Whether the shell census holds both strict descents and zero descents.
+
+    The census is exhaustive over the 78-state shell and every coin, so both
+    classes occurring is the PR-01 obstruction in its sharpest form: the native
+    law accepts repairs that lower nothing, and it also accepts strict descents,
+    so no measure decreases along every accepted move.
+    """
     census = gated_descent_census()
     return census["strict"] > 0 and census["zero"] > 0
 

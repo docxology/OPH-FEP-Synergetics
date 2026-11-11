@@ -35,12 +35,12 @@ CONCORDANCE_DOC = DOCS / "CONCORDANCE.md"
 TOKEN_CAPTION = re.compile(r"\{\{([A-Z][A-Z0-9_]*)\}\}")
 
 
-def format_value(value: object) -> str:
+def format_probe_value(value: object) -> str:
     """Render a probe value or bound value compactly and unambiguously."""
     if isinstance(value, dict):
-        return ", ".join(f"{key}={format_value(item)}" for key, item in value.items())
+        return ", ".join(f"{key}={format_probe_value(item)}" for key, item in value.items())
     if isinstance(value, (tuple, list)):
-        return "(" + ", ".join(format_value(item) for item in value) + ")"
+        return "(" + ", ".join(format_probe_value(item) for item in value) + ")"
     if isinstance(value, float):
         return f"{value!r}"
     return str(value)
@@ -104,7 +104,7 @@ def render_registry() -> str:
             "",
         ]
         for name, value in result.values.items():
-            lines.append(f"- `{name}` = {format_value(value)}")
+            lines.append(f"- `{name}` = {format_probe_value(value)}")
         lines.append("")
     return "\n".join(lines) + "\n"
 
@@ -126,7 +126,7 @@ def render_values() -> str:
         exact = f"`{entry.exact}`" if entry.exact else ""
         note = entry.note or ""
         lines.append(
-            f"| `{entry.key}` | {format_value(entry.value)} | {exact} | {entry.source} | {note} |"
+            f"| `{entry.key}` | {format_probe_value(entry.value)} | {exact} | {entry.source} | {note} |",
         )
     lines.append("")
     return "\n".join(lines)

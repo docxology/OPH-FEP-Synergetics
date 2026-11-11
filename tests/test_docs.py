@@ -84,10 +84,10 @@ def test_the_concordance_reports_no_uncited_formal_statement():
     assert "never cited" not in renderer.render_concordance()
 
 
-def test_format_value_renders_containers_and_scalars():
+def test_format_probe_value_renders_containers_and_scalars():
     renderer = _load_renderer()
-    assert renderer.format_value({"a": 1, "b": (2, 3)}) == "a=1, b=(2, 3)"
-    assert renderer.format_value("plain") == "plain"
+    assert renderer.format_probe_value({"a": 1, "b": (2, 3)}) == "a=1, b=(2, 3)"
+    assert renderer.format_probe_value("plain") == "plain"
 
 
 def test_every_relative_link_in_the_guides_resolves():

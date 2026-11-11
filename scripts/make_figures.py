@@ -1929,6 +1929,15 @@ def main() -> int:
         sandwich_figure,
         schedule_figure,
     )
+    unrendered = {
+        name
+        for name, obj in globals().items()
+        if name.endswith("_figure") and callable(obj) and obj not in builders
+    }
+    if unrendered:
+        raise RuntimeError(
+            f"figure builders missing from the builders tuple: {sorted(unrendered)}"
+        )
     for builder in builders:
         print(builder())
     print(write_registry())

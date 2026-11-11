@@ -26,6 +26,7 @@ from oph_fep_synergetics.core import (
     d_stability_free_energy_form,
     d_stability_matrix,
     d_stability_unstable,
+    descent_classes_coexist,
     directed_gradient_control,
     equilibrium_propagation_identity,
     four_cycle_local_minimum,
@@ -46,7 +47,6 @@ from oph_fep_synergetics.core import (
     replicator_potential_check,
     routh_first_column,
     solenoidal_check,
-    strict_descent_on_broken_seams,
     surprise_sandwich,
     two_node_map,
     two_node_orbit_min_radius,
@@ -69,8 +69,8 @@ def test_gated_census_classifies_every_transition():
     assert census["strict"] + census["zero"] + census["noop"] == 78 * 30 * 2 == 4680
 
 
-def test_every_broken_seam_repair_lowers_the_energy_strictly():
-    assert strict_descent_on_broken_seams() is True
+def test_strict_and_zero_descent_classes_coexist():
+    assert descent_classes_coexist() is True
 
 
 def test_mismatch_one_offers_two_moves_and_neither_descends():

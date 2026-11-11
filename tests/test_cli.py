@@ -13,6 +13,8 @@ from oph_fep_synergetics import __version__
 from oph_fep_synergetics.cli import main
 from oph_fep_synergetics.manuscript_variables import as_dict
 
+# The fallback path is the author's checkout layout; point OPH_FEP_VAULT_ROOT
+# elsewhere. The live-check tests skip when the root is not a mounted vault.
 VAULT_ROOT = Path(os.environ.get("OPH_FEP_VAULT_ROOT", "/Volumes/GitVault"))
 
 
