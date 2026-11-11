@@ -140,6 +140,20 @@ comments in this repository record the commit actually read only in
 commit is reported, and a test fails if a commit hash appears in code without
 appearing in the pin file.
 
+### Third-party notice
+
+Reimplemented here, with attribution: OPH's twelve-port carrier and its derived
+port chart, the native seam-repair law, and the sheaf, symmetry, network and
+controls machinery built on them — OPH's Apache-2.0 *software* scope; the
+linear-Gaussian free-energy dictionary of the FEP — cited, CC BY 4.0, DOI
+`10.5281/zenodo.19699233`; and QuadMath's quadray conventions, neighbour moves,
+shell counts and tetravolume arithmetic — Apache-2.0, DOI
+`10.5281/zenodo.16887791`. No source prose, documentation, figure, data file or
+ledger is copied or redistributed, and no source endorses any result here. Each
+source keeps its own terms, recorded with commit pins in
+[data/sources.json](data/sources.json) and restated in
+[docs/PROVENANCE.md](docs/PROVENANCE.md).
+
 This project is released under the MIT licence; see [LICENSE](LICENSE).
 
 ## The manuscript
