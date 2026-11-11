@@ -184,11 +184,13 @@ def carrier_figure() -> Path:
             xytext=(4, 4),
             fontsize=7.5,
         )
-    gap = carrier.spectral_gap()
+    lam1_value = carrier.spectral_gap()
+    normalised = lam1_value / (2.0 * carrier.seam_count)
     right.annotate(
-        f"normalised gap {gap:.6f}",
-        xy=(lam1, 3),
-        xytext=(lam1 + 1.2, 5.4),
+        f"$\\lambda_1 = 5 - \\sqrt{{5}} = {lam1_value:.6f}$\n"
+        f"normalised gap $\\lambda_1/60 = {normalised:.6f}$",
+        xy=(lam1, 3.05),
+        xytext=(0.35, 5.9),
         fontsize=8,
         arrowprops={"arrowstyle": "->", "color": "#a4262c", "lw": 1.0},
         color="#a4262c",
@@ -286,7 +288,7 @@ def registry_figure() -> Path:
     figure.legend(handles=handles, loc="lower center", ncol=3, fontsize=8)
     figure.suptitle(
         f"{len(CORRESPONDENCES)} correspondences: every row is executed by "
-        "`oph-fep-synergetics verify`",
+        "oph-fep-synergetics verify",
         fontsize=10,
     )
     kind_counts = {
@@ -1350,7 +1352,7 @@ def network_figure() -> Path:
             color="#102a43",
         )
     ladder_axis.set_xticks(positions)
-    ladder_axis.set_xticklabels([f"distance {step}" for step, _, _ in ladder], fontsize=8)
+    ladder_axis.set_xticklabels([f"d = {step}" for step, _, _ in ladder], fontsize=8)
     ladder_axis.set_ylabel("effective resistance")
     ladder_axis.set_ylim(0.0, max(resistances) * 1.45)
     ladder_axis.set_title("1. The resistance ladder: one exact resistance per distance class")
@@ -1406,16 +1408,14 @@ def network_figure() -> Path:
         )
     shells_axis.set_aspect("equal")
     shells_axis.set_axis_off()
-    shells_axis.legend(loc="upper right", fontsize=7.4)
-    shells_axis.set_title("2. The shells around port 0, coloured by graph distance")
-    shells_axis.text(
-        0.02,
-        0.02,
-        f"intersection array b={intersection[0]}, c={intersection[1]}",
-        transform=shells_axis.transAxes,
-        fontsize=7.6,
-        color="#243b53",
+    shells_axis.legend(
+        loc="upper left",
+        bbox_to_anchor=(1.02, 1.0),
+        fontsize=7.4,
+        title=f"intersection array\nb = {intersection[0]}, c = {intersection[1]}",
+        title_fontsize=7.4,
     )
+    shells_axis.set_title("2. The shells around port 0, coloured by graph distance")
 
     # --- panel 3: the subgraph census -------------------------------------
     census_positions = list(range(len(census)))
@@ -1444,54 +1444,92 @@ def network_figure() -> Path:
     census_axis.axhline(face_count, color=KIND_COLOURS["disagreement"], linestyle="--", linewidth=1.2)
     census_axis.annotate(
         f"faces {face_count}",
-        xy=(census_positions[-1], face_count),
-        xytext=(census_positions[-1] - 0.1, face_count - max(census_values) * 0.11),
+        xy=(census_positions[-1] + 0.3, face_count),
+        xytext=(census_positions[-1] + 0.42, face_count + max(census_values) * 0.03),
         fontsize=7.8,
         color=KIND_COLOURS["disagreement"],
-        ha="right",
+        ha="left",
     )
     census_axis.set_xticks(census_positions)
-    census_axis.set_xticklabels([name.replace("_", " ") for name in census], fontsize=7.6)
+    census_axis.set_xticklabels(
+        ["tri.", "pent.", "match.", "Ham."], fontsize=8.4
+    )
     census_axis.set_ylabel("count")
     census_axis.set_ylim(0.0, max(census_values) * 1.15)
     census_axis.set_title("3. The subgraph census, against the face count")
 
     # --- panel 4: the dual pair -------------------------------------------
     dual_axis.set_axis_off()
-    dual_axis.set_xlim(0.0, 1.0)
-    dual_axis.set_ylim(0.0, 1.0)
     dual_axis.set_title("4. The dual pair: the Voronoi cell and the cuboctahedron")
-    cell_lines = (
-        "Voronoi cell (rhombic dodecahedron)\n"
-        f"{cell['vertex_count']} vertices, {cell['face_count']} faces, {cell['edge_count']} edges\n"
-        f"tetravolume {cell_tetravolume}"
-    )
-    cuboctahedron_lines = (
-        "Cuboctahedron\n"
-        f"{cuboctahedron['vertices']} vertices, "
-        f"{cuboctahedron_face_counts['triangles']} triangle + "
-        f"{cuboctahedron_face_counts['squares']} square faces, "
-        f"{cuboctahedron_edge_count} edges\n"
-        f"tetravolume {cuboctahedron_tetravolume}"
-    )
-    for centre, colour, text in (
-        (0.73, KIND_COLOURS["isomorphism"], cell_lines),
-        (0.28, KIND_COLOURS["complementarity"], cuboctahedron_lines),
-    ):
+
+    def planar(points) -> np.ndarray:
+        pts = np.asarray(points, dtype=float)
+        pts = pts - pts.mean(axis=0)
+        e1 = np.array([1.0, -1.0, 0.0]) / math.sqrt(2.0)
+        e2 = np.array([1.0, 1.0, -2.0]) / math.sqrt(6.0)
+        return np.stack([pts @ e1, pts @ e2], axis=1)
+
+    def draw_solid(centre_x, projected, edges, colour, caption):
+        span = max(float(np.linalg.norm(row)) for row in projected)
+        placed = projected / span * 0.46 + np.array([centre_x, 0.32])
+        for a, b in edges:
+            dual_axis.plot(
+                [placed[a, 0], placed[b, 0]],
+                [placed[a, 1], placed[b, 1]],
+                color=colour,
+                linewidth=1.1,
+                zorder=2,
+            )
+        dual_axis.scatter(placed[:, 0], placed[:, 1], s=26, color=colour, zorder=3)
         dual_axis.text(
-            centre,
-            0.55,
-            text,
+            centre_x,
+            -0.24,
+            caption,
             ha="center",
-            va="center",
-            fontsize=8.2,
-            color="white",
-            bbox={"boxstyle": "round,pad=0.6", "facecolor": colour, "edgecolor": "#102a43"},
+            va="top",
+            fontsize=7.8,
+            color="#102a43",
         )
+
+    cell_edges = set()
+    for face in cell["faces"]:
+        for index, vertex in enumerate(face):
+            following = face[(index + 1) % len(face)]
+            cell_edges.add((min(vertex, following), max(vertex, following)))
+    draw_solid(
+        -1.05,
+        planar(cell["vertices"]),
+        sorted(cell_edges),
+        KIND_COLOURS["complementarity"],
+        f"Voronoi cell: {cell['vertex_count']} vertices, {cell['face_count']} rhombic\n"
+        f"faces, {cell['edge_count']} edges, tetravolume {cell_tetravolume}",
+    )
+    cuboctahedron_vertices = planar(
+        [geometry.to_xyz(site) for site in geometry.cuboctahedron_neighbors()]
+    )
+    cuboctahedron_adj = geometry.cuboctahedron_adjacency()
+    cuboctahedron_edge_pairs = [
+        (a, b)
+        for a in range(len(cuboctahedron_adj))
+        for b in range(a + 1, len(cuboctahedron_adj))
+        if cuboctahedron_adj[a][b]
+    ]
+    draw_solid(
+        1.05,
+        cuboctahedron_vertices,
+        cuboctahedron_edge_pairs,
+        KIND_COLOURS["isomorphism"],
+        f"Cuboctahedron: {cuboctahedron['vertices']} vertices, "
+        f"{len(cuboctahedron_face_counts['triangles'])} triangles +\n"
+        f"{len(cuboctahedron_face_counts['squares'])} squares, {cuboctahedron_edge_count} edges, "
+        f"tetravolume {cuboctahedron_tetravolume}",
+    )
+    dual_axis.set_xlim(-2.1, 2.1)
+    dual_axis.set_ylim(-0.78, 1.05)
     dual_axis.text(
-        0.50,
-        0.09,
-        f"volume ratio {cuboctahedron_tetravolume}/{cell_tetravolume} = {volume_ratio}",
+        0.0,
+        -0.70,
+        f"volume ratio {cuboctahedron_tetravolume}/{cell_tetravolume} = {volume_ratio}, exact",
         ha="center",
         fontsize=8.6,
         color="#102a43",
@@ -1735,12 +1773,13 @@ def sandwich_figure() -> Path:
         fontsize=8,
         color="#a4262c",
     )
+    left.set_xlim(lower - 0.08, upper + 0.08)
     for value, name in ((lower, "lower bound"), (upper, "upper bound")):
         left.axvline(value, color="#1f4e79", linewidth=1.0, linestyle="--")
         left.annotate(
             f"{name} {value:.7g}",
             (value, 0.9),
-            ha="center",
+            ha="left" if value < 0.3 else "right",
             va="center",
             fontsize=7.5,
             color="#1f4e79",
@@ -1764,11 +1803,22 @@ def sandwich_figure() -> Path:
             xytext=(4 if value >= 0 else -4, 0),
             textcoords="offset points",
         )
-    right.set_xlim(min(values) * 1.35, max(values) * 1.3)
-    right.set_title(
-        f"five readings, one name; interface and VFE differ by {constant:.7g}",
-        fontsize=10,
+    right.set_xlim(min(values) * 1.55, max(values) * 1.25)
+    right.annotate(
+        "",
+        xy=(at_posterior, 5.0),
+        xytext=(interface, 2.0),
+        arrowprops={"arrowstyle": "<->", "color": "#a4262c", "lw": 1.1},
     )
+    right.annotate(
+        f"$\\Delta$ = model constant\n{constant:.7g}",
+        xy=(-1.02, 3.5),
+        ha="center",
+        va="center",
+        fontsize=7.6,
+        color="#a4262c",
+    )
+    right.set_title("five readings, one name", fontsize=10)
     right.tick_params(axis="y", labelsize=8)
     figure.suptitle("what the probes report about the values called free energy", fontsize=10)
     return _save(
@@ -1807,11 +1857,12 @@ def schedule_figure() -> Path:
             )
     axis.annotate(
         f"after twelve steps: {exact}",
-        (11, contrasts[-1]),
+        (0.97, 0.88),
         ha="right",
-        va="bottom",
+        va="top",
         fontsize=8,
         color="#102a43",
+        xycoords="axes fraction",
     )
     axis.set_xlabel("steps of the affine iteration")
     axis.set_ylabel("absolute centered-contrast difference")
@@ -1821,7 +1872,7 @@ def schedule_figure() -> Path:
         "fig_schedule.png",
         "The absolute difference between the full and the half-damped schedules' centered "
         "contrasts, one exact value per step count from one to twelve. The schedules share "
-        f"every answer while the contrast difference grows to {contrasts[-1]:.7g}, which is "
+        f"every answer while the contrast difference decays to {contrasts[-1]:.7g}, which is "
         f"exactly {exact} after twelve steps.",
     )
 
