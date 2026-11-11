@@ -58,6 +58,7 @@ from oph_fep_synergetics.core.carrier import (  # noqa: E402
     icosahedral_carrier,
 )
 from oph_fep_synergetics.geometry import lattice  # noqa: E402
+from oph_fep_synergetics.manuscript_variables import as_dict  # noqa: E402
 
 FIGURES: Path = ROOT / "output" / "figures"
 
@@ -288,13 +289,19 @@ def registry_figure() -> Path:
         "`oph-fep-synergetics verify`",
         fontsize=10,
     )
+    kind_counts = {
+        kind: sum(1 for entry in CORRESPONDENCES if entry.kind == kind)
+        for kind in ("isomorphism", "disagreement", "complementarity")
+    }
     return _save(
         figure,
         "fig_registry.png",
-        "The twenty-three correspondences arranged in three columns by kind. Eight isomorphisms "
-        "on the left, eleven disagreements in the middle, four complementarities on the right. "
-        "Each row is labelled with its registry key and carries a marker for its status: a "
-        "circle for exact, a square for exact-on-domain, and a cross for obstructed.",
+        f"The {len(CORRESPONDENCES)} correspondences arranged in three columns by kind. "
+        f"{_counted(kind_counts['isomorphism'], 'isomorphism', 'isomorphisms')} on the left, "
+        f"{_counted(kind_counts['disagreement'], 'disagreement', 'disagreements')} in the middle, "
+        f"{_counted(kind_counts['complementarity'], 'complementarity', 'complementarities')} on "
+        "the right. Each row is labelled with its registry key and carries a marker for its "
+        "status: a circle for exact, a square for exact-on-domain, and a cross for obstructed.",
     )
 
 
@@ -1295,7 +1302,8 @@ def scope_matrix_figure() -> Path:
         "fig_scope_matrix.png",
         "A dense categorical matrix with one row per registry entry in registry order. The row "
         "label is the entry key, and four coloured columns give its pair, kind, status and "
-        "whether the probe is the entry's own executable probe. Thirty-five rows are shown.",
+        "whether the probe is the entry's own executable probe. "
+        f"{len(CORRESPONDENCES)} rows are shown.",
     )
 
 
@@ -1504,6 +1512,115 @@ def network_figure() -> Path:
     )
 
 
+def vertex_shells_figure() -> Path:
+    """The carrier's shells around a port against the IVM's lattice shells."""
+    adjacency = [[int(value) for value in row] for row in icosahedral_carrier().adjacency_matrix()]
+    carrier_shells = network.distance_distribution(adjacency)
+    radii = (1, 2, 3)
+    carrier_counts = carrier_shells[1:4]
+    lattice_counts = tuple(lattice.shell_count(k) for k in radii)
+    outward, homing = network.intersection_array(adjacency)
+    figure, axis = plt.subplots(figsize=(8.4, 4.4))
+    width = 0.38
+    positions = np.arange(len(radii))
+    carrier_bars = axis.bar(
+        positions - width / 2,
+        carrier_counts,
+        width,
+        color=KIND_COLOURS["isomorphism"],
+        label="carrier: ports at graph distance k",
+    )
+    lattice_bars = axis.bar(
+        positions + width / 2,
+        lattice_counts,
+        width,
+        color=KIND_COLOURS["complementarity"],
+        label="IVM lattice: sites on shell k",
+    )
+    axis.set_yscale("log")
+    axis.set_ylim(0.8, max(lattice_counts) * 1.6)
+    for bars in (carrier_bars, lattice_bars):
+        for bar in bars:
+            axis.annotate(
+                f"{int(bar.get_height())}",
+                (bar.get_x() + bar.get_width() / 2, bar.get_height()),
+                ha="center",
+                va="bottom",
+                fontsize=8,
+            )
+    axis.set_xticks(positions, [f"radius {k}" for k in radii])
+    axis.set_ylabel("count (log scale)")
+    axis.set_title(
+        f"shells around a port: {carrier_counts} against {lattice_counts}; "
+        f"b = {outward}, c = {homing}"
+    )
+    axis.legend(fontsize=7.5, loc="upper left")
+    return _save(
+        figure,
+        "fig_vertex_shells.png",
+        "Two bar series against the radius from a port, on a logarithmic count axis. The "
+        f"carrier's ports number {carrier_counts[0]}, {carrier_counts[1]} and {carrier_counts[2]} at "
+        "graph distances one, two and three, while the IVM lattice's shells hold "
+        f"{lattice_counts[0]}, {lattice_counts[1]} and {lattice_counts[2]} sites at the same radii, "
+        "so the sequences disagree at the first shell and no radius repairs the reading. The "
+        f"carrier is distance-regular with intersection array b = {outward}, c = {homing}, and "
+        f"diameter {len(carrier_shells) - 1}.",
+    )
+
+
+def conjugation_figure() -> Path:
+    """What Galois conjugation fixes (the counts) and what it moves (the volumes)."""
+    values = as_dict()
+    fixed = (
+        ("spanning-tree number", int(values["carrier.tree_number"])),
+        ("automorphisms", int(values["symmetry.group_order"])),
+        ("sheaf obstructions", int(values["sheaf.h1"])),
+        ("triangles", int(values["carrier.triangles"])),
+    )
+    volume = float(geometry.icosahedron_tetravolume()["tetravolume"])
+    norm = geometry.tetravolume_galois_norm()
+    conjugate = float(norm) / volume
+    figure, (left, right) = plt.subplots(1, 2, figsize=(10.0, 4.4))
+    names = [name for name, _ in fixed]
+    counts = [value for _, value in fixed]
+    bars = left.bar(names, counts, color="#1f4e79")
+    left.set_yscale("log")
+    left.set_ylim(1.0, max(counts) * 4.0)
+    for bar, count in zip(bars, counts):
+        left.annotate(
+            f"{count}",
+            (bar.get_x() + bar.get_width() / 2, count),
+            ha="center",
+            va="bottom",
+            fontsize=8,
+        )
+    left.set_title("fixed by sqrt(5) -> -sqrt(5)")
+    left.tick_params(axis="x", labelrotation=12)
+    bars = right.bar(("icosahedron", "conjugate"), (volume, conjugate), color=("#a4262c", "#c98a00"))
+    right.set_yscale("log")
+    right.set_ylim(1.0, max(volume, conjugate) * 4.0)
+    for bar, value in zip(bars, (volume, conjugate)):
+        right.annotate(
+            f"{value:.6g}",
+            (bar.get_x() + bar.get_width() / 2, value),
+            ha="center",
+            va="bottom",
+            fontsize=8,
+        )
+    right.set_title(f"moved; the product is the exact norm {norm}")
+    right.set_ylabel("tetravolume (log scale)")
+    figure.suptitle("the counting invariants are fixed, the volumes are not", fontsize=10)
+    return _save(
+        figure,
+        "fig_conjugation.png",
+        "Two panels on logarithmic axes. Left: the counting invariants that conjugating the "
+        f"square root of five fixes: the spanning-tree number {counts[0]}, the automorphism "
+        f"group order {counts[1]}, the {counts[2]} sheaf obstructions and the {counts[3]} triangles. "
+        f"Right: the icosahedron's tetravolume {volume:.6g} beside its conjugate {conjugate:.6g}; "
+        f"the two multiply to the exact norm {norm}.",
+    )
+
+
 def write_registry() -> Path:
     """Write the accessibility registry the renderer reads for figure alt text.
 
@@ -1550,6 +1667,8 @@ def main() -> int:
         pair_triangles_figure,
         scope_matrix_figure,
         network_figure,
+        vertex_shells_figure,
+        conjugation_figure,
     )
     for builder in builders:
         print(builder())

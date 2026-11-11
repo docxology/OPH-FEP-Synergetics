@@ -21,6 +21,7 @@ non-zero when a promise is broken.
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import shutil
 import subprocess
@@ -159,8 +160,16 @@ def check(
             f"{panel} figure on page {expected}: {'ok' if ok else 'FAIL (no caption)'}"
         )
     total_captions = sum(captions.values())
-    lines.append(f"figure captions: {total_captions} (at least {len(PANELS) + 11} expected)")
-    passed &= total_captions >= len(PANELS) + 11
+    registry_file = pdf.parent.parent / "figures" / "figure_registry.json"
+    if registry_file.is_file():
+        payload = json.loads(registry_file.read_text(encoding="utf-8"))
+        expected = sum(1 for item in payload["figures"] if item["label"] != "fig:cover")
+        note = f"expected from the accessibility registry: {expected}"
+    else:
+        expected = len(PANELS) + 11
+        note = f"at least {expected} expected (no accessibility registry found)"
+    lines.append(f"figure captions: {total_captions} ({note})")
+    passed &= total_captions >= expected
 
     margin_page = min(PANEL_PAGES[-1] + 2, len(pages))
     margin = text_left_margin(pdf, margin_page)
