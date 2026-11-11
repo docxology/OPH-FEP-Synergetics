@@ -140,7 +140,8 @@ requires an interpreter that passes the template's bytecode audit.
 - Do not edit anything under `output/`: regenerate the figures, the resolved
   tokens and the PDF with the scripts and the template pipeline.
 - Do not push anywhere except the published remote,
-  [docxology/OPH-FEP-Synergetics](https://github.com/docxology/OPH-FEP-Synergetics),
-  and push only through the vault's governed routes (`plan push` /
-  `github-apply`, or a `with-repo` lease for the first branch onto an empty
-  remote). Never force-push.
+  [docxology/OPH-FEP-Synergetics](https://github.com/docxology/OPH-FEP-Synergetics);
+  pushes are made by the maintainer through the project's governed publication
+  route (in the author's environment: the vault's `plan push` / `github-apply`
+  route, or a `with-repo` lease for the first branch onto an empty remote).
+  Never force-push.

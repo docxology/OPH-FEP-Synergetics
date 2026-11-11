@@ -261,3 +261,17 @@ enforced by `pyproject.toml`.
 
 A test runs the `--check` path, so the committed documents cannot drift from the
 registry they describe.
+
+## Contributing and citation
+
+Issues and pull requests are welcome on the public remote,
+[docxology/OPH-FEP-Synergetics](https://github.com/docxology/OPH-FEP-Synergetics).
+A pull request that changes a claim, a number or a figure has to keep the gates
+green: [docs/VERIFICATION.md](docs/VERIFICATION.md) lists them, and
+[AGENTS.md](AGENTS.md) records the house rules — the two most important being
+that manuscript numbers are bound tokens and that the generated documents are
+re-rendered, never hand-edited.
+
+To cite this repository use the machine-readable
+[CITATION.cff](CITATION.cff), which GitHub renders under "Cite this
+repository"; the release history lives in [CHANGELOG.md](CHANGELOG.md).

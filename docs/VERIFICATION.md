@@ -120,7 +120,7 @@ suite rather than in LaTeX, so a defect is reported by `pytest`:
 | `test_render_contract.py` | a render whose cover, graphical-abstract panels or contents page are not on the pages the manuscript promises, a panel page that does not carry its own figure caption, a measured left text margin wider than the 0.5 in the manuscript claims, a registry key that does not reach the printed text, or a log with an overfull box, an undefined reference or an unresolved token |
 
 The rendered result was checked the way a reader checks it, on the artefact
-itself: 43 pages, the cover on page 1, the four graphical-abstract panels on
+itself: 44 pages, the cover on page 1, the four graphical-abstract panels on
 pages 2 to 5, the contents page at 6, and a 0.500 in left text margin measured
 from the PDF's own text bounding boxes. Each panel page carries its own figure
 caption, so no panel floated away from its figure. The body carries twenty-one
@@ -135,6 +135,8 @@ runs it against the rendered PDF when one is present.
 ## What is deliberately not verified
 
 The `35/264` port-zero occupation and the `13/15` and `1/60` move probabilities
-from *Agreement and Surprise* need the record/selector protocol specification
-that the paper does not give. They are recorded as `not-reproduced` in
+from *Agreement and Surprise* cannot be reproduced: the record and selector
+protocol that would determine the occupation, and the probability space and
+conditioning event that would determine the probabilities, are not specified by
+the paper's text. They are recorded as `not-reproduced` in
 [docs/SCOPE.md](SCOPE.md) and are not asserted anywhere in this repository.

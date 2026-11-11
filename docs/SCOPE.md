@@ -48,13 +48,14 @@ domain.
 ## Not reproducible from the source text
 
 Two quantities in *Agreement and Surprise* cannot be reproduced from its own
-text, because they need the record/selector protocol specification that the
-paper does not give:
+text. They are recorded as `not-reproduced` rather than verified:
 
-- the `35/264` port-zero occupation;
-- the `13/15` and `1/60` move probabilities.
+| quantity | why it is not reproduced |
+| --- | --- |
+| the `35/264` port-zero occupation | the record and selector protocol that would determine the occupation is not specified in the paper's text |
+| the `13/15` and `1/60` move probabilities | the probability space and the conditioning event are not determined by the text |
 
-They are recorded as `not-reproduced` rather than verified. A future reader with
+A future reader with
 the protocol specification can add them as probes; until then, quoting them
 without that label would overstate what this repository establishes.
 
