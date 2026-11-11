@@ -70,6 +70,22 @@ def test_contents_must_not_be_the_cover_and_is_absent_when_unprinted():
     assert check_render.contents_page(_pages("cover", "Table of Contents\n")) is None
 
 
+def test_caption_pages_count_each_page_separately():
+    pages = _pages(
+        "cover with no caption",
+        "Panel 1\nFigure 1: the ledger triangle\nmore text",
+        "Panel 2\nFigure 2: the carrier",
+        "Figure 3: a float that left its panel",
+        "Panel 3",
+        "Panel 4",
+    )
+    counts = check_render.caption_pages(pages)
+    assert counts[1] == 0
+    assert counts[2] == 1
+    assert counts[4] == 1
+    assert sum(counts.values()) == 3
+
+
 def test_missing_keys_are_reported_in_registry_order():
     absent = check_render.missing_keys(
         "carrier-port-chart and spectral-gap", ("carrier-port-chart", "spectral-gap", "tree-number")

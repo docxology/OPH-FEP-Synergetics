@@ -20,10 +20,11 @@ hidden as a gap.
 ## What runs
 
 ```
-oph-fep-synergetics verify                 # all 35 correspondence probes
+oph-fep-synergetics verify                 # all 42 correspondence probes
 oph-fep-synergetics verify --json          # the same, as a machine-readable report
 oph-fep-synergetics verify --key pr01-obstruction
 oph-fep-synergetics verify --pair synergetics-oph   # one pairwise ledger
+oph-fep-synergetics verify --kind disagreement       # one kind of claim
 oph-fep-synergetics sources                # pins, licences and reuse policy
 oph-fep-synergetics sources --vault-root /path/to/vault   # check live checkouts
 oph-fep-synergetics values                 # every number the manuscript may quote
@@ -55,19 +56,21 @@ The only runtime dependency is `numpy`. `figures` (matplotlib) and `dev`
 | | `core/controls.py` | the obstruction and dynamics controls: descent census, D-stability, mediators, orbits, free-energy forms |
 | | `core/invariants.py` | the Laplacian's counting identities: spanning trees, reciprocal spectrum, GMRF precision, Markov blankets |
 | | `core/symmetry.py` | the carrier's automorphism group, rotations versus reflections, orbit counts, law equivariance |
+| | `core/network.py` | the carrier as a resistive network: exact effective resistances, the Kirchhoff index, shells around a port, and the subgraph census |
 | `geometry` | `geometry/quadray.py` | quadray coordinates, the A3/IVM embedding and exact tetravolumes |
 | | `geometry/lattice.py` | IVM shells, the cuboctahedral vector equilibrium, Voronoi cell and packing density, Goldberg/geodesic counts |
 | | `geometry/subdivision.py` | icosahedral subdivision and the dual count identities |
 | | `geometry/solids.py` | oriented faces, polyhedron volume, and the icosahedron's tetravolume against its closed form |
-| `analysis` | `analysis/registry.py` | the 35 registered correspondences, each with a pairwise scope and an executable probe |
+| `analysis` | `analysis/registry.py` | the 42 registered correspondences, each with a pairwise scope and an executable probe |
 | | `analysis/provenance.py` | source pins, licence terms and reuse policy |
 | `manuscript_variables` | `manuscript_variables/values.py` | every number the prose may quote, derived from the package where a derivation exists |
 
 ## The registry
 
-35 entries: **15 isomorphisms**, **13 disagreements**, **7 complementarities**,
-scoped to the pairs `oph-fep` (23), `synergetics-oph` (9), `fep-synergetics` (2)
-and `three-way` (1). All 35 probes pass. The full table, with the OPH / FEP /
+42 entries: **17 isomorphisms**, **15 disagreements**, **10 complementarities**,
+scoped to the pairs `oph-fep` (24), `synergetics-oph` (14), `fep-synergetics` (2)
+and `three-way` (2). All 42 probes pass. `verify --kind` narrows a run to one of
+the three kinds and `--pair` to one of the four scopes. The full table, with the OPH / FEP /
 Synergetics reading of each entry and the values its probe asserts, is generated
 into [docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
 
@@ -144,7 +147,7 @@ pipeline. The source of truth is `manuscript/`: the render reads `config.yaml`,
 `output/pdf/OPH-FEP-Synergetics_combined.pdf`.
 
 ```
-# 1. the sixteen figures and their accessibility registry
+# 1. the seventeen figures and their accessibility registry
 .venv/bin/python scripts/make_figures.py
 
 # 2. the tokens and the resolved tree, with the template checkout's interpreter
@@ -154,6 +157,9 @@ TEMPLATE_REPO_ROOT=$PWD .venv/bin/python /path/to/project/scripts/z_generate_man
 # 3. the PDF (hydration already ran, so the stage's own hydration is skipped)
 .venv/bin/python scripts/pipeline/stage_03_render.py \
     --project working/OPH-FEP-Synergetics --skip-manuscript-hydration
+
+# 4. the render contract, read back out of the artefact
+.venv/bin/python scripts/check_render.py
 ```
 
 `projects/working/OPH-FEP-Synergetics` is a symlink to this checkout, which the
@@ -197,10 +203,10 @@ docs/SCOPE.md                        what is reimplemented, what is cited, what 
 docs/VERIFICATION.md                 the gates and how to run them
 manuscript/                          config.yaml, preamble.md, references.bib and eleven sections
 scripts/render_docs.py               regenerates the two generated documents
-scripts/make_figures.py              renders the sixteen figures and their accessibility registry
+scripts/make_figures.py              renders the seventeen figures and their accessibility registry
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (308 tests)
+tests/                               the suite (339 tests)
 ```
 
 ## Tests
@@ -209,11 +215,12 @@ tests/                               the suite (308 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-308 tests, no mocks, no network. The suite checks exact values rather than
+339 tests, no mocks, no network. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over
-shell sites, and the exact volume ratios. Coverage is 96.30% with a 90% gate
+shell sites, the resistance ladder's exact fractions against a from-scratch solve,
+and the exact volume ratios. Coverage is 96.34% with a 90% gate
 enforced by `pyproject.toml`.
 
 ## Regenerating the documents

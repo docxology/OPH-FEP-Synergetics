@@ -44,7 +44,13 @@ packing density are floating-point measurements compared against closed forms,
 and the probes report the residual rather than only a verdict. The statuses are
 `exact` in both groups because the residuals are at the level of double
 precision, and a reader who wants a stronger statement should read the residual,
-which is reported.
+which is reported. The cleanest statement of the split is the conjugation of
+$\sqrt{5}$, which [@sec:conjugation] turns into a probe: it fixes the integer
+counts and moves the volume to {{ICOSAHEDRON_TETRAVOLUME_CONJUGATE}}, and the two
+volumes multiply to the exact norm {{TETRAVOLUME_GALOIS_NORM}}. A counting claim
+in this paper is therefore invariant under a symmetry that a geometric claim is
+not, and comparing one against the other without saying so is the error the
+section is written to prevent.
 
 ## What is not reproduced
 

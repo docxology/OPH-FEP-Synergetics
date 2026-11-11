@@ -23,6 +23,10 @@ domain.
 | the Gaussian reading of the same matrix | the precision's zeros as the conditional-independence pattern, the Markov blanket of every port, the pairwise precisions, and the exact marginal variance |
 | the information cost of a lattice step | equal-covariance Gaussian divergence against the IVM's squared distances: one step in nats, and the sequence `4k^2` |
 | the carrier's solid and the twelve-around-one cell | the icosahedron's tetravolume against its exact closed form, and the Voronoi cell's counts, derived tetravolume and packing density |
+| the carrier as a network | exact effective resistances as rationals from a grounded solve, their distance-class ladder, the Kirchhoff index, the distance distribution and intersection array around a port, and the subgraph census |
+| the carrier's curvature | the angle defect at every vertex of the derived chart, summed against Gauss-Bonnet, plus the defect of the dual solid's face set |
+| the twelve-around-one families | the obstruction is exhibited rather than asserted: the cuboctahedron, the icosahedron and the cube's line graph share the twelve-around-one description and differ in counts and volumes |
+| the quadratic field of the tetravolume | the Galois conjugation of $\sqrt{5}$ as a probe: it fixes the counting invariants and moves the icosahedron's tetravolume, whose norm is exact |
 
 ## Cited but not implemented
 

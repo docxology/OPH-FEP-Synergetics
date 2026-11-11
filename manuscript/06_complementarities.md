@@ -1,11 +1,11 @@
-# Complementarity: seven structures one programme supplies and another needs {#sec:complementarities}
+# Complementarity: ten structures one programme supplies and another needs {#sec:complementarities}
 
 The {{REGISTRY_COMPLEMENTARITIES}} complementarities are not identifications and
 not failures. Each is a case where one programme supplies a structure that
 another needs and does not have, without either reducing to the other. They are
-the constructive part of the paper: two of them are geometric, two are
-informational, one is a learning identity, one is a Lyapunov function, and one
-needs all three vocabularies at once.
+the constructive part of the paper: most of them are geometric, two are
+informational, one is a learning identity, one is a Lyapunov function, and two
+need all three vocabularies at once.
 
 ## Synergetics supplies the accounting in which the carrier's geometry is exact {#sec:quadray}
 
@@ -208,6 +208,66 @@ quadratic surd ($(5-\sqrt{5})/60$), and Synergetics' is an integer. A reader who
 wants one number has to choose a currency and state the exchange rate; a reader
 who wants the object has three exact readings of it.
 
+## The precision also carries a resistance metric {#sec:resistance}
+
+::: {#prop:resistance .proposition}
+Ground the Laplacian at one port and solve $L x = e_i - e_j$ over the rationals:
+the effective resistance across a seam is {{RESISTANCE_ADJACENT}}, at distance
+two {{RESISTANCE_DISTANCE_TWO}}, and across the carrier
+{{RESISTANCE_ANTIPODAL}}, over {{RESISTANCE_PAIR_COUNTS}} pairs in the three
+classes, summing to a Kirchhoff index of {{RESISTANCE_KIRCHHOFF_INDEX}}.
+:::
+
+Neither programme asks for this number, which is what makes it a complement
+rather than an identification. In the Gaussian reading it is the variance of a
+port's potential difference, so it is available for free to anyone holding the
+precision, and it is invisible to both programmes' own vocabularies: OPH never
+forms it, and the FEP's free energy does not depend on it. The sum is the useful
+part. The three classes contribute {{RESISTANCE_KIRCHHOFF_INDEX}} in total, and
+the same total is twelve times the reciprocal spectrum sum
+{{GMRF_RECIPROCAL_SPECTRUM_SUM}} from [@sec:gmrf], which is a cross-check between
+a rational system solved pair by pair and a closed-form spectral identity. The
+agreement is exact and the two routes share no arithmetic.
+
+## The twelve-around-one cell and the cuboctahedron are duals {#sec:dual-cells}
+
+::: {#prop:dual-cells .proposition}
+The cell of the twelve neighbours and the cuboctahedron are dual edge for edge:
+{{VORONOI_VERTICES}} vertices against {{CUBOCTAHEDRON_VERTICES}},
+{{VORONOI_FACES}} faces against {{CUBOCTAHEDRON_FACES}}, and
+{{CUBOCTAHEDRON_EDGES}} edges each, with Euler characteristic 2 each and
+tetravolumes {{PACKING_CELL_TETRAVOLUME}} and
+{{CUBOCTAHEDRON_TETRAVOLUME}} in the ratio {{DUAL_VOLUME_RATIO}}.
+:::
+
+The dual pair is derived twice, and the two derivations meet. The cell is built
+from the constraints of the twelve lattice sites, and the cuboctahedron from the
+neighbouring sites themselves; the cuboctahedron is also the cube's line graph,
+which the probe asserts by an explicit isomorphism search over the twelve
+vertices rather than by comparing degrees. [@sec:packing] uses the cell for a
+density; this claim records that its partner is the other solid Synergetics names
+for the same arrangement, and that the two accountings are related by exactly
+{{DUAL_VOLUME_RATIO}}.
+
+## Conjugation fixes the counts and moves the volumes {#sec:conjugation}
+
+::: {#prop:conjugation .proposition}
+Conjugating $\sqrt{5}$ leaves the counting invariants alone and moves the
+geometric ones. The spanning-tree number {{CARRIER_TREE_NUMBER}} is a rational
+integer and is fixed; the icosahedron's tetravolume {{ICOSAHEDRON_TETRAVOLUME}}
+maps to {{ICOSAHEDRON_TETRAVOLUME_CONJUGATE}}, and the two multiply to the exact
+norm {{TETRAVOLUME_GALOIS_NORM}}.
+:::
+
+This is the sharpest statement the paper can make about the difference between
+its two kinds of claim, and it is why [@sec:scope] separates them. A count over a
+finite complex is an integer, so the Galois symmetry of the quadratic field
+cannot see it; a volume in the same field is not an integer, and the symmetry
+moves it to the volume of a different solid. The product of the two is an
+integer, {{TETRAVOLUME_GALOIS_NORM}}, so the conjugation is a check rather than a
+curiosity: a transcription error in either volume would break a product that is
+exactly rational.
+
 ## What the complements add up to
 
 The {{REGISTRY_COMPLEMENTARITIES}} complements partition the labour cleanly.
@@ -220,4 +280,7 @@ update that neither of the others has.
 
 The synthesis that the complements suggest is therefore not a reduction but an
 assignment: the carrier is OPH's, the functional is the FEP's, and the accounting
-is Synergetics'. [@sec:scope] states the limits of that assignment.
+is Synergetics'. Two of the complements add a reading neither programme asks
+for and both can use: the precision's own resistance metric, and the
+conjugation that separates the counts from the volumes. [@sec:scope] states
+the limits of that assignment.

@@ -18,6 +18,7 @@ import math
 import os
 import sys
 from collections import Counter
+from fractions import Fraction
 from pathlib import Path
 
 os.environ.setdefault("MPLBACKEND", "Agg")
@@ -43,7 +44,14 @@ from oph_fep_synergetics.analysis.registry import (  # noqa: E402
     by_key,
     by_pair,
 )
-from oph_fep_synergetics.core import controls, free_energy, invariants, sheaf, symmetry  # noqa: E402
+from oph_fep_synergetics.core import (  # noqa: E402
+    controls,
+    free_energy,
+    invariants,
+    network,
+    sheaf,
+    symmetry,
+)
 from oph_fep_synergetics.core.carrier import (  # noqa: E402
     OPH_ORIENTED_BASE_FACES,
     IcosahedralCarrier,
@@ -1291,6 +1299,211 @@ def scope_matrix_figure() -> Path:
     )
 
 
+def network_figure() -> Path:
+    """The carrier read as a network, with the geometry dual pair beside it.
+
+    Four panels, each plotted only from executed package functions: the exact
+    effective-resistance ladder and its Kirchhoff total, the distance shells
+    around a port with the intersection array, the subgraph census against the
+    face count, and the Voronoi cell beside the cuboctahedron it is dual to.
+    """
+    carrier = icosahedral_carrier()
+    adjacency = [[int(value) for value in row] for row in carrier.adjacency_matrix()]
+    ladder = network.resistance_ladder(adjacency)
+    kirchhoff = network.kirchhoff_index(adjacency)
+    distribution = network.distance_distribution(adjacency)
+    intersection = network.intersection_array(adjacency)
+    census = network.subgraph_census(adjacency)
+    face_count = len(carrier.faces)
+
+    cell = geometry.voronoi_cell()
+    cell_tetravolume = Fraction(geometry.voronoi_cell_tetravolume()).limit_denominator()
+    cuboctahedron = geometry.cuboctahedron_signature()
+    cuboctahedron_edge_count = len(geometry.cuboctahedron_edges())
+    cuboctahedron_face_counts = geometry.cuboctahedron_faces()
+    cuboctahedron_tetravolume = Fraction(geometry.cuboctahedron_volume())
+    volume_ratio = cuboctahedron_tetravolume / cell_tetravolume
+
+    figure, axes = plt.subplots(2, 2, figsize=(11.5, 9.0))
+    ladder_axis, shells_axis, census_axis, dual_axis = axes.ravel()
+
+    # --- panel 1: the resistance ladder -----------------------------------
+    positions = list(range(len(ladder)))
+    resistances = [float(entry[1]) for entry in ladder]
+    ladder_axis.bar(positions, resistances, width=0.55, color=KIND_COLOURS["isomorphism"])
+    for position, (step, resistance, pairs) in zip(positions, ladder):
+        ladder_axis.text(
+            position,
+            float(resistance) + 0.004,
+            f"{resistance.numerator}/{resistance.denominator}\n{_counted(pairs, 'pair', 'pairs')}",
+            ha="center",
+            va="bottom",
+            fontsize=7.6,
+            color="#102a43",
+        )
+    ladder_axis.set_xticks(positions)
+    ladder_axis.set_xticklabels([f"distance {step}" for step, _, _ in ladder], fontsize=8)
+    ladder_axis.set_ylabel("effective resistance")
+    ladder_axis.set_ylim(0.0, max(resistances) * 1.45)
+    ladder_axis.set_title("1. The resistance ladder: one exact resistance per distance class")
+    ladder_axis.text(
+        0.03,
+        0.93,
+        f"Kirchhoff index {kirchhoff}",
+        transform=ladder_axis.transAxes,
+        fontsize=8.2,
+        color=KIND_COLOURS["disagreement"],
+    )
+
+    # --- panel 2: the shells around port 0 --------------------------------
+    projected_carrier, flat = _projected_carrier()
+    distances = network.graph_distances(adjacency)[0]
+    shell_colours = {
+        0: KIND_COLOURS["disagreement"],
+        1: KIND_COLOURS["isomorphism"],
+        2: "#c98a00",
+        3: KIND_COLOURS["complementarity"],
+    }
+    for port in range(projected_carrier.port_count):
+        for other in projected_carrier.neighbours(port):
+            if other > port:
+                shells_axis.plot(
+                    [flat[port, 0], flat[other, 0]],
+                    [flat[port, 1], flat[other, 1]],
+                    color="#9aa9b8",
+                    linewidth=0.9,
+                    zorder=1,
+                )
+    for step in range(len(distribution)):
+        members = [port for port in range(projected_carrier.port_count) if distances[port] == step]
+        shells_axis.scatter(
+            flat[members, 0],
+            flat[members, 1],
+            s=190,
+            color=shell_colours.get(step, "#7a7a7a"),
+            edgecolor="#102a43",
+            zorder=3,
+            label=f"distance {step}: {distribution[step]}",
+        )
+    for port in range(projected_carrier.port_count):
+        shells_axis.text(
+            flat[port, 0],
+            flat[port, 1],
+            str(port),
+            ha="center",
+            va="center",
+            fontsize=7.2,
+            color="white",
+            zorder=4,
+        )
+    shells_axis.set_aspect("equal")
+    shells_axis.set_axis_off()
+    shells_axis.legend(loc="upper right", fontsize=7.4)
+    shells_axis.set_title("2. The shells around port 0, coloured by graph distance")
+    shells_axis.text(
+        0.02,
+        0.02,
+        f"intersection array b={intersection[0]}, c={intersection[1]}",
+        transform=shells_axis.transAxes,
+        fontsize=7.6,
+        color="#243b53",
+    )
+
+    # --- panel 3: the subgraph census -------------------------------------
+    census_positions = list(range(len(census)))
+    census_values = list(census.values())
+    census_axis.bar(
+        census_positions,
+        census_values,
+        width=0.6,
+        color=[
+            KIND_COLOURS["isomorphism"],
+            "#c98a00",
+            KIND_COLOURS["complementarity"],
+            KIND_COLOURS["disagreement"],
+        ],
+    )
+    for position, count in zip(census_positions, census_values):
+        census_axis.text(
+            position,
+            count,
+            str(count),
+            ha="center",
+            va="bottom",
+            fontsize=8.0,
+            color="#102a43",
+        )
+    census_axis.axhline(face_count, color=KIND_COLOURS["disagreement"], linestyle="--", linewidth=1.2)
+    census_axis.annotate(
+        f"faces {face_count}",
+        xy=(census_positions[-1], face_count),
+        xytext=(census_positions[-1] - 0.1, face_count - max(census_values) * 0.11),
+        fontsize=7.8,
+        color=KIND_COLOURS["disagreement"],
+        ha="right",
+    )
+    census_axis.set_xticks(census_positions)
+    census_axis.set_xticklabels([name.replace("_", " ") for name in census], fontsize=7.6)
+    census_axis.set_ylabel("count")
+    census_axis.set_ylim(0.0, max(census_values) * 1.15)
+    census_axis.set_title("3. The subgraph census, against the face count")
+
+    # --- panel 4: the dual pair -------------------------------------------
+    dual_axis.set_axis_off()
+    dual_axis.set_xlim(0.0, 1.0)
+    dual_axis.set_ylim(0.0, 1.0)
+    dual_axis.set_title("4. The dual pair: the Voronoi cell and the cuboctahedron")
+    cell_lines = (
+        "Voronoi cell (rhombic dodecahedron)\n"
+        f"{cell['vertex_count']} vertices, {cell['face_count']} faces, {cell['edge_count']} edges\n"
+        f"tetravolume {cell_tetravolume}"
+    )
+    cuboctahedron_lines = (
+        "Cuboctahedron\n"
+        f"{cuboctahedron['vertices']} vertices, "
+        f"{cuboctahedron_face_counts['triangles']} triangle + "
+        f"{cuboctahedron_face_counts['squares']} square faces, "
+        f"{cuboctahedron_edge_count} edges\n"
+        f"tetravolume {cuboctahedron_tetravolume}"
+    )
+    for centre, colour, text in (
+        (0.73, KIND_COLOURS["isomorphism"], cell_lines),
+        (0.28, KIND_COLOURS["complementarity"], cuboctahedron_lines),
+    ):
+        dual_axis.text(
+            centre,
+            0.55,
+            text,
+            ha="center",
+            va="center",
+            fontsize=8.2,
+            color="white",
+            bbox={"boxstyle": "round,pad=0.6", "facecolor": colour, "edgecolor": "#102a43"},
+        )
+    dual_axis.text(
+        0.50,
+        0.09,
+        f"volume ratio {cuboctahedron_tetravolume}/{cell_tetravolume} = {volume_ratio}",
+        ha="center",
+        fontsize=8.6,
+        color="#102a43",
+    )
+
+    return _save(
+        figure,
+        "fig_network.png",
+        "Four panels, every number read from the executed package at draw time. Panel one is the "
+        "resistance ladder, one bar for each distance class of the carrier's port graph, labelled "
+        "with its exact fraction and its pair count and annotated with the Kirchhoff index. Panel "
+        "two draws the twelve ports in the icosahedral spectral projection, coloured by graph "
+        "distance from port zero with that shell distribution as its legend and the intersection "
+        "array annotated. Panel three is the subgraph census, bars for triangles, pentagons, "
+        "perfect matchings and Hamiltonian cycles with the icosahedron face count drawn as a "
+        "reference line. Panel four compares the Voronoi cell and the cuboctahedron by their "
+        "vertex, face and edge counts and their tetravolumes, ending in the exact volume ratio.",
+    )
+
+
 def write_registry() -> Path:
     """Write the accessibility registry the renderer reads for figure alt text.
 
@@ -1336,6 +1549,7 @@ def main() -> int:
         ga_synergetics_figure,
         pair_triangles_figure,
         scope_matrix_figure,
+        network_figure,
     )
     for builder in builders:
         print(builder())

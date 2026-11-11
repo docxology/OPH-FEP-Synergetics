@@ -90,12 +90,13 @@ Never edit them by hand: change the registry or the values and re-render.
 ```
 .venv/bin/python -m pytest tests/ -q                  # the suite
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
-.venv/bin/oph-fep-synergetics verify                  # the registry, all 35 probes
+.venv/bin/oph-fep-synergetics verify                  # the registry, all 42 probes
 .venv/bin/oph-fep-synergetics verify --pair oph-fep   # one pairwise ledger
+.venv/bin/oph-fep-synergetics verify --kind disagreement   # one kind of claim
 .venv/bin/oph-fep-synergetics sources --vault-root /Volumes/GitVault
 .venv/bin/python scripts/render_docs.py               # regenerate the two documents
 .venv/bin/python scripts/render_docs.py --check       # fail when stale
-.venv/bin/python scripts/make_figures.py              # the sixteen figures and their registry
+.venv/bin/python scripts/make_figures.py              # the seventeen figures and their registry
 ```
 
 The manuscript renders through the `docxology/template` checkout, whose

@@ -88,10 +88,18 @@ The contributions are the following.
     $175 + 75\sqrt{5}$, against an integral table, and a packing density of
     {{PACKING_DENSITY}} derived from the cell rather than quoted
     [@prop:ico-volume; @prop:packing].
-11. A provenance discipline in which every source claim is pinned to a commit and
+11. Five readings of the carrier as a network, none of which either programme
+    supplied: exact effective resistances summing to a Kirchhoff index of
+    {{RESISTANCE_KIRCHHOFF_INDEX}}, a subgraph census of
+    {{CARRIER_TRIANGLES}} triangles, {{CARRIER_PENTAGONS}} five-cycles,
+    {{CARRIER_PERFECT_MATCHINGS}} matchings and
+    {{CARRIER_HAMILTONIAN_CYCLES}} Hamiltonian cycles, and a curvature of
+    {{CARRIER_TOTAL_DEFECT}} pi that is Gauss-Bonnet exactly
+    [@prop:resistance; @prop:subgraph-census; @prop:defect].
+12. A provenance discipline in which every source claim is pinned to a commit and
     every reimplementation cites the identifier it reimplements [@sec:reproducibility].
 
-Items 1 to 10 are executable: each is a function, and each section below reports
+Items 1 to 11 are executable: each is a function, and each section below reports
 the values that function returns.
 
 ## What this paper does not do

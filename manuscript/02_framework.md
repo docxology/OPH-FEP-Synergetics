@@ -224,6 +224,9 @@ quadray site, only that the two play the same role in the three formalisms and
 that the resulting numbers must therefore agree where both are defined. Where the
 numbers do not agree, [@sec:disagreements] says so. The carrier's counting
 invariants — {{CARRIER_TREE_NUMBER}} spanning trees,
-{{SHEAF_H1}} sheaf obstructions and {{SYMMETRY_GROUP_ORDER}} automorphisms — are
-derived from the same complex in [@sec:correspondences], and each of them is a
-statement that two vocabularies inherit rather than assert.
+{{SHEAF_H1}} sheaf obstructions, {{SYMMETRY_GROUP_ORDER}} automorphisms, and a
+census of {{CARRIER_TRIANGLES}} triangles, {{CARRIER_PENTAGONS}} five-cycles,
+{{CARRIER_PERFECT_MATCHINGS}} matchings and {{CARRIER_HAMILTONIAN_CYCLES}}
+Hamiltonian cycles — are derived from the same complex in
+[@sec:correspondences], and each of them is a statement that two vocabularies
+inherit rather than assert.

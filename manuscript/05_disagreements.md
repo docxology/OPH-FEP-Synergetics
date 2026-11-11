@@ -1,4 +1,4 @@
-# Disagreement: the thirteen obstructions, each stated exactly {#sec:disagreements}
+# Disagreement: the fifteen obstructions, each stated exactly {#sec:disagreements}
 
 An obstruction is a result. Each of the {{REGISTRY_DISAGREEMENTS}} claims below
 was proposed as an identification, and each fails in a way that can be stated
@@ -310,7 +310,58 @@ composite vocabulary that treats "shell" and "free energy" as two names for the
 same stratification will be inconsistent at the first configuration whose
 coordinates do not sum to zero, and the probe exhibits such configurations.
 
-## What the thirteen have in common
+## The shells around a port are not the lattice's shells {#sec:vertex-shells}
+
+::: {#prop:vertex-shells .proposition}
+The ports at graph distance one, two and three from a port number
+{{CARRIER_SHELL_SIZES}}, the graph is distance-regular with intersection array
+{{CARRIER_INTERSECTION_ARRAY}} and diameter {{CARRIER_DIAMETER}}, and the
+lattice's own shells at the same three radii number {{LATTICE_SHELL_SIZES}}.
+:::
+
+The two sequences disagree from the first term. The carrier's first shell holds
+{{CARRIER_SHELL_SIZES}} of its neighbours because the icosahedron is
+five-valent, while the IVM's first shell holds {{LATTICE_SHELL_SIZES}} sites
+because the lattice is twelve-coordinated by construction. The proposal that a
+port's neighbourhood is a lattice shell therefore fails on the smallest possible
+test, and no choice of radius repairs it: the carrier is finite with diameter
+{{CARRIER_DIAMETER}}, so its shells stop, while the lattice's do not.
+
+What survives is a structural statement rather than an identification. The
+carrier is distance-regular, with intersection array
+{{CARRIER_INTERSECTION_ARRAY}} read off a single representative per shell, so
+its neighbourhood structure is rigid: from any port, at any distance, the
+outward and backward degrees are the same. That is a stronger fact than the
+identification it replaces, and it is the reason the symmetry group of
+{{SYMMETRY_GROUP_ORDER}} can be transitive on ports, seams and faces at once.
+
+## `Twelve around one` names a family, not an object {#sec:families}
+
+::: {#prop:families .proposition}
+The phrase covers at least two solids with different counting invariants. The
+icosahedron is five-valent with {{CARRIER_TREE_NUMBER}} spanning trees; the
+cuboctahedron is four-valent, carries {{CUBOCTAHEDRON_TRIANGLES}} triangles and
+{{CUBOCTAHEDRON_SQUARES}} squares, {{CUBOCTAHEDRON_MATCHINGS}} perfect matchings,
+and {{CUBOCTAHEDRON_SPANNING_TREES}} spanning trees, which is
+{{CUBOCTAHEDRON_SPANNING_TREES_ROOT}} squared.
+:::
+
+This is the same failure [@sec:cuboctahedron] reports, one level down. There the
+shared quantity was the vertex count; here it is the phrase itself. A reader who
+is told that a structure is "twelve around one" has been told the coordination
+number and nothing else, and the coordination number does not determine the
+object: the two solids differ in degree, in triangle count, in matching count,
+and in the spanning-tree number, which differs by a factor of more than fifteen.
+
+The counting invariant is what does the work. Spanning trees are computed by the
+same determinant in both cases, on adjacency matrices derived independently --
+the carrier's from OPH's oriented base faces, the cuboctahedron's from the
+neighbouring lattice sites -- so the numbers are comparable even though the
+objects are not the same. What the registry records is that a claim of the form
+"the carrier is the twelve-around-one solid" is under-determined, and that the
+remedy is a refinement rather than a tolerance.
+
+## What the fifteen have in common
 
 Most of the obstructions reduce to one of two failures. The first is a
 *plateau*: zero-descent moves (PR-01), plateaux in the violation landscape (the
@@ -320,12 +371,18 @@ production of a stationary blanket, the stability of a coupling outside its stab
 region, and the direction of a gradient all vary within a class that a coarser
 vocabulary treats as fixed.
 
-The two newest obstructions sharpen a third failure, which is the one a
+The four newest obstructions sharpen a third failure, which is the one a
 correspondence registry is best placed to catch: *an invariant too coarse to
 identify the object it is asked to identify*. Twelve vertices do not determine a
 solid, and a shell index does not determine a free energy. Both claims failed not
 because a number disagreed but because the shared quantity was never an
 identification; a table of matched counts would have reported both as successes.
+
+The two newest obstructions are of the same kind. Reading a port's
+neighbourhood as an IVM shell compares two sequences that disagree at the first
+term, and reading the carrier as "twelve around one" compares a phrase against
+two solids it does not separate. Neither is a numerical failure, and neither would
+be found by matching any single number.
 
 A synthesis that wants to identify the three programmes must therefore add
 structure that excludes plateaux, fixes the missing invariants, and refines the

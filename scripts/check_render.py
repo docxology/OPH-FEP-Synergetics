@@ -1,17 +1,21 @@
 #!/usr/bin/env python3
 """Check a rendered PDF against the front-matter and reference contract.
 
-The manuscript makes three promises that only a rendered artefact can keep:
+The manuscript makes five promises that only a rendered artefact can keep:
 
 1. page 1 is the cover, pages 2 to 5 are the four panels of the graphical
    abstract, and the contents page follows the front matter;
-2. every registry key appears in the printed text, which is what shows that the
+2. each panel page carries its own figure caption, so a panel cannot float away
+   from the figure it describes;
+3. every registry key appears in the printed text, which is what shows that the
    registry table is the registry rather than a summary of it;
-3. LaTeX resolved every reference and the log carries no overfull box.
+4. the text margin is the narrow one the manuscript claims, measured from the
+   PDF's own word bounding boxes rather than read back from the preamble;
+5. LaTeX resolved every reference and the log carries no overfull box.
 
-The first two are read from the PDF with ``pdftotext -layout``; the third is
-read from the LaTeX log. Nothing here computes project results: it is a check on
-the render, and it exits non-zero when a promise is broken.
+The first four are read from the PDF; the fifth is read from the LaTeX log.
+Nothing here computes project results: it is a check on the render, and it exits
+non-zero when a promise is broken.
 """
 
 from __future__ import annotations
@@ -56,6 +60,34 @@ def pdf_text(pdf: Path) -> list[str]:
         text=True,
     )
     return completed.stdout.split("\f")[:-1]
+
+
+def text_left_margin(pdf: Path, page: int) -> float | None:
+    """Return the leftmost text coordinate on a page, in points, measured from the PDF.
+
+    The margin is a promise about the layout, so it is measured on the artefact
+    rather than read from the preamble: ``pdftotext -bbox`` reports the bounding
+    box of every word, and the smallest x is where the text block starts.
+    """
+    binary = shutil.which("pdftotext")
+    if binary is None:
+        return None
+    completed = subprocess.run(
+        [binary, "-bbox", "-f", str(page), "-l", str(page), str(pdf), "-"],
+        capture_output=True,
+        check=True,
+        text=True,
+    )
+    lefts = [float(value) for value in re.findall(r'xMin="([\d.]+)"', completed.stdout)]
+    return min(lefts) if lefts else None
+
+
+def caption_pages(pages: list[str]) -> dict[int, int]:
+    """Return how many figure captions each physical page carries."""
+    return {
+        number: len(re.findall(r"^Figure \d+:", text, re.M))
+        for number, text in enumerate(pages, start=1)
+    }
 
 
 def panel_page_map(pages: list[str]) -> dict[str, int]:
@@ -118,6 +150,30 @@ def check(
         ok = actual == expected
         passed &= ok
         lines.append(f"{panel} on page {expected}: {'ok' if ok else f'FAIL (page {actual})'}")
+
+    captions = caption_pages(pages)
+    for panel, expected in zip(PANELS, PANEL_PAGES, strict=True):
+        ok = captions.get(expected, 0) >= 1
+        passed &= ok
+        lines.append(
+            f"{panel} figure on page {expected}: {'ok' if ok else 'FAIL (no caption)'}"
+        )
+    total_captions = sum(captions.values())
+    lines.append(f"figure captions: {total_captions} (at least {len(PANELS) + 11} expected)")
+    passed &= total_captions >= len(PANELS) + 11
+
+    margin_page = min(PANEL_PAGES[-1] + 2, len(pages))
+    margin = text_left_margin(pdf, margin_page)
+    if margin is None:
+        lines.append("left text margin: unavailable")
+        passed = False
+    else:
+        margin_ok = margin <= 0.6 * 72
+        passed &= margin_ok
+        lines.append(
+            f"left text margin on page {margin_page}: {margin:.1f} pt = {margin / 72:.3f} in "
+            f"{'ok' if margin_ok else 'FAIL (wider than 0.6 in)'}"
+        )
 
     contents = contents_page(pages)
     contents_ok = contents is not None and contents > PANEL_PAGES[-1]

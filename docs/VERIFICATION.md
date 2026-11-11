@@ -9,9 +9,11 @@ surfaces: the registry (`oph-fep-synergetics verify`) and the test suite.
 .venv/bin/oph-fep-synergetics verify
 .venv/bin/oph-fep-synergetics verify --json
 .venv/bin/oph-fep-synergetics verify --key <key> [--key <key> ...]
+.venv/bin/oph-fep-synergetics verify --pair <pair>
+.venv/bin/oph-fep-synergetics verify --kind <kind>
 ```
 
-Each of the 23 entries carries an executable probe. A probe returns `(passed,
+Each of the 42 entries carries an executable probe. A probe returns `(passed,
 values)`; `values` is what the pass is made of, so a number that changes without
 changing the verdict is still visible in the report.
 
@@ -21,7 +23,7 @@ Exit codes:
 | --- | --- |
 | `0` | every selected probe passed |
 | `1` | at least one selected probe failed |
-| `2` | an unknown key was requested |
+| `2` | an unknown key, pair or kind was requested |
 
 An unknown key is an error rather than an empty selection, so a typo cannot be
 mistaken for a clean run.
@@ -33,7 +35,7 @@ mistaken for a clean run.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-308 tests, no mocks, no network, no fixtures that fake a result. The suite runs
+339 tests, no mocks, no network, no fixtures that fake a result. The suite runs
 from a fresh process against the real code paths.
 
 | file | what it pins down |
@@ -46,6 +48,8 @@ from a fresh process against the real code paths.
 | `test_geometry.py` | the twelve moves and their metric, the gauge, the exact xyz round-trip over shell sites, the shell sequence, the exact volumes, the vector equilibrium, and the subdivision identities |
 | `test_geometry_guards.py` | the icosahedral adjacency matrix and every range guard |
 | `test_invariants.py` | the reduced-Laplacian determinant in exact rationals, the spanning-tree number against the spectral product, the reciprocal spectrum sum, the GMRF precision and its independence pattern, Markov blankets, and the guesses the invariants reject |
+| `test_network.py` | the graph layer: the Laplacian's rows and degrees, distances and the intersection array, the exact effective resistance of every port pair as a rational, the ladder and its Kirchhoff index, the subgraph census, and an isomorphism test that is invariant under relabelling |
+| `test_lattice.py` | the cube's corners and its line graph, and the isomorphism between that line graph and the cuboctahedron |
 | `test_symmetry.py` | the automorphism group by exhaustive search, closure, orbit counts, the rotation/reflection split from the face orientations, eigenspace irreducibility, and the equivariance of the descent law |
 | `test_solids.py` | oriented faces, the icosahedron's volume against its closed form and its exact squared ratio, and the rejection of an unoriented face list |
 | `test_registry.py` | the registry contract, the pairwise scopes, the selection commands, plus an exact-value assertion per probe |
@@ -64,7 +68,7 @@ identity.
 ## Coverage
 
 `pyproject.toml` enforces `fail_under = 90` with branch coverage over
-`src/oph_fep_synergetics`. The current result is **96.30%**. The remaining lines
+`src/oph_fep_synergetics`. The current result is **96.34%**. The remaining lines
 are defensive or unreachable branches (an assertion that cannot fire on a
 well-formed carrier, a guard behind a guard), not untested behaviour.
 
@@ -108,17 +112,18 @@ suite rather than in LaTeX, so a defect is reported by `pytest`:
 | `test_the_registry_table_lists_exactly_the_registered_keys` | a manuscript registry table that drifts from `analysis/registry.py` |
 | `test_figure_links_match_the_accessibility_registry` | a figure link without a registry entry, or a missing PNG |
 | `test_figures.py` | a builder that is not orchestrated, or a registry entry without alt text |
-| `test_render_contract.py` | a render whose cover, graphical-abstract panels or contents page are not on the pages the manuscript promises, a registry key that does not reach the printed text, or a log with an overfull box, an undefined reference or an unresolved token |
+| `test_render_contract.py` | a render whose cover, graphical-abstract panels or contents page are not on the pages the manuscript promises, a panel page that does not carry its own figure caption, a measured left text margin wider than the 0.5 in the manuscript claims, a registry key that does not reach the printed text, or a log with an overfull box, an undefined reference or an unresolved token |
 
 The rendered result was checked the way a reader checks it, on the artefact
-itself: 39 pages, the cover on page 1, the four graphical-abstract panels on
+itself: 42 pages, the cover on page 1, the four graphical-abstract panels on
 pages 2 to 5, the contents page at 6, and a 0.500 in left text margin measured
-from the PDF's own text bounding boxes. The body carries fifteen numbered figures
-plus the cover image, fourteen numbered equations, three definitions, twenty-five
-numbered propositions and eight tables, with `0` undefined citations and `0`
-unresolved `??` cross-references in `_combined_manuscript.tex`, `0` overfull
-boxes in `_combined_manuscript.log`, and all 35 registry keys present and
-unbroken in the extracted text of the PDF. `scripts/check_render.py` performs
+from the PDF's own text bounding boxes. Each panel page carries its own figure
+caption, so no panel floated away from its figure. The body carries sixteen
+numbered figures plus the cover image, fourteen numbered equations, three
+definitions, thirty-two numbered propositions and eight tables, with `0`
+undefined citations and `0` unresolved `??` cross-references in
+`_combined_manuscript.tex`, `0` overfull boxes in `_combined_manuscript.log`, and
+all 42 registry keys present and unbroken in the extracted text of the PDF. `scripts/check_render.py` performs
 that reading and exits non-zero when any of it drifts; `test_render_contract.py`
 runs it against the rendered PDF when one is present.
 

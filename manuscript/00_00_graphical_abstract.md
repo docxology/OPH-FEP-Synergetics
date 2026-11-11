@@ -29,12 +29,6 @@ FEP–Synergetics edge is short by {{REGISTRY_FEP_SYNERGETICS}} claims and holds
 two exact results about information, in one of which the programmes disagree
 about the meaning of a number.
 
-The scope of a claim is part of the claim: `spectral-gap` is a statement about
-OPH's repair operator and the FEP's second eigenvalue, `kl-lattice-metric` about
-the FEP's divergence and Synergetics' lattice metric.
-[@sec:correspondences] reports the three ledgers separately, and
-[@tbl:registry] carries the scope of every row.
-
 ![The pairwise ledger triangle. Vertices are the three programmes, Observer Patch Holography, the Free Energy Principle and Fuller's Synergetics. Each edge is annotated with the counts of identifications, obstructions and complementarities for that pair, and the three load-bearing identifications are named on the edge where they sit. The centre carries the one claim that needs all three vocabularies, the three currencies of one lattice step. Every count is read from the executed registry at draw time rather than transcribed.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
 
 The scope of a claim is part of the claim: `carrier-port-chart` is a statement

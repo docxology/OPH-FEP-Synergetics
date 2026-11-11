@@ -60,6 +60,7 @@ queried. A `moved` result is not a failure: it says the reading is historical.
 # every correspondence, in one run or one pairwise scope at a time
 .venv/bin/oph-fep-synergetics verify
 .venv/bin/oph-fep-synergetics verify --pair synergetics-oph
+.venv/bin/oph-fep-synergetics verify --kind disagreement
 .venv/bin/oph-fep-synergetics verify --json
 
 # the pins, checked against the live vault

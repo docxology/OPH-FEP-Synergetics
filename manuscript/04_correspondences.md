@@ -1,4 +1,4 @@
-# Agreement: the fifteen identifications each pairwise scope survives {#sec:correspondences}
+# Agreement: the seventeen identifications each pairwise scope survives {#sec:correspondences}
 
 The registry records {{REGISTRY_ISOMORPHISMS}} isomorphisms across the three
 pairwise scopes. This section states each one, gives the exact values the probe
@@ -321,9 +321,56 @@ lattice sites is an integer table scaled by two. It also fixes a convention that
 the paper uses everywhere else: a "one-step cost" is a divergence, not an energy,
 and the two differ by the factor of two that [@eq:kl] makes explicit.
 
-## What the fifteen agreements do not say
+## The carrier's subgraphs are the solid's own counts {#sec:census}
 
-None of the fifteen claims identifies OPH's *dynamics* with the FEP's
+::: {#prop:subgraph-census .proposition}
+Counting the seam graph's subgraphs by exhaustion returns
+{{CARRIER_TRIANGLES}} triangles, {{CARRIER_PENTAGONS}} five-cycles,
+{{CARRIER_PERFECT_MATCHINGS}} perfect matchings and
+{{CARRIER_HAMILTONIAN_CYCLES}} labelled Hamiltonian cycles, and the first of
+those is exactly the number of faces the port chart was derived from.
+:::
+
+The probe enumerates rather than quotes: every three-vertex subset for the
+triangles, every five-vertex subset for the pentagons, and a memoized recursion
+for the matchings and the Hamiltonian cycles, all from the adjacency matrix
+alone. The triangle count is where two derivations meet. The carrier's faces were
+*derived* from OPH's oriented base faces in [@sec:port-chart], and the census then
+*rediscovers* {{CARRIER_TRIANGLES}} triangles in the graph that derivation
+produced. A count that agreed by construction would prove nothing; this one is
+computed from the adjacency and checked against the face list afterwards.
+
+The five-cycles are the dual solid's vertices, which is the first place in the
+paper where the dodecahedron appears without being named. The perfect matchings
+and the Hamiltonian cycles have no counterpart in any of the three programmes,
+and that is the reason to report them: they are properties of the object all
+three are about, available to anyone who can read its adjacency.
+
+## Curvature is exact in units of pi {#sec:defect}
+
+::: {#prop:defect .proposition}
+Five equilateral triangles meet at every port, so each port carries an angle
+defect of {{CARRIER_DEFECT_PER_PORT}} pi and the twelve ports carry
+{{CARRIER_TOTAL_DEFECT}} pi in total, which is $2\pi\chi$ for a triangulated
+sphere: the combinatorial form of Gauss-Bonnet, read off the face list.
+:::
+
+The probe computes each defect as twice pi minus the incident faces times pi over
+three and returns it as an exact rational multiple of pi rather than as a decimal:
+{{CARRIER_DEFECT_PER_PORT}} at each port, {{CARRIER_TOTAL_DEFECT}} in total,
+against the Euler characteristic that [@sec:census] has already reached from the
+other direction. The identity is the reason twelve five-fold vertices close into
+a sphere rather than a dish, and it is exact for the same reason the tree number
+is: rational quantities over a finite complex.
+
+![The carrier read as a network. Panel one gives the exact resistance ladder between port pairs with the Kirchhoff index; panel two colours the twelve ports by their graph distance from one port and annotates the intersection array; panel three counts the subgraphs; panel four compares the twelve-around-one cell with its dual, whose counts and tetravolumes are read from the geometry package. Every number is computed from the executed package at draw time rather than transcribed.](../output/figures/fig_network.png){#fig:network width=100%}
+
+[@fig:network] draws this section and the two that follow it: the resistance
+ladder, the shells around a port, the census, and the dual pair.
+
+## What the seventeen agreements do not say
+
+None of the seventeen claims identifies OPH's *dynamics* with the FEP's
 *functional*. Several of them are statements about counting, and most of the rest
 are statements about the carrier, its spectrum, its repair rule as an integer map,
 the Gaussian free energy on it, and the sheaf whose Laplacian it is. Every one of
@@ -335,6 +382,6 @@ reports them with the same care: a symmetry group of order
 integer, and a cohomology dimension is an exact rank. What none of them supplies
 is a claim that either programme's *learning* dynamics is the other's.
 
-The next section reports the thirteen places where the identification fails, and
+The next section reports the fifteen places where the identification fails, and
 most of them fail for one reason: the authors of each programme attach a
 *dynamical* claim to that shared object, and the dynamical claims do not agree.

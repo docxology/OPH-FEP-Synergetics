@@ -22,7 +22,9 @@ claim: the same icosahedral symmetry is a statement about OPH and Synergetics,
 while the Markov blanket of the carrier precision is a statement about OPH and
 the FEP. [@sec:correspondences] reports the three pairwise ledgers separately for
 that reason, and `oph-fep-synergetics verify --pair synergetics-oph` executes one
-ledger on its own.
+ledger on its own. The kind of a claim is selectable the same way:
+`oph-fep-synergetics verify --kind disagreement` runs the obstructions alone, so a
+reader who wants the failures does not have to read past the identifications.
 
 Making the probe return values rather than a boolean is the single design choice
 that keeps the registry honest. A boolean can be made true by weakening a
@@ -89,6 +91,13 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `icosahedron-tetravolume` | complementarity | `exact` | `synergetics-oph` | the carrier's solid is $18.5123\ldots$, squared exactly $175 + 75\sqrt{5}$ |
 | `packing-density` | complementarity | `exact` | `synergetics-oph` | Voronoi cell $14/12/24$, tetravolume six, density $\pi/(3\sqrt{2})$ |
 | `tetravolume-arithmetic` | complementarity | `exact` | `three-way` | four nats, the rational gap, and an integral table beside a non-integral carrier |
+| `effective-resistance` | complementarity | `exact` | `oph-fep` | effective resistance $11/30$, $7/15$, $1/2$ by distance class, Kirchhoff index $28$ twice over |
+| `vertex-shells` | disagreement | `obstructed` | `synergetics-oph` | shells $5, 5, 1$ against the lattice's $12, 42, 92$; intersection array $(5, 2, 1; 1, 2, 5)$ |
+| `subgraph-census` | isomorphism | `exact` | `synergetics-oph` | 20 triangles, 12 pentagons, 125 matchings, 1280 Hamiltonian cycles, counted by exhaustion |
+| `angle-defect` | isomorphism | `exact` | `synergetics-oph` | a defect of $\pi/3$ at each port and $4\pi$ in total, which is $2\pi\chi$ |
+| `twelve-around-one-families` | disagreement | `obstructed` | `synergetics-oph` | the phrase covers solids with $5184000$ and $331776 = 576^2$ spanning trees |
+| `dual-cells` | complementarity | `exact` | `synergetics-oph` | the cell and the cuboctahedron, $14/12/24$ against $12/14/24$, volumes $6$ and $20$ |
+| `conjugation-norm` | complementarity | `exact` | `three-way` | conjugation fixes the integer counts and moves the volume, whose norm is $50$ |
 
 : The {{REGISTRY_ENTRIES}} correspondences, in registry order:
 {{REGISTRY_ISOMORPHISMS}} isomorphisms, {{REGISTRY_DISAGREEMENTS}}

@@ -11,7 +11,11 @@ more than its entries' statuses.
 The rendered edition adds a cover page (page 1) and a four-panel graphical
 abstract (pages 2 to 5) written in `00_00_graphical_abstract.md`, with the
 contents page re-emitted after the panels. The registry carries a pairwise scope
-per entry, and `oph-fep-synergetics verify --pair` executes one scope at a time.
+per entry, and `oph-fep-synergetics verify --pair` executes one scope at a time;
+`--kind` narrows a run to the identifications, the obstructions or the
+complementarities. `fig:network` draws the carrier's network readings — the
+resistance ladder, the shells, the subgraph census and the dual pair — beside
+the registry and triangle figures.
 
 ---
 
@@ -20,7 +24,7 @@ per entry, and `oph-fep-synergetics verify --pair` executes one scope at a time.
 **Entries:** `carrier-port-chart`, `sheath-agreement`, `kissing-twelve`,
 `quadray-ivm`, `tree-number`, `gmrf-independence`, `sheaf-cohomology`,
 `icosahedral-symmetry`, `eigenspace-irreducibility`, `law-equivariance`,
-`kl-lattice-metric`.
+`kl-lattice-metric`, `subgraph-census`, `angle-defect`, `effective-resistance`.
 
 The carrier is a fixed finite object: `carrier.ports` ports, `carrier.seams`
 seams, `carrier.faces` faces, every port meeting `carrier.degree` triangles.
@@ -63,7 +67,7 @@ non-Gaussian cases are outside this work; see [docs/SCOPE.md](../docs/SCOPE.md).
 `d-stability`, `schedule-path`, `reduction-criterion`,
 `existence-without-reachability`, `directed-gradient`,
 `four-cycle-local-minimum`, `cuboctahedron-vs-icosahedron`,
-`shell-vs-free-energy`.
+`shell-vs-free-energy`, `vertex-shells`, `twelve-around-one-families`.
 
 These are results, not caveats. Each is an executable demonstration that an
 identification that looks natural in prose fails as stated.
@@ -121,7 +125,8 @@ identification that looks natural in prose fails as stated.
 
 **Entries:** `equilibrium-propagation`, `replicator-potential`,
 `native-repair-law`, `certificate-species`, `quadray-ivm`,
-`icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic`.
+`icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic`,
+`dual-cells`, `conjugation-norm`.
 
 - **OPH** supplies a concrete, finite, conserving law on a fixed carrier, with
   an exact energy identity and a sharp certificate — a spectral gap, not a

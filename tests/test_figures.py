@@ -35,6 +35,7 @@ EXPECTED_BUILDERS = (
     "ga_synergetics_figure",
     "pair_triangles_figure",
     "scope_matrix_figure",
+    "network_figure",
 )
 
 
