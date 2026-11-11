@@ -73,3 +73,12 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         assert entry["filename"].endswith(".png")
         assert len(entry["alt"]) > 60
         assert entry["alt"].endswith(".")
+
+
+def test_the_same_builder_is_byte_deterministic(tmp_path, monkeypatch):
+    """A rebuilt figure is byte-identical, so the delivered copy stays identical."""
+    monkeypatch.setattr(make_figures, "FIGURES", tmp_path)
+    monkeypatch.setattr(make_figures, "ALT_TEXT", {})
+    first = make_figures.descent_figure().read_bytes()
+    second = make_figures.descent_figure().read_bytes()
+    assert second == first

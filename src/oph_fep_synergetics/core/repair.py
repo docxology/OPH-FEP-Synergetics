@@ -111,6 +111,28 @@ def predict_energy_decrease(loads: Sequence[int], a: int, b: int) -> float:
     return (difference * difference - (abs(difference) % 2)) / 4.0
 
 
+def classify_native_outcome(
+    loads: Sequence[int],
+    seam: tuple[int, int],
+    coin: int,
+) -> dict[str, object]:
+    """Classify the native repair of one seam as strict, zero, or noop.
+
+    The shared primitive behind the census controls: the outcome is
+    ``"noop"`` when the law leaves the configuration alone, ``"strict"``
+    when the quadratic energy strictly decreases, and ``"zero"`` when the
+    configuration changes but the energy stays flat (mismatch one).
+    """
+    step = native_repair(loads, seam, coin)
+    if step.after == step.before:
+        kind = "noop"
+    elif step.energy_decrease > 1e-12:
+        kind = "strict"
+    else:
+        kind = "zero"
+    return {"kind": kind, "step": step}
+
+
 def broken_seams(loads: Sequence[int], seams: Iterable[tuple[int, int]]) -> tuple[tuple[int, int], ...]:
     """Return the broken seams in deterministic order."""
     return tuple((a, b) for a, b in seams if is_broken(loads, a, b))

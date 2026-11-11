@@ -39,6 +39,7 @@ def test_verify_reports_every_probe(capsys):
 def test_verify_json_payload_is_complete(capsys):
     assert main(["verify", "--json"]) == 0
     payload = json.loads(capsys.readouterr().out)
+    assert payload["schema_version"] == "1.2"
     assert payload["summary"]["total"] == 42
     assert payload["summary"]["failed"] == 0
     assert payload["summary"]["failures"] == []

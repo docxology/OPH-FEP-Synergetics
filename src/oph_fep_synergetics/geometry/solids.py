@@ -36,6 +36,17 @@ from typing import Iterable, Sequence
 
 from .subdivision import icosahedron_edges, icosahedron_faces, icosahedron_vertices
 
+from .vectors import (
+    TIGHT_TOLERANCE,
+    Vector,
+    add,
+    cross,
+    dot,
+    norm,
+    scale,
+    subtract,
+)
+
 __all__ = [
     "angle_defects",
     "icosahedron_tetravolume",
@@ -48,36 +59,6 @@ __all__ = [
     "tetravolume_galois_norm",
     "tetravolume_ratio_squared_exact",
 ]
-
-Vector = tuple[float, float, float]
-
-
-def _subtract(left: Sequence[float], right: Sequence[float]) -> Vector:
-    return (left[0] - right[0], left[1] - right[1], left[2] - right[2])
-
-
-def _add(left: Sequence[float], right: Sequence[float]) -> Vector:
-    return (left[0] + right[0], left[1] + right[1], left[2] + right[2])
-
-
-def _scale(vector: Sequence[float], factor: float) -> Vector:
-    return (vector[0] * factor, vector[1] * factor, vector[2] * factor)
-
-
-def _dot(left: Sequence[float], right: Sequence[float]) -> float:
-    return left[0] * right[0] + left[1] * right[1] + left[2] * right[2]
-
-
-def _cross(left: Sequence[float], right: Sequence[float]) -> Vector:
-    return (
-        left[1] * right[2] - left[2] * right[1],
-        left[2] * right[0] - left[0] * right[2],
-        left[0] * right[1] - left[1] * right[0],
-    )
-
-
-def _norm(vector: Sequence[float]) -> float:
-    return math.sqrt(_dot(vector, vector))
 
 
 def _centroid(vertices: Sequence[Sequence[float]]) -> Vector:
@@ -98,8 +79,8 @@ def shortest_edge(vertices: Sequence[Sequence[float]]) -> float:
     least = math.inf
     for i in range(len(vertices)):
         for j in range(i + 1, len(vertices)):
-            distance = _norm(_subtract(vertices[i], vertices[j]))
-            if 1e-12 < distance < least:
+            distance = norm(subtract(vertices[i], vertices[j]))
+            if TIGHT_TOLERANCE < distance < least:
                 least = distance
     if not math.isfinite(least):
         raise ValueError("a vertex set needs at least two distinct vertices")
@@ -123,11 +104,11 @@ def orient_faces_outward(
     flips = 0
     for face in faces:
         a, b, c = (int(index) for index in face)
-        normal = _cross(_subtract(points[b], points[a]), _subtract(points[c], points[a]))
-        outward = _subtract(
-            _scale(_add(_add(points[a], points[b]), points[c]), 1.0 / 3.0), centre
+        normal = cross(subtract(points[b], points[a]), subtract(points[c], points[a]))
+        outward = subtract(
+            scale(add(add(points[a], points[b]), points[c]), 1.0 / 3.0), centre
         )
-        if _dot(normal, outward) < 0.0:
+        if dot(normal, outward) < 0.0:
             b, c = c, b
             flips += 1
         oriented.append((a, b, c))
@@ -151,12 +132,12 @@ def polyhedron_volume(
     total = 0.0
     for face in faces:
         a, b, c = (int(index) for index in face)
-        left = _subtract(points[a], centre)
-        middle = _subtract(points[b], centre)
-        right = _subtract(points[c], centre)
-        if _dot(_cross(left, middle), right) < 0.0:
+        left = subtract(points[a], centre)
+        middle = subtract(points[b], centre)
+        right = subtract(points[c], centre)
+        if dot(cross(left, middle), right) < 0.0:
             raise ValueError("face orientation points inward; orient the faces outward first")
-        total += _dot(left, _cross(middle, right))
+        total += dot(left, cross(middle, right))
     return abs(total) / 6.0
 
 
@@ -178,8 +159,8 @@ def tetravolume_ratio_squared_exact() -> tuple[Fraction, Fraction]:
     using ``(3 + sqrt 5)^2 = 14 + 6 sqrt 5`` rather than a decimal expansion.
     """
     base = (Fraction(14, 1), Fraction(6, 1))
-    scale = Fraction(25, 2)
-    return (scale * base[0], scale * base[1])
+    factor = Fraction(25, 2)
+    return (factor * base[0], factor * base[1])
 
 
 def icosahedron_tetravolume() -> dict[str, object]:
@@ -194,7 +175,7 @@ def icosahedron_tetravolume() -> dict[str, object]:
     vertices = icosahedron_vertices()
     faces = icosahedron_faces()
     edge_list = icosahedron_edges()
-    lengths = [_norm(_subtract(vertices[a], vertices[b])) for a, b in edge_list]
+    lengths = [norm(subtract(vertices[a], vertices[b])) for a, b in edge_list]
     oriented, flips = orient_faces_outward(vertices, faces)
     volume = polyhedron_volume(vertices, oriented)
     edge = sum(lengths) / len(lengths)

@@ -43,7 +43,7 @@ from oph_fep_synergetics.geometry import (
     neighbor_sites,
     octahedron_vertices,
     octahedron_volume,
-    scale,
+    scaled_canonical,
     shell_count,
     shell_index,
     sites_through_shell,
@@ -111,7 +111,7 @@ def test_embedding_has_four_tetrahedral_columns():
     assert all(len(row) == 4 for row in EMBEDDING)
     assert EMBEDDING == ((1, -1, -1, 1), (1, 1, -1, -1), (1, -1, 1, -1))
     assert all(sum(row) == 0 for row in EMBEDDING)
-    assert scale(Quadray(2, 1, 1, 0), 1).as_tuple() == (2, 1, 1, 0)
+    assert scaled_canonical(Quadray(2, 1, 1, 0), 1).as_tuple() == (2, 1, 1, 0)
 
 
 def test_xyz_round_trip_is_exact_on_shell_sites():

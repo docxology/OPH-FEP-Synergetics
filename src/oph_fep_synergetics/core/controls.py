@@ -7,7 +7,7 @@ rational arithmetic, explicit matrices) and numerically checked where the
 source statement is analytic.  They are the project's negative controls: a
 bridge that cannot survive them is not a bridge.
 
-The controls fall into seven groups:
+The controls fall into eight groups:
 
 1. **Descent versus drift** -- the native repair law strictly lowers the
    quadratic energy on broken seams, but admits zero-descent moves at
@@ -23,9 +23,10 @@ The controls fall into seven groups:
    equilibrium and a periodic orbit; the relaxation orbit's minimum radius and
    period are reported numerically, not proved.
 6. **Carrier invariants of the native law** -- the transition multiplicities of
-   the seventy-eight-state shell, and the four-cycle local minimum of an
-   independently defined discrepancy.
-7. **Free-energy form and its boundaries** -- the Lyapunov form of a stable
+   the seventy-eight-state shell.
+7. **Four-cycle local minimum** -- the local minimum of an independently defined
+   discrepancy is not a shell object, but it is a control.
+8. **Free-energy form and its boundaries** -- the Lyapunov form of a stable
    law, the directed-gradient boundary, the two-settle identity, the surprise
    sandwich, and the contraction displacement bounds.
 """
@@ -39,8 +40,10 @@ from typing import Sequence
 
 import numpy as np
 
+from .carrier import icosahedral_carrier
 from .repair import (
     RepairStep,
+    classify_native_outcome,
     energy,
     mismatch,
     native_repair,
@@ -61,8 +64,6 @@ def gated_descent_census() -> dict[str, int]:
     (mismatch one), and no-op moves.  The quadratic decrease is checked against
     the closed form ``(d^2 - (|d| mod 2)) / 4``.
     """
-    from .carrier import icosahedral_carrier
-
     carrier = icosahedral_carrier()
     states = carrier.shell_configurations(total=2)
     strict = zero = noop = 0
@@ -70,8 +71,9 @@ def gated_descent_census() -> dict[str, int]:
         for a, b in carrier.edges:
             difference = mismatch(state, a, b)
             for coin in (0, 1):
-                step = native_repair(state, (a, b), coin)
-                if step.after == step.before:
+                outcome = classify_native_outcome(state, (a, b), coin)
+                step = outcome["step"]
+                if outcome["kind"] == "noop":
                     noop += 1
                     continue
                 predicted = predict_energy_decrease(state, a, b)
@@ -80,7 +82,7 @@ def gated_descent_census() -> dict[str, int]:
                     raise AssertionError(
                         f"energy decrease mismatch at {state} seam {(a, b)} coin {coin}"
                     )
-                if observed > 0:
+                if outcome["kind"] == "strict":
                     strict += 1
                 elif abs(difference) == 1:
                     zero += 1
@@ -134,8 +136,6 @@ def mismatch_one_excursion(steps: int = 6) -> tuple[tuple[int, ...], ...]:
     """
     if steps < 1:
         raise ValueError("steps must be positive")
-    from .carrier import icosahedral_carrier
-
     carrier = icosahedral_carrier()
     state = [0] * carrier.port_count
     state[0] = 1
@@ -572,14 +572,13 @@ def path_multiplicity_census() -> dict[int, int]:
     state.  The conditional surprisal of a path is therefore a sum of
     ``log(60 / m)`` terms drawn from this set.
     """
-    from .carrier import icosahedral_carrier
-
     carrier = icosahedral_carrier()
     census: dict[tuple[tuple[int, ...], tuple[int, ...]], int] = {}
     for state in carrier.shell_configurations(total=2):
         for a, b in carrier.edges:
             for coin in (0, 1):
-                step = native_repair(state, (a, b), coin)
+                outcome = classify_native_outcome(state, (a, b), coin)
+                step = outcome["step"]
                 key = (step.before, step.after)
                 census[key] = census.get(key, 0) + 1
     counts: dict[int, int] = {}

@@ -16,7 +16,7 @@ no pair of readings captures.
 | oph-fep | isomorphism | exact | `shell-counts` | The total-two load shell has 78 configurations and the binary shell has 66. |
 | oph-fep | isomorphism | exact | `native-repair-law` | The native seam law conserves total load on every transition and lowers the quadratic energy by exactly (d^2 - (|d| mod 2)) / 4. |
 | oph-fep | isomorphism | exact-on-domain | `variational-equivalence` | On the linear-Gaussian domain the interface-energy minimiser over the interior is the harmonic extension and the posterior mean, so A3-style constrained relative-entropy minimisation and predictive-coding perception are the same object. |
-| oph-fep | isomorphism | exact-on-domain | `free-energy-dictionary` | Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, and the update residual pins the Bayesian surprise between the extreme interior eigenvalues. |
+| oph-fep | isomorphism | exact-on-domain | `free-energy-dictionary` | Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, the update residual pins the Bayesian surprise between the extreme interior eigenvalues, and the interior free energy's drop from the old minimiser to the new one equals the Bayesian surprise on this domain. |
 | oph-fep | isomorphism | exact | `sheaf-agreement` | Patch agreement is the global-section condition of a cellular sheaf over the carrier complex, and the sheaf Laplacian is the carrier Laplacian. |
 | oph-fep | isomorphism | exact | `certificate-species` | The native law's sharp certificate is a spectral gap: the mean repair operator is symmetric, nonnegative and doubly stochastic by construction from the five-regular Laplacian, with second eigenvalue 1 - (5 - sqrt(5)) / 60, and its induced infinity norm is exactly one, so no sup-norm contraction certifies it. |
 | oph-fep | isomorphism | exact | `tree-number` | The carrier's Laplacian carries an exact integer spanning-tree number: the reduced Laplacian's determinant is 5184000, equal to (1/12) times the product of the eleven nonzero eigenvalues, so the count of acyclic seam sets is an invariant both readings share. |
@@ -170,7 +170,7 @@ Probe values:
 
 **isomorphism** / **exact-on-domain** / **oph-fep** / probe PASS
 
-Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, and the update residual pins the Bayesian surprise between the extreme interior eigenvalues.
+Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, the update residual pins the Bayesian surprise between the extreme interior eigenvalues, and the interior free energy's drop from the old minimiser to the new one equals the Bayesian surprise on this domain.
 
 - OPH: Repair reduces disagreement; records survive comparison.
 - FEP: The variational bound, its gap, and Bayesian surprise.
@@ -179,6 +179,7 @@ Surprisal is the disagreement no repair removes, Bayesian surprise is the disagr
 
 Probe values:
 
+- `energy_drop_residual` = 0.0
 - `record_injectivity` = True
 - `bayesian_surprise` = 0.25
 - `closed_form_half_g_linv_g` = 0.25
@@ -898,7 +899,7 @@ Probe values:
 The carrier's subgraph census, computed from the derived graph alone, is asserted equal to the icosahedron's own counts: 20 triangles, exactly its twenty faces; 12 five-cycles, the vertices of its dual dodecahedron; 125 perfect matchings; and 1280 labelled Hamiltonian cycles.
 
 - OPH: The 20 triangles of the derived face set.
-- FEP: Nothing: a census of the same graph, not a probabilistic reading of it.
+- FEP: A census of the precision's underlying graph; the FEP reading inherits the counts and asserts nothing about them.
 - Synergetics: The icosahedron's faces and the dodecahedron's twelve vertices.
 - Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
 
@@ -918,7 +919,7 @@ Probe values:
 Gauss-Bonnet on the carrier is exact in units of pi: five equilateral triangles meet at every port in the derived chart, so the defect is 1/3 pi there and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the triangulated sphere; the probe verifies the five-fold vertex figure and the bookkeeping that follows from the definition of the defect.
 
 - OPH: A patch complex with five faces at every port.
-- FEP: Nothing: curvature is a property of the complex, not of a belief.
+- FEP: Curvature of the shared complex; the FEP vocabulary adds no reading of a geometric defect, and none is claimed.
 - Synergetics: The icosahedron's five-fold vertex figures, whose angular accounting is the classical one.
 - Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
 

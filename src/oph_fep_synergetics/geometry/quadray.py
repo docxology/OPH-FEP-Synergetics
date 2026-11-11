@@ -26,6 +26,8 @@ from fractions import Fraction
 from itertools import permutations
 from typing import Iterable, Sequence
 
+from .vectors import PIVOT_TOLERANCE, TIGHT_TOLERANCE
+
 #: Default 3x4 embedding: rows are X, Y, Z; columns are the tetrahedron directions.
 EMBEDDING: tuple[tuple[int, int, int, int], ...] = (
     (1, -1, -1, 1),
@@ -159,7 +161,7 @@ def _solve_in_place(matrix: list[list[float]], rhs: list[float]) -> None:
     size = len(matrix)
     for column in range(size):
         pivot = max(range(column, size), key=lambda row: abs(matrix[row][column]))
-        if abs(matrix[pivot][column]) <= 1e-15:
+        if abs(matrix[pivot][column]) <= PIVOT_TOLERANCE:
             raise ValueError("embedding is singular")
         if pivot != column:
             matrix[column], matrix[pivot] = matrix[pivot], matrix[column]
@@ -188,7 +190,7 @@ def _least_squares(matrix: list[list[float]], xyz: tuple[float, float, float]) -
     # Solve the 4x4 normal equations; the system is singular along the gauge
     # kernel, so add the minimum-norm regulariser.
     for i in range(4):
-        normal[i][i] += 1e-12
+        normal[i][i] += TIGHT_TOLERANCE
     _solve_in_place(normal, rhs)
     return rhs
 
@@ -285,6 +287,6 @@ def neighbor_sites() -> tuple[Quadray, ...]:
     return tuple(Quadray(*move) for move in neighbor_moves())
 
 
-def scale(point: Quadray | Sequence[int], factor: int) -> Quadray:
+def scaled_canonical(point: Quadray | Sequence[int], factor: int) -> Quadray:
     """Return ``factor * point`` in the canonical gauge."""
     return Quadray(*_components(point)).scale(factor).normalize()

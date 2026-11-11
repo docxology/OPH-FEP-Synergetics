@@ -33,15 +33,19 @@ from .quadray import (
     to_xyz,
 )
 from .solids import (
-    _add,
-    _cross,
-    _dot,
-    _norm,
-    _scale,
-    _subtract,
     orient_faces_outward,
     polyhedron_volume,
     regular_tetrahedron_volume,
+)
+from .vectors import (
+    EDGE_TOLERANCE,
+    TIGHT_TOLERANCE,
+    add,
+    cross,
+    dot,
+    norm,
+    scale,
+    subtract,
 )
 
 #: Deepest frequency shell this module enumerates.  QuadMath supports 32.
@@ -405,6 +409,11 @@ def cuboctahedron_signature() -> dict[str, object]:
 # ---------------------------------------------------------------------------
 
 
+def _fan_triangulation(face: tuple[int, ...]) -> list[tuple[int, int, int]]:
+    """Fan-triangulate one polygonal cell face about its first vertex."""
+    return [(face[0], face[k], face[k + 1]) for k in range(1, len(face) - 1)]
+
+
 def voronoi_cell() -> dict[str, object]:
     """Return the Voronoi cell of the IVM, built as the dual of the twelve neighbours.
 
@@ -433,20 +442,20 @@ def voronoi_cell() -> dict[str, object]:
         for face in faces[key]:
             total = (0.0, 0.0, 0.0)
             for index in face:
-                total = _add(total, neighbours[index])
-            vertices.append(_scale(total, 0.25))
+                total = add(total, neighbours[index])
+            vertices.append(scale(total, 0.25))
             dualized.append(tuple(face))
 
     cell_faces: list[tuple[int, ...]] = []
     for index, neighbour in enumerate(neighbours):
         incident = [dual for dual, face in enumerate(dualized) if index in face]
-        axis = _scale(neighbour, 1.0 / _norm(neighbour))
-        reference = _cross(axis, (1.0, 0.0, 0.0))
-        if _norm(reference) < 1e-9:
-            reference = _cross(axis, (0.0, 1.0, 0.0))
-        reference = _scale(reference, 1.0 / _norm(reference))
-        second = _cross(axis, reference)
-        centre = _scale(
+        axis = scale(neighbour, 1.0 / norm(neighbour))
+        reference = cross(axis, (1.0, 0.0, 0.0))
+        if norm(reference) < EDGE_TOLERANCE:
+            reference = cross(axis, (0.0, 1.0, 0.0))
+        reference = scale(reference, 1.0 / norm(reference))
+        second = cross(axis, reference)
+        centre = scale(
             sum((vertices[dual] for dual in incident), (0.0, 0.0, 0.0)),
             1.0 / len(incident),
         )
@@ -455,8 +464,8 @@ def voronoi_cell() -> dict[str, object]:
                 sorted(
                     incident,
                     key=lambda dual: math.atan2(
-                        _dot(_subtract(vertices[dual], centre), second),
-                        _dot(_subtract(vertices[dual], centre), reference),
+                        dot(subtract(vertices[dual], centre), second),
+                        dot(subtract(vertices[dual], centre), reference),
                     ),
                 )
             )
@@ -470,33 +479,32 @@ def voronoi_cell() -> dict[str, object]:
     side_spreads = []
     for face in cell_faces:
         lengths = [
-            _norm(_subtract(vertices[face[k]], vertices[face[(k + 1) % len(face)]]))
+            norm(subtract(vertices[face[k]], vertices[face[(k + 1) % len(face)]]))
             for k in range(len(face))
         ]
         side_spreads.append(max(lengths) - min(lengths))
 
     triangles: list[tuple[int, int, int]] = []
     for face in cell_faces:
-        for k in range(1, len(face) - 1):
-            triangles.append((face[0], face[k], face[k + 1]))
+        triangles.extend(_fan_triangulation(face))
     volume = polyhedron_volume(vertices, triangles)
     _, orientation_flips = orient_faces_outward(vertices, triangles)
 
-    inradius = half / _norm(neighbours[0])
+    inradius = half / norm(neighbours[0])
     pyramid = 0.0
     for face in cell_faces:
         area = 0.0
-        for k in range(1, len(face) - 1):
-            area += 0.5 * _norm(
-                _cross(
-                    _subtract(vertices[face[k]], vertices[face[0]]),
-                    _subtract(vertices[face[k + 1]], vertices[face[0]]),
+        for a, b, c in _fan_triangulation(face):
+            area += 0.5 * norm(
+                cross(
+                    subtract(vertices[b], vertices[a]),
+                    subtract(vertices[c], vertices[a]),
                 )
             )
         pyramid += area * inradius / 3.0
 
     constraint_values = [
-        _dot(vertex, neighbour) for vertex in vertices for neighbour in neighbours
+        dot(vertex, neighbour) for vertex in vertices for neighbour in neighbours
     ]
     return {
         "vertices": tuple(vertices),
@@ -507,10 +515,10 @@ def voronoi_cell() -> dict[str, object]:
         "euler_characteristic": len(vertices) - len(edges) + len(cell_faces),
         "all_faces_quadrilateral": all(len(face) == 4 for face in cell_faces),
         "max_side_spread": max(side_spreads),
-        "all_faces_rhombic": max(side_spreads) < 1e-9,
+        "all_faces_rhombic": max(side_spreads) < EDGE_TOLERANCE,
         "constraint_half": half,
         "max_constraint_value": max(constraint_values),
-        "feasible": max(constraint_values) <= half + 1e-9,
+        "feasible": max(constraint_values) <= half + EDGE_TOLERANCE,
         "inradius": inradius,
         "orientation_flips": orientation_flips,
         "volume": volume,
@@ -559,7 +567,7 @@ def packing_density() -> dict[str, object]:
         "prime_vector": edge,
         "neighbour_squared_distance": NEIGHBOR_SQUARED_DISTANCE,
         "inradius": inradius,
-        "inradius_is_half_the_prime_vector": abs(inradius - edge / 2.0) < 1e-12,
+        "inradius_is_half_the_prime_vector": abs(inradius - edge / 2.0) < TIGHT_TOLERANCE,
         "ball_volume": ball,
         "cell_volume": float(cell["volume"]),
         "cell_tetravolume": cell_tetravolume,
@@ -570,7 +578,7 @@ def packing_density() -> dict[str, object]:
         "cell_tetravolume_matches_table": abs(
             cell_tetravolume - float(VOLUME_RATIOS["rhombic_dodecahedron"])
         )
-        < 1e-9,
+        < EDGE_TOLERANCE,
         "vertices": cell["vertex_count"],
         "faces": cell["face_count"],
         "edges": cell["edge_count"],

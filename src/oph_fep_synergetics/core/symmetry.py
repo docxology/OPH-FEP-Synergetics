@@ -24,6 +24,7 @@ from itertools import product
 import numpy as np
 
 from .carrier import IcosahedralCarrier, OPH_ORIENTED_BASE_FACES, icosahedral_carrier
+from .repair import classify_native_outcome
 
 __all__ = [
     "automorphism_group_is_closed",
@@ -251,21 +252,12 @@ def descent_outcome_multiset(configuration: tuple[int, ...]) -> dict[str, int]:
     a changed configuration, and no-ops leave the configuration alone.  The
     classification is computed from the law itself, not from the census.
     """
-    from .carrier import icosahedral_carrier as _carrier
-    from .repair import energy, native_repair
-
-    carrier = _carrier()
+    carrier = icosahedral_carrier()
     outcomes = {"strict": 0, "zero": 0, "noop": 0}
-    before_energy = energy(configuration)
     for a, b in carrier.edges:
         for coin in (0, 1):
-            step = native_repair(configuration, (a, b), coin)
-            if step.after == step.before:
-                outcomes["noop"] += 1
-            elif energy(step.after) < before_energy - 1e-12:
-                outcomes["strict"] += 1
-            else:
-                outcomes["zero"] += 1
+            outcome = classify_native_outcome(configuration, (a, b), coin)
+            outcomes[outcome["kind"]] += 1
     return outcomes
 
 

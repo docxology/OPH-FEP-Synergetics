@@ -43,6 +43,7 @@ def _cmd_verify(args: argparse.Namespace) -> int:
     report = summary(results)
     if args.json:
         payload = {
+            "schema_version": "1.2",
             "summary": report,
             "results": [
                 {

@@ -18,6 +18,7 @@ import math
 import os
 import sys
 from collections import Counter
+from collections.abc import Iterable
 from fractions import Fraction
 from pathlib import Path
 
@@ -58,14 +59,14 @@ from oph_fep_synergetics.core.carrier import (  # noqa: E402
     icosahedral_carrier,
 )
 from oph_fep_synergetics.geometry import lattice  # noqa: E402
-from oph_fep_synergetics.manuscript_variables import as_dict  # noqa: E402
+from oph_fep_synergetics.manuscript_variables import as_dict, format_value  # noqa: E402
 
 FIGURES: Path = ROOT / "output" / "figures"
 
 KIND_COLOURS = {
-    "isomorphism": "#1f4e79",
-    "disagreement": "#a4262c",
-    "complementarity": "#2f6b3a",
+    "isomorphism": "#0072b2",
+    "disagreement": "#d55e00",
+    "complementarity": "#009e73",
 }
 STATUS_MARKERS = {"exact": "o", "exact-on-domain": "s", "obstructed": "X"}
 ALT_TEXT: dict[str, str] = {}
@@ -74,6 +75,14 @@ ALT_TEXT: dict[str, str] = {}
 def _counted(count: int, singular: str, plural: str) -> str:
     """Format a count with the singular or plural noun."""
     return f"{count} {singular if count == 1 else plural}"
+
+
+def _enumerated(values: Iterable[object]) -> str:
+    """Format a short bound sequence as "a, b and c" for alt text."""
+    items = [format_value(item) for item in values]
+    if len(items) < 3:
+        return " and ".join(items)
+    return ", ".join(items[:-1]) + " and " + items[-1]
 
 
 def _style() -> None:
@@ -108,6 +117,7 @@ def _save(
 
 def carrier_figure() -> Path:
     """The carrier, drawn in the spectral embedding of its own Laplacian."""
+    values = as_dict()
     carrier = icosahedral_carrier()
     eigenvalues, eigenvectors = np.linalg.eigh(carrier.laplacian())
     lam1 = 5.0 - math.sqrt(5.0)
@@ -203,9 +213,11 @@ def carrier_figure() -> Path:
     return _save(
         figure,
         "fig_carrier.png",
-        "Two panels. Left: the twelve ports of the carrier drawn in the three-dimensional "
-        "spectral embedding of its own Laplacian, with the thirty seams drawn and the twenty "
-        "oriented faces shaded; every port is labelled with its index and meets five others. "
+        f"Two panels. Left: the {int(values['carrier.ports'])} ports of the carrier drawn in the "
+        f"three-dimensional spectral embedding of its own Laplacian, with the "
+        f"{int(values['carrier.seams'])} seams drawn and the {int(values['carrier.faces'])} "
+        f"oriented faces shaded; every port is labelled with its index and meets "
+        f"{int(values['carrier.degree'])} others. "
         "Right: the Laplacian spectrum, with the zero eigenvalue once, five minus root five "
         "three times, six five times and five plus root five three times, and the normalised "
         "gap marked.",
@@ -271,7 +283,7 @@ def registry_figure() -> Path:
                 s=70,
                 color=KIND_COLOURS[kind],
             )
-            axis.text(0.14, row, entry.key, va="center", fontsize=7.4, family="monospace")
+            axis.text(0.14, row, entry.key, va="center", fontsize=9.4, family="monospace")
         axis.set_xlim(-0.25, 1.5)
         axis.set_ylim(-0.8, max(len(entries), 1) - 0.2)
         axis.invert_yaxis()
@@ -309,6 +321,7 @@ def registry_figure() -> Path:
 
 def descent_figure() -> Path:
     """The descent census and a mismatch-one excursion."""
+    bound = as_dict()
     census = controls.gated_descent_census()
     excursion = controls.mismatch_one_excursion(steps=6)
     energies = [0.5 * sum(value * value for value in state) for state in excursion]
@@ -344,16 +357,18 @@ def descent_figure() -> Path:
     return _save(
         figure,
         "fig_descent.png",
-        "Two panels. Left: the shell census, a bar chart of one hundred and twenty strict "
-        "descents, six hundred zero descents and three thousand nine hundred and sixty no-op "
-        "moves out of four thousand six hundred and eighty transitions. Right: a heat map of a "
-        "seven-state excursion over the twelve ports, in which the load moves between ports "
-        "while the quadratic energy stays at one half throughout.",
+        f"Two panels. Left: the shell census, a bar chart of "
+        f"{int(bound['shell.strict_descent'])} strict descents, "
+        f"{int(bound['shell.zero_descent'])} zero descents and {int(bound['shell.noop'])} "
+        f"no-op moves out of {int(bound['shell.transitions'])} transitions. Right: a heat map "
+        f"of a seven-state excursion over the {int(bound['carrier.ports'])} ports, in which "
+        "the load moves between ports while the quadratic energy stays at one half throughout.",
     )
 
 
 def dstability_figure() -> Path:
     """Eigenvalue loci and the sign of the third Routh entry."""
+    values = as_dict()
     samples = controls.D_STABILITY_SAMPLES
     onset = math.sqrt(10.0)
     figure, (left, right) = plt.subplots(1, 2, figsize=(11.0, 4.6))
@@ -390,11 +405,12 @@ def dstability_figure() -> Path:
     return _save(
         figure,
         "fig_dstability.png",
-        "Two panels. Left: the eigenvalue loci of the scaled matrix in the complex plane for five "
-        "couplings, with a dashed imaginary axis; the pair that crosses into the right half plane "
-        "is drawn in red and the stable cases in blue. Right: the third Routh entry two times ten "
-        "minus k squared over k plus two against the coupling, crossing zero at the square root "
-        "of ten and equal to minus two at k equal to four.",
+        "Two panels. Left: the eigenvalue loci of the scaled matrix in the complex plane for "
+        f"{len(values['d_stability.samples'])} couplings, with a dashed imaginary axis; the pair "
+        "that crosses into the right half plane is drawn in red and the stable cases in blue. "
+        "Right: the third Routh entry two times ten minus k squared over k plus two against the "
+        f"coupling, crossing zero at {format_value(values['d_stability.routh_onset'])} and equal "
+        f"to {format_value(values['d_stability.routh_k4_third'])} at k equal to four.",
     )
 
 
@@ -442,6 +458,7 @@ def mediator_figure() -> Path:
 
 def blanket_figure() -> Path:
     """The drift that a stationary law does not fix, and free entropy production."""
+    bound = as_dict()
     drift = controls.blanket_dynamics_check(0.75)
     figure, (left, right) = plt.subplots(1, 2, figsize=(11.0, 4.4))
     names = ["exterior", "blanket", "internal"]
@@ -491,11 +508,14 @@ def blanket_figure() -> Path:
     return _save(
         figure,
         "fig_blanket.png",
-        "Two panels. Left: the three drift components at q equal to 0.75, namely 1.5, minus 0.25 "
-        "and minus 2, with the cross drift difference of 1.5 annotated; the stationary law "
-        "factorises even though the drift couples the exterior and the interior. Right: entropy "
-        "production against the solenoidal parameter q, rising as two q squared, with the marked "
-        "values 0, 0.5 and 4.5 at q equal to 0, 0.5 and 1.5.",
+        f"Two panels. Left: the three drift components at q equal to "
+        f"{format_value(bound['blanket.q'])}, namely {_enumerated(bound['blanket.drift'])}, "
+        f"with the cross drift difference of {format_value(bound['blanket.cross_drift'])} "
+        "annotated; the stationary law factorises even though the drift couples the exterior "
+        "and the interior. Right: entropy production against the solenoidal parameter q, "
+        "rising as two q squared, with the marked values "
+        f"{_enumerated(bound['solenoidal.entropy_production'])} at q equal to "
+        f"{_enumerated(bound['solenoidal.q_grid'])}.",
     )
 
 
@@ -884,6 +904,7 @@ def ga_triangle_figure() -> Path:
 
 def ga_carrier_figure() -> Path:
     """The carrier graph beside the OPH-facing and FEP-facing invariant ledger."""
+    bound = as_dict()
     carrier, flat = _projected_carrier()
     figure, (left, right) = plt.subplots(1, 2, figsize=(10.0, 7.0))
     for port in range(carrier.port_count):
@@ -967,7 +988,8 @@ def ga_carrier_figure() -> Path:
     return _save(
         figure,
         "fig_ga_carrier.png",
-        "Two panels. Left: the twelve ports and thirty seams of the carrier in its planar "
+        f"Two panels. Left: the {int(bound['carrier.ports'])} ports and "
+        f"{int(bound['carrier.seams'])} seams of the carrier in its planar "
         "spectral projection, with each port labelled by index. Right: a two-column ledger of "
         "invariants, OPH-facing on the left and FEP-facing on the right, listing the spanning-tree "
         "number, the dimensions of H0 and H1, the automorphism group order with its rotation and "
@@ -978,6 +1000,7 @@ def ga_carrier_figure() -> Path:
 
 def ga_descent_figure() -> Path:
     """The descent census and the free-energy levels of the first five IVM shells."""
+    bound = as_dict()
     census = controls.gated_descent_census()
     multiplicities = controls.path_multiplicity_values()
     figure, (left, right) = plt.subplots(1, 2, figsize=(10.0, 7.0))
@@ -1048,11 +1071,14 @@ def ga_descent_figure() -> Path:
     return _save(
         figure,
         "fig_ga_descent.png",
-        "Two panels. Left: the descent census as three bars, one hundred and twenty strict "
-        "descents, six hundred zero descents and three thousand nine hundred and sixty no-op "
-        "moves, annotated with the path-multiplicity values one, two, fifty and fifty-two. Right: "
-        "the distinct free-energy levels of the first five IVM shells, with levels 36 and 52 "
-        "visibly shared between shells and the Gaussian KL curve annotated as four k squared.",
+        f"Two panels. Left: the descent census as three bars, "
+        f"{int(bound['shell.strict_descent'])} strict descents, "
+        f"{int(bound['shell.zero_descent'])} zero descents and {int(bound['shell.noop'])} "
+        f"no-op moves, annotated with the path-multiplicity values "
+        f"{_enumerated(bound['shell.multiplicities'])}. Right: the distinct free-energy levels "
+        f"of the first {len(bound['ivm.shell_counts'])} IVM shells, with levels "
+        f"{_enumerated(bound['shell.shared_free_energy_levels'])} visibly shared between shells "
+        "and the Gaussian KL curve annotated as four k squared.",
     )
 
 
@@ -1241,21 +1267,21 @@ def scope_matrix_figure() -> Path:
         luminance = 0.299 * red + 0.587 * green + 0.114 * blue
         return "black" if luminance > 150 else "white"
 
-    figure, axis = plt.subplots(figsize=(11.0, 9.0))
+    figure, axis = plt.subplots(figsize=(11.0, 10.0))
     axis.set_axis_off()
-    axis.set_xlim(0.0, 5.05)
+    axis.set_xlim(0.0, 5.70)
     axis.set_ylim(0.0, len(CORRESPONDENCES) + 1.2)
     probe_names = [entry.probe.__name__ for entry in CORRESPONDENCES]
     unique_probes = len(set(probe_names)) == len(probe_names)
     headers = ["pair", "kind", "status", "own probe"]
     for column, header in enumerate(headers):
         axis.text(
-            column + 1.50,
+            column + 2.15,
             len(CORRESPONDENCES) + 0.55,
             header,
             ha="center",
             va="center",
-            fontsize=8.2,
+            fontsize=9.5,
             fontweight="bold",
             color="#102a43",
         )
@@ -1267,7 +1293,7 @@ def scope_matrix_figure() -> Path:
             entry.key,
             ha="left",
             va="center",
-            fontsize=6.2,
+            fontsize=9.0,
             family="monospace",
             color="#102a43",
         )
@@ -1281,7 +1307,7 @@ def scope_matrix_figure() -> Path:
         for column, (colour, label) in enumerate(cells):
             axis.add_patch(
                 plt.Rectangle(
-                    (column + 1.05, y_value - 0.42),
+                    (column + 1.70, y_value - 0.42),
                     0.90,
                     0.84,
                     facecolor=colour,
@@ -1290,12 +1316,12 @@ def scope_matrix_figure() -> Path:
                 )
             )
             axis.text(
-                column + 1.50,
+                column + 2.15,
                 y_value,
                 label,
                 ha="center",
                 va="center",
-                fontsize=6.4,
+                fontsize=9.0,
                 color=text_colour(colour),
             )
     axis.set_title("Registry scope matrix: pair, kind, status and probe ownership", fontsize=10)

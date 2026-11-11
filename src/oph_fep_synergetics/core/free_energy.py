@@ -112,6 +112,12 @@ class GaussianSheafModel:
         self._l_xx = laplacian[np.ix_(interior_indices, interior_indices)]
         self._l_xo = laplacian[np.ix_(interior_indices, record_indices)]
         self._l_ox = self._l_xo.T
+        # RHS-independent quantities derived from the fixed ``_l_xx`` are
+        # computed once and cached.  ``np.linalg`` exposes no reusable LU
+        # factors, so solve-based results stay on ``np.linalg.solve``.
+        self._schur: np.ndarray | None = None
+        self._l_xx_inv: np.ndarray | None = None
+        self._largest_eigenvalue: float | None = None
 
     # -- dimensions ---------------------------------------------------------
     @property
@@ -134,6 +140,10 @@ class GaussianSheafModel:
     def _records(self, records: Sequence[float]) -> np.ndarray:
         return _as_vector(records, self.record_dim, "records")
 
+    def _residual(self, state: np.ndarray, records: np.ndarray) -> np.ndarray:
+        """The energy gradient at ``state``: ``L_xx @ state + L_xo @ records``."""
+        return self._l_xx @ state + self._l_xo @ records
+
     # -- inference ----------------------------------------------------------
     def harmonic_extension(self, records: Sequence[float]) -> np.ndarray:
         """Return the unique interior minimiser for the given records."""
@@ -146,16 +156,19 @@ class GaussianSheafModel:
         """Return the marginal precision of the records."""
         if self.interior_dim == 0:
             return self._l_oo.copy()
-        solved = np.linalg.solve(self._l_xx, self._l_xo)
-        return _symmetrise(self._l_oo - self._l_ox @ solved)
+        if self._schur is None:
+            solved = np.linalg.solve(self._l_xx, self._l_xo)
+            self._schur = _symmetrise(self._l_oo - self._l_ox @ solved)
+        return self._schur.copy()
 
     def posterior(self, records: Sequence[float]) -> tuple[np.ndarray, np.ndarray]:
         """Return the Gaussian posterior ``(mean, covariance)`` over interiors."""
         mean = self.harmonic_extension(records)
         if self.interior_dim == 0:
             return mean, np.zeros((0, 0))
-        covariance = np.linalg.inv(self._l_xx)
-        return mean, _symmetrise(covariance)
+        if self._l_xx_inv is None:
+            self._l_xx_inv = np.linalg.inv(self._l_xx)
+        return mean, _symmetrise(self._l_xx_inv)
 
     def surprisal(self, records: Sequence[float], *, prior_quadratic: float = 0.0) -> float:
         """Return ``-ln p(o)`` for the Gaussian sheaf model, up to a constant in ``o``.
@@ -231,13 +244,14 @@ class GaussianSheafModel:
             state = np.zeros(self.interior_dim)
         else:
             state = _as_vector(initial, self.interior_dim, "initial")
-        largest = float(np.linalg.eigvalsh(self._l_xx)[-1])
-        step = 1.0 / largest if largest > 0 else 1.0
-        residual = self._l_xx @ state + self._l_xo @ self._records(records)
+        if self._largest_eigenvalue is None:
+            self._largest_eigenvalue = float(np.linalg.eigvalsh(self._l_xx)[-1])
+        step = 1.0 / self._largest_eigenvalue if self._largest_eigenvalue > 0 else 1.0
+        residual = self._residual(state, self._records(records))
         iterations = 0
         while float(np.linalg.norm(residual)) > tolerance and iterations < max_steps:
             state = state - step * residual
-            residual = self._l_xx @ state + self._l_xo @ self._records(records)
+            residual = self._residual(state, self._records(records))
             iterations += 1
         return state, float(np.linalg.norm(residual)), iterations
 
@@ -245,7 +259,7 @@ class GaussianSheafModel:
     def numerical_surprise(self, old_records: Sequence[float], new_records: Sequence[float]) -> float:
         """The norm of the update residual at the old rest under new records."""
         old_rest = self.harmonic_extension(old_records)
-        gradient = self._l_xx @ old_rest + self._l_xo @ self._records(new_records)
+        gradient = self._residual(old_rest, self._records(new_records))
         return float(np.linalg.norm(gradient))
 
     def bayesian_surprise(self, old_records: Sequence[float], new_records: Sequence[float]) -> float:
@@ -253,7 +267,7 @@ class GaussianSheafModel:
         if self.interior_dim == 0:
             return 0.0
         old_rest = self.harmonic_extension(old_records)
-        gradient = self._l_xx @ old_rest + self._l_xo @ self._records(new_records)
+        gradient = self._residual(old_rest, self._records(new_records))
         return 0.5 * float(gradient @ np.linalg.solve(self._l_xx, gradient))
 
     def record_injectivity(self) -> bool:

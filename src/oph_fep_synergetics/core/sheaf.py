@@ -71,6 +71,7 @@ class CellularSheaf:
                 raise ValueError("edge restriction map shape does not match its stalk")
             normalized.append(EdgeRestriction(edge.u, edge.v, map_u, map_v))
         self.edges = tuple(normalized)
+        self._laplacian = self._build_laplacian()
 
     # -- identity and sizes -------------------------------------------------
     @property
@@ -110,7 +111,14 @@ class CellularSheaf:
         return np.concatenate(pieces) if pieces else np.zeros(0)
 
     def laplacian(self) -> np.ndarray:
-        """Return the sheaf Laplacian ``delta^T delta`` as a dense matrix."""
+        """Return the sheaf Laplacian ``delta^T delta`` as a dense matrix.
+
+        The matrix is assembled once at construction and cached, so repeated
+        calls return the same dense array without rebuilding it.
+        """
+        return self._laplacian
+
+    def _build_laplacian(self) -> np.ndarray:
         matrix = np.zeros((self.total_dim, self.total_dim), dtype=float)
         offsets = self.offsets()
         for edge in self.edges:

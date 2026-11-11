@@ -25,6 +25,8 @@ import itertools
 import math
 from typing import Iterable
 
+from .vectors import EDGE_TOLERANCE, TIGHT_TOLERANCE
+
 PHI = (1.0 + math.sqrt(5.0)) / 2.0
 
 
@@ -54,9 +56,13 @@ def icosahedron_edges() -> tuple[tuple[int, int], ...]:
         (a, b, _squared_distance(vertices[a], vertices[b]))
         for a, b in itertools.combinations(range(len(vertices)), 2)
     ]
-    edge_length = min(distance for _, _, distance in pairwise if distance > 1e-12)
+    edge_length = min(distance for _, _, distance in pairwise if distance > TIGHT_TOLERANCE)
     return tuple(
-        sorted((a, b) for a, b, distance in pairwise if abs(distance - edge_length) <= 1e-9)
+        sorted(
+            (a, b)
+            for a, b, distance in pairwise
+            if abs(distance - edge_length) <= EDGE_TOLERANCE
+        )
     )
 
 

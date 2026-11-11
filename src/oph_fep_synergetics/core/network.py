@@ -23,7 +23,7 @@ from __future__ import annotations
 
 import itertools
 from fractions import Fraction
-from typing import Sequence
+from typing import Callable, Iterator, Mapping, Sequence
 
 __all__ = [
     "distance_distribution",
@@ -93,57 +93,83 @@ def intersection_array(adjacency: Adjacency, source: int = 0) -> tuple[tuple[int
     return tuple(onward), tuple(back)
 
 
-def _solve_grounded(laplacian: Sequence[Sequence[int]], rhs: Sequence[int]) -> list[Fraction]:
-    """Solve ``L x = rhs`` exactly with port 0 grounded (row and column dropped)."""
-    size = len(laplacian) - 1
+def _grounded_inverse(adjacency: Adjacency) -> list[list[Fraction]]:
+    """Invert the Laplacian exactly, with port 0 grounded (row and column dropped).
+
+    One elimination serves every pair: the grounded inverse determines each
+    effective resistance directly, so the pair formulas below share it.
+    """
+    size = len(adjacency) - 1
+    laplacian = laplacian_matrix(adjacency)
     matrix = [[Fraction(laplacian[i + 1][j + 1]) for j in range(size)] for i in range(size)]
-    vector = [Fraction(value) for value in rhs]
+    inverse = [[Fraction(1 if row == column else 0) for column in range(size)] for row in range(size)]
     for column in range(size):
         pivot = next((row for row in range(column, size) if matrix[row][column] != 0), None)
         if pivot is None:
             raise AssertionError("a grounded Laplacian must be invertible")
-        matrix[column], matrix[pivot] = matrix[pivot], matrix[column]
-        vector[column], vector[pivot] = vector[pivot], vector[column]
+        if pivot != column:
+            matrix[column], matrix[pivot] = matrix[pivot], matrix[column]
+            inverse[column], inverse[pivot] = inverse[pivot], inverse[column]
         diagonal = matrix[column][column]
-        for row in range(column + 1, size):
-            factor = matrix[row][column] / diagonal
-            if factor:
-                for col in range(column, size):
-                    matrix[row][col] -= factor * matrix[column][col]
-                vector[row] -= factor * vector[column]
-    solution = [Fraction(0)] * size
-    for column in range(size - 1, -1, -1):
-        total = vector[column] - sum(matrix[column][col] * solution[col] for col in range(column + 1, size))
-        solution[column] = total / matrix[column][column]
-    return solution
+        matrix[column] = [value / diagonal for value in matrix[column]]
+        inverse[column] = [value / diagonal for value in inverse[column]]
+        for row in range(size):
+            factor = matrix[row][column]
+            if row != column and factor:
+                matrix[row] = [
+                    value - factor * other for value, other in zip(matrix[row], matrix[column])
+                ]
+                inverse[row] = [
+                    value - factor * other for value, other in zip(inverse[row], inverse[column])
+                ]
+    return inverse
+
+
+def _resistance_from_inverse(
+    inverse: Sequence[Sequence[Fraction]], source: int, target: int
+) -> Fraction:
+    """Read the effective resistance off a grounded Laplacian inverse.
+
+    With port 0 grounded, the pair solve ``(e_source - e_target) . L_reduced^-1 .
+    (e_source - e_target)`` expands to ``g_ii + g_jj - 2 g_ij`` over the reduced
+    indices, the grounded port contributing zero.
+    """
+    def diagonal(vertex: int) -> Fraction:
+        return Fraction(0) if vertex == 0 else inverse[vertex - 1][vertex - 1]
+
+    off_diagonal = Fraction(0)
+    if source and target:
+        off_diagonal = inverse[source - 1][target - 1]
+    return diagonal(source) + diagonal(target) - 2 * off_diagonal
+
+
+def _pair_resistances(
+    adjacency: Adjacency, inverse: Sequence[Sequence[Fraction]]
+) -> Iterator[tuple[int, int, Fraction]]:
+    """Yield ``(source, target, resistance)`` for every unordered pair."""
+    for source, target in itertools.combinations(range(len(adjacency)), 2):
+        yield source, target, _resistance_from_inverse(inverse, source, target)
 
 
 def effective_resistance(adjacency: Adjacency, source: int, target: int) -> Fraction:
     """Return the effective resistance between two ports, exactly.
 
-    Grounding port 0 and solving ``L x = e_source - e_target`` gives the
-    potentials; the resistance is ``(e_source - e_target) . x``, which is
-    gauge-invariant and rational for an integer graph.
+    Grounding port 0 and inverting the reduced Laplacian once puts every pair's
+    resistance on the inverse's own entries; the value is gauge-invariant and
+    rational for an integer graph.
     """
-    laplacian = laplacian_matrix(adjacency)
-    size = len(adjacency) - 1
-    rhs = [0] * size
-    if source:
-        rhs[source - 1] += 1
-    if target:
-        rhs[target - 1] -= 1
-    solution = _solve_grounded(laplacian, rhs)
-    return sum(Fraction(rhs[index]) * solution[index] for index in range(size))
+    return _resistance_from_inverse(_grounded_inverse(adjacency), source, target)
 
 
 def resistance_ladder(adjacency: Adjacency) -> tuple[tuple[int, Fraction, int], ...]:
     """Return ``(distance, resistance, pairs)`` for every pair class, nearest first."""
+    inverse = _grounded_inverse(adjacency)
     distances = graph_distances(adjacency)
     classes: dict[int, set[Fraction]] = {}
     counts: dict[int, int] = {}
-    for source, target in itertools.combinations(range(len(adjacency)), 2):
+    for source, target, resistance in _pair_resistances(adjacency, inverse):
         step = distances[source][target]
-        classes.setdefault(step, set()).add(effective_resistance(adjacency, source, target))
+        classes.setdefault(step, set()).add(resistance)
         counts[step] = counts.get(step, 0) + 1
     ladder = []
     for step in sorted(classes):
@@ -155,9 +181,10 @@ def resistance_ladder(adjacency: Adjacency) -> tuple[tuple[int, Fraction, int], 
 
 def kirchhoff_index(adjacency: Adjacency) -> Fraction:
     """Return the sum of the effective resistances over all unordered pairs."""
+    inverse = _grounded_inverse(adjacency)
     total = Fraction(0)
-    for source, target in itertools.combinations(range(len(adjacency)), 2):
-        total += effective_resistance(adjacency, source, target)
+    for _, _, resistance in _pair_resistances(adjacency, inverse):
+        total += resistance
     return total
 
 
@@ -229,6 +256,43 @@ def _hamiltonian_cycles(adjacency: Adjacency) -> int:
 
     return count(1, 0) // 2
 
+def _isomorphism_backtrack(
+    size: int,
+    order: Sequence[int],
+    signature_ok: Callable[[int, int], bool],
+    mapped_ok: Callable[[int, int, Mapping[int, int]], bool],
+) -> dict[int, int] | None:
+    """Backtrack a left-to-right vertex mapping, or return ``None``.
+
+    Places the left vertices in ``order``, trying each unused right vertex of
+    the same ``size``: ``signature_ok`` prunes on static vertex invariants and
+    ``mapped_ok`` prunes against the placements already made. Callers keep
+    their own pruning rules; the search itself is shared.
+    """
+    mapping: dict[int, int] = {}
+    used: set[int] = set()
+
+    def place(position: int) -> bool:
+        if position == len(order):
+            return True
+        vertex = order[position]
+        for candidate in range(size):
+            if candidate in used or not signature_ok(vertex, candidate):
+                continue
+            if not mapped_ok(vertex, candidate, mapping):
+                continue
+            mapping[vertex] = candidate
+            used.add(candidate)
+            if place(position + 1):
+                return True
+            used.discard(candidate)
+            del mapping[vertex]
+        return False
+
+    if not place(0):
+        return None
+    return mapping
+
 
 def graphs_are_isomorphic(left: Adjacency, right: Adjacency) -> bool:
     """Whether two adjacency matrices are related by a vertex relabelling.
@@ -241,24 +305,11 @@ def graphs_are_isomorphic(left: Adjacency, right: Adjacency) -> bool:
     if size != len(right) or sorted(sum(row) for row in left) != sorted(sum(row) for row in right):
         return False
     order = sorted(range(size), key=lambda vertex: -sum(left[vertex]))
-    mapping: dict[int, int] = {}
-    used: set[int] = set()
 
-    def place(position: int) -> bool:
-        if position == size:
-            return True
-        vertex = order[position]
-        for candidate in range(size):
-            if candidate in used or sum(right[candidate]) != sum(left[vertex]):
-                continue
-            if any(left[vertex][other] != right[candidate][mapping[other]] for other in mapping):
-                continue
-            mapping[vertex] = candidate
-            used.add(candidate)
-            if place(position + 1):
-                return True
-            used.discard(candidate)
-            del mapping[vertex]
-        return False
+    def signature_ok(vertex: int, candidate: int) -> bool:
+        return sum(right[candidate]) == sum(left[vertex])
 
-    return place(0)
+    def mapped_ok(vertex: int, candidate: int, mapping: Mapping[int, int]) -> bool:
+        return all(left[vertex][other] == right[candidate][mapping[other]] for other in mapping)
+
+    return _isomorphism_backtrack(size, order, signature_ok, mapped_ok) is not None

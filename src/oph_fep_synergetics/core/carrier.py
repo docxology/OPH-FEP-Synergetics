@@ -17,9 +17,11 @@ from __future__ import annotations
 import itertools
 import math
 from dataclasses import dataclass
-from typing import Iterator
+from typing import Iterator, Mapping
 
 import numpy as np
+
+from .network import _isomorphism_backtrack
 
 PHI = (1.0 + math.sqrt(5.0)) / 2.0
 
@@ -305,32 +307,17 @@ def carrier_isomorphism(
     if sorted(left_signature.values()) != sorted(right_signature.values()):
         return None
     order = sorted(range(count), key=lambda port: (-len(left_adjacency[port]), left_signature[port]))
-    mapping: dict[int, int] = {}
-    used: set[int] = set()
 
-    def consistent(source: int, target: int) -> bool:
-        if left_signature[source] != right_signature[target]:
-            return False
+    def signature_ok(source: int, target: int) -> bool:
+        return left_signature[source] == right_signature[target]
+
+    def mapped_ok(source: int, target: int, mapping: Mapping[int, int]) -> bool:
         return all(
             (other in left_adjacency[source]) == (image in right_adjacency[target])
             for other, image in mapping.items()
         )
 
-    def extend(index: int) -> bool:
-        if index == count:
-            return True
-        source = order[index]
-        for target in range(count):
-            if target in used or not consistent(source, target):
-                continue
-            mapping[source] = target
-            used.add(target)
-            if extend(index + 1):
-                return True
-            del mapping[source]
-            used.discard(target)
-        return False
-
-    if not extend(0):
+    mapping = _isomorphism_backtrack(count, order, signature_ok, mapped_ok)
+    if mapping is None:
         return None
     return tuple(mapping[port] for port in range(count))

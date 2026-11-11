@@ -261,19 +261,31 @@ def _probe_free_energy_dictionary() -> tuple[bool, dict]:
     old_records = (0.0, 0.0)
     new_records = (1.0, -0.5)
     blocks = model.blocks
+    old_min = model.harmonic_extension(old_records)
+    new_min = model.harmonic_extension(new_records)
+    old_vector = np.asarray(old_records, dtype=float)
+    new_vector = np.asarray(new_records, dtype=float)
+    bayesian = model.bayesian_surprise(old_records, new_records)
+    def _interior_energy(x: np.ndarray, o: np.ndarray) -> float:
+        """Evaluate the interior part E(x, o) = 0.5 x^T L_xx x + o^T L_ox x."""
+        quadratic = 0.5 * float(x @ blocks["L_xx"] @ x)
+        linear = float(o @ blocks["L_ox"] @ x)
+        return quadratic + linear
+    e_old_under_new = _interior_energy(old_min, new_vector)
+    e_new_under_new = _interior_energy(new_min, new_vector)
+    energy_drop_residual = abs(e_old_under_new - e_new_under_new - bayesian)
     gradient = blocks["L_xx"] @ model.harmonic_extension(old_records) + blocks["L_xo"] @ np.asarray(
         new_records
     )
-    bayesian = model.bayesian_surprise(old_records, new_records)
     sandwich = control_module.surprise_sandwich(blocks["L_xx"], gradient, bayesian)
     closed_form = 0.5 * float(gradient @ np.linalg.solve(blocks["L_xx"], gradient))
     mean, covariance = model.posterior(new_records)
     delta = np.asarray(new_records, dtype=float) - np.asarray(old_records, dtype=float)
-    old_vector = np.asarray(old_records, dtype=float)
     schur = model.schur_complement()
     predicted_drop = 0.5 * float(delta @ schur @ delta) + float(old_vector @ schur @ delta)
     measured_drop = float(model.surprisal(new_records) - model.surprisal(old_records))
     values = {
+        "energy_drop_residual": energy_drop_residual,
         "record_injectivity": model.record_injectivity(),
         "bayesian_surprise": bayesian,
         "closed_form_half_g_linv_g": closed_form,
@@ -291,6 +303,7 @@ def _probe_free_energy_dictionary() -> tuple[bool, dict]:
         and values["sandwich_inside"]
         and abs(values["variational_free_energy"] - values["surprisal"]) < 1e-12
         and values["surprisal_drop_residual"] < 1e-12
+        and values["energy_drop_residual"] < 1e-12
     )
     return passed, values
 
@@ -1397,7 +1410,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="free-energy-dictionary",
         kind=ISOMORPHISM,
         pair=OPH_FEP,
-        claim="Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, and the update residual pins the Bayesian surprise between the extreme interior eigenvalues.",
+        claim="Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, the update residual pins the Bayesian surprise between the extreme interior eigenvalues, and the interior free energy's drop from the old minimiser to the new one equals the Bayesian surprise on this domain.",
         oph="Repair reduces disagreement; records survive comparison.",
         fep="The variational bound, its gap, and Bayesian surprise.",
         synergetics="No counterpart; the geometry supplies no probabilistic reading.",
@@ -1783,7 +1796,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         pair=SYNERGETICS_OPH,
         claim="The carrier's subgraph census, computed from the derived graph alone, is asserted equal to the icosahedron's own counts: 20 triangles, exactly its twenty faces; 12 five-cycles, the vertices of its dual dodecahedron; 125 perfect matchings; and 1280 labelled Hamiltonian cycles.",
         oph="The 20 triangles of the derived face set.",
-        fep="Nothing: a census of the same graph, not a probabilistic reading of it.",
+        fep="A census of the precision's underlying graph; the FEP reading inherits the counts and asserts nothing about them.",
         synergetics="The icosahedron's faces and the dodecahedron's twelve vertices.",
         status="exact",
         source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}",
@@ -1795,7 +1808,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         pair=SYNERGETICS_OPH,
         claim="Gauss-Bonnet on the carrier is exact in units of pi: five equilateral triangles meet at every port in the derived chart, so the defect is 1/3 pi there and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the triangulated sphere; the probe verifies the five-fold vertex figure and the bookkeeping that follows from the definition of the defect.",
         oph="A patch complex with five faces at every port.",
-        fep="Nothing: curvature is a property of the complex, not of a belief.",
+        fep="Curvature of the shared complex; the FEP vocabulary adds no reading of a geometric defect, and none is claimed.",
         synergetics="The icosahedron's five-fold vertex figures, whose angular accounting is the classical one.",
         status="exact",
         source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}",
