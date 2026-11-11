@@ -13,6 +13,8 @@ from oph_fep_synergetics.core import (
     icosahedral_carrier,
     independence_matches_graph,
     independence_pattern,
+    laplacian_determinant,
+    laplacian_matrix,
     marginal_variance,
     markov_blanket,
     pairwise_precision,
@@ -20,9 +22,11 @@ from oph_fep_synergetics.core import (
     reciprocal_spectrum_sum,
     reduced_laplacian_determinant,
     spanning_tree_number,
+    spanning_tree_number_of_adjacency,
     tree_number_from_spectrum,
 )
 from oph_fep_synergetics.core import carrier as carrier_module
+from oph_fep_synergetics.geometry import cuboctahedron_adjacency
 
 
 def test_spanning_tree_number_is_exact():
@@ -100,3 +104,32 @@ def test_markov_blanket_is_the_neighbourhood():
 def test_carrier_module_is_ophs_labelled_carrier():
     carrier = icosahedral_carrier()
     assert [carrier.neighbours(port) for port in range(12)] == list(carrier_module.OPH_NEIGHBOURS)
+
+
+def test_laplacian_determinant_of_a_single_edge_is_one():
+    laplacian = laplacian_matrix([[0, 1], [1, 0]])
+    assert laplacian == [[1, -1], [-1, 1]]
+    assert laplacian_determinant(laplacian) == 1
+
+
+def test_laplacian_determinant_of_a_triangle_is_three():
+    triangle = [[0, 1, 1], [1, 0, 1], [1, 1, 0]]
+    assert laplacian_determinant(laplacian_matrix(triangle)) == 3
+
+
+def test_laplacian_determinant_of_the_carrier_is_the_tree_number():
+    carrier = icosahedral_carrier()
+    adjacency = [[int(value) for value in row] for row in carrier.adjacency_matrix()]
+    assert laplacian_determinant(laplacian_matrix(adjacency)) == 5184000
+    assert laplacian_determinant(laplacian_matrix(adjacency)) == spanning_tree_number()
+
+
+def test_spanning_tree_number_of_adjacency_of_the_carrier():
+    carrier = icosahedral_carrier()
+    adjacency = [[int(value) for value in row] for row in carrier.adjacency_matrix()]
+    assert spanning_tree_number_of_adjacency(adjacency) == 5184000
+
+
+def test_spanning_tree_number_of_adjacency_of_the_cuboctahedron():
+    assert spanning_tree_number_of_adjacency(cuboctahedron_adjacency()) == 331776
+    assert spanning_tree_number_of_adjacency(cuboctahedron_adjacency()) == 576**2

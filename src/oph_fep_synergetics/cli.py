@@ -34,8 +34,9 @@ def _json_default(value: object) -> object:
 def _cmd_verify(args: argparse.Namespace) -> int:
     keys = tuple(args.key) if args.key else None
     pairs = tuple(args.pair) if args.pair else None
+    kinds = tuple(args.kind) if args.kind else None
     try:
-        results = verify(keys=keys, pairs=pairs)
+        results = verify(keys=keys, pairs=pairs, kinds=kinds)
     except ValueError as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
@@ -63,6 +64,8 @@ def _cmd_verify(args: argparse.Namespace) -> int:
         print(f"\n{report['passed']}/{report['total']} probes passed")
         for pair, bucket in report["by_pair"].items():
             print(f"  {pair:<18} {bucket['passed']} passed, {bucket['failed']} failed")
+        for kind, bucket in report["by_kind"].items():
+            print(f"  {kind:<18} {bucket['passed']} passed, {bucket['failed']} failed")
         if report["failures"]:
             print("failed: " + ", ".join(report["failures"]))
     return 0 if report["failed"] == 0 else 1
@@ -208,6 +211,12 @@ def _build_parser() -> argparse.ArgumentParser:
         action="append",
         default=[],
         help="run only this pairwise scope (oph-fep, fep-synergetics, synergetics-oph, three-way); repeatable",
+    )
+    verify_parser.add_argument(
+        "--kind",
+        action="append",
+        default=[],
+        help="run only this kind of claim (isomorphism, disagreement, complementarity); repeatable",
     )
     verify_parser.add_argument("--json", action="store_true", help="emit machine-readable output")
     verify_parser.set_defaults(handler=_cmd_verify)

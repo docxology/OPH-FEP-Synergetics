@@ -22,16 +22,19 @@ entry is ``7/36``.
 from __future__ import annotations
 
 from fractions import Fraction
+from typing import Sequence
 
 import numpy as np
 
 from .carrier import IcosahedralCarrier, icosahedral_carrier
+from .network import laplacian_matrix
 
 __all__ = [
     "blanket_sizes",
     "gmrf_precision",
     "independence_matches_graph",
     "independence_pattern",
+    "laplacian_determinant",
     "marginal_variance",
     "markov_blanket",
     "pairwise_precision",
@@ -39,20 +42,24 @@ __all__ = [
     "reciprocal_spectrum_sum",
     "reduced_laplacian_determinant",
     "spanning_tree_number",
+    "spanning_tree_number_of_adjacency",
     "tree_number_from_spectrum",
 ]
 
 
-def reduced_laplacian_determinant(carrier: IcosahedralCarrier | None = None) -> int:
-    """Return the exact determinant of the reduced Laplacian as an integer.
+def laplacian_determinant(laplacian: Sequence[Sequence[int]]) -> int:
+    """Return the determinant of a Laplacian's grounded minor, exactly.
 
-    The determinant is taken over ``Fraction`` arithmetic, so the result is an
-    exact integer rather than a floating-point shadow of one.
+    The minor is taken over ``Fraction`` arithmetic, so the result is an exact
+    integer rather than a floating-point shadow of one. Every graph whose
+    adjacency matrix is available can be counted with this function, which is
+    why the carrier and the cuboctahedron are compared by the same code path.
     """
-    carrier = carrier or icosahedral_carrier()
-    laplacian = np.rint(carrier.laplacian()).astype(int)
-    size = carrier.port_count - 1
-    matrix = [[Fraction(int(laplacian[i][j])) for j in range(1, size + 1)] for i in range(1, size + 1)]
+    size = len(laplacian) - 1
+    matrix = [
+        [Fraction(int(laplacian[i][j])) for j in range(1, size + 1)]
+        for i in range(1, size + 1)
+    ]
     determinant = Fraction(1)
     for column in range(size):
         pivot = next((row for row in range(column, size) if matrix[row][column] != 0), None)
@@ -71,6 +78,22 @@ def reduced_laplacian_determinant(carrier: IcosahedralCarrier | None = None) -> 
     if determinant.denominator != 1:
         raise AssertionError("a reduced Laplacian determinant must be an integer")
     return int(determinant)
+
+
+def reduced_laplacian_determinant(carrier: IcosahedralCarrier | None = None) -> int:
+    """Return the exact determinant of the reduced Laplacian as an integer.
+
+    The determinant is taken over ``Fraction`` arithmetic, so the result is an
+    exact integer rather than a floating-point shadow of one.
+    """
+    carrier = carrier or icosahedral_carrier()
+    laplacian = np.rint(carrier.laplacian()).astype(int)
+    return laplacian_determinant([[int(value) for value in row] for row in laplacian])
+
+
+def spanning_tree_number_of_adjacency(adjacency: Sequence[Sequence[int]]) -> int:
+    """Return the number of spanning trees of any integer graph, exactly."""
+    return laplacian_determinant(laplacian_matrix(adjacency))
 
 
 def spanning_tree_number(carrier: IcosahedralCarrier | None = None) -> int:

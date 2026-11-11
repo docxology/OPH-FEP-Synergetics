@@ -41,14 +41,14 @@ gives one; `Note` records what is measured rather than quoted.
 | `two_node.relaxation_min_radius_measured` | 0.8400707833642703 |  | two_node_relaxation_orbit, measured in this package | the source states the bound 0.84; this is the measurement the prose reports beside it |
 | `two_node.relaxation_max_radius` | 1.0533912226419835 |  | two_node_relaxation_orbit, measured in this package | the outer radius of the annulus that contains the relaxation orbit |
 | `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | the source states 7.58; this is the measurement the prose reports beside it |
-| `registry.entries` | 35 | `35` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.isomorphisms` | 15 | `15` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.disagreements` | 13 | `13` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.complementarities` | 7 | `7` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.oph_fep` | 23 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
+| `registry.entries` | 42 | `42` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.isomorphisms` | 17 | `17` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.disagreements` | 15 | `15` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.complementarities` | 10 | `10` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.oph_fep` | 24 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
 | `registry.fep_synergetics` | 2 |  | analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics |  |
-| `registry.synergetics_oph` | 9 |  | analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph |  |
-| `registry.three_way` | 1 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
+| `registry.synergetics_oph` | 14 |  | analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph |  |
+| `registry.three_way` | 2 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
 | `carrier.tree_number` | 5184000 | `5184000` | core/invariants.py, Kirchhoff: the exact reduced-Laplacian determinant |  |
 | `gmrf.marginal_variance` | 0.19444444444444445 | `7/36` | core/invariants.py, the reciprocal spectrum summed exactly in the rationals |  |
 | `gmrf.blanket_size` | 5 | `five` | core/invariants.py: the Markov blanket of a port is its neighbours |  |
@@ -80,3 +80,30 @@ gives one; `Note` records what is measured rather than quoted.
 | `shell.shared_free_energy_levels` | (36.0, 52.0) |  | geometry.generate_shell: free-energy levels carried by more than one shell |  |
 | `kl.one_step` | 4.0 | `half of 8` | core/free_energy.py gaussian_kl at the IVM's first neighbour |  |
 | `kl.step_squared_distance` | 8.0 | `8` | geometry.NEIGHBOR_SQUARED_DISTANCE, the IVM's squared neighbour distance |  |
+| `resistance.adjacent` | 11/30 | `11/30` | core/network.py resistance_ladder: exact rational solve of L x = e_i - e_j on a seam |  |
+| `resistance.distance_two` | 7/15 | `7/15` | core/network.py resistance_ladder: ports at graph distance two |  |
+| `resistance.antipodal` | 1/2 | `1/2` | core/network.py resistance_ladder: ports at graph distance three, across the carrier |  |
+| `resistance.pair_counts` | (30, 30, 6) |  | core/network.py resistance_ladder: how many port pairs each distance class holds |  |
+| `resistance.kirchhoff_index` | 28 | `28` | core/network.py kirchhoff_index: the 66 resistances summed, against 12 times 7/3 |  |
+| `carrier.shell_sizes` | (5, 5, 1) |  | core/network.py distance_distribution: shells of ports around one port |  |
+| `lattice.shell_sizes` | (12, 42, 92) |  | geometry.shell_count: the IVM's own shell sizes for the same radii |  |
+| `carrier.diameter` | 3 | `three` | core/network.py graph_distances: the carrier's graph diameter |  |
+| `carrier.intersection_array` | (2, 1, 0; 1, 2, 5) |  | core/network.py intersection_array: neighbours outward and back, shell by shell |  |
+| `carrier.triangles` | 20 | `twenty` | core/network.py subgraph_census: three-cycles, exactly the twenty faces |  |
+| `carrier.pentagons` | 12 | `twelve` | core/network.py subgraph_census: five-cycles, the dual dodecahedron's vertices |  |
+| `carrier.perfect_matchings` | 125 | `125` | core/network.py subgraph_census: perfect matchings of the custody graph |  |
+| `carrier.hamiltonian_cycles` | 1280 |  | core/network.py subgraph_census: labelled Hamiltonian cycles |  |
+| `carrier.defect_per_port` | 1/3 | `1/3 pi` | geometry/solids.py angle_defects: the defect at a port, in units of pi |  |
+| `carrier.total_defect` | 4 | `4 pi` | geometry/solids.py angle_defects: the total defect against 2 pi times chi |  |
+| `cuboctahedron.spanning_trees` | 331776 | `576 squared` | core/invariants.py spanning_tree_number_of_adjacency: the cuboctahedron's own count |  |
+| `cuboctahedron.spanning_trees_root` | 576 |  | core/invariants.py: the square root of the cuboctahedron's spanning-tree count |  |
+| `cuboctahedron.triangles` | 8 | `eight` | geometry/lattice.py cuboctahedron_faces: the eight triangles |  |
+| `cuboctahedron.squares` | 6 | `six` | geometry/lattice.py cuboctahedron_faces: the six squares |  |
+| `cuboctahedron.matchings` | 32 |  | core/network.py subgraph_census on the cuboctahedron |  |
+| `dual.volume_ratio` | 10/3 | `10/3` | geometry.VOLUME_RATIOS: the cuboctahedron's twenty against the cell's six |  |
+| `tetravolume.galois_norm` | 50 | `50` | geometry/solids.py tetravolume_galois_norm: T times its conjugate, exactly |  |
+| `icosahedron.tetravolume_conjugate` | 2.7009075673772625 |  | geometry/solids.py: the conjugate solid's tetravolume, from the conjugated square |  |
+| `gmrf.reciprocal_spectrum_sum` | 7/3 | `7/3` | core/invariants.py reciprocal_spectrum_sum: the exact sum of reciprocal eigenvalues |  |
+| `cuboctahedron.vertices` | 12 | `twelve` | geometry/lattice.py cuboctahedron_adjacency: the twelve neighbouring sites |  |
+| `cuboctahedron.edges` | 24 | `twenty-four` | geometry/lattice.py cuboctahedron_edges: the cube's line graph's edges |  |
+| `cuboctahedron.faces` | 14 | `fourteen` | geometry/lattice.py cuboctahedron_faces: eight triangles and six squares |  |

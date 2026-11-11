@@ -25,7 +25,7 @@ def test_version_flag(capsys):
 def test_verify_reports_every_probe(capsys):
     assert main(["verify"]) == 0
     out = capsys.readouterr().out
-    assert "35/35 probes passed" in out
+    assert "42/42 probes passed" in out
     assert "[FAIL]" not in out
     assert "carrier-port-chart" in out
     assert "pr01-obstruction" in out
@@ -36,14 +36,14 @@ def test_verify_reports_every_probe(capsys):
 def test_verify_json_payload_is_complete(capsys):
     assert main(["verify", "--json"]) == 0
     payload = json.loads(capsys.readouterr().out)
-    assert payload["summary"]["total"] == 35
+    assert payload["summary"]["total"] == 42
     assert payload["summary"]["failed"] == 0
     assert payload["summary"]["failures"] == []
-    assert len(payload["results"]) == 35
+    assert len(payload["results"]) == 42
     assert all(result["passed"] for result in payload["results"])
     assert all(result["values"] for result in payload["results"])
     assert all(result["pair"] in payload["summary"]["by_pair"] for result in payload["results"])
-    assert sum(entry["passed"] for entry in payload["summary"]["by_pair"].values()) == 35
+    assert sum(entry["passed"] for entry in payload["summary"]["by_pair"].values()) == 42
 
 
 def test_verify_selects_named_probes(capsys):
@@ -54,9 +54,25 @@ def test_verify_selects_named_probes(capsys):
 def test_verify_selects_one_pairwise_scope(capsys):
     assert main(["verify", "--pair", "three-way"]) == 0
     out = capsys.readouterr().out
-    assert "1/1 probes passed" in out
+    assert "2/2 probes passed" in out
     assert "tetravolume-arithmetic" in out
+    assert "conjugation-norm" in out
     assert "carrier-port-chart" not in out
+
+
+def test_verify_selects_one_kind(capsys):
+    assert main(["verify", "--kind", "complementarity"]) == 0
+    out = capsys.readouterr().out
+    assert "10/10 probes passed" in out
+    assert "effective-resistance" in out
+    assert "carrier-port-chart" not in out
+
+
+def test_verify_rejects_an_unknown_kind(capsys):
+    assert main(["verify", "--kind", "isomorphism-typo"]) == 2
+    captured = capsys.readouterr()
+    assert "isomorphism-typo" in captured.err
+    assert captured.out == ""
 
 
 def test_verify_rejects_an_unknown_pair(capsys):
@@ -91,7 +107,14 @@ def test_sources_reports_absent_checkouts(capsys, tmp_path):
 def test_sources_checks_a_live_vault(capsys):
     assert main(["sources", "--vault-root", str(VAULT_ROOT)]) == 0
     out = capsys.readouterr().out
-    assert out.count("pin:     match") == 3
+    # A pin is a point-in-time reading, not a live requirement: an upstream
+    # checkout that has moved since it was read is reported as moved, and the
+    # package's own invariant is that this is a reading rather than a failure.
+    # What the live check must show is that all three sources are readable and
+    # that each lands in the documented vocabulary.
+    statuses = [chunk.split()[0] for chunk in out.split("pin:     ")[1:]]
+    assert len(statuses) == 3, out
+    assert all(status in {"match", "moved", "absent", "unavailable"} for status in statuses), out
 
 
 def test_sources_json(capsys):

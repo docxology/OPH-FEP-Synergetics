@@ -37,12 +37,15 @@ from typing import Iterable, Sequence
 from .subdivision import icosahedron_edges, icosahedron_faces, icosahedron_vertices
 
 __all__ = [
+    "angle_defects",
     "icosahedron_tetravolume",
     "icosahedron_volume",
     "orient_faces_outward",
     "polyhedron_volume",
+    "quadratic_norm",
     "regular_tetrahedron_volume",
     "shortest_edge",
+    "tetravolume_galois_norm",
     "tetravolume_ratio_squared_exact",
 ]
 
@@ -219,3 +222,62 @@ def icosahedron_tetravolume() -> dict[str, object]:
         "exact_squared_residual": abs(ratio * ratio - exact_squared),
         "integral": False,
     }
+
+
+def angle_defects(
+    faces: Iterable[Sequence[int]], vertex_count: int
+) -> dict[str, object]:
+    """Return the combinatorial angle defect of a triangulated closed surface.
+
+    At a vertex where ``k`` equilateral triangles meet, the surface angle sum is
+    ``k * pi / 3``, so the defect is ``2 pi - k pi / 3``. Its total is ``2 pi``
+    times the Euler characteristic -- Gauss-Bonnet, read off a face list rather
+    than quoted. Defects are returned as exact multiples of ``pi``, which is the
+    form in which the carrier's is a rational: ``1/3`` at every port and ``4`` in
+    total, against ``2 * chi = 4`` for a triangulated sphere.
+    """
+    triangles = [tuple(face) for face in faces]
+    for face in triangles:
+        if len(face) != 3 or len(set(face)) != 3:
+            raise AssertionError("the defect formula here assumes a triangle-only surface")
+    incident = [0] * vertex_count
+    for face in triangles:
+        for vertex in face:
+            if not 0 <= vertex < vertex_count:
+                raise AssertionError("a face names a vertex outside the surface")
+            incident[vertex] += 1
+    per_vertex = tuple(Fraction(2, 1) - Fraction(count, 3) for count in incident)
+    return {
+        "faces": len(triangles),
+        "faces_per_vertex": tuple(incident),
+        "per_vertex": per_vertex,
+        "total": sum(per_vertex, Fraction(0)),
+        "euler_characteristic_times_two": 2 * vertex_count - len(triangles),
+    }
+
+
+def quadratic_norm(parts: Sequence[Fraction]) -> Fraction:
+    """Return the norm ``a^2 - 5 b^2`` of ``a + b sqrt 5``.
+
+    The conjugation ``sqrt 5 -> -sqrt 5`` is the Galois symmetry of the field the
+    icosahedron's volume lives in, and the norm is the integer it lands on.
+    """
+    return parts[0] * parts[0] - 5 * parts[1] * parts[1]
+
+
+def tetravolume_galois_norm() -> Fraction:
+    """Return ``50``: the icosahedron's tetravolume times its conjugate's.
+
+    The squared tetravolume is ``175 + 75 sqrt 5``, so the norm of the square is
+    ``175^2 - 5 * 75^2 = 2500`` and the norm of the volume itself is its square
+    root, exactly ``50``. A counting invariant over the same carrier -- the
+    spanning-tree number -- is a rational integer and so is fixed by the same
+    conjugation; the volume is not, which is the arithmetic difference between
+    the two kinds of claim this package makes.
+    """
+    first, second = tetravolume_ratio_squared_exact()
+    squared_norm = quadratic_norm((first, second))
+    root = math.isqrt(squared_norm.numerator // squared_norm.denominator)
+    if root * root != squared_norm:
+        raise AssertionError("the norm of the squared tetravolume must be a perfect square")
+    return Fraction(root)

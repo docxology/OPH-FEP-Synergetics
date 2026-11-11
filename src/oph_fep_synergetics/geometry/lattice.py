@@ -147,6 +147,42 @@ def shell_index(point: Quadray | tuple[int, int, int, int]) -> int:
 # ---------------------------------------------------------------------------
 
 
+def cube_adjacency() -> tuple[tuple[int, ...], ...]:
+    """Return the 8x8 adjacency matrix of the cube, as the signed unit vectors.
+
+    The cube is built rather than quoted: its vertices are the eight sign
+    patterns of ``(1, 1, 1)`` and two of them are adjacent when they differ in
+    exactly one coordinate. That construction is what makes the next function a
+    derivation rather than a table.
+    """
+    corners = [(x, y, z) for x in (-1, 1) for y in (-1, 1) for z in (-1, 1)]
+    return tuple(
+        tuple(1 if sum(a != b for a, b in zip(left, right)) == 1 else 0 for right in corners)
+        for left in corners
+    )
+
+
+def cube_line_graph_adjacency() -> tuple[tuple[int, ...], ...]:
+    """Return the adjacency matrix of the cube's line graph: the cuboctahedron.
+
+    Its twelve vertices are the cube's twelve edges, and two of them are adjacent
+    when the cube's edges meet. The result is what Synergetics draws as the
+    twelve-around-one cuboctahedron, so the identity between the two is derived
+    here and only asserted later, by an isomorphism search over the twelve
+    vertices.
+    """
+    edges = [
+        (i, j)
+        for i, row in enumerate(cube_adjacency())
+        for j, value in enumerate(row)
+        if value and i < j
+    ]
+    return tuple(
+        tuple(1 if left != right and set(left) & set(right) else 0 for right in edges)
+        for left in edges
+    )
+
+
 def cuboctahedron_neighbors() -> tuple[Quadray, ...]:
     """The twelve nearest IVM neighbours, the vector-equilibrium shell."""
     return neighbor_sites()

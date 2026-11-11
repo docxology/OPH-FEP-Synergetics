@@ -12,6 +12,7 @@ from oph_fep_synergetics.analysis import (
     DISAGREEMENT,
     FEP_SYNERGETICS,
     ISOMORPHISM,
+    KINDS as REGISTRY_KINDS,
     OPH_FEP,
     PAIRS,
     SYNERGETICS_OPH,
@@ -25,11 +26,12 @@ from oph_fep_synergetics.analysis import (
 
 STATUS_VOCABULARY = {"exact", "exact-on-domain", "obstructed", "not-reproduced"}
 KINDS = (ISOMORPHISM, DISAGREEMENT, COMPLEMENTARITY)
+assert KINDS == REGISTRY_KINDS, "the registry and its tests must agree on the kind vocabulary"
 
 
 def test_registry_entries_are_well_formed():
-    assert len(CORRESPONDENCES) == 35
-    assert len({entry.key for entry in CORRESPONDENCES}) == 35
+    assert len(CORRESPONDENCES) == 42
+    assert len({entry.key for entry in CORRESPONDENCES}) == 42
     for entry in CORRESPONDENCES:
         assert entry.kind in KINDS
         assert entry.pair in PAIRS
@@ -41,7 +43,7 @@ def test_registry_entries_are_well_formed():
 
 def test_registry_covers_all_three_relations():
     counts = {kind: sum(1 for entry in CORRESPONDENCES if entry.kind == kind) for kind in KINDS}
-    assert counts == {ISOMORPHISM: 15, DISAGREEMENT: 13, COMPLEMENTARITY: 7}
+    assert counts == {ISOMORPHISM: 17, DISAGREEMENT: 15, COMPLEMENTARITY: 10}
 
 
 def test_registry_covers_every_pairwise_scope():
@@ -49,7 +51,7 @@ def test_registry_covers_every_pairwise_scope():
     index = by_pair()
     assert set(index) == set(PAIRS)
     counts = {pair: len(entries) for pair, entries in index.items()}
-    assert counts == {OPH_FEP: 23, FEP_SYNERGETICS: 2, SYNERGETICS_OPH: 9, THREE_WAY: 1}
+    assert counts == {OPH_FEP: 24, FEP_SYNERGETICS: 2, SYNERGETICS_OPH: 14, THREE_WAY: 2}
     assert sum(counts.values()) == len(CORRESPONDENCES)
     for pair, entries in index.items():
         assert all(entry.pair == pair for entry in entries)
@@ -73,24 +75,24 @@ def test_by_key_indexes_every_entry():
 
 def test_every_probe_passes_and_reports_values():
     results = verify()
-    assert len(results) == 35
+    assert len(results) == 42
     for result in results:
         assert result.passed is True
         assert result.pair in PAIRS
         assert result.values
     report = summary(results)
-    assert report["total"] == 35
-    assert report["passed"] == 35
+    assert report["total"] == 42
+    assert report["passed"] == 42
     assert report["failed"] == 0
     assert report["failures"] == ()
-    assert report["by_kind"][ISOMORPHISM] == {"passed": 15, "failed": 0}
-    assert report["by_kind"][DISAGREEMENT] == {"passed": 13, "failed": 0}
-    assert report["by_kind"][COMPLEMENTARITY] == {"passed": 7, "failed": 0}
+    assert report["by_kind"][ISOMORPHISM] == {"passed": 17, "failed": 0}
+    assert report["by_kind"][DISAGREEMENT] == {"passed": 15, "failed": 0}
+    assert report["by_kind"][COMPLEMENTARITY] == {"passed": 10, "failed": 0}
     assert report["pairs"] == PAIRS
-    assert report["by_pair"][OPH_FEP] == {"passed": 23, "failed": 0}
+    assert report["by_pair"][OPH_FEP] == {"passed": 24, "failed": 0}
     assert report["by_pair"][FEP_SYNERGETICS] == {"passed": 2, "failed": 0}
-    assert report["by_pair"][SYNERGETICS_OPH] == {"passed": 9, "failed": 0}
-    assert report["by_pair"][THREE_WAY] == {"passed": 1, "failed": 0}
+    assert report["by_pair"][SYNERGETICS_OPH] == {"passed": 14, "failed": 0}
+    assert report["by_pair"][THREE_WAY] == {"passed": 2, "failed": 0}
 
 
 def test_selection_limits_the_run():
@@ -100,10 +102,26 @@ def test_selection_limits_the_run():
 
 def test_pair_selection_limits_the_run_to_one_pairwise_scope():
     results = verify(pairs=(THREE_WAY,))
-    assert [result.key for result in results] == ["tetravolume-arithmetic"]
+    assert [result.key for result in results] == ["tetravolume-arithmetic", "conjugation-norm"]
     for pair in PAIRS:
         selected = verify(pairs=(pair,))
         assert {result.key for result in selected} == {entry.key for entry in by_pair()[pair]}
+
+
+def test_kind_selection_limits_the_run_to_one_kind():
+    for kind in KINDS:
+        selected = verify(kinds=(kind,))
+        assert {result.key for result in selected} == {entry.key for entry in by_kind()[kind]}
+        assert all(result.kind == kind for result in selected)
+    both = verify(pairs=(SYNERGETICS_OPH,), kinds=(DISAGREEMENT,))
+    assert {result.key for result in both} <= {entry.key for entry in by_pair()[SYNERGETICS_OPH]}
+    assert all(result.kind == DISAGREEMENT for result in both)
+    assert both, "the synergetics-oph scope has disagreements"
+
+
+def test_unknown_kinds_are_rejected_instead_of_selecting_nothing():
+    with pytest.raises(ValueError):
+        verify(kinds=("no-such-kind",))
 
 
 def test_unknown_pairs_are_rejected_instead_of_selecting_nothing():

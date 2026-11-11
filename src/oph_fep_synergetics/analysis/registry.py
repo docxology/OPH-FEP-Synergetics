@@ -40,6 +40,7 @@ from ..core import carrier as carrier_module
 from ..core import controls as control_module
 from ..core import free_energy as free_energy_module
 from ..core import invariants as invariant_module
+from ..core import network as network_module
 from ..core import repair as repair_module
 from ..core import sheaf as sheaf_module
 from ..core import symmetry as symmetry_module
@@ -47,6 +48,7 @@ from ..core import symmetry as symmetry_module
 ISOMORPHISM = "isomorphism"
 DISAGREEMENT = "disagreement"
 COMPLEMENTARITY = "complementarity"
+KINDS: tuple[str, ...] = (ISOMORPHISM, DISAGREEMENT, COMPLEMENTARITY)
 
 #: Pairwise scope of a claim.  The three programmes meet two at a time, so most
 #: claims relate a pair of them; ``THREE_WAY`` is reserved for the few that no
@@ -104,6 +106,11 @@ class CorrespondenceResult:
 
 def _carrier() -> carrier_module.IcosahedralCarrier:
     return carrier_module.icosahedral_carrier()
+
+
+def _carrier_adjacency(carrier: carrier_module.IcosahedralCarrier) -> list[list[int]]:
+    """Return the carrier's adjacency as exact integers, for the network readings."""
+    return [[int(value) for value in row] for row in carrier.adjacency_matrix()]
 
 
 # ---------------------------------------------------------------------------
@@ -1101,6 +1108,205 @@ def _probe_tetravolume_arithmetic() -> tuple[bool, dict]:
 # The registry
 # ---------------------------------------------------------------------------
 
+def _probe_effective_resistance() -> tuple[bool, dict]:
+    """The FEP's metric and the electrical reading of the same matrix agree exactly."""
+    carrier = _carrier()
+    adjacency = _carrier_adjacency(carrier)
+    ladder = network_module.resistance_ladder(adjacency)
+    exact = network_module.kirchhoff_index(adjacency)
+    from_spectrum = carrier.port_count * invariant_module.reciprocal_spectrum_sum(carrier)
+    values = {
+        "ladder": tuple((distance, str(resistance), pairs) for distance, resistance, pairs in ladder),
+        "adjacent_resistance": str(ladder[0][1]),
+        "distance_two_resistance": str(ladder[1][1]),
+        "antipodal_resistance": str(ladder[2][1]),
+        "kirchhoff_index_exact": str(exact),
+        "kirchhoff_index_from_spectrum": str(from_spectrum),
+        "ports": carrier.port_count,
+        "seams": carrier.seam_count,
+    }
+    passed = (
+        values["ladder"] == ((1, "11/30", 30), (2, "7/15", 30), (3, "1/2", 6))
+        and exact == from_spectrum == 28
+        and values["seams"] == 30
+    )
+    return passed, values
+
+
+def _probe_vertex_shells() -> tuple[bool, dict]:
+    """Shells around a port are not the lattice's shells: the graph is not the IVM."""
+    carrier = _carrier()
+    adjacency = _carrier_adjacency(carrier)
+    shells = network_module.distance_distribution(adjacency)
+    onward, back = network_module.intersection_array(adjacency)
+    outer = shells[1:]
+    lattice = tuple(geometry.shell_count(step) for step in range(1, len(shells)))
+    values = {
+        "shell_sizes": shells,
+        "outer_shell_sizes": outer,
+        "lattice_shell_sizes": lattice,
+        "onward": onward,
+        "back": back,
+        "diameter": len(shells) - 1,
+        "ports": carrier.port_count,
+    }
+    passed = (
+        shells == (1, 5, 5, 1)
+        and outer == (5, 5, 1)
+        and lattice == (12, 42, 92)
+        and onward == (2, 1, 0)
+        and back == (1, 2, 5)
+        and outer != lattice
+    )
+    return passed, values
+
+
+def _probe_subgraph_census() -> tuple[bool, dict]:
+    """The carrier's subgraphs reproduce the icosahedron's own counts exactly."""
+    carrier = _carrier()
+    census = network_module.subgraph_census(_carrier_adjacency(carrier))
+    values = {**census, "faces": len(carrier.faces), "ports": carrier.port_count}
+    passed = (
+        census
+        == {
+            "triangles": 20,
+            "pentagons": 12,
+            "perfect_matchings": 125,
+            "hamiltonian_cycles": 1280,
+        }
+        and census["triangles"] == values["faces"]
+        and census["pentagons"] == carrier.port_count
+    )
+    return passed, values
+
+
+def _probe_angle_defect() -> tuple[bool, dict]:
+    """Gauss-Bonnet on the carrier: a defect of pi/3 at each port, 4 pi in total."""
+    carrier = _carrier()
+    defects = geometry.angle_defects(carrier.faces, carrier.port_count)
+    values = {
+        "defect_per_port_over_pi": str(defects["per_vertex"][0]),
+        "total_defect_over_pi": str(defects["total"]),
+        "euler_characteristic_times_two": defects["euler_characteristic_times_two"],
+        "faces_per_port": defects["faces_per_vertex"][0],
+        "uniform": len(set(defects["faces_per_vertex"])) == 1,
+        "sum_is_gauss_bonnet": defects["total"] == Fraction(defects["euler_characteristic_times_two"], 1),
+    }
+    passed = (
+        values["defect_per_port_over_pi"] == "1/3"
+        and values["total_defect_over_pi"] == "4"
+        and values["euler_characteristic_times_two"] == 4
+        and values["faces_per_port"] == 5
+        and values["uniform"] is True
+        and values["sum_is_gauss_bonnet"] is True
+    )
+    return passed, values
+
+
+def _probe_twelve_around_one_families() -> tuple[bool, dict]:
+    """`Twelve around one` names a family; the counting invariant tells its members apart."""
+    carrier = _carrier()
+    icosahedron = _carrier_adjacency(carrier)
+    cuboctahedron = [list(row) for row in geometry.cuboctahedron_adjacency()]
+    ico_trees = invariant_module.spanning_tree_number_of_adjacency(icosahedron)
+    cub_trees = invariant_module.spanning_tree_number_of_adjacency(cuboctahedron)
+    census = network_module.subgraph_census(cuboctahedron)
+    values = {
+        "icosahedron_spanning_trees": ico_trees,
+        "cuboctahedron_spanning_trees": cub_trees,
+        "cuboctahedron_spanning_trees_is_square": math.isqrt(cub_trees) ** 2 == cub_trees,
+        "icosahedron_degree": max(sum(row) for row in icosahedron),
+        "cuboctahedron_degree": max(sum(row) for row in cuboctahedron),
+        "cuboctahedron_triangles": census["triangles"],
+        "cuboctahedron_squares": len(geometry.cuboctahedron_faces()["squares"]),
+        "cuboctahedron_perfect_matchings": census["perfect_matchings"],
+    }
+    passed = (
+        ico_trees == 5184000
+        and cub_trees == 331776
+        and values["cuboctahedron_spanning_trees_is_square"] is True
+        and values["icosahedron_degree"] == 5
+        and values["cuboctahedron_degree"] == 4
+        and census["triangles"] == 8
+        and census["perfect_matchings"] == 32
+        and ico_trees != cub_trees
+    )
+    return passed, values
+
+
+def _probe_dual_cells() -> tuple[bool, dict]:
+    """The twelve-around-one cell and the cuboctahedron are duals, edge for edge."""
+    cell = geometry.voronoi_cell()
+    cuboctahedron = [list(row) for row in geometry.cuboctahedron_adjacency()]
+    line_graph = [list(row) for row in geometry.cube_line_graph_adjacency()]
+    faces = geometry.cuboctahedron_faces()
+    cuboctahedron_faces = len(faces["triangles"]) + len(faces["squares"])
+    cuboctahedron_edges = len(geometry.cuboctahedron_edges())
+    ratio = Fraction(geometry.cuboctahedron_volume()) / Fraction(6)
+    values = {
+        "cell_vertices": cell["vertex_count"],
+        "cell_faces": cell["face_count"],
+        "cell_edges": cell["edge_count"],
+        "cell_tetravolume": geometry.voronoi_cell_tetravolume(),
+        "cell_euler_characteristic": cell["euler_characteristic"],
+        "cuboctahedron_vertices": len(cuboctahedron),
+        "cuboctahedron_faces": cuboctahedron_faces,
+        "cuboctahedron_edges": cuboctahedron_edges,
+        "cuboctahedron_tetravolume": str(geometry.cuboctahedron_volume()),
+        "volume_ratio": str(ratio),
+        "is_line_graph_of_cube": network_module.graphs_are_isomorphic(line_graph, cuboctahedron),
+        "euler_characteristics": (
+            cell["euler_characteristic"],
+            len(cuboctahedron) - cuboctahedron_edges + cuboctahedron_faces,
+        ),
+    }
+    passed = (
+        values["cell_vertices"] == 14
+        and values["cell_faces"] == 12
+        and values["cell_edges"] == 24
+        and values["cuboctahedron_vertices"] == 12
+        and values["cuboctahedron_faces"] == 14
+        and cuboctahedron_edges == 24
+        and abs(values["cell_tetravolume"] - 6.0) < 1e-6
+        and values["cuboctahedron_tetravolume"] == "20"
+        and values["volume_ratio"] == "10/3"
+        and values["is_line_graph_of_cube"] is True
+        and values["euler_characteristics"] == (2, 2)
+    )
+    return passed, values
+
+
+def _probe_conjugation_norm() -> tuple[bool, dict]:
+    """Conjugation fixes the counting invariant and moves the volume to its conjugate."""
+    carrier = _carrier()
+    trees = invariant_module.spanning_tree_number(carrier)
+    parts = geometry.tetravolume_ratio_squared_exact()
+    squared_norm = geometry.quadratic_norm(parts)
+    conjugated_squared = float(parts[0]) - float(parts[1]) * math.sqrt(5.0)
+    tetravolume = float(geometry.icosahedron_tetravolume()["tetravolume"])
+    conjugate_volume = math.sqrt(conjugated_squared)
+    values = {
+        "spanning_trees": trees,
+        "tree_number_is_an_integer": trees == int(trees),
+        "squared_parts": (int(parts[0]), int(parts[1])),
+        "squared_norm": int(squared_norm),
+        "galois_norm_of_tetravolume": str(geometry.tetravolume_galois_norm()),
+        "conjugated_squared": conjugated_squared,
+        "conjugate_volume": conjugate_volume,
+        "volume_times_conjugate": tetravolume * conjugate_volume,
+        "volume_is_irrational": abs(tetravolume - round(tetravolume)) > 1e-6,
+    }
+    passed = (
+        trees == 5184000
+        and values["squared_parts"] == (175, 75)
+        and values["squared_norm"] == 2500
+        and values["galois_norm_of_tetravolume"] == "50"
+        and abs(values["volume_times_conjugate"] - 50.0) < 1e-9
+        and values["volume_is_irrational"] is True
+    )
+    return passed, values
+
+
 _CARRIER_SOURCE = "OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c"
 _LAW_SOURCE = "OPH model/observer/native.py:45-51 and the 'Agreement and Surprise' paper, Section 6.2"
 _PAPER_SOURCE = "Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026"
@@ -1531,6 +1737,90 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; {_PAPER_SOURCE}",
         probe=_probe_tetravolume_arithmetic,
     ),
+    Correspondence(
+        key="effective-resistance",
+        kind=COMPLEMENTARITY,
+        pair=OPH_FEP,
+        claim="The precision carries a metric neither programme computes: the effective resistance between two ports, exact and rational, is 11/30 across a seam, 7/15 at distance two and 1/2 across the carrier, and the 66 of them sum to 28, which is twelve times the reciprocal spectrum sum 7/3 exactly.",
+        oph="A Laplacian whose generalized inverse defines a resistance distance.",
+        fep="In the Gaussian reading the same number is the variance of a port's potential difference.",
+        synergetics="A lattice metric on the same twelve sites, counted in whole steps rather than in resistances.",
+        status="exact",
+        source=f"{_CARRIER_SOURCE}; {_PAPER_SOURCE}",
+        probe=_probe_effective_resistance,
+    ),
+    Correspondence(
+        key="vertex-shells",
+        kind=DISAGREEMENT,
+        pair=SYNERGETICS_OPH,
+        claim="The shells of ports around a port are 5, 5 and 1, not the lattice's 12, 42 and 92: the carrier is distance-regular with intersection array {5, 2, 1; 1, 2, 5} and diameter three, so reading its neighbourhoods as IVM shells fails at the first shell, 5 against 12.",
+        oph="Neighbourhood shells of the port adjacency.",
+        fep="The same shells as conditional-independence distance in the precision.",
+        synergetics="IVM shells 10k^2 + 2 around a lattice site.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}",
+        probe=_probe_vertex_shells,
+    ),
+    Correspondence(
+        key="subgraph-census",
+        kind=ISOMORPHISM,
+        pair=SYNERGETICS_OPH,
+        claim="The carrier's subgraph census reproduces the icosahedron's own counts without being given them: 20 triangles, exactly its twenty faces; 12 five-cycles, the vertices of its dual dodecahedron; 125 perfect matchings; and 1280 labelled Hamiltonian cycles.",
+        oph="The 20 triangles of the derived face set.",
+        fep="Nothing: a census of the same graph, not a probabilistic reading of it.",
+        synergetics="The icosahedron's faces and the dodecahedron's twelve vertices.",
+        status="exact",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}",
+        probe=_probe_subgraph_census,
+    ),
+    Correspondence(
+        key="angle-defect",
+        kind=ISOMORPHISM,
+        pair=SYNERGETICS_OPH,
+        claim="Gauss-Bonnet on the carrier is exact in units of pi: five equilateral triangles meet at every port, so the defect is 1/3 pi there and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the triangulated sphere.",
+        oph="A patch complex with five faces at every port.",
+        fep="Nothing: curvature is a property of the complex, not of a belief.",
+        synergetics="The icosahedron's five-fold vertex figures, whose angular accounting is the classical one.",
+        status="exact",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}",
+        probe=_probe_angle_defect,
+    ),
+    Correspondence(
+        key="twelve-around-one-families",
+        kind=DISAGREEMENT,
+        pair=SYNERGETICS_OPH,
+        claim="`Twelve around one` names a family and not an object: the icosahedron has degree 5 and 5184000 spanning trees, while the cuboctahedron has degree 4, eight triangles, 32 perfect matchings and 331776 = 576^2 spanning trees, so the counting invariant separates the two solids the phrase covers.",
+        oph="The carrier is the icosahedron, so its count is 5184000.",
+        fep="Nothing: both graphs support the same Gaussian reading, and the count is what distinguishes them.",
+        synergetics="The vector equilibrium is the cuboctahedron, and its count is 576 squared.",
+        status="obstructed",
+        source=f"{_QUADRAY_SOURCE}; {_CARRIER_SOURCE}",
+        probe=_probe_twelve_around_one_families,
+    ),
+    Correspondence(
+        key="dual-cells",
+        kind=COMPLEMENTARITY,
+        pair=SYNERGETICS_OPH,
+        claim="The twelve-around-one cell and the cuboctahedron are duals edge for edge: 14 vertices against 12, 12 faces against 14, 24 edges each, Euler characteristic 2 each, and tetravolumes 6 and 20 in the ratio 10/3, with the cuboctahedron derived a second time as the cube's line graph.",
+        oph="The Voronoi cell of the twelve ports, derived from the carrier's sites.",
+        fep="The cell's volume is not a free-energy quantity; the dual pair is geometry.",
+        synergetics="The rhombic dodecahedron's six and the cuboctahedron's twenty tetravolumes.",
+        status="exact",
+        source=f"{_QUADRAY_SOURCE}; {_CARRIER_SOURCE}",
+        probe=_probe_dual_cells,
+    ),
+    Correspondence(
+        key="conjugation-norm",
+        kind=COMPLEMENTARITY,
+        pair=THREE_WAY,
+        claim="Conjugation of sqrt 5 fixes the counting invariants and moves the geometric ones: the spanning-tree number 5184000 is a rational integer and is fixed, while the icosahedron's tetravolume and its conjugate multiply to exactly 50, since (175 + 75 sqrt 5)(175 - 75 sqrt 5) = 2500.",
+        oph="A count over the carrier, which is an integer and therefore conjugation-invariant.",
+        fep="A determinant over the same matrix, likewise rational.",
+        synergetics="Tetravolumes in the quadratic field Q(sqrt 5), where the volume moves under conjugation.",
+        status="exact",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; {_PAPER_SOURCE}",
+        probe=_probe_conjugation_norm,
+    ),
 )
 
 
@@ -1563,10 +1853,11 @@ def verify(
     *,
     keys: tuple[str, ...] | None = None,
     pairs: tuple[str, ...] | None = None,
+    kinds: tuple[str, ...] | None = None,
 ) -> tuple[CorrespondenceResult, ...]:
     """Run every registered probe, or only the selected ones.
 
-    An unknown key or an unknown pairwise scope raises ``ValueError`` instead of
+    An unknown key, pairwise scope or kind raises ``ValueError`` instead of
     selecting nothing, so a mistyped argument cannot pass as an empty run.
     """
     selected = CORRESPONDENCES
@@ -1582,6 +1873,12 @@ def verify(
         if unknown_pairs:
             raise ValueError(f"unknown pairwise scope(s): {', '.join(unknown_pairs)}")
         selected = tuple(entry for entry in selected if entry.pair in wanted_pairs)
+    if kinds is not None:
+        wanted_kinds = set(kinds)
+        unknown_kinds = sorted(wanted_kinds - set(KINDS))
+        if unknown_kinds:
+            raise ValueError(f"unknown kind(s): {', '.join(unknown_kinds)}")
+        selected = tuple(entry for entry in selected if entry.kind in wanted_kinds)
     return tuple(entry.run() for entry in selected)
 
 

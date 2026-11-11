@@ -13,20 +13,30 @@ transcribed copy is a number that can silently stop matching its source.
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
+from fractions import Fraction
 
 from ..analysis import registry as registry_module
 from ..core import cohomology_dimensions, icosahedral_carrier, invariants as invariant_module
+from ..core import network as network_module
 from ..core import symmetry as symmetry_module
 from ..core.sheaf import carrier_sheaf
 from ..geometry import (
     VOLUME_RATIOS,
+    angle_defects,
     cuboctahedron_adjacency,
+    cuboctahedron_edges,
+    cuboctahedron_faces,
+    cuboctahedron_volume,
     generate_shell,
     icosahedron_tetravolume,
     neighbor_moves,
     packing_density,
+    shell_count,
     squared_norm,
+    tetravolume_galois_norm,
+    tetravolume_ratio_squared_exact,
     voronoi_cell,
 )
 
@@ -119,6 +129,84 @@ def _shared_free_energy_levels() -> tuple[float, ...]:
     return tuple(sorted(level for level, carriers in shells.items() if len(carriers) > 1))
 
 
+def _network_adjacency() -> list[list[int]]:
+    """Return the carrier's adjacency as exact integers for the network readings."""
+    return [[int(value) for value in row] for row in icosahedral_carrier().adjacency_matrix()]
+
+
+def _resistance_readings() -> dict[str, object]:
+    """Read the resistance ladder, the pair counts and the Kirchhoff index."""
+    adjacency = _network_adjacency()
+    ladder = network_module.resistance_ladder(adjacency)
+    return {
+        "adjacent": str(ladder[0][1]),
+        "distance_two": str(ladder[1][1]),
+        "antipodal": str(ladder[2][1]),
+        "pair_counts": tuple(pairs for _, _, pairs in ladder),
+        "kirchhoff_index": int(network_module.kirchhoff_index(adjacency)),
+    }
+
+
+def _shell_readings() -> dict[str, object]:
+    """Read the carrier's shells around a port against the lattice's own shells."""
+    adjacency = _network_adjacency()
+    shells = network_module.distance_distribution(adjacency)
+    onward, back = network_module.intersection_array(adjacency)
+    return {
+        "carrier": shells[1:],
+        "lattice": tuple(shell_count(step) for step in range(1, len(shells))),
+        "diameter": len(shells) - 1,
+        "intersection": "(" + ", ".join(str(value) for value in onward) + "; "
+        + ", ".join(str(value) for value in back) + ")",
+    }
+
+
+def _defect_readings() -> dict[str, object]:
+    """Read the angle defect of the carrier's triangulation, in units of pi."""
+    carrier = icosahedral_carrier()
+    defects = angle_defects(carrier.faces, carrier.port_count)
+    return {
+        "per_port": str(defects["per_vertex"][0]),
+        "total": str(defects["total"]),
+        "euler_characteristic_times_two": defects["euler_characteristic_times_two"],
+    }
+
+
+def _cuboctahedron_readings() -> dict[str, object]:
+    """Read the counts that separate the cuboctahedron from the carrier."""
+    adjacency = [list(row) for row in cuboctahedron_adjacency()]
+    faces = cuboctahedron_faces()
+    return {
+        "spanning_trees": invariant_module.spanning_tree_number_of_adjacency(adjacency),
+        "triangles": len(faces["triangles"]),
+        "squares": len(faces["squares"]),
+        "edges": len(cuboctahedron_edges()),
+        "matchings": network_module.subgraph_census(adjacency)["perfect_matchings"],
+    }
+
+
+def _volume_ratio() -> str:
+    """Return the dual pair's tetravolume ratio, exactly.
+
+    The cell is the rhombic dodecahedron, whose tetravolume the declared table
+    gives as six, so the ratio against the cuboctahedron's twenty is 10/3 and is
+    read from the table rather than transcribed.
+    """
+    return str(Fraction(cuboctahedron_volume()) / VOLUME_RATIOS["rhombic_dodecahedron"])
+
+
+def _conjugate_tetravolume() -> float:
+    """Return the tetravolume of the solid whose squared volume is the conjugate.
+
+    Conjugating ``sqrt 5`` in ``175 + 75 sqrt 5`` gives a positive square, and its
+    root is the volume of the conjugate solid. The two volumes multiply to the
+    exact norm 50, which is what makes the conjugation a usable check rather than
+    a curiosity.
+    """
+    first, second = tetravolume_ratio_squared_exact()
+    return math.sqrt(float(first) - float(second) * math.sqrt(5.0))
+
+
 _COUNTS = _registry_counts()
 _COHOMOLOGY = cohomology_dimensions(carrier_sheaf(icosahedral_carrier()))
 _EQUIVARIANCE = symmetry_module.law_equivariance()
@@ -127,6 +215,12 @@ _DENSITY = packing_density()
 _CELL = voronoi_cell()
 _SHELL_LEVELS = _shell_free_energy_levels()
 _SHARED_LEVELS = _shared_free_energy_levels()
+#: The network readings each solve exact rational systems, so they are read once.
+_RESISTANCE = _resistance_readings()
+_SHELLS = _shell_readings()
+_DEFECTS = _defect_readings()
+_CUBOCTAHEDRON = _cuboctahedron_readings()
+_CENSUS = network_module.subgraph_census(_network_adjacency())
 
 
 MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
@@ -557,6 +651,168 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         float(squared_norm(neighbor_moves()[0])),
         "geometry.NEIGHBOR_SQUARED_DISTANCE, the IVM's squared neighbour distance",
         "8",
+    ),
+    BoundValue(
+        "resistance.adjacent",
+        _RESISTANCE["adjacent"],
+        "core/network.py resistance_ladder: exact rational solve of L x = e_i - e_j on a seam",
+        "11/30",
+    ),
+    BoundValue(
+        "resistance.distance_two",
+        _RESISTANCE["distance_two"],
+        "core/network.py resistance_ladder: ports at graph distance two",
+        "7/15",
+    ),
+    BoundValue(
+        "resistance.antipodal",
+        _RESISTANCE["antipodal"],
+        "core/network.py resistance_ladder: ports at graph distance three, across the carrier",
+        "1/2",
+    ),
+    BoundValue(
+        "resistance.pair_counts",
+        _RESISTANCE["pair_counts"],
+        "core/network.py resistance_ladder: how many port pairs each distance class holds",
+        None,
+    ),
+    BoundValue(
+        "resistance.kirchhoff_index",
+        _RESISTANCE["kirchhoff_index"],
+        "core/network.py kirchhoff_index: the 66 resistances summed, against 12 times 7/3",
+        "28",
+    ),
+    BoundValue(
+        "carrier.shell_sizes",
+        _SHELLS["carrier"],
+        "core/network.py distance_distribution: shells of ports around one port",
+        None,
+    ),
+    BoundValue(
+        "lattice.shell_sizes",
+        _SHELLS["lattice"],
+        "geometry.shell_count: the IVM's own shell sizes for the same radii",
+        None,
+    ),
+    BoundValue(
+        "carrier.diameter",
+        _SHELLS["diameter"],
+        "core/network.py graph_distances: the carrier's graph diameter",
+        "three",
+    ),
+    BoundValue(
+        "carrier.intersection_array",
+        _SHELLS["intersection"],
+        "core/network.py intersection_array: neighbours outward and back, shell by shell",
+        None,
+    ),
+    BoundValue(
+        "carrier.triangles",
+        _CENSUS["triangles"],
+        "core/network.py subgraph_census: three-cycles, exactly the twenty faces",
+        "twenty",
+    ),
+    BoundValue(
+        "carrier.pentagons",
+        _CENSUS["pentagons"],
+        "core/network.py subgraph_census: five-cycles, the dual dodecahedron's vertices",
+        "twelve",
+    ),
+    BoundValue(
+        "carrier.perfect_matchings",
+        _CENSUS["perfect_matchings"],
+        "core/network.py subgraph_census: perfect matchings of the custody graph",
+        "125",
+    ),
+    BoundValue(
+        "carrier.hamiltonian_cycles",
+        _CENSUS["hamiltonian_cycles"],
+        "core/network.py subgraph_census: labelled Hamiltonian cycles",
+        None,
+    ),
+    BoundValue(
+        "carrier.defect_per_port",
+        _DEFECTS["per_port"],
+        "geometry/solids.py angle_defects: the defect at a port, in units of pi",
+        "1/3 pi",
+    ),
+    BoundValue(
+        "carrier.total_defect",
+        _DEFECTS["total"],
+        "geometry/solids.py angle_defects: the total defect against 2 pi times chi",
+        "4 pi",
+    ),
+    BoundValue(
+        "cuboctahedron.spanning_trees",
+        _CUBOCTAHEDRON["spanning_trees"],
+        "core/invariants.py spanning_tree_number_of_adjacency: the cuboctahedron's own count",
+        "576 squared",
+    ),
+    BoundValue(
+        "cuboctahedron.spanning_trees_root",
+        math.isqrt(int(_CUBOCTAHEDRON["spanning_trees"])),
+        "core/invariants.py: the square root of the cuboctahedron's spanning-tree count",
+        None,
+    ),
+    BoundValue(
+        "cuboctahedron.triangles",
+        _CUBOCTAHEDRON["triangles"],
+        "geometry/lattice.py cuboctahedron_faces: the eight triangles",
+        "eight",
+    ),
+    BoundValue(
+        "cuboctahedron.squares",
+        _CUBOCTAHEDRON["squares"],
+        "geometry/lattice.py cuboctahedron_faces: the six squares",
+        "six",
+    ),
+    BoundValue(
+        "cuboctahedron.matchings",
+        _CUBOCTAHEDRON["matchings"],
+        "core/network.py subgraph_census on the cuboctahedron",
+        None,
+    ),
+    BoundValue(
+        "dual.volume_ratio",
+        _volume_ratio(),
+        "geometry.VOLUME_RATIOS: the cuboctahedron's twenty against the cell's six",
+        "10/3",
+    ),
+    BoundValue(
+        "tetravolume.galois_norm",
+        str(tetravolume_galois_norm()),
+        "geometry/solids.py tetravolume_galois_norm: T times its conjugate, exactly",
+        "50",
+    ),
+    BoundValue(
+        "icosahedron.tetravolume_conjugate",
+        _conjugate_tetravolume(),
+        "geometry/solids.py: the conjugate solid's tetravolume, from the conjugated square",
+        None,
+    ),
+    BoundValue(
+        "gmrf.reciprocal_spectrum_sum",
+        str(invariant_module.reciprocal_spectrum_sum(icosahedral_carrier())),
+        "core/invariants.py reciprocal_spectrum_sum: the exact sum of reciprocal eigenvalues",
+        "7/3",
+    ),
+    BoundValue(
+        "cuboctahedron.vertices",
+        len(cuboctahedron_adjacency()),
+        "geometry/lattice.py cuboctahedron_adjacency: the twelve neighbouring sites",
+        "twelve",
+    ),
+    BoundValue(
+        "cuboctahedron.edges",
+        _CUBOCTAHEDRON["edges"],
+        "geometry/lattice.py cuboctahedron_edges: the cube's line graph's edges",
+        "twenty-four",
+    ),
+    BoundValue(
+        "cuboctahedron.faces",
+        int(_CUBOCTAHEDRON["triangles"]) + int(_CUBOCTAHEDRON["squares"]),
+        "geometry/lattice.py cuboctahedron_faces: eight triangles and six squares",
+        "fourteen",
     ),
 )
 

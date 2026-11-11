@@ -7,11 +7,15 @@ from fractions import Fraction
 
 import pytest
 
+from oph_fep_synergetics.core import icosahedral_carrier
 from oph_fep_synergetics.geometry import (
+    angle_defects,
     icosahedron_faces,
     icosahedron_tetravolume,
     icosahedron_vertices,
     packing_density,
+    quadratic_norm,
+    tetravolume_galois_norm,
     voronoi_cell,
     voronoi_cell_tetravolume,
     voronoi_cell_volume,
@@ -115,3 +119,30 @@ def test_packing_density_is_the_ivm_density():
     assert report["faces"] == 12
     assert report["edges"] == 24
     assert report["volume_residual"] < 1e-9
+
+
+def test_angle_defects_of_the_carrier_are_a_third_at_every_vertex():
+    carrier = icosahedral_carrier()
+    report = angle_defects(carrier.faces, 12)
+    assert report["faces"] == 20
+    assert report["per_vertex"] == (Fraction(1, 3),) * 12
+    assert report["total"] == Fraction(4, 1)
+    assert report["faces_per_vertex"] == (5,) * 12
+    assert report["euler_characteristic_times_two"] == 4
+    euler_characteristic = Fraction(report["euler_characteristic_times_two"], 2)
+    assert report["total"] == 2 * euler_characteristic
+
+
+def test_quadratic_norm_of_the_tetravolume_squared_parts():
+    parts = solids.tetravolume_ratio_squared_exact()
+    assert parts == (Fraction(175), Fraction(75))
+    assert quadratic_norm(parts) == Fraction(2500)
+    assert quadratic_norm((Fraction(175), Fraction(75))) == Fraction(2500)
+
+
+def test_tetravolume_galois_norm_is_fifty():
+    assert tetravolume_galois_norm() == Fraction(50)
+    assert tetravolume_galois_norm() * tetravolume_galois_norm() == quadratic_norm(
+        solids.tetravolume_ratio_squared_exact()
+    )
+    assert quadratic_norm(solids.tetravolume_ratio_squared_exact()) == 50**2

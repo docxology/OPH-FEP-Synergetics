@@ -46,21 +46,28 @@ no pair of readings captures.
 | synergetics-oph | complementarity | exact | `icosahedron-tetravolume` | Synergetics' tetravolume accounting extends to the carrier's own solid: the regular icosahedron measures 18.512295868219... tetravolumes, equal to (5/2)(3 sqrt 2 + sqrt 10), whose square is exactly 175 + 75 sqrt 5, so the carrier's polytope has an exact algebraic volume that no integral table entry can express. |
 | synergetics-oph | complementarity | exact | `packing-density` | The IVM's Voronoi cell is the rhombic dodecahedron, fourteen vertices, twelve rhombic faces and twenty-four edges with Euler characteristic two, its tetravolume is exactly six, and the ball of radius half the prime vector gives the packing density pi / (3 sqrt 2): the carrier's coordination is the twelve-around-one of the densest lattice packing. |
 | three-way | complementarity | exact | `tetravolume-arithmetic` | The three programmes count in three currencies and only one stays integral: the FEP's equal-covariance cost for one IVM step is exactly four nats, OPH's shell gap is the rational (5 - sqrt 5) / 60, and the synergetic tetravolume table is integral (1, 3, 4, 6, 20, 96) with the cell volume six derived, while the carrier's own icosahedron enters at 18.512295868219..., whose square is 175 + 75 sqrt 5. |
+| oph-fep | complementarity | exact | `effective-resistance` | The precision carries a metric neither programme computes: the effective resistance between two ports, exact and rational, is 11/30 across a seam, 7/15 at distance two and 1/2 across the carrier, and the 66 of them sum to 28, which is twelve times the reciprocal spectrum sum 7/3 exactly. |
+| synergetics-oph | disagreement | obstructed | `vertex-shells` | The shells of ports around a port are 5, 5 and 1, not the lattice's 12, 42 and 92: the carrier is distance-regular with intersection array {5, 2, 1; 1, 2, 5} and diameter three, so reading its neighbourhoods as IVM shells fails at the first shell, 5 against 12. |
+| synergetics-oph | isomorphism | exact | `subgraph-census` | The carrier's subgraph census reproduces the icosahedron's own counts without being given them: 20 triangles, exactly its twenty faces; 12 five-cycles, the vertices of its dual dodecahedron; 125 perfect matchings; and 1280 labelled Hamiltonian cycles. |
+| synergetics-oph | isomorphism | exact | `angle-defect` | Gauss-Bonnet on the carrier is exact in units of pi: five equilateral triangles meet at every port, so the defect is 1/3 pi there and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the triangulated sphere. |
+| synergetics-oph | disagreement | obstructed | `twelve-around-one-families` | `Twelve around one` names a family and not an object: the icosahedron has degree 5 and 5184000 spanning trees, while the cuboctahedron has degree 4, eight triangles, 32 perfect matchings and 331776 = 576^2 spanning trees, so the counting invariant separates the two solids the phrase covers. |
+| synergetics-oph | complementarity | exact | `dual-cells` | The twelve-around-one cell and the cuboctahedron are duals edge for edge: 14 vertices against 12, 12 faces against 14, 24 edges each, Euler characteristic 2 each, and tetravolumes 6 and 20 in the ratio 10/3, with the cuboctahedron derived a second time as the cube's line graph. |
+| three-way | complementarity | exact | `conjugation-norm` | Conjugation of sqrt 5 fixes the counting invariants and moves the geometric ones: the spanning-tree number 5184000 is a rational integer and is fixed, while the icosahedron's tetravolume and its conjugate multiply to exactly 50, since (175 + 75 sqrt 5)(175 - 75 sqrt 5) = 2500. |
 
-Totals: 35/35 probes pass, 0 fail.
+Totals: 42/42 probes pass, 0 fail.
 
 By kind:
 
-- isomorphism: 15 passing, 0 failing
-- disagreement: 13 passing, 0 failing
-- complementarity: 7 passing, 0 failing
+- isomorphism: 17 passing, 0 failing
+- disagreement: 15 passing, 0 failing
+- complementarity: 10 passing, 0 failing
 
 By pairwise scope:
 
-- oph-fep: 23 passing, 0 failing
+- oph-fep: 24 passing, 0 failing
 - fep-synergetics: 2 passing, 0 failing
-- synergetics-oph: 9 passing, 0 failing
-- three-way: 1 passing, 0 failing
+- synergetics-oph: 14 passing, 0 failing
+- three-way: 2 passing, 0 failing
 
 ## `carrier-port-chart`
 
@@ -835,4 +842,158 @@ Probe values:
 - `synergetics_icosahedron_squared_parts` = (175, 75)
 - `ivm_cell_tetravolume` = 5.999999999999998
 - `ivm_density_is_below_one` = True
+
+## `effective-resistance`
+
+**complementarity** / **exact** / **oph-fep** / probe PASS
+
+The precision carries a metric neither programme computes: the effective resistance between two ports, exact and rational, is 11/30 across a seam, 7/15 at distance two and 1/2 across the carrier, and the 66 of them sum to 28, which is twelve times the reciprocal spectrum sum 7/3 exactly.
+
+- OPH: A Laplacian whose generalized inverse defines a resistance distance.
+- FEP: In the Gaussian reading the same number is the variance of a port's potential difference.
+- Synergetics: A lattice metric on the same twelve sites, counted in whole steps rather than in resistances.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026
+
+Probe values:
+
+- `ladder` = ((1, 11/30, 30), (2, 7/15, 30), (3, 1/2, 6))
+- `adjacent_resistance` = 11/30
+- `distance_two_resistance` = 7/15
+- `antipodal_resistance` = 1/2
+- `kirchhoff_index_exact` = 28
+- `kirchhoff_index_from_spectrum` = 28
+- `ports` = 12
+- `seams` = 30
+
+## `vertex-shells`
+
+**disagreement** / **obstructed** / **synergetics-oph** / probe PASS
+
+The shells of ports around a port are 5, 5 and 1, not the lattice's 12, 42 and 92: the carrier is distance-regular with intersection array {5, 2, 1; 1, 2, 5} and diameter three, so reading its neighbourhoods as IVM shells fails at the first shell, 5 against 12.
+
+- OPH: Neighbourhood shells of the port adjacency.
+- FEP: The same shells as conditional-independence distance in the precision.
+- Synergetics: IVM shells 10k^2 + 2 around a lattice site.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+
+Probe values:
+
+- `shell_sizes` = (1, 5, 5, 1)
+- `outer_shell_sizes` = (5, 5, 1)
+- `lattice_shell_sizes` = (12, 42, 92)
+- `onward` = (2, 1, 0)
+- `back` = (1, 2, 5)
+- `diameter` = 3
+- `ports` = 12
+
+## `subgraph-census`
+
+**isomorphism** / **exact** / **synergetics-oph** / probe PASS
+
+The carrier's subgraph census reproduces the icosahedron's own counts without being given them: 20 triangles, exactly its twenty faces; 12 five-cycles, the vertices of its dual dodecahedron; 125 perfect matchings; and 1280 labelled Hamiltonian cycles.
+
+- OPH: The 20 triangles of the derived face set.
+- FEP: Nothing: a census of the same graph, not a probabilistic reading of it.
+- Synergetics: The icosahedron's faces and the dodecahedron's twelve vertices.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+
+Probe values:
+
+- `triangles` = 20
+- `pentagons` = 12
+- `perfect_matchings` = 125
+- `hamiltonian_cycles` = 1280
+- `faces` = 20
+- `ports` = 12
+
+## `angle-defect`
+
+**isomorphism** / **exact** / **synergetics-oph** / probe PASS
+
+Gauss-Bonnet on the carrier is exact in units of pi: five equilateral triangles meet at every port, so the defect is 1/3 pi there and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the triangulated sphere.
+
+- OPH: A patch complex with five faces at every port.
+- FEP: Nothing: curvature is a property of the complex, not of a belief.
+- Synergetics: The icosahedron's five-fold vertex figures, whose angular accounting is the classical one.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+
+Probe values:
+
+- `defect_per_port_over_pi` = 1/3
+- `total_defect_over_pi` = 4
+- `euler_characteristic_times_two` = 4
+- `faces_per_port` = 5
+- `uniform` = True
+- `sum_is_gauss_bonnet` = True
+
+## `twelve-around-one-families`
+
+**disagreement** / **obstructed** / **synergetics-oph** / probe PASS
+
+`Twelve around one` names a family and not an object: the icosahedron has degree 5 and 5184000 spanning trees, while the cuboctahedron has degree 4, eight triangles, 32 perfect matchings and 331776 = 576^2 spanning trees, so the counting invariant separates the two solids the phrase covers.
+
+- OPH: The carrier is the icosahedron, so its count is 5184000.
+- FEP: Nothing: both graphs support the same Gaussian reading, and the count is what distinguishes them.
+- Synergetics: The vector equilibrium is the cuboctahedron, and its count is 576 squared.
+- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b; OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
+
+Probe values:
+
+- `icosahedron_spanning_trees` = 5184000
+- `cuboctahedron_spanning_trees` = 331776
+- `cuboctahedron_spanning_trees_is_square` = True
+- `icosahedron_degree` = 5
+- `cuboctahedron_degree` = 4
+- `cuboctahedron_triangles` = 8
+- `cuboctahedron_squares` = 6
+- `cuboctahedron_perfect_matchings` = 32
+
+## `dual-cells`
+
+**complementarity** / **exact** / **synergetics-oph** / probe PASS
+
+The twelve-around-one cell and the cuboctahedron are duals edge for edge: 14 vertices against 12, 12 faces against 14, 24 edges each, Euler characteristic 2 each, and tetravolumes 6 and 20 in the ratio 10/3, with the cuboctahedron derived a second time as the cube's line graph.
+
+- OPH: The Voronoi cell of the twelve ports, derived from the carrier's sites.
+- FEP: The cell's volume is not a free-energy quantity; the dual pair is geometry.
+- Synergetics: The rhombic dodecahedron's six and the cuboctahedron's twenty tetravolumes.
+- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b; OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
+
+Probe values:
+
+- `cell_vertices` = 14
+- `cell_faces` = 12
+- `cell_edges` = 24
+- `cell_tetravolume` = 5.999999999999998
+- `cell_euler_characteristic` = 2
+- `cuboctahedron_vertices` = 12
+- `cuboctahedron_faces` = 14
+- `cuboctahedron_edges` = 24
+- `cuboctahedron_tetravolume` = 20
+- `volume_ratio` = 10/3
+- `is_line_graph_of_cube` = True
+- `euler_characteristics` = (2, 2)
+
+## `conjugation-norm`
+
+**complementarity** / **exact** / **three-way** / probe PASS
+
+Conjugation of sqrt 5 fixes the counting invariants and moves the geometric ones: the spanning-tree number 5184000 is a rational integer and is fixed, while the icosahedron's tetravolume and its conjugate multiply to exactly 50, since (175 + 75 sqrt 5)(175 - 75 sqrt 5) = 2500.
+
+- OPH: A count over the carrier, which is an integer and therefore conjugation-invariant.
+- FEP: A determinant over the same matrix, likewise rational.
+- Synergetics: Tetravolumes in the quadratic field Q(sqrt 5), where the volume moves under conjugation.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026
+
+Probe values:
+
+- `spanning_trees` = 5184000
+- `tree_number_is_an_integer` = True
+- `squared_parts` = (175, 75)
+- `squared_norm` = 2500
+- `galois_norm_of_tetravolume` = 50
+- `conjugated_squared` = 7.294901687515761
+- `conjugate_volume` = 2.7009075673772625
+- `volume_times_conjugate` = 49.999999999999936
+- `volume_is_irrational` = True
 
