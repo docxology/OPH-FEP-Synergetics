@@ -63,6 +63,15 @@ def test_check_mode_reports_stale_documents(tmp_path, monkeypatch, capsys):
 
 
 def test_write_mode_creates_missing_documents(tmp_path, monkeypatch, capsys):
+    renderer = _load_renderer()
+    target = tmp_path / "nested" / "registry.md"
+    monkeypatch.setattr(renderer, "REGISTRY_DOC", target)
+    monkeypatch.setattr(renderer, "VALUES_DOC", tmp_path / "values.md")
+    monkeypatch.setattr(renderer, "CONCORDANCE_DOC", tmp_path / "concordance.md")
+    assert renderer.main([]) == 0
+    assert target.is_file()
+    assert target.read_text(encoding="utf-8") == renderer.render_registry()
+    assert "wrote" in capsys.readouterr().out
 
 
 def test_the_concordance_reports_no_uncited_formal_statement():
@@ -73,15 +82,6 @@ def test_the_concordance_reports_no_uncited_formal_statement():
     """
     renderer = _load_renderer()
     assert "never cited" not in renderer.render_concordance()
-    renderer = _load_renderer()
-    target = tmp_path / "nested" / "registry.md"
-    monkeypatch.setattr(renderer, "REGISTRY_DOC", target)
-    monkeypatch.setattr(renderer, "VALUES_DOC", tmp_path / "values.md")
-    monkeypatch.setattr(renderer, "CONCORDANCE_DOC", tmp_path / "concordance.md")
-    assert renderer.main([]) == 0
-    assert target.is_file()
-    assert target.read_text(encoding="utf-8") == renderer.render_registry()
-    assert "wrote" in capsys.readouterr().out
 
 
 def test_format_value_renders_containers_and_scalars():

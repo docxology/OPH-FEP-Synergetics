@@ -35,7 +35,7 @@ mistaken for a clean run.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-345 tests, no mocks, no network, no fixtures that fake a result. The suite runs
+346 tests, no mocks, no network, no fixtures that fake a result. The suite runs
 from a fresh process against the real code paths.
 
 | file | what it pins down |
