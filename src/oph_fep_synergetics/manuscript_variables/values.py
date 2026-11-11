@@ -18,9 +18,11 @@ from dataclasses import dataclass
 from fractions import Fraction
 
 from ..analysis import registry as registry_module
-from ..core import cohomology_dimensions, icosahedral_carrier, invariants as invariant_module
+from ..core import cohomology_dimensions, controls as control_module, icosahedral_carrier
+from ..core import invariants as invariant_module
 from ..core import network as network_module
 from ..core import symmetry as symmetry_module
+from ..core.carrier import OPH_NEIGHBOURS
 from ..core.sheaf import carrier_sheaf
 from ..geometry import (
     VOLUME_RATIOS,
@@ -77,7 +79,7 @@ def format_value(value: object) -> str:
     if isinstance(value, int):
         return str(value)
     if isinstance(value, float):
-        return f"{value:.6g}"
+        return f"{value:.7g}"
     if isinstance(value, dict):
         return ", ".join(
             f"{str(key).replace('_', ' ')} {format_value(item)}" for key, item in value.items()
@@ -221,6 +223,49 @@ _SHELLS = _shell_readings()
 _DEFECTS = _defect_readings()
 _CUBOCTAHEDRON = _cuboctahedron_readings()
 _CENSUS = network_module.subgraph_census(_network_adjacency())
+
+
+def _probe_values(key: str) -> dict[str, object]:
+    """Run one registered probe; probe-derived values quote what verify reports."""
+    result = registry_module.by_key()[key].run()
+    if not result.passed:
+        raise AssertionError(f"probe {key} failed while binding manuscript values")
+    return dict(result.values)
+
+
+def _chart_values() -> tuple[BoundValue, ...]:
+    """The derived port chart, one bound value per port, for the adjacency table."""
+    return tuple(
+        BoundValue(
+            f"carrier.chart_{index}",
+            ", ".join(str(port) for port in row),
+            "core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES",
+            None,
+            note=f"the five neighbours of port {index}",
+        )
+        for index, row in enumerate(OPH_NEIGHBOURS)
+    )
+
+
+#: Probe outputs the prose quotes directly. Running the probes here keeps the
+#: bound values and the verified values from drifting apart: a change in a
+#: probe changes the prose at the next render or fails the suite.
+_VE = _probe_values("variational-equivalence")
+_FE = _probe_values("free-energy-dictionary")
+_COLLISION = _probe_values("free-energy-name-collision")
+_CERT = _probe_values("certificate-species")
+_SPECTRUM = _probe_values("spectral-gap")
+_PR01 = _probe_values("pr01-obstruction")
+_BLANKET = _probe_values("stationary-blanket")
+_SOLENODIAL = _probe_values("solenoidal-freedom")
+_DSTAB = _probe_values("d-stability")
+_MEDIATOR = _probe_values("mediator-obstruction")
+_REDUCTION = _probe_values("reduction-criterion")
+_FOURCYCLE = _probe_values("four-cycle-local-minimum")
+_EP = _probe_values("equilibrium-propagation")
+_REPLICATOR = _probe_values("replicator-potential")
+_GMRF = _probe_values("gmrf-independence")
+_EIGEN = _probe_values("eigenspace-irreducibility")
 
 
 MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
@@ -814,6 +859,336 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         "geometry/lattice.py cuboctahedron_faces: eight triangles and six squares",
         "fourteen",
     ),
+    # --- probe-derived values: the prose quotes what the probes report ---
+    BoundValue(
+        "spectral.lambda_max",
+        float(_SPECTRUM["spectrum"][-1]),
+        "probe:spectral-gap:spectrum:max",
+        "5 + sqrt(5)",
+    ),
+    BoundValue(
+        "certificate.second_eigenvalue",
+        float(_CERT["second_eigenvalue"]),
+        "probe:certificate-species:second_eigenvalue",
+        "1 - (5 - sqrt(5)) / 60",
+    ),
+    BoundValue(
+        "certificate.infinity_norm",
+        float(_CERT["induced_infinity_norm"]),
+        "probe:certificate-species:induced_infinity_norm",
+        "1",
+    ),
+    BoundValue(
+        "ve.iterations",
+        int(_VE["iterations"]),
+        "probe:variational-equivalence:iterations",
+        None,
+        note="the perceive fixed-point iteration's steps to the harmonic extension",
+    ),
+    BoundValue(
+        "ve.residual",
+        float(_VE["residual"]),
+        "probe:variational-equivalence:residual",
+        None,
+    ),
+    BoundValue(
+        "ve.excess",
+        float(_VE["excess_free_energy_at_posterior"]),
+        "probe:variational-equivalence:excess_free_energy_at_posterior",
+        "0",
+    ),
+    BoundValue(
+        "fe.numerical",
+        float(_FE["numerical_surprise"]),
+        "probe:free-energy-dictionary:numerical_surprise",
+        None,
+    ),
+    BoundValue(
+        "fe.bayesian",
+        float(_FE["bayesian_surprise"]),
+        "probe:free-energy-dictionary:bayesian_surprise",
+        None,
+    ),
+    BoundValue(
+        "fe.surprisal",
+        float(_FE["surprisal"]),
+        "probe:free-energy-dictionary:surprisal",
+        None,
+    ),
+    BoundValue(
+        "fe.variational",
+        float(_FE["variational_free_energy"]),
+        "probe:free-energy-dictionary:variational_free_energy",
+        None,
+    ),
+    BoundValue(
+        "fe.sandwich_lower",
+        float(_FE["sandwich_lower"]),
+        "probe:free-energy-dictionary:sandwich_lower",
+        None,
+    ),
+    BoundValue(
+        "fe.sandwich_upper",
+        float(_FE["sandwich_upper"]),
+        "probe:free-energy-dictionary:sandwich_upper",
+        None,
+    ),
+    BoundValue(
+        "fe.interface",
+        float(_COLLISION["interface_energy_minimised_over_interior"]),
+        "probe:free-energy-name-collision:interface_energy_minimised_over_interior",
+        None,
+    ),
+    BoundValue(
+        "fe.variational_at_posterior",
+        float(_COLLISION["variational_free_energy_at_posterior"]),
+        "probe:free-energy-name-collision:variational_free_energy_at_posterior",
+        None,
+    ),
+    BoundValue(
+        "fe.difference",
+        float(_COLLISION["difference"]),
+        "probe:free-energy-name-collision:difference",
+        None,
+    ),
+    BoundValue(
+        "fe.model_constant",
+        float(_COLLISION["expected_model_constant"]),
+        "probe:free-energy-name-collision:expected_model_constant",
+        None,
+    ),
+    BoundValue(
+        "pr01.coin_zero_current",
+        float(_PR01["coin_zero_current"]),
+        "probe:pr01-obstruction:coin_zero_current",
+        None,
+    ),
+    BoundValue(
+        "pr01.coin_one_current",
+        float(_PR01["coin_one_current"]),
+        "probe:pr01-obstruction:coin_one_current",
+        None,
+    ),
+    BoundValue(
+        "pr01.coin_zero_decrease",
+        float(_PR01["coin_zero_decrease"]),
+        "probe:pr01-obstruction:coin_zero_decrease",
+        "0",
+    ),
+    BoundValue(
+        "pr01.coin_one_decrease",
+        float(_PR01["coin_one_decrease"]),
+        "probe:pr01-obstruction:coin_one_decrease",
+        "0",
+    ),
+    BoundValue(
+        "pr01.walk_energy",
+        float(_PR01["excursion_energy"]),
+        "probe:pr01-obstruction:excursion_energy",
+        "1/2",
+    ),
+    BoundValue(
+        "blanket.q",
+        float(_BLANKET["q"]),
+        "probe:stationary-blanket:q",
+        None,
+    ),
+    BoundValue(
+        "blanket.drift",
+        (
+            float(_BLANKET["mu_drift_external"]),
+            float(_BLANKET["mu_drift_blanket"]),
+            float(_BLANKET["mu_drift_internal"]),
+        ),
+        "probe:stationary-blanket:mu_drift:row",
+        None,
+    ),
+    BoundValue(
+        "gmrf.marginal_variance_exact",
+        "7/36",
+        "core/invariants.py marginal_variance: the exact rational marginal variance of a port",
+        "7/36",
+    ),
+    BoundValue(
+        "blanket.cross_drift",
+        float(_BLANKET["cross_drift_difference"]),
+        "probe:stationary-blanket:cross_drift_difference",
+        None,
+    ),
+    BoundValue(
+        "solenoidal.q_grid",
+        tuple(float(q) for q in _SOLENODIAL["q_grid"]),
+        "probe:solenoidal-freedom:q_grid",
+        None,
+    ),
+    BoundValue(
+        "solenoidal.entropy_production",
+        tuple(float(value) for value in _SOLENODIAL["entropy_production"]),
+        "probe:solenoidal-freedom:entropy_production",
+        None,
+    ),
+    BoundValue(
+        "d_stability.real_stable",
+        float(min(_DSTAB["eigenvalue_real_parts"])),
+        "probe:d-stability:eigenvalue_real_parts:min",
+        None,
+    ),
+    BoundValue(
+        "d_stability.real_unstable",
+        float(max(_DSTAB["eigenvalue_real_parts"])),
+        "probe:d-stability:eigenvalue_real_parts:max",
+        None,
+    ),
+    BoundValue(
+        "d_stability.imag_unstable",
+        float(abs(max(_DSTAB["eigenvalue_imag_parts"], key=abs))),
+        "probe:d-stability:eigenvalue_imag_parts:absmax",
+        None,
+    ),
+    BoundValue(
+        "d_stability.lyapunov_residual",
+        float(_DSTAB["lyapunov_residual"]),
+        "probe:d-stability:lyapunov_residual",
+        None,
+    ),
+    BoundValue(
+        "d_stability.routh_k4_third",
+        float(_DSTAB["routh_first_column_at_k4"][2]),
+        "probe:d-stability:routh_first_column_at_k4:2",
+        "-2",
+    ),
+    BoundValue(
+        "d_stability.samples",
+        tuple(float(value) for value in control_module.D_STABILITY_SAMPLES),
+        "core/controls.py D_STABILITY_SAMPLES: the eigenvalue-locus sample grid",
+        None,
+    ),
+    BoundValue(
+        "mediator.epsilon_below",
+        float(_MEDIATOR["below_threshold_epsilon"]),
+        "probe:mediator-obstruction:below_threshold_epsilon",
+        None,
+    ),
+    BoundValue(
+        "mediator.margin_below",
+        float(_MEDIATOR["margin_below_threshold"]),
+        "probe:mediator-obstruction:margin_below_threshold",
+        None,
+    ),
+    BoundValue(
+        "mediator.margin_at",
+        float(_MEDIATOR["margin_at_threshold"]),
+        "probe:mediator-obstruction:margin_at_threshold",
+        "0",
+    ),
+    BoundValue(
+        "reduction.same_observation",
+        float(_REDUCTION["same_observation"]),
+        "probe:reduction-criterion:same_observation",
+        "1",
+    ),
+    BoundValue(
+        "reduction.first_after",
+        float(_REDUCTION["first_after"]),
+        "probe:reduction-criterion:first_after",
+        None,
+    ),
+    BoundValue(
+        "reduction.second_after",
+        float(_REDUCTION["second_after"]),
+        "probe:reduction-criterion:second_after",
+        None,
+    ),
+    BoundValue(
+        "reduction.response_distance",
+        float(_REDUCTION["response_distance"]),
+        "probe:reduction-criterion:response_distance",
+        "2",
+    ),
+    BoundValue(
+        "reduction.worst_case",
+        float(_REDUCTION["worst_case_error_lower_bound"]),
+        "probe:reduction-criterion:worst_case_error_lower_bound",
+        "1",
+    ),
+    BoundValue(
+        "four_cycle.violations",
+        int(_FOURCYCLE["trap_violations"]),
+        "probe:four-cycle-local-minimum:trap_violations",
+        "2",
+    ),
+    BoundValue(
+        "ep.closed_form",
+        str(_EP["closed_form_contrast"]),
+        "probe:equilibrium-propagation:closed_form_contrast",
+        None,
+        note="kept at full printed precision: the closed-form and relaxed contrasts differ in the eighth digit",
+    ),
+    BoundValue(
+        "ep.relaxed",
+        str(_EP["relaxed_contrast"]),
+        "probe:equilibrium-propagation:relaxed_contrast",
+        None,
+        note="kept at full printed precision for the same reason",
+    ),
+    BoundValue(
+        "ep.exact_gradient",
+        float(_EP["exact_gradient"]),
+        "probe:equilibrium-propagation:exact_gradient",
+        "-1.25",
+    ),
+    BoundValue(
+        "ep.closed_form_error",
+        float(_EP["closed_form_error"]),
+        "probe:equilibrium-propagation:closed_form_error",
+        None,
+    ),
+    BoundValue(
+        "ep.gradient_distance",
+        float(_EP["distance_to_gradient"]),
+        "probe:equilibrium-propagation:distance_to_gradient",
+        None,
+    ),
+    BoundValue(
+        "replicator.rate",
+        float(_REPLICATOR["potential_rate_direct"]),
+        "probe:replicator-potential:potential_rate_direct",
+        None,
+    ),
+    BoundValue(
+        "replicator.field_norm",
+        float(_REPLICATOR["field_norm"]),
+        "probe:replicator-potential:field_norm",
+        None,
+    ),
+    BoundValue(
+        "gmrf.ordered_pairs",
+        int(_GMRF["pairwise_precision_entries"]),
+        "probe:gmrf-independence:pairwise_precision_entries",
+        None,
+    ),
+    BoundValue(
+        "symmetry.eigenspace_dimensions",
+        tuple(sorted(int(value) for value in _EIGEN["dimensions"])[1:]),
+        "probe:eigenspace-irreducibility:dimensions:sortedtail",
+        None,
+        note="the non-trivial eigenspace dimensions beside the trivial one",
+    ),
+    BoundValue(
+        "not_reproduced.port_zero_occupation",
+        "35/264",
+        "'Agreement and Surprise' (private draft): recorded not-reproduced; the record/selector protocol is not specified in its text",
+        None,
+        note="not-reproduced",
+    ),
+    BoundValue(
+        "not_reproduced.move_probabilities",
+        "13/15 and 1/60",
+        "'Agreement and Surprise' (private draft): recorded not-reproduced; the probability space and the conditioning event are not determined by the text",
+        None,
+        note="not-reproduced",
+    ),
+    *_chart_values(),
 )
 
 MANUSCRIPT_TOKENS: dict[str, str] = as_tokens()

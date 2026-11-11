@@ -22,7 +22,7 @@ that gains or loses a claim changes its triangle.](../output/figures/fig_pair_tr
 
 [@prop:carrier] is exact in the strongest sense available: the derivation returns
 {{CARRIER_PORTS}} ports, {{CARRIER_SEAMS}} seams and {{CARRIER_FACES}} faces; every
-degree is $5$; the twenty triangles of the derived graph are exactly the twenty
+degree is {{CARRIER_DEGREE}}; the twenty triangles of the derived graph are exactly the twenty
 oriented faces; and the derived adjacency equals the declared adjacency. The
 probe reports all six facts separately, so a failure of any one of them is
 visible rather than masked by the conjunction.
@@ -37,8 +37,8 @@ wherever this package reads a table that has consequences.
 ## The spectrum is closed-form {#sec:spectrum}
 
 [@prop:spectrum] gives the full spectrum. The probe reports the eigenvalues as
-`{{CARRIER_LAMBDA1}}` three times, $6$ five times, and $5+\sqrt{5} \approx
-7.236$ three times, with the zero eigenvalue once, and checks that the Laplacian
+`{{CARRIER_LAMBDA1}}` three times, six five times, and
+$5+\sqrt{5} \approx {{SPECTRAL_LAMBDA_MAX}}$ three times, with the zero eigenvalue once, and checks that the Laplacian
 really is $5I - A$ rather than a normalised variant.
 
 The gap is the quantity that carries dynamical meaning. Normalising by the total
@@ -57,10 +57,10 @@ P \;=\; I - \frac{L}{2\lvert E\rvert},
 $$ {#eq:chain}
 
 whose rows sum to one, whose entries are non-negative because every degree is at
-most $2\lvert E\rvert$, and whose second eigenvalue is $1-\gamma = 0.9539344663$ — the
+most $2\lvert E\rvert$, and whose second eigenvalue is $1-\gamma = {{CERTIFICATE_SECOND_EIGENVALUE}}$ — the
 `certificate-species` correspondence, reported by the probe as a row-stochastic,
 symmetric, non-negative matrix with exactly that second eigenvalue and induced
-infinity norm $1$. The chain is the natural object behind the phrase "the shell
+infinity norm {{CERTIFICATE_INFINITY_NORM}}. The chain is the natural object behind the phrase "the shell
 mixes at the spectral gap": its mixing is governed by $\gamma$, and $\gamma$ is a
 property of the carrier alone.
 
@@ -106,9 +106,9 @@ $$ {#eq:ve}
 :::
 
 The probe reports that the fixed-point iteration `perceive` reaches the harmonic
-extension in $51$ iterations with residual $7.4\times 10^{-11}$, that the
+extension in {{VE_ITERATIONS}} iterations with residual {{VE_RESIDUAL}}, that the
 posterior mean equals the harmonic extension, and that the free energy at the
-posterior exceeds the energy at the minimiser by $0.0$ to machine precision. The
+posterior exceeds the energy at the minimiser by {{VE_EXCESS}} to machine precision. The
 excess free energy at the posterior is exactly zero because the bound is tight
 there: [@eq:vfe] is an equality when $q$ is the posterior.
 
@@ -129,21 +129,22 @@ registry entry is `free-energy-dictionary`.
 
 | Quantity | Definition | Value in the probe model |
 |:---------|:-----------|:-------------------------|
-| numerical free energy | $\tfrac{1}{2} r^{\top}\Pi\, r$ at the residual $r$ | $1.118034$ |
-| Bayesian surprise | $\tfrac{1}{2} g^{\top} L^{-1} g$ | $0.25$ |
-| surprisal | $-\log p(o)$ up to the model constant | $-0.913571$ |
-| variational free energy | [@eq:gaussian] at the posterior | $-0.913571$ |
+| numerical free energy | $\tfrac{1}{2} r^{\top}\Pi\, r$ at the residual $r$ | {{FE_NUMERICAL}} |
+| Bayesian surprise | $\tfrac{1}{2} g^{\top} L^{-1} g$ | {{FE_BAYESIAN}} |
+| surprisal | $-\log p(o)$ up to the model constant | {{FE_SURPRISAL}} |
+| variational free energy | [@eq:gaussian] at the posterior | {{FE_VARIATIONAL}} |
 
 : The three surprises in the linear-Gaussian corner, with the values the probe
 reports. The numerical and Bayesian quantities differ from the surprisal by the
 model constant; the sandwich bound brackets the Bayesian value. {#tbl:surprises}
 
-The probe reports a sandwich with lower bound $0.208333$ and upper bound
-$0.625$, and the Bayesian value $0.25$ lies inside it. It reports that the
+The probe reports a sandwich with lower bound {{FE_SANDWICH_LOWER}} and upper
+bound {{FE_SANDWICH_UPPER}}, and the Bayesian value {{FE_BAYESIAN}} lies inside it. It reports that the
 variational free energy and the surprisal agree to machine precision, because at
 the posterior the bound is tight. And it reports that the interface energy
-minimised over the interior is $0.041667$ while the variational free energy is
-$-1.246904$, a difference of $-1.288571$ which is exactly the model constant.
+minimised over the interior is {{FE_INTERFACE}} while the variational free energy
+is {{FE_VARIATIONAL_AT_POSTERIOR}}, a difference of {{FE_DIFFERENCE}} which is exactly the
+model constant {{FE_MODEL_CONSTANT}}.
 
 The status is `exact-on-domain` rather than `exact` for that reason: the
 identification is exact as a statement about *first variation*, and the levels
@@ -184,7 +185,7 @@ of the remaining $11 \times 11$ matrix is an integer, and that integer is the
 number of spanning trees of the seam graph:
 
 $$
-\tau(K) \;=\; 5\,184\,000 \;=\; \frac{1}{12}\prod_{i=2}^{12}\lambda_i .
+\tau(K) \;=\; {{CARRIER_TREE_NUMBER}} \;=\; \frac{1}{12}\prod_{i=2}^{12}\lambda_i .
 $$ {#eq:tree}
 :::
 
@@ -210,13 +211,13 @@ gauge where the field is centred by its mean. Then conditional independence is a
 property of the precision's zeros: two ports are independent given the rest
 exactly when their precision entry vanishes, which here happens exactly when they
 are not joined by a seam. The probe reports the independence pattern as a
-$12 \times 12$ matrix over all $60$ ordered pairs of distinct ports, checks that
+${{CARRIER_PORTS}} \times {{CARRIER_PORTS}}$ matrix over all {{GMRF_ORDERED_PAIRS}} ordered pairs of distinct ports, checks that
 it equals the adjacency pattern, and reports the three quantities that make the
 reading usable.
 
 Every seam's pairwise precision is {{GMRF_PAIRWISE_PRECISION}}, the Markov
 blanket of every port is its {{GMRF_BLANKET_SIZE}} neighbours, and the exact
-marginal variance of a port is {{GMRF_MARGINAL_VARIANCE}}, which is $7/36$. The
+marginal variance of a port is {{GMRF_MARGINAL_VARIANCE}}, which is {{GMRF_MARGINAL_VARIANCE_EXACT}}. The
 variance is computed as the reciprocal spectrum sum
 $\sum_{i\ge 2} 1/\lambda_i$ in exact arithmetic and cross-checked against the
 pseudo-inverse of $L$, so the number is an identity rather than a fitted value.
@@ -243,11 +244,11 @@ sheaf used as a control.
 
 The two numbers have concrete readings, which is the reason for reporting them
 separately rather than as one identity. The global sections are the assignments
-of equal values to adjacent ports, so $\dim H^{0} = 1$ says that the only way for
+of equal values to adjacent ports, so $\dim H^{0} = {{SHEAF_H0}}$ says that the only way for
 every seam to agree is for every port to carry the same value: the agreement is a
-constant. The cohomology $\dim H^{1} = 19$ counts the seam assignments that
+constant. The cohomology $\dim H^{1} = {{SHEAF_H1}}$ counts the seam assignments that
 cannot be written as the coboundary of any port assignment, and its value is the
-cycle rank of the seam graph, $\lvert E\rvert - \lvert V\rvert + 1 = 30 - 12 + 1$.
+cycle rank of the seam graph, $\lvert E\rvert - \lvert V\rvert + 1 = {{CARRIER_SEAMS}} - {{CARRIER_PORTS}} + 1$.
 So the carrier's frustration space is one-dimensional in the constants and
 nineteen-dimensional in the disagreements, and both dimensions are forced by the
 graph rather than chosen [@hansen2019sheaves; @ghrist2014elementary].
@@ -259,7 +260,7 @@ The automorphism group of the carrier has order {{SYMMETRY_GROUP_ORDER}}, is
 closed under composition, and acts transitively on the {{CARRIER_PORTS}} ports,
 the {{CARRIER_SEAMS}} seams and the {{CARRIER_FACES}} faces. It splits into
 {{SYMMETRY_ROTATIONS}} rotations and {{SYMMETRY_REFLECTIONS}} reflections, and
-the Laplacian eigenspaces of dimensions $3$, $5$ and $3$ are irreducible under
+the Laplacian eigenspaces of dimensions {{SYMMETRY_EIGENSPACE_DIMENSIONS}} are irreducible under
 it. Across all group elements and all {{SYMMETRY_CONFIGURATIONS}} total-two
 configurations, the multiset of descent outcomes takes
 {{SYMMETRY_OUTCOME_MULTISETS}} values, on {{SYMMETRY_ORBITS}} orbits of
@@ -277,7 +278,7 @@ Three readings follow, and they are the reason this correspondence is in the
 registry rather than in an appendix. First, the symmetry is a symmetry of the
 *object*, so any claim about the carrier that is not group-invariant is a claim
 about a labelling. Second, the eigenspaces being irreducible means the
-multiplicities $3$, $5$, $3$ are forced: they are the dimensions of the
+multiplicities {{SYMMETRY_EIGENSPACE_DIMENSIONS}} are forced: they are the dimensions of the
 icosahedral group's representations, so the spectrum's shape cannot be changed by
 perturbing the graph without breaking the symmetry. Third, and most useful for
 this paper, the descent census is equivariant: the multiset of outcomes is

@@ -81,6 +81,7 @@ argue by key.
 | `fig:ugation` | `06_complementarities.md` |
 | `fig:ent` | `05_disagreements.md` |
 | `fig:bility` | `05_disagreements.md` |
+| `fig:lies` | `05_disagreements.md` |
 | `fig:arrier` | `00_00_graphical_abstract.md` |
 | `fig:escent` | `00_00_graphical_abstract.md` |
 | `fig:ynergetics` | `00_00_graphical_abstract.md` |
@@ -95,7 +96,7 @@ argue by key.
 | `fig:ivision` | `06_complementarities.md` |
 | `fig:ex-shells` | `05_disagreements.md` |
 
-18 distinct figures are included by the sections; the cover is
+19 distinct figures are included by the sections; the cover is
 placed by `manuscript/config.yaml`. The accessibility registry that gives
 each figure its alternative text is `output/figures/figure_registry.json`,
 written by `scripts/make_figures.py`.

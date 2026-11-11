@@ -216,6 +216,11 @@ def routh_first_column(k: float) -> tuple[float, float, float, float]:
     return (1.0, a2, (a2 * a1 - a0) / a2, a0)
 
 
+#: The couplings the eigenvalue-locus figure samples: one probe value, the
+#: onset's neighbourhood and one unstable coupling.
+D_STABILITY_SAMPLES: tuple[float, ...] = (0.5, 1.0, 2.0, 4.0, 7.0)
+
+
 def d_stability_eigenvalues(k: float) -> np.ndarray:
     return np.linalg.eigvals(d_stability_matrix(k))
 

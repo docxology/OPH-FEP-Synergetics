@@ -352,7 +352,7 @@ def descent_figure() -> Path:
 
 def dstability_figure() -> Path:
     """Eigenvalue loci and the sign of the third Routh entry."""
-    samples = (0.5, 1.0, 2.0, 4.0, 7.0)
+    samples = controls.D_STABILITY_SAMPLES
     onset = math.sqrt(10.0)
     figure, (left, right) = plt.subplots(1, 2, figsize=(11.0, 4.6))
     for k in samples:
@@ -1621,6 +1621,96 @@ def conjugation_figure() -> Path:
     )
 
 
+def families_figure() -> Path:
+    """The solids the phrase twelve-around-one can name, separated by their counts."""
+    carrier = icosahedral_carrier()
+    ico_adjacency = [[int(value) for value in row] for row in carrier.adjacency_matrix()]
+    cubo_adjacency = lattice.cuboctahedron_adjacency()
+    ico_degree = int(sum(ico_adjacency[0]))
+    cubo_degree = int(sum(cubo_adjacency[0]))
+    ico_edges = len(carrier.edges)
+    cubo_edges = len(lattice.cuboctahedron_edges())
+    cubo_faces = lattice.cuboctahedron_faces()
+    cubo_triangles = sum(1 for face in cubo_faces.values() if len(face) == 3)
+    cubo_squares = sum(1 for face in cubo_faces.values() if len(face) == 4)
+    ico_triangles = len(carrier.faces)
+    ico_trees = invariants.spanning_tree_number(carrier)
+    cubo_trees = invariants.spanning_tree_number_of_adjacency(cubo_adjacency)
+    ico_volume = float(geometry.icosahedron_tetravolume()["tetravolume"])
+    cubo_volume = float(lattice.cuboctahedron_volume())
+    figure, (left, right) = plt.subplots(1, 2, figsize=(10.0, 4.6))
+    rows = ("degree", "edges", "triangles", "squares")
+    cubo_counts = (cubo_degree, cubo_edges, cubo_triangles, cubo_squares)
+    ico_counts = (ico_degree, ico_edges, ico_triangles, 0)
+    positions = np.arange(len(rows))
+    width = 0.38
+    cubo_bars = left.barh(
+        positions - width / 2,
+        cubo_counts,
+        width,
+        color=KIND_COLOURS["isomorphism"],
+        label="cuboctahedron",
+    )
+    ico_bars = left.barh(
+        positions + width / 2,
+        ico_counts,
+        width,
+        color=KIND_COLOURS["disagreement"],
+        label="carrier (icosahedron)",
+    )
+    left.set_yticks(positions, rows)
+    left.invert_yaxis()
+    left.set_xlim(0.0, max(cubo_counts + ico_counts) * 1.35)
+    for bars, values in ((cubo_bars, cubo_counts), (ico_bars, ico_counts)):
+        for bar, value in zip(bars, values):
+            left.annotate(
+                f"{value}" if value else "none",
+                (bar.get_width(), bar.get_y() + bar.get_height() / 2),
+                va="center",
+                ha="left",
+                fontsize=7.5,
+            )
+    left.set_title(
+        f"counts; tetravolumes {cubo_volume:.6g} against {ico_volume:.6g}",
+        fontsize=10,
+    )
+    left.legend(fontsize=7.5, loc="lower right")
+    trees = (ico_trees, cubo_trees)
+    bars = right.bar(("carrier", "cuboctahedron"), trees, color=("#1f4e79", "#c98a00"))
+    right.set_yscale("log")
+    right.set_ylim(trees[1] / 4.0, trees[0] * 4.0)
+    for bar, count in zip(bars, trees):
+        right.annotate(
+            f"{count:,}",
+            (bar.get_x() + bar.get_width() / 2, count),
+            ha="center",
+            va="bottom",
+            fontsize=8,
+        )
+    right.annotate(
+        f"{math.isqrt(cubo_trees)}^2",
+        (1.0, cubo_trees),
+        ha="center",
+        va="top",
+        fontsize=7.5,
+        color="#102a43",
+    )
+    right.set_title("spanning trees of the seam graph, exact", fontsize=10)
+    right.set_ylabel("spanning trees (log scale)")
+    figure.suptitle("the same twelve-around-one phrase, two different solids", fontsize=10)
+    return _save(
+        figure,
+        "fig_families.png",
+        "Two panels. Left: horizontal bars comparing the cuboctahedron with the carrier's "
+        f"icosahedron: degree {cubo_degree} against {ico_degree}, edges {cubo_edges} against "
+        f"{ico_edges}, triangles {cubo_triangles} against {ico_triangles}, and squares "
+        f"{cubo_squares} against none, with the tetravolumes {cubo_volume:.6g} and "
+        f"{ico_volume:.6g} annotated in the title. Right: the spanning trees the same "
+        f"determinant counts, {ico_trees} for the carrier against {cubo_trees} for the "
+        f"cuboctahedron, which is {math.isqrt(cubo_trees)} squared, on a logarithmic axis.",
+    )
+
+
 def write_registry() -> Path:
     """Write the accessibility registry the renderer reads for figure alt text.
 
@@ -1669,6 +1759,7 @@ def main() -> int:
         network_figure,
         vertex_shells_figure,
         conjugation_figure,
+        families_figure,
     )
     for builder in builders:
         print(builder())

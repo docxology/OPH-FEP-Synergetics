@@ -445,6 +445,7 @@ Eliminating an interior mediator leaves a genuinely three-way boundary term: the
 
 Probe values:
 
+- `below_threshold_epsilon` = 0.2
 - `schur_matches_expected_below` = True
 - `schur_matches_expected_above` = True
 - `margin_below_threshold` = -0.3999999999999999
@@ -473,6 +474,7 @@ Probe values:
 - `mu_drift_blanket` = -0.25
 - `mu_drift_internal` = -2.0
 - `cross_drift_difference` = 1.5
+- `q` = 0.75
 - `expected_mu_drift` = (1.5, -0.25, -2.0)
 
 ## `solenoidal-freedom`
@@ -488,6 +490,7 @@ One stationary density is shared by a family of laws: the diffusion with drift -
 
 Probe values:
 
+- `q_grid` = (0.0, 0.5, 1.5)
 - `stationary_residuals` = (0.0, 0.0, 0.0)
 - `spectral_real` = (-1.0, -1.0, -1.0)
 - `spectral_imag` = (0.0, 0.5000000000000001, 1.4999999999999998)

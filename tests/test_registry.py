@@ -46,6 +46,21 @@ def test_registry_covers_all_three_relations():
     assert counts == {ISOMORPHISM: 17, DISAGREEMENT: 15, COMPLEMENTARITY: 10}
 
 
+def test_statuses_follow_their_kind():
+    """A disagreement claims a failure; an isomorphism or a complementarity claims a
+
+    verification. ``not-reproduced`` is available to every kind, because any
+    kind of claim can rest on a quantity the source does not determine. What
+    the vocabulary forbids is calling a failed identification ``exact`` or
+    calling a verified one ``obstructed``.
+    """
+    for entry in CORRESPONDENCES:
+        if entry.kind == DISAGREEMENT:
+            assert entry.status in ("obstructed", "not-reproduced"), entry.key
+        else:
+            assert entry.status in ("exact", "exact-on-domain", "not-reproduced"), entry.key
+
+
 def test_registry_covers_every_pairwise_scope():
     assert PAIRS == (OPH_FEP, FEP_SYNERGETICS, SYNERGETICS_OPH, THREE_WAY)
     index = by_pair()

@@ -60,8 +60,8 @@ a protocol that would produce them.
 
 | Quantity | Source | Why it is not reproduced |
 |:---------|:-------|:-------------------------|
-| `35/264` port-zero occupation | [@mueller2026agreement] | the record and selector protocol that would determine the occupation is not specified in the paper's text |
-| `13/15` and `1/60` move probabilities | [@mueller2026agreement] | the probability space and the conditioning event are not determined by the text |
+| {{NOT_REPRODUCED_PORT_ZERO_OCCUPATION}} port-zero occupation | [@mueller2026agreement] | the record and selector protocol that would determine the occupation is not specified in the paper's text |
+| {{NOT_REPRODUCED_MOVE_PROBABILITIES}} move probabilities | [@mueller2026agreement] | the probability space and the conditioning event are not determined by the text |
 
 : Quantities recorded as not reproduced, with the reason. Recording them keeps the
 gap visible; inventing a protocol would have produced numbers that look like
@@ -120,7 +120,7 @@ most likely to change with scale.
 The conclusions are falsifiable in a specific sense, and it is worth saying how.
 
 A single strict descent at $\lvert d\rvert = 1$ would disprove [@prop:census] and remove the
-PR-01 obstruction. A pairwise representation below $\varepsilon = 1/3$ would
+PR-01 obstruction. A pairwise representation below $\varepsilon = {{MEDIATOR_THRESHOLD}}$ would
 disprove [@prop:mediator]. A member of the solenoidal family with a different
 entropy production would disprove [@prop:solenoid]. A stable $D_kA$ at
 $k > \sqrt{10}$ would disprove [@prop:dstability]. Each of these is a computation,

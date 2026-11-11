@@ -614,16 +614,18 @@ def _probe_energy_name_collision() -> tuple[bool, dict]:
 def _probe_mediator() -> tuple[bool, dict]:
     """Proposition 8: eliminating a mediator can require a higher-order interface."""
     threshold = 1.0 / 3.0
+    below = 0.2
     values = {
+        "below_threshold_epsilon": below,
         "schur_matches_expected_below": bool(
             np.allclose(control_module.mediator_schur(0.0), control_module.mediator_expected(0.0), atol=1e-12)
         ),
         "schur_matches_expected_above": bool(
             np.allclose(control_module.mediator_schur(0.5), control_module.mediator_expected(0.5), atol=1e-12)
         ),
-        "margin_below_threshold": control_module.mediator_pairwise_margin(0.2),
+        "margin_below_threshold": control_module.mediator_pairwise_margin(below),
         "margin_at_threshold": control_module.mediator_pairwise_margin(threshold),
-        "decomposition_below_is_none": control_module.mediator_pairwise_decomposition(0.2) is None,
+        "decomposition_below_is_none": control_module.mediator_pairwise_decomposition(below) is None,
         "decomposition_at_threshold_exists": control_module.mediator_pairwise_decomposition(threshold)
         is not None,
     }
@@ -646,8 +648,10 @@ def _probe_mediator() -> tuple[bool, dict]:
 
 def _probe_stationary_blanket() -> tuple[bool, dict]:
     """Proposition 11: a blanket of the stationary statistics need not bound the dynamics."""
-    values = dict(control_module.blanket_dynamics_check(0.75))
-    values["expected_mu_drift"] = (2.0 * 0.75, 0.75 - 1.0, -2.0)
+    q = 0.75
+    values = dict(control_module.blanket_dynamics_check(q))
+    values["q"] = q
+    values["expected_mu_drift"] = (2.0 * q, q - 1.0, -2.0)
     passed = (
         values["conditional_independence"] is True
         and abs(values["mu_drift_external"] - 1.5) < 1e-12
@@ -662,6 +666,7 @@ def _probe_solenoidal() -> tuple[bool, dict]:
     """Proposition 9: one stationary density is shared by a family of laws."""
     sampled = {q: control_module.solenoidal_check(q) for q in (0.0, 0.5, 1.5)}
     values = {
+        "q_grid": tuple(sampled),
         "stationary_residuals": [sampled[q]["stationary_residual"] for q in sampled],
         "spectral_real": [sampled[q]["spectral_real"] for q in sampled],
         "spectral_imag": [sampled[q]["spectral_imag"] for q in sampled],

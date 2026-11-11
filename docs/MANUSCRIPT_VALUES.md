@@ -107,3 +107,68 @@ gives one; `Note` records what is measured rather than quoted.
 | `cuboctahedron.vertices` | 12 | `twelve` | geometry/lattice.py cuboctahedron_adjacency: the twelve neighbouring sites |  |
 | `cuboctahedron.edges` | 24 | `twenty-four` | geometry/lattice.py cuboctahedron_edges: the cube's line graph's edges |  |
 | `cuboctahedron.faces` | 14 | `fourteen` | geometry/lattice.py cuboctahedron_faces: eight triangles and six squares |  |
+| `spectral.lambda_max` | 7.236067977 | `5 + sqrt(5)` | probe:spectral-gap:spectrum:max |  |
+| `certificate.second_eigenvalue` | 0.9539344662916631 | `1 - (5 - sqrt(5)) / 60` | probe:certificate-species:second_eigenvalue |  |
+| `certificate.infinity_norm` | 1.0 | `1` | probe:certificate-species:induced_infinity_norm |  |
+| `ve.iterations` | 51 |  | probe:variational-equivalence:iterations | the perceive fixed-point iteration's steps to the harmonic extension |
+| `ve.residual` | 7.393172864827226e-11 |  | probe:variational-equivalence:residual |  |
+| `ve.excess` | 0.0 | `0` | probe:variational-equivalence:excess_free_energy_at_posterior |  |
+| `fe.numerical` | 1.118033988749895 |  | probe:free-energy-dictionary:numerical_surprise |  |
+| `fe.bayesian` | 0.25 |  | probe:free-energy-dictionary:bayesian_surprise |  |
+| `fe.surprisal` | -0.9135709220752906 |  | probe:free-energy-dictionary:surprisal |  |
+| `fe.variational` | -0.9135709220752906 |  | probe:free-energy-dictionary:variational_free_energy |  |
+| `fe.sandwich_lower` | 0.20833333333333334 |  | probe:free-energy-dictionary:sandwich_lower |  |
+| `fe.sandwich_upper` | 0.625 |  | probe:free-energy-dictionary:sandwich_upper |  |
+| `fe.interface` | 0.04166666666666667 |  | probe:free-energy-name-collision:interface_energy_minimised_over_interior |  |
+| `fe.variational_at_posterior` | -1.2469042554086238 |  | probe:free-energy-name-collision:variational_free_energy_at_posterior |  |
+| `fe.difference` | -1.2885709220752906 |  | probe:free-energy-name-collision:difference |  |
+| `fe.model_constant` | -1.2885709220752906 |  | probe:free-energy-name-collision:expected_model_constant |  |
+| `pr01.coin_zero_current` | 1.0 |  | probe:pr01-obstruction:coin_zero_current |  |
+| `pr01.coin_one_current` | 0.0 |  | probe:pr01-obstruction:coin_one_current |  |
+| `pr01.coin_zero_decrease` | 0.0 | `0` | probe:pr01-obstruction:coin_zero_decrease |  |
+| `pr01.coin_one_decrease` | 0.0 | `0` | probe:pr01-obstruction:coin_one_decrease |  |
+| `pr01.walk_energy` | 0.5 | `1/2` | probe:pr01-obstruction:excursion_energy |  |
+| `blanket.q` | 0.75 |  | probe:stationary-blanket:q |  |
+| `blanket.drift` | (1.5, -0.25, -2.0) |  | probe:stationary-blanket:mu_drift:row |  |
+| `gmrf.marginal_variance_exact` | 7/36 | `7/36` | core/invariants.py marginal_variance: the exact rational marginal variance of a port |  |
+| `blanket.cross_drift` | 1.5 |  | probe:stationary-blanket:cross_drift_difference |  |
+| `solenoidal.q_grid` | (0.0, 0.5, 1.5) |  | probe:solenoidal-freedom:q_grid |  |
+| `solenoidal.entropy_production` | (0.0, 0.5, 4.5) |  | probe:solenoidal-freedom:entropy_production |  |
+| `d_stability.real_stable` | -6.288814 |  | probe:d-stability:eigenvalue_real_parts:min |  |
+| `d_stability.real_unstable` | 0.144407 |  | probe:d-stability:eigenvalue_real_parts:max |  |
+| `d_stability.imag_unstable` | 1.948191 |  | probe:d-stability:eigenvalue_imag_parts:absmax |  |
+| `d_stability.lyapunov_residual` | 2.531698018113677e-15 |  | probe:d-stability:lyapunov_residual |  |
+| `d_stability.routh_k4_third` | -2.0 | `-2` | probe:d-stability:routh_first_column_at_k4:2 |  |
+| `d_stability.samples` | (0.5, 1.0, 2.0, 4.0, 7.0) |  | core/controls.py D_STABILITY_SAMPLES: the eigenvalue-locus sample grid |  |
+| `mediator.epsilon_below` | 0.2 |  | probe:mediator-obstruction:below_threshold_epsilon |  |
+| `mediator.margin_below` | -0.3999999999999999 |  | probe:mediator-obstruction:margin_below_threshold |  |
+| `mediator.margin_at` | 0.0 | `0` | probe:mediator-obstruction:margin_at_threshold |  |
+| `reduction.same_observation` | 1.0 | `1` | probe:reduction-criterion:same_observation |  |
+| `reduction.first_after` | 1.0 |  | probe:reduction-criterion:first_after |  |
+| `reduction.second_after` | -1.0 |  | probe:reduction-criterion:second_after |  |
+| `reduction.response_distance` | 2.0 | `2` | probe:reduction-criterion:response_distance |  |
+| `reduction.worst_case` | 1.0 | `1` | probe:reduction-criterion:worst_case_error_lower_bound |  |
+| `four_cycle.violations` | 2 | `2` | probe:four-cycle-local-minimum:trap_violations |  |
+| `ep.closed_form` | -1.2499987500012502 |  | probe:equilibrium-propagation:closed_form_contrast | kept at full printed precision: the closed-form and relaxed contrasts differ in the eighth digit |
+| `ep.relaxed` | -1.24999874998033 |  | probe:equilibrium-propagation:relaxed_contrast | kept at full printed precision for the same reason |
+| `ep.exact_gradient` | -1.25 | `-1.25` | probe:equilibrium-propagation:exact_gradient |  |
+| `ep.closed_form_error` | 2.092015449761675e-11 |  | probe:equilibrium-propagation:closed_form_error |  |
+| `ep.gradient_distance` | 1.2499987498415521e-06 |  | probe:equilibrium-propagation:distance_to_gradient |  |
+| `replicator.rate` | 0.13440000000000002 |  | probe:replicator-potential:potential_rate_direct |  |
+| `replicator.field_norm` | 0.21196226079186833 |  | probe:replicator-potential:field_norm |  |
+| `gmrf.ordered_pairs` | 60 |  | probe:gmrf-independence:pairwise_precision_entries |  |
+| `symmetry.eigenspace_dimensions` | (3, 3, 5) |  | probe:eigenspace-irreducibility:dimensions:sortedtail | the non-trivial eigenspace dimensions beside the trivial one |
+| `not_reproduced.port_zero_occupation` | 35/264 |  | 'Agreement and Surprise' (private draft): recorded not-reproduced; the record/selector protocol is not specified in its text | not-reproduced |
+| `not_reproduced.move_probabilities` | 13/15 and 1/60 |  | 'Agreement and Surprise' (private draft): recorded not-reproduced; the probability space and the conditioning event are not determined by the text | not-reproduced |
+| `carrier.chart_0` | 1, 5, 7, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 0 |
+| `carrier.chart_1` | 0, 5, 7, 8, 9 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 1 |
+| `carrier.chart_2` | 3, 4, 6, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 2 |
+| `carrier.chart_3` | 2, 4, 6, 8, 9 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 3 |
+| `carrier.chart_4` | 2, 3, 5, 9, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 4 |
+| `carrier.chart_5` | 0, 1, 4, 9, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 5 |
+| `carrier.chart_6` | 2, 3, 7, 8, 10 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 6 |
+| `carrier.chart_7` | 0, 1, 6, 8, 10 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 7 |
+| `carrier.chart_8` | 1, 3, 6, 7, 9 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 8 |
+| `carrier.chart_9` | 1, 3, 4, 5, 8 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 9 |
+| `carrier.chart_10` | 0, 2, 6, 7, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 10 |
+| `carrier.chart_11` | 0, 2, 4, 5, 10 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 11 |

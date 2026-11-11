@@ -88,6 +88,91 @@ def test_the_published_value_set_is_used_except_where_documented():
     assert set(UNUSED_TOKENS) <= set(MANUSCRIPT_TOKENS)
 
 
+#: Literal numbers that are structure, citation metadata or layout rather than
+#: claim values. Each pattern says what it excuses; any other number in the
+#: manuscript must arrive as a {{TOKEN}} bound to a BoundValue.
+LITERAL_ALLOWLIST = tuple(
+    re.compile(pattern)
+    for pattern in (
+        r"@[\w:-]+",                          # citations and cross-references: [@sec:pr01]
+        r"width=\d+%",                        # figure layout
+        r"\\setcounter\{page\}\{\d+\}",       # page plumbing
+        r"\bPR-01\b",                         # OPH's own premise label
+        r"\bA3\b",                            # the root lattice's name
+        r"Panel \d",                          # panel headings
+        r"^\s*\d+\.\s",                       # ordered-list markers
+        r"Items \d+ to \d+",                  # the contributions cross-reference
+        r"\|\s*\d+\s*\|",                     # the adjacency table's port-index columns
+        r"port\s+0\s+meets\s+ports\s+1,2,3,4,6",  # the common-labelling example's port labels
+        r"2, ?1, ?1, ?0",                     # the neighbour-move generator tuple (2,1,1,0)
+        r"\{#sec:[a-z0-9_-]+\}",              # section labels in headings
+        r"\\binom\{13\}\{11\}",               # the shell-size formula's arguments
+        r"\bCC BY-NC-SA 4\.0\b",
+        r"\bCC BY 4\.0\b",
+        r"\bApache-2\.0\b",
+        r"\bMIT\b",
+        r"10\.5281/zenodo\.\d+",              # DOIs
+        r"schema-\d",                         # FEP_Formal's roster schema version
+    )
+)
+
+#: A math span that carries a letter or a command is a formula, not a value; a
+#: digits-only span is a claim and must be a token instead.
+def _numeric_fragments() -> list[str]:
+    """Every numeric literal outside tokens, code, formulas and the allowlist."""
+    fragments: list[str] = []
+    for path in SECTIONS:
+        fenced = False
+        display_math = False
+        math_carry = False
+        for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            stripped = line.strip()
+            if stripped.startswith("```"):
+                fenced = not fenced
+                continue
+            if fenced:
+                continue
+            if display_math:
+                if "$$" in stripped:
+                    display_math = False
+                continue
+            if stripped.startswith("$$"):
+                display_math = True
+                continue
+            if math_carry:
+                if line.count("$") % 2 == 1:
+                    math_carry = False
+                continue
+            text = CODE_SPAN.sub("", line)
+            if text.count("$") % 2 == 1:
+                # an unclosed span: its tail is a formula continuing next line
+                head, sep, _ = text.rpartition("$")
+                text = head + sep
+                math_carry = True
+            pieces: list[str] = []
+            for part in re.split(r"(\$[^$]*\$)", text):
+                if len(part) > 1 and part.startswith("$") and part.endswith("$"):
+                    if re.search(r"[A-Za-z\\]", part[1:-1]):
+                        continue
+                    pieces.append(f" {part[1:-1]} ")
+                else:
+                    pieces.append(part)
+            text = TOKEN.sub(" ", "".join(pieces))
+            for pattern in LITERAL_ALLOWLIST:
+                text = pattern.sub(" ", text)
+            for match in re.finditer(r"\d+(?:\.\d+)?", text):
+                fragments.append(
+                    f"{path.name}:{number}: {match.group(0)} :: {stripped[:70]}"
+                )
+    return fragments
+
+
+def test_no_hard_coded_numbers_in_the_manuscript():
+    """Every number the prose quotes arrives as a bound token; nothing is pasted."""
+    fragments = _numeric_fragments()
+    assert fragments == [], "\n".join(fragments[:25])
+
+
 def test_every_citation_resolves_and_every_entry_is_cited():
     cited = {
         key for key in CITATION.findall(_text_without_code_spans()) if key not in REFERENCE_PREFIXES
@@ -142,7 +227,7 @@ def test_figure_links_match_the_accessibility_registry():
     for path in SECTIONS:
         for match in FIGURE_LINK.finditer(path.read_text(encoding="utf-8")):
             links[match.group(2)] = match.group(1)
-    assert len(links) == 18, sorted(links)
+    assert len(links) == 19, sorted(links)
     registry = PROJECT / "output" / "figures" / "figure_registry.json"
     if not registry.is_file():  # the figures are generated artefacts
         return

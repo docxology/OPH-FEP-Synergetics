@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import re
 
 import pytest
 
@@ -138,7 +139,100 @@ EXPECTED_KEYS = {
     "voronoi.edges",
     "voronoi.faces",
     "voronoi.vertices",
+    "spectral.lambda_max",
+    "certificate.second_eigenvalue",
+    "ve.iterations",
+    "ve.residual",
+    "ve.excess",
+    "fe.numerical",
+    "fe.bayesian",
+    "fe.surprisal",
+    "fe.variational",
+    "fe.sandwich_lower",
+    "fe.sandwich_upper",
+    "fe.interface",
+    "fe.variational_at_posterior",
+    "fe.difference",
+    "fe.model_constant",
+    "pr01.coin_zero_current",
+    "pr01.coin_one_current",
+    "pr01.coin_zero_decrease",
+    "pr01.coin_one_decrease",
+    "pr01.walk_energy",
+    "blanket.q",
+    "blanket.drift",
+    "blanket.cross_drift",
+    "solenoidal.q_grid",
+    "solenoidal.entropy_production",
+    "d_stability.real_stable",
+    "d_stability.real_unstable",
+    "d_stability.imag_unstable",
+    "d_stability.lyapunov_residual",
+    "d_stability.routh_k4_third",
+    "d_stability.samples",
+    "mediator.epsilon_below",
+    "mediator.margin_below",
+    "mediator.margin_at",
+    "reduction.same_observation",
+    "reduction.first_after",
+    "reduction.second_after",
+    "reduction.response_distance",
+    "reduction.worst_case",
+    "four_cycle.violations",
+    "ep.closed_form",
+    "ep.relaxed",
+    "ep.exact_gradient",
+    "ep.closed_form_error",
+    "ep.gradient_distance",
+    "replicator.rate",
+    "replicator.field_norm",
+    "gmrf.ordered_pairs",
+    "certificate.infinity_norm",
+    "gmrf.marginal_variance_exact",
+    "symmetry.eigenspace_dimensions",
+    "not_reproduced.port_zero_occupation",
+    "not_reproduced.move_probabilities",
+    "carrier.chart_0", "carrier.chart_1", "carrier.chart_2", "carrier.chart_3",
+    "carrier.chart_4", "carrier.chart_5", "carrier.chart_6", "carrier.chart_7",
+    "carrier.chart_8", "carrier.chart_9", "carrier.chart_10", "carrier.chart_11",
 }
+
+
+def test_probe_derived_values_match_the_executed_probes():
+    """A value whose source names a probe must be exactly what the probe reports."""
+    from oph_fep_synergetics.analysis.registry import by_key
+
+    derived = [entry for entry in MANUSCRIPT_VALUES if entry.source.startswith("probe:")]
+    assert len(derived) >= 40
+    for entry in derived:
+        _, probe_key, name = entry.source.split(":", 2)
+        result = by_key()[probe_key].run()
+        assert result.passed, entry.key
+        values = result.values
+        if name.endswith(":min"):
+            expected = min(values[name[: -4]])
+        elif name.endswith(":row"):
+            stem = name[: -4]
+            expected = tuple(
+                values[stem + suffix] for suffix in ("_external", "_blanket", "_internal")
+            )
+        elif name.endswith(":max"):
+            expected = max(values[name[: -4]])
+        elif name.endswith(":absmax"):
+            expected = abs(max(values[name[: -7]], key=abs))
+        elif re.search(r":\d+$", name):
+            stem, _, index = name.rpartition(":")
+            expected = values[stem][int(index)]
+        elif name.endswith(":sortedtail"):
+            expected = tuple(sorted(values[name[: -11]]))[1:]
+        else:
+            expected = values[name]
+        if isinstance(entry.value, str):
+            assert float(entry.value) == expected, entry.key
+        elif isinstance(entry.value, tuple):
+            assert entry.value == tuple(expected), entry.key
+        else:
+            assert entry.value == expected, entry.key
 
 
 def test_the_bound_value_set_is_exactly_the_documented_one():

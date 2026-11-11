@@ -64,12 +64,12 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `free-energy-dictionary` | isomorphism | `exact-on-domain` | `oph-fep` | numerical, Bayesian and surprisal free energy coincide to curvature |
 | `sheaf-agreement` | isomorphism | `exact` | `oph-fep` | the cellular sheaf Laplacian is the carrier Laplacian |
 | `certificate-species` | isomorphism | `exact` | `oph-fep` | the certificate species of the shell and its spectral gap |
-| `tree-number` | isomorphism | `exact` | `oph-fep` | the reduced Laplacian determinant is 5 184 000, an integer tree count |
-| `gmrf-independence` | isomorphism | `exact` | `oph-fep` | independence on the seams and nowhere else; blanket five, variance $7/36$ |
-| `sheaf-cohomology` | isomorphism | `exact` | `oph-fep` | $\dim H^0 = 1$, $\dim H^1 = 19$, and $\dim H^0 - \dim H^1 = 12 - 30$ |
-| `icosahedral-symmetry` | isomorphism | `exact` | `synergetics-oph` | order $120$, transitive on ports, seams and faces: $60$ rotations, $60$ reflections |
-| `eigenspace-irreducibility` | isomorphism | `exact` | `synergetics-oph` | eigenspaces of dimensions 3, 5 and 3 irreducible under the icosahedral group |
-| `law-equivariance` | isomorphism | `exact` | `synergetics-oph` | $120 \times 78$ pairs preserve the outcome multiset: 4 orbits, 3 multisets |
+| `tree-number` | isomorphism | `exact` | `oph-fep` | the reduced Laplacian determinant is {{CARRIER_TREE_NUMBER}}, an integer tree count |
+| `gmrf-independence` | isomorphism | `exact` | `oph-fep` | independence on the seams and nowhere else; blanket {{GMRF_BLANKET_SIZE}}, variance {{GMRF_MARGINAL_VARIANCE}} |
+| `sheaf-cohomology` | isomorphism | `exact` | `oph-fep` | $\dim H^0 = {{SHEAF_H0}}$, $\dim H^1 = {{SHEAF_H1}}$, and $\dim H^0 - \dim H^1 = {{CARRIER_PORTS}} - {{CARRIER_SEAMS}}$ |
+| `icosahedral-symmetry` | isomorphism | `exact` | `synergetics-oph` | order {{SYMMETRY_GROUP_ORDER}}, transitive on ports, seams and faces: {{SYMMETRY_ROTATIONS}} rotations, {{SYMMETRY_REFLECTIONS}} reflections |
+| `eigenspace-irreducibility` | isomorphism | `exact` | `synergetics-oph` | eigenspaces of dimensions {{SYMMETRY_EIGENSPACE_DIMENSIONS}} irreducible under the icosahedral group |
+| `law-equivariance` | isomorphism | `exact` | `synergetics-oph` | ${{SYMMETRY_GROUP_ORDER}} \times {{SHELL_TOTAL_TWO}}$ pairs preserve the outcome multiset: {{SYMMETRY_ORBITS}} orbits, {{SYMMETRY_OUTCOME_MULTISETS}} multisets |
 | `kl-lattice-metric` | isomorphism | `exact` | `fep-synergetics` | one IVM step costs four nats and squared norm $8k^2$ costs $4k^2$ |
 | `pr01-obstruction` | disagreement | `obstructed` | `oph-fep` | the native law is not confluent |
 | `free-energy-name-collision` | disagreement | `obstructed` | `oph-fep` | "free energy" names inequivalent functionals |
@@ -82,22 +82,22 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `existence-without-reachability` | disagreement | `obstructed` | `oph-fep` | existence of an equilibrium does not imply reachability |
 | `directed-gradient` | disagreement | `obstructed` | `oph-fep` | direct and adjoint gradients differ |
 | `four-cycle-local-minimum` | disagreement | `obstructed` | `oph-fep` | the four-cycle has spurious local minima |
-| `cuboctahedron-vs-icosahedron` | disagreement | `obstructed` | `synergetics-oph` | twelve vertices is not one solid: tetravolume 20 against $18.5123\ldots$ |
-| `shell-vs-free-energy` | disagreement | `obstructed` | `fep-synergetics` | shell two spans three free energies, shell four seven; 36 and 52 are shared |
+| `cuboctahedron-vs-icosahedron` | disagreement | `obstructed` | `synergetics-oph` | twelve vertices is not one solid: tetravolume {{CUBOCTAHEDRON_TETRAVOLUME}} against ${{ICOSAHEDRON_TETRAVOLUME}}\ldots$ |
+| `shell-vs-free-energy` | disagreement | `obstructed` | `fep-synergetics` | shell two spans three free energies, shell four seven; {{SHELL_SHARED_FREE_ENERGY_LEVELS}} are shared |
 | `quadray-ivm` | complementarity | `exact` | `synergetics-oph` | IVM coordinates supply the carrier's geometry |
 | `equilibrium-propagation` | complementarity | `exact` | `oph-fep` | the energy-based learning identity holds exactly |
 | `replicator-potential` | complementarity | `exact` | `oph-fep` | the replicator field is a metric gradient |
 | `kissing-twelve` | complementarity | `exact` | `synergetics-oph` | twelve neighbours at squared distance eight |
-| `icosahedron-tetravolume` | complementarity | `exact` | `synergetics-oph` | the carrier's solid is $18.5123\ldots$, squared exactly $175 + 75\sqrt{5}$ |
-| `packing-density` | complementarity | `exact` | `synergetics-oph` | Voronoi cell $14/12/24$, tetravolume six, density $\pi/(3\sqrt{2})$ |
+| `icosahedron-tetravolume` | complementarity | `exact` | `synergetics-oph` | the carrier's solid is ${{ICOSAHEDRON_TETRAVOLUME}}\ldots$, squared exactly $175 + 75\sqrt{5}$ |
+| `packing-density` | complementarity | `exact` | `synergetics-oph` | Voronoi cell ${{VORONOI_VERTICES}}/{{VORONOI_FACES}}/{{VORONOI_EDGES}}$, tetravolume six, density $\pi/(3\sqrt{2})$ |
 | `tetravolume-arithmetic` | complementarity | `exact` | `three-way` | four nats, the rational gap, and an integral table beside a non-integral carrier |
-| `effective-resistance` | complementarity | `exact` | `oph-fep` | effective resistance $11/30$, $7/15$, $1/2$ by distance class, Kirchhoff index $28$ twice over |
-| `vertex-shells` | disagreement | `obstructed` | `synergetics-oph` | shells $5, 5, 1$ against the lattice's $12, 42, 92$; intersection array $(5, 2, 1; 1, 2, 5)$ |
-| `subgraph-census` | isomorphism | `exact` | `synergetics-oph` | 20 triangles, 12 pentagons, 125 matchings, 1280 Hamiltonian cycles, counted by exhaustion |
+| `effective-resistance` | complementarity | `exact` | `oph-fep` | effective resistance {{RESISTANCE_ADJACENT}}, {{RESISTANCE_DISTANCE_TWO}}, {{RESISTANCE_ANTIPODAL}} by distance class, Kirchhoff index {{RESISTANCE_KIRCHHOFF_INDEX}} twice over |
+| `vertex-shells` | disagreement | `obstructed` | `synergetics-oph` | shells {{CARRIER_SHELL_SIZES}} against the lattice's {{LATTICE_SHELL_SIZES}}; intersection array {{CARRIER_INTERSECTION_ARRAY}} |
+| `subgraph-census` | isomorphism | `exact` | `synergetics-oph` | {{CARRIER_TRIANGLES}} triangles, {{CARRIER_PENTAGONS}} pentagons, {{CARRIER_PERFECT_MATCHINGS}} matchings, {{CARRIER_HAMILTONIAN_CYCLES}} Hamiltonian cycles, counted by exhaustion |
 | `angle-defect` | isomorphism | `exact` | `synergetics-oph` | a defect of $\pi/3$ at each port and $4\pi$ in total, which is $2\pi\chi$ |
-| `twelve-around-one-families` | disagreement | `obstructed` | `synergetics-oph` | the phrase covers solids with $5184000$ and $331776 = 576^2$ spanning trees |
-| `dual-cells` | complementarity | `exact` | `synergetics-oph` | the cell and the cuboctahedron, $14/12/24$ against $12/14/24$, volumes $6$ and $20$ |
-| `conjugation-norm` | complementarity | `exact` | `three-way` | conjugation fixes the integer counts and moves the volume, whose norm is $50$ |
+| `twelve-around-one-families` | disagreement | `obstructed` | `synergetics-oph` | the phrase covers solids with {{CARRIER_TREE_NUMBER}} and ${{CUBOCTAHEDRON_SPANNING_TREES}} = {{CUBOCTAHEDRON_SPANNING_TREES_ROOT}}^2$ spanning trees |
+| `dual-cells` | complementarity | `exact` | `synergetics-oph` | the cell and the cuboctahedron, ${{VORONOI_VERTICES}}/{{VORONOI_FACES}}/{{VORONOI_EDGES}}$ against ${{CUBOCTAHEDRON_VERTICES}}/{{CUBOCTAHEDRON_FACES}}/{{CUBOCTAHEDRON_EDGES}}$, volumes {{PACKING_CELL_TETRAVOLUME}} and {{CUBOCTAHEDRON_TETRAVOLUME}} |
+| `conjugation-norm` | complementarity | `exact` | `three-way` | conjugation fixes the integer counts and moves the volume, whose norm is {{TETRAVOLUME_GALOIS_NORM}} |
 
 : The {{REGISTRY_ENTRIES}} correspondences, in registry order:
 {{REGISTRY_ISOMORPHISMS}} isomorphisms, {{REGISTRY_DISAGREEMENTS}}
