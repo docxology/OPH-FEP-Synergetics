@@ -165,7 +165,7 @@ pipeline. The source of truth is `manuscript/`: the render reads `config.yaml`,
 `output/pdf/OPH-FEP-Synergetics_combined.pdf`.
 
 ```
-# 1. the nineteen figures and their accessibility registry
+# 1. the twenty figures and their accessibility registry
 .venv/bin/python scripts/make_figures.py
 
 # 2. the tokens and the resolved tree, with the template checkout's interpreter
@@ -179,6 +179,15 @@ TEMPLATE_REPO_ROOT=$PWD .venv/bin/python /path/to/project/scripts/z_generate_man
 # 4. the render contract, read back out of the artefact
 .venv/bin/python scripts/check_render.py
 ```
+All four steps run in order with one command:
+
+```
+.venv/bin/python scripts/build.py --deliver
+```
+
+The template checkout comes from `--template-root`, `$TEMPLATE_ROOT`, or the
+sibling `template/` directory beside this project; `--deliver` refreshes the
+byte-identical copy in `~/Downloads/` and prints both sha256 digests.
 
 `projects/working/OPH-FEP-Synergetics` is a symlink to this checkout, which the
 pipeline resolves to its real path, so the PDF lands in this project's
@@ -222,10 +231,11 @@ docs/SCOPE.md                        what is reimplemented, what is cited, what 
 docs/VERIFICATION.md                 the gates and how to run them
 manuscript/                          config.yaml, preamble.md, references.bib and eleven sections
 scripts/render_docs.py               regenerates the three generated documents
-scripts/make_figures.py              renders the nineteen figures and their accessibility registry
+scripts/make_figures.py              renders the twenty figures and their accessibility registry
+scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (342 tests)
+tests/                               the suite (345 tests)
 ```
 
 ## Tests
@@ -234,7 +244,7 @@ tests/                               the suite (342 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-342 tests, no mocks, no network. The suite checks exact values rather than
+345 tests, no mocks, no network. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

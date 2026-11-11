@@ -35,7 +35,7 @@ mistaken for a clean run.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-342 tests, no mocks, no network, no fixtures that fake a result. The suite runs
+345 tests, no mocks, no network, no fixtures that fake a result. The suite runs
 from a fresh process against the real code paths.
 
 | file | what it pins down |
@@ -52,7 +52,7 @@ from a fresh process against the real code paths.
 | `test_lattice.py` | the cube's corners and its line graph, and the isomorphism between that line graph and the cuboctahedron |
 | `test_symmetry.py` | the automorphism group by exhaustive search, closure, orbit counts, the rotation/reflection split from the face orientations, eigenspace irreducibility, and the equivariance of the descent law |
 | `test_solids.py` | oriented faces, the icosahedron's volume against its closed form and its exact squared ratio, and the rejection of an unoriented face list |
-| `test_registry.py` | the registry contract, the pairwise scopes, the selection commands, plus an exact-value assertion per probe |
+| `test_registry.py` | the registry contract, the pairwise scopes, the selection commands, the status/kind vocabulary invariant, plus an exact-value assertion per probe |
 | `test_provenance.py` | the pin file, the licence split, identifier lookup, and `match`/`moved`/`absent`/`unavailable` against a real temporary repository |
 | `test_manuscript_variables.py` | every bound value, cross-checked against the function that produces it |
 | `test_cli.py` | every subcommand, the JSON payloads, the exit codes, and the console-script declaration |
@@ -104,7 +104,8 @@ A `moved` result is reported as `moved`. It is a reading, not a failure.
 ## The manuscript gates
 
 The PDF is produced by the `docxology/template` pipeline; the commands are in
-[README.md](../README.md#the-manuscript). The manuscript's own gates run in the
+[README.md](../README.md#the-manuscript), and `scripts/build.py` runs them in
+order, ending in the contract check. The manuscript's own gates run in the
 suite rather than in LaTeX, so a defect is reported by `pytest`:
 
 | gate | what it rejects |
@@ -122,7 +123,7 @@ The rendered result was checked the way a reader checks it, on the artefact
 itself: 43 pages, the cover on page 1, the four graphical-abstract panels on
 pages 2 to 5, the contents page at 6, and a 0.500 in left text margin measured
 from the PDF's own text bounding boxes. Each panel page carries its own figure
-caption, so no panel floated away from its figure. The body carries eighteen
+caption, so no panel floated away from its figure. The body carries nineteen
 numbered figures plus the cover image, fourteen numbered equations, three
 definitions, thirty-two numbered propositions and eight tables, with `0`
 undefined citations and `0` unresolved `??` cross-references in

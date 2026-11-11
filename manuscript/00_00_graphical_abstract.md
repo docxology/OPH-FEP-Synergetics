@@ -68,7 +68,7 @@ orbits with {{SYMMETRY_OUTCOME_MULTISETS}} distinct descent-outcome multisets.
 As a Gaussian precision the same matrix puts every seam's pairwise precision at
 {{GMRF_PAIRWISE_PRECISION}}, every port's Markov blanket at
 {{GMRF_BLANKET_SIZE}} neighbours, and the marginal variance of a port at
-{{GMRF_MARGINAL_VARIANCE}}, exactly $7/36$.
+{{GMRF_MARGINAL_VARIANCE}}, exactly {{GMRF_MARGINAL_VARIANCE_EXACT}}.
 
 \clearpage
 

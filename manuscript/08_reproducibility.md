@@ -90,11 +90,11 @@ lives there. {#tbl:commands}
 
 The package depends on `numpy` and on nothing else at run time; the test and
 figure extras add `pytest`, `pytest-cov` and `matplotlib`. The suite runs on
-Python 3.15 with `numpy` 2.5 and has no network dependency; the provenance check
+`Python 3.15` with `numpy 2.5` and has no network dependency; the provenance check
 reads the local checkouts with `git rev-parse` and reports `absent` when they are
 not mounted.
 
-The rendering toolchain is Pandoc 3.13 with `pandoc-crossref` and a TeX Live
+The rendering toolchain is `Pandoc 3.13` with `pandoc-crossref` and a TeX Live
 installation. The template's own documentation records the full toolchain
 [@template]; this section records only what the manuscript needs.
 

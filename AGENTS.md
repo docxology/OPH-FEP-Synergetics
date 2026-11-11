@@ -97,7 +97,8 @@ the sections and re-render.
 .venv/bin/oph-fep-synergetics sources --vault-root /path/to/vault
 .venv/bin/python scripts/render_docs.py               # regenerate the three documents
 .venv/bin/python scripts/render_docs.py --check       # fail when stale
-.venv/bin/python scripts/make_figures.py              # the nineteen figures and their registry
+.venv/bin/python scripts/make_figures.py              # the twenty figures and their registry
+.venv/bin/python scripts/build.py --deliver           # the four manuscript steps, in order
 ```
 
 The manuscript renders through the `docxology/template` checkout, whose
