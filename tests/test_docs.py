@@ -31,10 +31,31 @@ def test_rendered_values_document_is_current():
     assert current == renderer.render_values()
 
 
+def test_rendered_concordance_document_is_current():
+    renderer = _load_renderer()
+    current = (ROOT / "docs" / "CONCORDANCE.md").read_text(encoding="utf-8")
+    assert current == renderer.render_concordance()
+
+
+def test_the_outline_names_every_registered_claim():
+    renderer = _load_renderer()
+    outline = (ROOT / "manuscript" / "MANUSCRIPT_STATUS.md").read_text(encoding="utf-8")
+    missing = [entry.key for entry in renderer.CORRESPONDENCES if f"`{entry.key}`" not in outline]
+    assert missing == []
+
+
+def test_every_claim_is_named_by_some_section():
+    renderer = _load_renderer()
+    text = renderer.render_concordance()
+    assert "no section names it" not in text
+    assert "**no**" not in text
+
+
 def test_check_mode_reports_stale_documents(tmp_path, monkeypatch, capsys):
     renderer = _load_renderer()
     monkeypatch.setattr(renderer, "REGISTRY_DOC", tmp_path / "missing-registry.md")
     monkeypatch.setattr(renderer, "VALUES_DOC", tmp_path / "missing-values.md")
+    monkeypatch.setattr(renderer, "CONCORDANCE_DOC", tmp_path / "missing-concordance.md")
     assert renderer.main(["--check"]) == 1
     captured = capsys.readouterr()
     assert "out of date" in captured.err
@@ -46,6 +67,7 @@ def test_write_mode_creates_missing_documents(tmp_path, monkeypatch, capsys):
     target = tmp_path / "nested" / "registry.md"
     monkeypatch.setattr(renderer, "REGISTRY_DOC", target)
     monkeypatch.setattr(renderer, "VALUES_DOC", tmp_path / "values.md")
+    monkeypatch.setattr(renderer, "CONCORDANCE_DOC", tmp_path / "concordance.md")
     assert renderer.main([]) == 0
     assert target.is_file()
     assert target.read_text(encoding="utf-8") == renderer.render_registry()

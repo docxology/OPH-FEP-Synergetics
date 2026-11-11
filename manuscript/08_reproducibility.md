@@ -22,7 +22,7 @@ the reason the paper can claim that its numbers are not transcribed.
 | `src/`, `geometry/`, `analysis/` | yes | never |
 | `output/figures/*.png` | no | `scripts/make_figures.py` |
 | `output/figures/figure_registry.json` | no | `scripts/make_figures.py` |
-| `docs/CORRESPONDENCES.md`, `docs/MANUSCRIPT_VALUES.md` | no | `scripts/render_docs.py` |
+| `docs/CORRESPONDENCES.md`, `docs/MANUSCRIPT_VALUES.md`, `docs/CONCORDANCE.md` | no | `scripts/render_docs.py` |
 | manuscript tokens | no | `scripts/z_generate_manuscript_variables.py` |
 
 : Which surfaces are written by hand and which are produced. A generated surface

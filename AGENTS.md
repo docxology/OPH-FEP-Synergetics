@@ -21,8 +21,9 @@ scope limits there are part of the deliverable, not caveats to be trimmed.
 | a citation | `manuscript/references.bib`, cited from a section and nowhere else |
 | a test | `tests/`, named for the layer it exercises |
 
-`docs/CORRESPONDENCES.md` and `docs/MANUSCRIPT_VALUES.md` are **generated**.
-Never edit them by hand: change the registry or the values and re-render.
+`docs/CORRESPONDENCES.md`, `docs/MANUSCRIPT_VALUES.md` and `docs/CONCORDANCE.md`
+are **generated**. Never edit them by hand: change the registry, the values or
+the sections and re-render.
 
 ## Invariants
 
@@ -94,9 +95,9 @@ Never edit them by hand: change the registry or the values and re-render.
 .venv/bin/oph-fep-synergetics verify --pair oph-fep   # one pairwise ledger
 .venv/bin/oph-fep-synergetics verify --kind disagreement   # one kind of claim
 .venv/bin/oph-fep-synergetics sources --vault-root /path/to/vault
-.venv/bin/python scripts/render_docs.py               # regenerate the two documents
+.venv/bin/python scripts/render_docs.py               # regenerate the three documents
 .venv/bin/python scripts/render_docs.py --check       # fail when stale
-.venv/bin/python scripts/make_figures.py              # the seventeen figures and their registry
+.venv/bin/python scripts/make_figures.py              # the nineteen figures and their registry
 ```
 
 The manuscript renders through the `docxology/template` checkout, whose

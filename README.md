@@ -165,7 +165,7 @@ pipeline. The source of truth is `manuscript/`: the render reads `config.yaml`,
 `output/pdf/OPH-FEP-Synergetics_combined.pdf`.
 
 ```
-# 1. the seventeen figures and their accessibility registry
+# 1. the nineteen figures and their accessibility registry
 .venv/bin/python scripts/make_figures.py
 
 # 2. the tokens and the resolved tree, with the template checkout's interpreter
@@ -216,15 +216,16 @@ Three disciplines hold the manuscript together, and each one is a test:
 data/sources.json                    pinned sources, licences, cited identifiers
 docs/CORRESPONDENCES.md              generated: the 42 entries and their probe values
 docs/MANUSCRIPT_VALUES.md            generated: every bound value
+docs/CONCORDANCE.md                  generated: where each claim is stated and each figure appears
 docs/PROVENANCE.md                   the pins and the reuse rules
 docs/SCOPE.md                        what is reimplemented, what is cited, what is out
 docs/VERIFICATION.md                 the gates and how to run them
 manuscript/                          config.yaml, preamble.md, references.bib and eleven sections
-scripts/render_docs.py               regenerates the two generated documents
-scripts/make_figures.py              renders the seventeen figures and their accessibility registry
+scripts/render_docs.py               regenerates the three generated documents
+scripts/make_figures.py              renders the nineteen figures and their accessibility registry
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (339 tests)
+tests/                               the suite (342 tests)
 ```
 
 ## Tests
@@ -233,7 +234,7 @@ tests/                               the suite (339 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-339 tests, no mocks, no network. The suite checks exact values rather than
+342 tests, no mocks, no network. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

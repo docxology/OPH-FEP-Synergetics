@@ -35,7 +35,7 @@ mistaken for a clean run.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-339 tests, no mocks, no network, no fixtures that fake a result. The suite runs
+342 tests, no mocks, no network, no fixtures that fake a result. The suite runs
 from a fresh process against the real code paths.
 
 | file | what it pins down |
@@ -57,7 +57,7 @@ from a fresh process against the real code paths.
 | `test_manuscript_variables.py` | every bound value, cross-checked against the function that produces it |
 | `test_cli.py` | every subcommand, the JSON payloads, the exit codes, and the console-script declaration |
 | `test_public_api.py` | that every exported name resolves, and that no commit hash escapes the pin file |
-| `test_docs.py` | that the two generated documents are current and that the guides' relative links resolve |
+| `test_docs.py` | that the three generated documents are current, that the outline and the sections name every registered claim, and that the guides' relative links resolve |
 | `test_manuscript.py` | the eleven section files the renderer discovers, every token resolving to a bound value and every bound value being quoted, citations equal to the bibliography in both directions, a `{#sec:…}` label on every top-level heading, the manuscript's registry table against the registry, and the figure links against the accessibility registry |
 | `test_figures.py` | that every figure builder exists and is orchestrated, and that a sample renders non-trivial PNGs plus a well-formed registry (skipped without the `figures` extra) |
 
@@ -79,10 +79,11 @@ well-formed carrier, a guard behind a guard), not untested behaviour.
 .venv/bin/python scripts/render_docs.py --check
 ```
 
-`docs/CORRESPONDENCES.md` and `docs/MANUSCRIPT_VALUES.md` are rendered from the
-registry and from `MANUSCRIPT_VALUES`. `test_docs.py` runs the same render and
-compares byte-for-byte, so a claim or a value that changes without a re-render
-fails the suite.
+`docs/CORRESPONDENCES.md`, `docs/MANUSCRIPT_VALUES.md` and `docs/CONCORDANCE.md`
+are rendered from the registry, from `MANUSCRIPT_VALUES` and from the manuscript
+text itself. `test_docs.py` runs the same render and compares byte-for-byte, so
+a claim, a value or a cross-reference that changes without a re-render fails
+the suite.
 
 ## Live source pins
 
@@ -118,10 +119,10 @@ suite rather than in LaTeX, so a defect is reported by `pytest`:
 | `test_render_contract.py` | a render whose cover, graphical-abstract panels or contents page are not on the pages the manuscript promises, a panel page that does not carry its own figure caption, a measured left text margin wider than the 0.5 in the manuscript claims, a registry key that does not reach the printed text, or a log with an overfull box, an undefined reference or an unresolved token |
 
 The rendered result was checked the way a reader checks it, on the artefact
-itself: 42 pages, the cover on page 1, the four graphical-abstract panels on
+itself: 43 pages, the cover on page 1, the four graphical-abstract panels on
 pages 2 to 5, the contents page at 6, and a 0.500 in left text margin measured
 from the PDF's own text bounding boxes. Each panel page carries its own figure
-caption, so no panel floated away from its figure. The body carries sixteen
+caption, so no panel floated away from its figure. The body carries eighteen
 numbered figures plus the cover image, fourteen numbered equations, three
 definitions, thirty-two numbered propositions and eight tables, with `0`
 undefined citations and `0` unresolved `??` cross-references in
