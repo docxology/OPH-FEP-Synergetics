@@ -15,7 +15,8 @@ contract", is not satisfied by the native seam rule, because the rule "waits or
 swaps at mismatch one, so the binary shell keeps moving and accepted repairs need
 not lower a measure" [@oph; @mueller2026agreement]. The Lean development carries
 the demonstration carrier `demoCarrier_not_confluent` for exactly this. The
-contribution here is to make the obstruction quantitative.
+contribution here is to make the obstruction quantitative. Registered as
+`pr01-obstruction`.
 
 ::: {#prop:census .proposition}
 Over the {{SHELL_TOTAL_TWO}} configurations of $\Sigma_2$, the
@@ -58,7 +59,7 @@ The second obstruction is terminological but not merely terminological. In the
 linear-Gaussian model the interface energy minimised over the interior is
 $0.041667$ and the variational free energy at the posterior is $-1.246904$. The
 difference is $-1.288571$, which is exactly the model constant reported by the
-probe — not a leftover, and not zero.
+probe — not a leftover, and not zero. Registered as `free-energy-name-collision`.
 
 The identification is therefore exact up to a constant that the model fixes and
 the vocabulary does not. A comparison of the two programmes by name will
@@ -117,7 +118,7 @@ what a stationary-blanket argument can and cannot conclude. The dissipative
 structure is constrained; the circulating structure is not
 [@ao2004potential; @seifert2012stochastic]. A free energy argument that works only
 from stationarity therefore cannot reach the thermodynamic quantities that the
-solenoidal part controls.
+solenoidal part controls. Registered as `solenoidal-freedom`.
 
 ## Stability is not generic in the coupling {#sec:dstability}
 
@@ -145,7 +146,7 @@ also exact, with $f(0) = 0$ and zero Jacobian error
 that stability is a property of a point in a parameter space, and the
 identification of a repair rule with a stable descent needs every admissible
 coupling to be on the stable side. Here the stable region is $k < \sqrt{10}$,
-which is not the whole admissible range.
+which is not the whole admissible range. Registered as `d-stability`.
 
 ![D-stability. Left: the eigenvalue locus of $D_kA$ in the complex plane for
 $k \in \{0.5, 1, 2, 4, 7\}$, with the imaginary axis drawn; the pair that crosses
@@ -182,7 +183,8 @@ response distance is $2.0$, and the worst-case error has a lower bound of $1.0$
 the iteration schedule is not a detail: the centred contrast after twelve steps
 differs between the full and the half-damped schedules by exactly
 ${{SCHEDULE_AFFINE_CONTRAST}}$ in absolute value, so a claim about "the"
-schedule path has to name the schedule [@mueller2026agreement].
+schedule path has to name the schedule [@mueller2026agreement]. Registered as
+`mediator-obstruction`, with `reduction-criterion` and `schedule-path` beside it.
 
 ## Existence does not imply reachability {#sec:existence}
 
@@ -216,7 +218,8 @@ that a fixed point exists, and both can compute it. The relaxation dynamics has 
 Jacobian with positive real part at the fixed point, so the fixed point is
 unstable, and the orbit is bounded away from it. Existence and reachability are
 different questions, and a synthesis that infers the second from the first is
-wrong in a way that no amount of algebraic care will fix.
+wrong in a way that no amount of algebraic care will fix. Registered as
+`existence-without-reachability`.
 
 ## Direct and adjoint gradients differ {#sec:directed}
 
@@ -226,6 +229,7 @@ $-J^{-\top} c = {{DIRECTED_GRADIENT_ADJOINT}}$. Both are exact, both are
 "gradients" of the same objective, and they point in different directions. A
 learning rule that uses the direct form and a rule that uses the adjoint form
 therefore do not agree, and the disagreement is not a numerical artefact.
+Registered as `directed-gradient`.
 
 ## The four-cycle has spurious local minima {#sec:four-cycle}
 
@@ -239,7 +243,7 @@ the four flips, all of which are $2$.
 This is the mechanism behind the traps that repair-as-descent arguments have to
 exclude by hand. It is also a concrete instance of the general point: a descent
 guarantee is a statement about a landscape, and a landscape with plateaux has
-local minima that are not global ones.
+local minima that are not global ones. Registered as `four-cycle-local-minimum`.
 
 ## Twelve vertices is not one solid {#sec:cuboctahedron}
 
@@ -275,7 +279,7 @@ The same coincidence is why this entry is a disagreement rather than a
 complementarity: the neighbour *cell* of [@sec:packing] is the rhombic
 dodecahedron, of tetravolume six, whose graph is four-regular as well. Three
 distinct solids in this geometry have twelve-fold features, and only one of them
-is the carrier.
+is the carrier. Registered as `cuboctahedron-vs-icosahedron`.
 
 ## The shell index is not a function of the free energy {#sec:shell-energy}
 
@@ -309,6 +313,7 @@ FEP's functional is wrong or that Synergetics' metric is wrong; it says that a
 composite vocabulary that treats "shell" and "free energy" as two names for the
 same stratification will be inconsistent at the first configuration whose
 coordinates do not sum to zero, and the probe exhibits such configurations.
+Registered as `shell-vs-free-energy`.
 
 ## The shells around a port are not the lattice's shells {#sec:vertex-shells}
 
@@ -335,6 +340,15 @@ outward and backward degrees are the same. That is a stronger fact than the
 identification it replaces, and it is the reason the symmetry group of
 {{SYMMETRY_GROUP_ORDER}} can be transitive on ports, seams and faces at once.
 
+![Two bar series against the radius from a port, on a logarithmic count axis.
+The carrier's ports number {{CARRIER_SHELL_SIZES}} at graph distances one, two
+and three, while the lattice's shells hold {{LATTICE_SHELL_SIZES}} sites at the
+same radii, so the sequences disagree at the first shell and no radius repairs
+the reading. The carrier is distance-regular, and the title annotates its
+intersection array {{CARRIER_INTERSECTION_ARRAY}}. Generated by
+`scripts/make_figures.py` from `core/network.py` and
+`geometry/lattice.py`.](../output/figures/fig_vertex_shells.png){#fig:vertex-shells width=90%}
+
 ## `Twelve around one` names a family, not an object {#sec:families}
 
 ::: {#prop:families .proposition}
@@ -359,7 +373,8 @@ the carrier's from OPH's oriented base faces, the cuboctahedron's from the
 neighbouring lattice sites -- so the numbers are comparable even though the
 objects are not the same. What the registry records is that a claim of the form
 "the carrier is the twelve-around-one solid" is under-determined, and that the
-remedy is a refinement rather than a tolerance.
+remedy is a refinement rather than a tolerance. Registered as
+`twelve-around-one-families`.
 
 ## What the fifteen have in common
 

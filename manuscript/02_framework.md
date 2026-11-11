@@ -198,21 +198,22 @@ dictionary, not an argument: each row asserts that two terms denote the same
 mathematical object, and [@sec:correspondences] reports whether the assertion
 survives execution.
 
-| OPH | FEP | Synergetics |
-|:----|:----|:------------|
-| port (patch) | coordinate of the generative model | quadray site |
-| seam | edge of the precision graph | IVM neighbour move |
-| load configuration | state of the recognition density | site occupancy |
-| seam repair | variational update | local re-accounting |
-| total load | conserved quantity of the dynamics | shell index |
-| \{12, 30, 20\} carrier | blanket-structured precision graph | icosahedron on the IVM |
-| carrier automorphisms | symmetries of the precision | icosahedral group of order {{SYMMETRY_GROUP_ORDER}} |
-| obstructed seam cycles | frustrated cycle space of the precision | cycle rank {{SHEAF_H1}} |
-| one shell step | one divergence step of {{KL_ONE_STEP}} nats | one move of squared distance {{KL_STEP_SQUARED_DISTANCE}} |
-| the carrier's twenty faces | faces of the simplicial complex | icosahedron of {{ICOSAHEDRON_TETRAVOLUME}} tetravolumes |
-| the twelve-around-one cell | neighbourhood of one coordinate | rhombic dodecahedron of {{PACKING_CELL_TETRAVOLUME}} tetravolumes |
+| OPH | FEP | Synergetics | probed by |
+|:----|:----|:------------|:----------|
+| port (patch) | coordinate of the generative model | quadray site | `carrier-port-chart` |
+| seam | edge of the precision graph | IVM neighbour move | `gmrf-independence`, `kl-lattice-metric` |
+| load configuration | state of the recognition density | site occupancy | `shell-counts` |
+| seam repair | variational update | local re-accounting | `native-repair-law`, `variational-equivalence` |
+| total load | conserved quantity of the dynamics | shell index | `native-repair-law`, `shell-counts` |
+| \{12, 30, 20\} carrier | blanket-structured precision graph | icosahedron on the IVM | `carrier-port-chart`, `gmrf-independence`, `kissing-twelve` |
+| carrier automorphisms | symmetries of the precision | icosahedral group of order {{SYMMETRY_GROUP_ORDER}} | `icosahedral-symmetry` |
+| obstructed seam cycles | frustrated cycle space of the precision | cycle rank {{SHEAF_H1}} | `sheaf-cohomology` |
+| one shell step | one divergence step of {{KL_ONE_STEP}} nats | one move of squared distance {{KL_STEP_SQUARED_DISTANCE}} | `kl-lattice-metric`, `tetravolume-arithmetic` |
+| the carrier's twenty faces | faces of the simplicial complex | icosahedron of {{ICOSAHEDRON_TETRAVOLUME}} tetravolumes | `subgraph-census`, `icosahedron-tetravolume` |
+| the twelve-around-one cell | neighbourhood of one coordinate | rhombic dodecahedron of {{PACKING_CELL_TETRAVOLUME}} tetravolumes | `packing-density`, `dual-cells` |
 
-: The vocabulary dictionary this paper tests. Each row is a claim with a probe;
+: The vocabulary dictionary this paper tests. Each row is a claim, and the last
+column names the registry entries whose probes execute it;
 [@sec:correspondences] reports the verdicts. The last two rows are the ones where
 the dictionary is least conservative, because a solid is not a graph: the
 agreements there are statements about the same geometry read from different

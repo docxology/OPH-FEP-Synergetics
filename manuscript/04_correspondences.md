@@ -124,7 +124,8 @@ failure of convergence would be visible as a number rather than as a hang.
 
 Three quantities are routinely called "surprisal", and the source literature
 distinguishes five: {{PAPER_FIVE_SURPRISES}} [@mueller2026agreement]. In the linear-Gaussian model this
-package computes three of them, and [@tbl:surprises] reports what happens.
+package computes three of them, and [@tbl:surprises] reports what happens. The
+registry entry is `free-energy-dictionary`.
 
 | Quantity | Definition | Value in the probe model |
 |:---------|:-----------|:-------------------------|
@@ -164,7 +165,7 @@ The probe reports all of this, and it reports two negative controls: a chain
 sheaf with one record has a one-dimensional space of global sections, and a chain
 sheaf with no record has none. The controls matter because a sheaf whose global
 sections are one-dimensional for every choice of records would not be saying
-anything about the carrier.
+anything about the carrier. Registered as `sheaf-agreement`.
 
 The sheaf formulation is the one that generalises. A scalar identity sheaf is
 the simplest case; the same construction with non-identity restrictions is how
@@ -283,7 +284,8 @@ this paper, the descent census is equivariant: the multiset of outcomes is
 preserved by every one of the group elements, and the probe searches the whole
 product for a witness that would break it and finds none. The census numbers in
 [@sec:pr01] are therefore invariants, and the {{SYMMETRY_ORBITS}} orbits are the
-right unit of analysis.
+right unit of analysis. The registry carries this section as three entries:
+`icosahedral-symmetry`, `eigenspace-irreducibility` and `law-equivariance`.
 
 The rotation and reflection counts require the orientation of the faces, and that
 detail is a correction worth reporting. Testing orientation by the set of
@@ -361,7 +363,7 @@ three and returns it as an exact rational multiple of pi rather than as a decima
 against the Euler characteristic that [@sec:census] has already reached from the
 other direction. The identity is the reason twelve five-fold vertices close into
 a sphere rather than a dish, and it is exact for the same reason the tree number
-is: rational quantities over a finite complex.
+is: rational quantities over a finite complex. Registered as `angle-defect`.
 
 ![The carrier read as a network. Panel one gives the exact resistance ladder between port pairs with the Kirchhoff index; panel two colours the twelve ports by their graph distance from one port and annotates the intersection array; panel three counts the subgraphs; panel four compares the twelve-around-one cell with its dual, whose counts and tetravolumes are read from the geometry package. Every number is computed from the executed package at draw time rather than transcribed.](../output/figures/fig_network.png){#fig:network width=100%}
 
