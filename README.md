@@ -249,7 +249,7 @@ smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over
 shell sites, the resistance ladder's exact fractions against a from-scratch solve,
-and the exact volume ratios. Coverage is 96.34% with a 90% gate
+and the exact volume ratios. Coverage is 96.49% with a 90% gate
 enforced by `pyproject.toml`.
 
 ## Regenerating the documents

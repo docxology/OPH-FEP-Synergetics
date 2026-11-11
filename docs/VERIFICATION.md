@@ -68,7 +68,7 @@ identity.
 ## Coverage
 
 `pyproject.toml` enforces `fail_under = 90` with branch coverage over
-`src/oph_fep_synergetics`. The current result is **96.34%**. The remaining lines
+`src/oph_fep_synergetics`. The current result is **96.49%**. The remaining lines
 are defensive or unreachable branches (an assertion that cannot fire on a
 well-formed carrier, a guard behind a guard), not untested behaviour.
 
