@@ -25,26 +25,45 @@ def test_version_flag(capsys):
 def test_verify_reports_every_probe(capsys):
     assert main(["verify"]) == 0
     out = capsys.readouterr().out
-    assert "23/23 probes passed" in out
+    assert "35/35 probes passed" in out
     assert "[FAIL]" not in out
     assert "carrier-port-chart" in out
     assert "pr01-obstruction" in out
+    assert "oph-fep" in out
+    assert "three-way" in out
 
 
 def test_verify_json_payload_is_complete(capsys):
     assert main(["verify", "--json"]) == 0
     payload = json.loads(capsys.readouterr().out)
-    assert payload["summary"]["total"] == 23
+    assert payload["summary"]["total"] == 35
     assert payload["summary"]["failed"] == 0
     assert payload["summary"]["failures"] == []
-    assert len(payload["results"]) == 23
+    assert len(payload["results"]) == 35
     assert all(result["passed"] for result in payload["results"])
     assert all(result["values"] for result in payload["results"])
+    assert all(result["pair"] in payload["summary"]["by_pair"] for result in payload["results"])
+    assert sum(entry["passed"] for entry in payload["summary"]["by_pair"].values()) == 35
 
 
 def test_verify_selects_named_probes(capsys):
     assert main(["verify", "--key", "quadray-ivm"]) == 0
     assert "1/1 probes passed" in capsys.readouterr().out
+
+
+def test_verify_selects_one_pairwise_scope(capsys):
+    assert main(["verify", "--pair", "three-way"]) == 0
+    out = capsys.readouterr().out
+    assert "1/1 probes passed" in out
+    assert "tetravolume-arithmetic" in out
+    assert "carrier-port-chart" not in out
+
+
+def test_verify_rejects_an_unknown_pair(capsys):
+    assert main(["verify", "--pair", "oph-fep-typo"]) == 2
+    captured = capsys.readouterr()
+    assert "oph-fep-typo" in captured.err
+    assert captured.out == ""
 
 
 def test_verify_rejects_an_unknown_key(capsys):

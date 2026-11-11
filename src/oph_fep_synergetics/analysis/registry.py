@@ -39,20 +39,37 @@ from .. import geometry
 from ..core import carrier as carrier_module
 from ..core import controls as control_module
 from ..core import free_energy as free_energy_module
+from ..core import invariants as invariant_module
 from ..core import repair as repair_module
 from ..core import sheaf as sheaf_module
+from ..core import symmetry as symmetry_module
 
 ISOMORPHISM = "isomorphism"
 DISAGREEMENT = "disagreement"
 COMPLEMENTARITY = "complementarity"
 
+#: Pairwise scope of a claim.  The three programmes meet two at a time, so most
+#: claims relate a pair of them; ``THREE_WAY`` is reserved for the few that no
+#: pair of readings captures.
+OPH_FEP = "oph-fep"
+FEP_SYNERGETICS = "fep-synergetics"
+SYNERGETICS_OPH = "synergetics-oph"
+THREE_WAY = "three-way"
+PAIRS: tuple[str, ...] = (OPH_FEP, FEP_SYNERGETICS, SYNERGETICS_OPH, THREE_WAY)
+
 
 @dataclass(frozen=True)
 class Correspondence:
-    """One registered claim about how two or more of the three programs relate."""
+    """One registered claim about how two or more of the three programs relate.
+
+    ``kind`` says what sort of claim it is -- an isomorphism, a disagreement or a
+    complementarity -- and ``pair`` says which of the three pairwise readings it
+    is made across, which is what the triangle map is drawn from.
+    """
 
     key: str
     kind: str
+    pair: str
     claim: str
     oph: str
     fep: str
@@ -66,6 +83,7 @@ class Correspondence:
         return CorrespondenceResult(
             key=self.key,
             kind=self.kind,
+            pair=self.pair,
             status=self.status,
             passed=bool(passed),
             values=dict(values),
@@ -78,6 +96,7 @@ class CorrespondenceResult:
 
     key: str
     kind: str
+    pair: str
     status: str
     passed: bool
     values: dict
@@ -312,6 +331,208 @@ def _probe_certificate_species() -> tuple[bool, dict]:
         and values["is_nonnegative"]
         and abs(values["second_eigenvalue"] - expected) < 1e-12
         and abs(values["induced_infinity_norm"] - 1.0) < 1e-12
+    )
+    return passed, values
+
+
+def _probe_tree_number() -> tuple[bool, dict]:
+    """Kirchhoff: the carrier's seam structure has an exact spanning-tree count."""
+    carrier = _carrier()
+    exact = invariant_module.spanning_tree_number(carrier)
+    from_spectrum = invariant_module.tree_number_from_spectrum(carrier)
+    values = {
+        "spanning_trees_exact": exact,
+        "spanning_trees_from_spectrum": from_spectrum,
+        "relative_residual": abs(from_spectrum - exact) / exact,
+        "reduced_laplacian_is_integral": bool(
+            np.allclose(carrier.laplacian(), np.rint(carrier.laplacian()))
+        ),
+        "nonzero_eigenvalue_count": int((carrier.laplacian_spectrum() > 1e-9).sum()),
+        "seams": carrier.seam_count,
+    }
+    passed = (
+        exact == 5184000
+        and values["relative_residual"] < 1e-9
+        and values["nonzero_eigenvalue_count"] == 11
+        and values["reduced_laplacian_is_integral"] is True
+    )
+    return passed, values
+
+
+def _probe_gmrf_independence() -> tuple[bool, dict]:
+    """The carrier Laplacian is the precision of a Gaussian Markov random field."""
+    carrier = _carrier()
+    variance = invariant_module.marginal_variance(carrier)
+    pairwise = invariant_module.pairwise_precision(carrier)
+    inverse_diagonal = float(np.linalg.pinv(carrier.laplacian())[0][0])
+    values = {
+        "laplacian_is_precision": bool(
+            np.allclose(invariant_module.gmrf_precision(carrier), carrier.laplacian())
+        ),
+        "proper_precision_shift": 1.0 / carrier.port_count,
+        "independence_matches_graph": invariant_module.independence_matches_graph(carrier),
+        "pairwise_precision_values": sorted(set(pairwise.values())),
+        "pairwise_precision_entries": len(pairwise),
+        "blanket_sizes": sorted(set(invariant_module.blanket_sizes(carrier))),
+        "reciprocal_spectrum_sum": str(invariant_module.reciprocal_spectrum_sum(carrier)),
+        "marginal_variance": (variance.numerator, variance.denominator),
+        "pseudoinverse_diagonal": inverse_diagonal,
+        "offsets_cancel": bool(np.allclose(np.sum(carrier.laplacian(), axis=1), 0.0)),
+    }
+    passed = (
+        values["laplacian_is_precision"]
+        and values["independence_matches_graph"]
+        and values["pairwise_precision_values"] == [-1]
+        and values["pairwise_precision_entries"] == 2 * carrier.seam_count
+        and values["blanket_sizes"] == [5]
+        and values["marginal_variance"] == (7, 36)
+        and abs(inverse_diagonal - 7.0 / 36.0) < 1e-9
+        and values["offsets_cancel"]
+    )
+    return passed, values
+
+
+def _probe_sheaf_cohomology() -> tuple[bool, dict]:
+    """One global section, nineteen edge classes: the sheaf's two cohomology groups."""
+    carrier = _carrier()
+    sheaf = sheaf_module.carrier_sheaf(carrier)
+    values = dict(sheaf_module.cohomology_dimensions(sheaf))
+    values["laplacian_equals_carrier_laplacian"] = bool(
+        np.allclose(sheaf.laplacian(), carrier.laplacian())
+    )
+    values["global_section_basis_columns"] = int(sheaf.global_section_basis().shape[1])
+    values["coboundary_rank_direct"] = sheaf_module.coboundary_rank(sheaf)
+    passed = (
+        values["coboundary_rank"] == 11
+        and values["coboundary_rank_direct"] == 11
+        and values["h0"] == 1
+        and values["h1"] == 19
+        and values["euler_characteristic"] == -18
+        and values["h0_minus_h1"] == -18
+        and values["laplacian_equals_coboundary_square"]
+        and values["laplacian_equals_carrier_laplacian"]
+        and values["global_section_basis_columns"] == 1
+    )
+    return passed, values
+
+
+def _probe_icosahedral_symmetry() -> tuple[bool, dict]:
+    """The carrier's automorphism group is the full icosahedral group."""
+    carrier = _carrier()
+    group = symmetry_module.carrier_automorphisms(carrier)
+    rotations = symmetry_module.rotation_subgroup(carrier)
+    reflections = symmetry_module.reflection_subgroup(carrier)
+    orbits = symmetry_module.orbit_sizes(carrier)
+    values = {
+        "order": len(group),
+        "distinct": len(set(group)),
+        "closed_under_composition": symmetry_module.automorphism_group_is_closed(carrier),
+        "identity_present": tuple(range(carrier.port_count)) in set(group),
+        "rotations": len(rotations),
+        "reflections": len(reflections),
+        "halves_disjoint": not (set(rotations) & set(reflections)),
+        "orbits": orbits,
+        "transitive_on_ports": orbits["ports"] == 1,
+    }
+    passed = (
+        values["order"] == 120
+        and values["distinct"] == 120
+        and values["closed_under_composition"] is True
+        and values["identity_present"] is True
+        and values["rotations"] == 60
+        and values["reflections"] == 60
+        and values["halves_disjoint"] is True
+        and orbits == {"ports": 1, "seams": 1, "faces": 1}
+    )
+    return passed, values
+
+
+def _probe_eigenspace_irreducibility() -> tuple[bool, dict]:
+    """Each Laplacian eigenspace is an irreducible representation of the group."""
+    carrier = _carrier()
+    report = symmetry_module.eigenspace_irreducibility(carrier)
+    values = {
+        "eigenspaces": {key: dict(value) for key, value in report.items()},
+        "dimensions": sorted(int(value["dim"]) for value in report.values()),
+        "orbit_ranks": sorted(int(value["orbit_rank"]) for value in report.values()),
+        "irreducible": all(bool(value["irreducible"]) for value in report.values()),
+        "eigenvalue_count": len(report),
+    }
+    passed = (
+        values["dimensions"] == [1, 3, 3, 5]
+        and values["orbit_ranks"] == [1, 3, 3, 5]
+        and values["irreducible"] is True
+        and values["eigenvalue_count"] == 4
+    )
+    return passed, values
+
+
+def _probe_law_equivariance() -> tuple[bool, dict]:
+    """The native law commutes with the whole icosahedral group."""
+    carrier = _carrier()
+    report = dict(symmetry_module.law_equivariance(carrier))
+    sample = tuple(carrier.shell_configurations(total=2)[0])
+    sample_outcomes = symmetry_module.descent_outcome_multiset(sample)
+    values = {
+        "invariant": report["invariant"],
+        "configurations": report["configurations"],
+        "group_order": report["group_order"],
+        "orbits": report["orbits"],
+        "distinct_outcome_multisets": report["distinct_outcome_multisets"],
+        "witness": report["witness"],
+        "sample_configuration": sample,
+        "sample_outcomes": sample_outcomes,
+        "sample_transitions": sum(sample_outcomes.values()),
+    }
+    passed = (
+        values["invariant"] is True
+        and values["witness"] is None
+        and values["configurations"] == 78
+        and values["group_order"] == 120
+        and values["orbits"] == 4
+        and values["sample_transitions"] == 60
+    )
+    return passed, values
+
+
+def _probe_kl_lattice_metric() -> tuple[bool, dict]:
+    """One IVM step costs exactly four nats, and the k-th norm sphere four k squared."""
+    identity = np.eye(3)
+    origin = (0.0, 0.0, 0.0)
+    move = geometry.neighbor_moves()[0]
+    steps = {}
+    for k in range(1, 5):
+        target = 8 * k * k
+        site = next(
+            site for site in geometry.generate_shell(k) if geometry.squared_norm(site) == target
+        )
+        steps[k] = {
+            "squared_norm": target,
+            "kl": free_energy_module.gaussian_kl(origin, identity, geometry.to_xyz(site), identity),
+            "expected": 4.0 * k * k,
+        }
+    every_site = all(
+        abs(
+            free_energy_module.gaussian_kl(origin, identity, geometry.to_xyz(site), identity)
+            - 0.5 * float(geometry.squared_norm(site))
+        )
+        < 1e-9
+        for k in range(1, 4)
+        for site in geometry.generate_shell(k)
+    )
+    values = {
+        "one_step_kl": free_energy_module.gaussian_kl(origin, identity, geometry.to_xyz(move), identity),
+        "one_step_squared_distance": float(geometry.squared_norm(move)),
+        "one_step_expected": 4.0,
+        "norm_sphere_kl": {k: steps[k]["kl"] for k in steps},
+        "norm_sphere_expected": {k: steps[k]["expected"] for k in steps},
+        "kl_is_half_the_squared_distance": every_site,
+    }
+    passed = (
+        abs(values["one_step_kl"] - 4.0) < 1e-12
+        and values["one_step_squared_distance"] == 8.0
+        and all(abs(steps[k]["kl"] - steps[k]["expected"]) < 1e-9 for k in steps)
+        and every_site is True
     )
     return passed, values
 
@@ -591,6 +812,83 @@ def _probe_four_cycle() -> tuple[bool, dict]:
     return passed, values
 
 
+def _probe_cuboctahedron_vs_icosahedron() -> tuple[bool, dict]:
+    """Twelve vertices twice, two different solids: the carrier is not the vector equilibrium."""
+    carrier = _carrier()
+    cuboctahedron = geometry.cuboctahedron_adjacency()
+    icosahedron = geometry.icosahedron_adjacency()
+    faces = geometry.cuboctahedron_faces()
+    measured = dict(geometry.icosahedron_tetravolume())
+    values = {
+        "cuboctahedron_vertices": len(cuboctahedron),
+        "cuboctahedron_degrees": sorted({sum(row) for row in cuboctahedron}),
+        "cuboctahedron_edges": len(geometry.cuboctahedron_edges()),
+        "cuboctahedron_faces": len(faces["triangles"]) + len(faces["squares"]),
+        "cuboctahedron_square_faces": len(faces["squares"]),
+        "cuboctahedron_tetravolume": float(geometry.cuboctahedron_volume()),
+        "icosahedron_vertices": len(icosahedron),
+        "icosahedron_degrees": sorted({sum(row) for row in icosahedron}),
+        "icosahedron_edges": len(geometry.icosahedron_edges()),
+        "icosahedron_faces": len(geometry.icosahedron_faces()),
+        "icosahedron_tetravolume": float(measured["tetravolume"]),
+        "adjacency_equal": cuboctahedron == icosahedron,
+        "carrier_is_the_icosahedron": carrier_module.carrier_isomorphism(
+            carrier, carrier_module.geometric_carrier()
+        )
+        is not None,
+        "carrier_is_the_cuboctahedron": carrier.adjacency_matrix().astype(int).tolist()
+        == [list(row) for row in cuboctahedron],
+    }
+    passed = (
+        values["cuboctahedron_vertices"] == 12
+        and values["cuboctahedron_degrees"] == [4]
+        and values["cuboctahedron_edges"] == 24
+        and values["icosahedron_degrees"] == [5]
+        and values["cuboctahedron_tetravolume"] == 20.0
+        and abs(values["icosahedron_tetravolume"] - 20.0) > 1.0
+        and values["adjacency_equal"] is False
+        and values["carrier_is_the_icosahedron"] is True
+        and values["carrier_is_the_cuboctahedron"] is False
+    )
+    return passed, values
+
+
+def _probe_shell_vs_free_energy() -> tuple[bool, dict]:
+    """The shell index is not a function of the free energy."""
+    levels: dict[int, dict[float, int]] = {}
+    carriers: dict[float, list[int]] = {}
+    for k in range(1, 6):
+        counts: dict[float, int] = {}
+        for site in geometry.generate_shell(k):
+            level = 0.5 * float(geometry.squared_norm(site))
+            counts[level] = counts.get(level, 0) + 1
+            carriers.setdefault(level, []).append(k)
+        levels[k] = counts
+    shared = {
+        level: sorted(set(shells))
+        for level, shells in carriers.items()
+        if len(set(shells)) > 1
+    }
+    values = {
+        "shell_sizes": {k: int(geometry.shell_count(k)) for k in range(1, 6)},
+        "counted_shell_sizes": {k: len(geometry.generate_shell(k)) for k in range(1, 6)},
+        "free_energy_levels": {k: sorted(levels[k]) for k in levels},
+        "levels_per_shell": {k: len(levels[k]) for k in levels},
+        "levels_shared_across_shells": shared,
+        "shell_one_is_one_sphere": levels[1] == {4.0: 12},
+        "shell_two_spans_three_spheres": levels[2] == {8.0: 6, 12.0: 24, 16.0: 12},
+    }
+    passed = (
+        values["shell_sizes"] == values["counted_shell_sizes"] == {1: 12, 2: 42, 3: 92, 4: 162, 5: 252}
+        and values["levels_per_shell"] == {1: 1, 2: 3, 3: 4, 4: 7, 5: 7}
+        and shared.get(36.0) == [3, 4]
+        and shared.get(52.0) == [4, 5]
+        and values["shell_one_is_one_sphere"]
+        and values["shell_two_spans_three_spheres"]
+    )
+    return passed, values
+
+
 # ---------------------------------------------------------------------------
 # Complementarity probes
 # ---------------------------------------------------------------------------
@@ -680,6 +978,125 @@ def _probe_kissing_twelve() -> tuple[bool, dict]:
     return passed, values
 
 
+def _probe_icosahedron_tetravolume() -> tuple[bool, dict]:
+    """Synergetics' volume accounting, applied to the carrier's own solid."""
+    measured = dict(geometry.icosahedron_tetravolume())
+    exact_parts = measured["exact_squared_parts"]
+    values = {
+        "vertices": measured["vertices"],
+        "edges": measured["edges"],
+        "faces": measured["faces"],
+        "faces_reoriented": measured["faces_reoriented"],
+        "edge": measured["edge"],
+        "edge_spread": measured["edge_spread"],
+        "volume": measured["volume"],
+        "tetraunit": measured["tetraunit"],
+        "tetravolume": measured["tetravolume"],
+        "closed_form_tetravolume": measured["closed_form_tetravolume"],
+        "tetravolume_residual": measured["tetravolume_residual"],
+        "tetravolume_squared": measured["tetravolume_squared"],
+        "exact_squared": measured["exact_squared"],
+        "exact_squared_parts": exact_parts,
+        "exact_squared_residual": measured["exact_squared_residual"],
+        "integral": measured["integral"],
+    }
+    passed = (
+        values["vertices"] == 12
+        and values["edges"] == 30
+        and values["faces"] == 20
+        and values["faces_reoriented"] == 10
+        and float(values["edge_spread"]) < 1e-12
+        and float(values["tetravolume_residual"]) < 1e-9
+        and float(values["exact_squared_residual"]) < 1e-9
+        and abs(float(values["closed_form_tetravolume"]) - float(values["tetravolume"])) < 1e-9
+        and tuple(exact_parts) == (175, 75)
+        and values["integral"] is False
+    )
+    return passed, values
+
+
+def _probe_packing_density() -> tuple[bool, dict]:
+    """The IVM's Voronoi cell, its tetravolume, and the packing density they imply."""
+    cell = geometry.voronoi_cell()
+    density = dict(geometry.packing_density())
+    values = {
+        "cell_vertex_count": cell["vertex_count"],
+        "cell_face_count": cell["face_count"],
+        "cell_edge_count": cell["edge_count"],
+        "cell_euler_characteristic": cell["euler_characteristic"],
+        "cell_all_faces_quadrilateral": cell["all_faces_quadrilateral"],
+        "cell_all_faces_rhombic": cell["all_faces_rhombic"],
+        "cell_feasible": cell["feasible"],
+        "cell_orientation_flips": cell["orientation_flips"],
+        "cell_volume": cell["volume"],
+        "cell_pyramid_volume": cell["pyramid_volume"],
+        "cell_volume_residual": cell["volume_residual"],
+        "cell_tetravolume": density["cell_tetravolume"],
+        "cell_tetravolume_matches_table": density["cell_tetravolume_matches_table"],
+        "ball_tetravolume": density["ball_tetravolume"],
+        "density": density["density"],
+        "closed_form": density["closed_form"],
+        "density_residual": density["density_residual"],
+        "inradius_is_half_the_prime_vector": density["inradius_is_half_the_prime_vector"],
+    }
+    passed = (
+        values["cell_vertex_count"] == 14
+        and values["cell_face_count"] == 12
+        and values["cell_edge_count"] == 24
+        and values["cell_euler_characteristic"] == 2
+        and values["cell_all_faces_quadrilateral"] is True
+        and values["cell_all_faces_rhombic"] is True
+        and values["cell_feasible"] is True
+        and values["cell_orientation_flips"] == 0
+        and float(values["cell_volume_residual"]) < 1e-9
+        and abs(float(values["cell_tetravolume"]) - 6.0) < 1e-9
+        and values["cell_tetravolume_matches_table"] is True
+        and values["inradius_is_half_the_prime_vector"] is True
+        and float(values["density_residual"]) < 1e-15
+        and abs(float(values["ball_tetravolume"]) - math.pi * math.sqrt(2.0)) < 1e-9
+    )
+    return passed, values
+
+
+def _probe_tetravolume_arithmetic() -> tuple[bool, dict]:
+    """Three currencies, and the one place the synergetic table cannot stay integral."""
+    identity = np.eye(3)
+    origin = (0.0, 0.0, 0.0)
+    move = geometry.neighbor_moves()[0]
+    kl = free_energy_module.gaussian_kl(origin, identity, geometry.to_xyz(move), identity)
+    measured = dict(geometry.icosahedron_tetravolume())
+    density = dict(geometry.packing_density())
+    table = {name: str(value) for name, value in sorted(geometry.VOLUME_RATIOS.items())}
+    values = {
+        "fep_currency": "nats",
+        "fep_one_step_kl": kl,
+        "fep_one_step_is_integral": bool(abs(kl - round(kl)) < 1e-12),
+        "oph_currency": "integer loads and rational spectral data",
+        "oph_shell_gap": repair_module.shell_gap(),
+        "oph_shell_gap_is_smaller_than_one": repair_module.shell_gap() < 1.0,
+        "synergetics_currency": "tetravolumes of the prime vector",
+        "synergetics_table": table,
+        "synergetics_table_is_integral": all(
+            float(value) == int(float(value)) for value in geometry.VOLUME_RATIOS.values()
+        ),
+        "synergetics_icosahedron_tetravolume": float(measured["tetravolume"]),
+        "synergetics_icosahedron_is_integral": measured["integral"],
+        "synergetics_icosahedron_squared_parts": measured["exact_squared_parts"],
+        "ivm_cell_tetravolume": float(density["cell_tetravolume"]),
+        "ivm_density_is_below_one": float(density["density"]) < 1.0,
+    }
+    passed = (
+        abs(kl - 4.0) < 1e-12
+        and values["fep_one_step_is_integral"] is True
+        and values["synergetics_table_is_integral"] is True
+        and values["synergetics_icosahedron_is_integral"] is False
+        and tuple(values["synergetics_icosahedron_squared_parts"]) == (175, 75)
+        and abs(float(values["ivm_cell_tetravolume"]) - 6.0) < 1e-9
+        and values["ivm_density_is_below_one"] is True
+    )
+    return passed, values
+
+
 # ---------------------------------------------------------------------------
 # The registry
 # ---------------------------------------------------------------------------
@@ -687,11 +1104,17 @@ def _probe_kissing_twelve() -> tuple[bool, dict]:
 _CARRIER_SOURCE = "OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c"
 _LAW_SOURCE = "OPH model/observer/native.py:45-51 and the 'Agreement and Surprise' paper, Section 6.2"
 _PAPER_SOURCE = "Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026"
+_QUADRAY_SOURCE = (
+    "QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and "
+    "the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b"
+)
+_SHEAF_SOURCE = f"{_PAPER_SOURCE}, Proposition 4 and Section 7.2 (the cellular sheaf over the carrier complex)"
 
 CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="carrier-port-chart",
         kind=ISOMORPHISM,
+        pair=SYNERGETICS_OPH,
         claim="OPH's twelve-port carrier has twelve ports, thirty seams and twenty faces, is five-regular, and its port chart is the one OPH declares.",
         oph="The executable observer's twelve-port carrier.",
         fep="No fixed carrier; the FEP leaves the graph to the model.",
@@ -703,6 +1126,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="spectral-gap",
         kind=ISOMORPHISM,
+        pair=OPH_FEP,
         claim="The carrier Laplacian is 5I - A, its first positive eigenvalue is 5 - sqrt(5), and the record-discarding shell gap is (5 - sqrt(5)) / 60.",
         oph="The spectral certificate of the native repair law.",
         fep="A precision-weighted sheaf Laplacian, of which this is the unweighted case.",
@@ -714,6 +1138,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="shell-counts",
         kind=ISOMORPHISM,
+        pair=OPH_FEP,
         claim="The total-two load shell has 78 configurations and the binary shell has 66.",
         oph="The finite shell the executable observer runs on.",
         fep="The finite state space of a bounded system.",
@@ -725,6 +1150,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="native-repair-law",
         kind=ISOMORPHISM,
+        pair=OPH_FEP,
         claim="The native seam law conserves total load on every transition and lowers the quadratic energy by exactly (d^2 - (|d| mod 2)) / 4.",
         oph="The native repair law.",
         fep="A local update on a bounded interface.",
@@ -736,6 +1162,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="variational-equivalence",
         kind=ISOMORPHISM,
+        pair=OPH_FEP,
         claim="On the linear-Gaussian domain the interface-energy minimiser over the interior is the harmonic extension and the posterior mean, so A3-style constrained relative-entropy minimisation and predictive-coding perception are the same object.",
         oph="A3: the least informative state relative to a reference under observer-visible constraints.",
         fep="Perception as the descent of variational free energy in the means.",
@@ -747,6 +1174,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="free-energy-dictionary",
         kind=ISOMORPHISM,
+        pair=OPH_FEP,
         claim="Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, and the update residual pins the Bayesian surprise between the extreme interior eigenvalues.",
         oph="Repair reduces disagreement; records survive comparison.",
         fep="The variational bound, its gap, and Bayesian surprise.",
@@ -758,6 +1186,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="sheaf-agreement",
         kind=ISOMORPHISM,
+        pair=OPH_FEP,
         claim="Patch agreement is the global-section condition of a cellular sheaf over the carrier complex, and the sheaf Laplacian is the carrier Laplacian.",
         oph="Public records are the states that survive every comparison.",
         fep="Message passing across a blanket; the sheaf Laplacian is the precision-weighted interface energy.",
@@ -769,6 +1198,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="certificate-species",
         kind=ISOMORPHISM,
+        pair=OPH_FEP,
         claim="The native law's sharp certificate is a spectral gap: the mean repair operator is symmetric, nonnegative and doubly stochastic with second eigenvalue 1 - (5 - sqrt(5)) / 60, and its induced infinity norm is exactly one, so no sup-norm contraction certifies it.",
         oph="The capacity-weighted two-norm spectral certificate.",
         fep="Precision-weighted quadratic norms for the linearised update.",
@@ -778,8 +1208,93 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         probe=_probe_certificate_species,
     ),
     Correspondence(
+        key="tree-number",
+        kind=ISOMORPHISM,
+        pair=OPH_FEP,
+        claim="The carrier's Laplacian carries an exact integer spanning-tree number: the reduced Laplacian's determinant is 5184000, equal to (1/12) times the product of the eleven nonzero eigenvalues, so the count of acyclic seam sets is an invariant both readings share.",
+        oph="The seam structure of the twelve-port carrier, whose Laplacian is the repair energy's quadratic form.",
+        fep="The same matrix as a Gaussian precision, whose determinant normalises the linear-Gaussian interface integral.",
+        synergetics="The icosahedron's own graph, counted by its seam structure.",
+        status="exact",
+        source=_CARRIER_SOURCE,
+        probe=_probe_tree_number,
+    ),
+    Correspondence(
+        key="gmrf-independence",
+        kind=ISOMORPHISM,
+        pair=OPH_FEP,
+        claim="With the carrier Laplacian as a Gaussian precision, conditional independence holds exactly on the seams and nowhere else: each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the exact marginal variance of a port is 7/36.",
+        oph="Seams are the only coupling between ports, and a repair touches one seam.",
+        fep="A Markov blanket is the graph neighbourhood of a port, and the interface energy is the precision-quadratic form on the linear-Gaussian domain.",
+        synergetics="Every vertex of the icosahedron is five-coordinated.",
+        status="exact",
+        source=f"{_CARRIER_SOURCE}; {_PAPER_SOURCE}, Section 7.2",
+        probe=_probe_gmrf_independence,
+    ),
+    Correspondence(
+        key="sheaf-cohomology",
+        kind=ISOMORPHISM,
+        pair=OPH_FEP,
+        claim="The carrier complex's scalar sheaf has H^0 of dimension one and H^1 of dimension nineteen: one global section up to a constant, and nineteen independent ways for edges to disagree that no coboundary explains, with dim H^0 - dim H^1 equal to 12 - 30.",
+        oph="A public record is a global section; what prevents agreement is not counted by the seam count alone.",
+        fep="The harmonic-extension problem is well posed up to a constant, and its residual space is nineteen-dimensional.",
+        synergetics="A closed triangulated surface whose twelve vertices, thirty edges and twenty faces give the same Euler characteristic.",
+        status="exact",
+        source=_SHEAF_SOURCE,
+        probe=_probe_sheaf_cohomology,
+    ),
+    Correspondence(
+        key="icosahedral-symmetry",
+        kind=ISOMORPHISM,
+        pair=SYNERGETICS_OPH,
+        claim="The carrier's automorphism group has order 120, is closed under composition, acts transitively on the twelve ports, the thirty seams and the twenty faces, and splits into sixty rotations and sixty reflections detected from OPH's own oriented faces.",
+        oph="The port chart's oriented faces decide which automorphisms preserve orientation.",
+        fep="The group is a property of the chosen interface, not of any free-energy functional.",
+        synergetics="The full icosahedral group of the icosahedron.",
+        status="exact",
+        source=_CARRIER_SOURCE,
+        probe=_probe_icosahedral_symmetry,
+    ),
+    Correspondence(
+        key="eigenspace-irreducibility",
+        kind=ISOMORPHISM,
+        pair=SYNERGETICS_OPH,
+        claim="The Laplacian's eigenspaces of dimensions 3, 5 and 3 are irreducible under the icosahedral group, so the spectrum 0, (5 - sqrt 5) three times, 6 five times and (5 + sqrt 5) three times is an invariant of the symmetry rather than a numerical accident.",
+        oph="The spectral certificate of the native repair law.",
+        fep="A precision spectrum that no relabelling of the interface can change.",
+        synergetics="The icosahedral group's real irreducible representations of dimensions 1, 3, 3 and 5 appear as the eigenspaces.",
+        status="exact",
+        source=_CARRIER_SOURCE,
+        probe=_probe_eigenspace_irreducibility,
+    ),
+    Correspondence(
+        key="law-equivariance",
+        kind=ISOMORPHISM,
+        pair=SYNERGETICS_OPH,
+        claim="The native repair law is equivariant: across all 120 automorphisms and all 78 total-two configurations the multiset of strict, zero and no-op outcomes is unchanged, giving four configuration orbits and three distinct outcome multisets, so the census is a group invariant and no symmetry-breaking witness exists.",
+        oph="The repair law commutes with any relabelling of the carrier's ports.",
+        fep="A local update whose outcome statistics a relabelling cannot change.",
+        synergetics="The icosahedral group acting on the coordination structure.",
+        status="exact",
+        source=_LAW_SOURCE,
+        probe=_probe_law_equivariance,
+    ),
+    Correspondence(
+        key="kl-lattice-metric",
+        kind=ISOMORPHISM,
+        pair=FEP_SYNERGETICS,
+        claim="Equal-covariance Gaussian KL is half the squared distance, and the IVM's first shell sits at squared distance eight, so one lattice step costs exactly four nats and the sites at squared norm 8 k^2 cost 4 k^2: the information cost is the synergetic metric over two.",
+        oph="No counterpart; OPH's own step cost is the change of its quadratic seam energy.",
+        fep="The linear-Gaussian KL of a mean shift at fixed covariance.",
+        synergetics="The IVM's squared distance in quadray coordinates.",
+        status="exact",
+        source=f"{_PAPER_SOURCE}, Theorem 7 item 5; {_QUADRAY_SOURCE}",
+        probe=_probe_kl_lattice_metric,
+    ),
+    Correspondence(
         key="pr01-obstruction",
         kind=DISAGREEMENT,
+        pair=OPH_FEP,
         claim="The native repair law is not confluent and accepted repairs need not lower a measure: 600 of the 4680 shell transitions move at mismatch one with zero energy decrease, and a one-unit walk keeps energy 1/2 while changing state.",
         oph="PR-01 'confluent terminating repair contract' is recorded as obstructed; the consensus theorems hold for the integer and transactional contracts, not the native law.",
         fep="Active inference is a descent on a bound; the identification with this law therefore fails on the mismatch-one domain.",
@@ -791,6 +1306,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="free-energy-name-collision",
         kind=DISAGREEMENT,
+        pair=OPH_FEP,
         claim="The interface energy minimised over the interior and the variational free energy at the posterior are different objects that differ by a model-dependent constant, so identifying them numerically is a gauge choice rather than a theorem.",
         oph="Native thermodynamic free energy: Gibbs states and Landauer bounds on records.",
         fep="Variational free energy: a KL bound on surprisal, not a thermodynamic potential.",
@@ -802,6 +1318,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="mediator-obstruction",
         kind=DISAGREEMENT,
+        pair=OPH_FEP,
         claim="Eliminating an interior mediator leaves a genuinely three-way boundary term: the reduced precision is (1/3) v v^T + epsilon I with v = (1, 1, -1), and a sum of pairwise semidefinite terms reproduces it if and only if epsilon >= 1/3.",
         oph="A local patch can be unable to repair although a consistent world exists.",
         fep="A blanket reduction that destroys the pairwise predictive-coding description.",
@@ -813,6 +1330,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="stationary-blanket",
         kind=DISAGREEMENT,
+        pair=OPH_FEP,
         claim="A blanket visible in the stationary statistics need not bound the dynamics: with zero (mu, eta) precision entry the internal drift is 2q eta + (q - 1) b - 2 mu, so two states with equal blanket and internal values differ in internal motion by 2|q| |eta - eta'|.",
         oph="Seam structure is declared before the law, so compatibility and dynamics are separated by construction.",
         fep="A Markov blanket of the stationary density permits reciprocal internal-external influence.",
@@ -824,6 +1342,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="solenoidal-freedom",
         kind=DISAGREEMENT,
+        pair=OPH_FEP,
         claim="One stationary density is shared by a family of laws: the diffusion with drift -(Gamma - Q) H has stationary law N(0, H^{-1}) for every antisymmetric Q, with spectrum -1 +/- i q and entropy production 2 q^2 in the two-dimensional case.",
         oph="Configuration equilibrium does not determine inertia; the native counterpart shares the full reference state with distinct finite kinetics.",
         fep="A stationary law does not fix the law that preserves it; the solenoidal part is a free parameter.",
@@ -835,6 +1354,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="d-stability",
         kind=DISAGREEMENT,
+        pair=OPH_FEP,
         claim="A linear rest admits a free-energy form exactly when it is stable, and one positive local gain removes that form without moving the rest: at k = 4 the Routh first column is (1, 6, -2, 24) and the scaled matrix has two right-half-plane roots.",
         oph="A spectral certificate is a property of the law's sign structure, which the compatibility set does not fix.",
         fep="Making one part repair faster can destroy convergence while compatibility is unchanged.",
@@ -846,6 +1366,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="schedule-path",
         kind=DISAGREEMENT,
+        pair=OPH_FEP,
         claim="Agreement and dissipation are state functions while finite phases are path functions: full and half-damped iteration of the same affine rule share every answer, yet their centered contrasts after twelve steps differ by exactly 921633999 / 40000000000.",
         oph="What is read from a completed history is a state function; the solver counter is a path function.",
         fep="A learner that reads unfinished settling is taught differently under a different schedule.",
@@ -857,6 +1378,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="reduction-criterion",
         kind=DISAGREEMENT,
+        pair=OPH_FEP,
         claim="Two histories can share the present observation and need different futures, so a summary that drops the record must err by at least half the response distance on one of them: here the worst-case error floor is exactly one.",
         oph="Records are part of the state; the observer's next action follows its retained record.",
         fep="An observation-only state can fail the response criterion while every solve converges.",
@@ -868,6 +1390,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="existence-without-reachability",
         kind=DISAGREEMENT,
+        pair=OPH_FEP,
         claim="An agreement can exist and be unreachable: the clipped two-node map has the origin as its only equilibrium and a source there, and the relaxation orbit stays at radius at least 0.84 with period about 7.58, while the synchronous clipped map stays at radius at least one.",
         oph="Existence of a public fixed point is not reachability by the repair dynamics.",
         fep="Existence of a fixed point is not convergence of the process theory.",
@@ -879,6 +1402,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="directed-gradient",
         kind=DISAGREEMENT,
+        pair=OPH_FEP,
         claim="A directed network's forward response need not carry its exact gradient: for J = [[-1, 2], [0, -1]] and c = (1, 0), the direct nudging response is (1, 0) while the adjoint is (1, 2).",
         oph="The native law is self-adjoint and nonnegative, so this boundary does not bind it.",
         fep="Equilibrium propagation's gradient identity needs an energy; a directed wiring does not automatically supply one.",
@@ -890,6 +1414,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="four-cycle-local-minimum",
         kind=DISAGREEMENT,
+        pair=OPH_FEP,
         claim="A local minimum of an independently defined discrepancy can be incompatible: on a four-cycle, 0011 violates two edges and every single-bit flip also violates two.",
         oph="An energy-descent argument needs a completeness argument before termination can imply agreement.",
         fep="The same obligation applies to any predictive-coding energy.",
@@ -899,8 +1424,33 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         probe=_probe_four_cycle,
     ),
     Correspondence(
+        key="cuboctahedron-vs-icosahedron",
+        kind=DISAGREEMENT,
+        pair=SYNERGETICS_OPH,
+        claim="The twelve-around-one shell and the carrier are not the same solid although each has twelve vertices: the cuboctahedron is four-regular with eight triangles and six squares and tetravolume 20, while the carrier is the icosahedron, five-regular with twenty triangles and tetravolume 18.512295868219..., so a count coincidence of twelve is not an identification.",
+        oph="The carrier is the icosahedron; its twenty faces are the faces the repair law uses.",
+        fep="No counterpart.",
+        synergetics="The vector equilibrium is the twelve-around-one cuboctahedron; the icosahedron is a different twelve-vertex solid.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}",
+        probe=_probe_cuboctahedron_vs_icosahedron,
+    ),
+    Correspondence(
+        key="shell-vs-free-energy",
+        kind=DISAGREEMENT,
+        pair=FEP_SYNERGETICS,
+        claim="The IVM shell index is not a function of the free energy: shell two spans three distinct free energies and shell four spans seven, the level 36 occurs on shells three and four, and the level 52 on shells four and five, so a bounded free energy does not bound the shell.",
+        oph="OPH's shell is a graph-distance shell of configurations, not a level set of a quadratic form.",
+        fep="The free energy of a Gaussian mean is a quadratic form whose level sets cut across the coordination shells.",
+        synergetics="The shells are 10 k^2 + 2 sites at graph distance k from the centre.",
+        status="obstructed",
+        source=_QUADRAY_SOURCE,
+        probe=_probe_shell_vs_free_energy,
+    ),
+    Correspondence(
         key="quadray-ivm",
         kind=COMPLEMENTARITY,
+        pair=SYNERGETICS_OPH,
         claim="Quadray coordinates give the synergetic side exact integer geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and rational tetravolumes including 1, 3, 4, 6, 20 and 96.",
         oph="The carrier needs a lattice in which twelve neighbours is the kissing configuration.",
         fep="No fixed geometry; the FEP leaves the interface geometry to the model.",
@@ -912,6 +1462,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="equilibrium-propagation",
         kind=COMPLEMENTARITY,
+        pair=OPH_FEP,
         claim="The two-settle contrast of equilibrium propagation supplies the parameter gradient that the native repair law does not define: the contrast equals (theta - target) / (1 + beta) exactly and tends to the exact loss gradient as the nudge vanishes.",
         oph="The native law repairs; it does not learn its law.",
         fep="Learning is a descent of free energy in parameters, which needs a gradient the settling rule alone does not give.",
@@ -923,6 +1474,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="replicator-potential",
         kind=COMPLEMENTARITY,
+        pair=OPH_FEP,
         claim="Replicator selection climbs a potential, so the repair language covers it as a comparison class rather than a shared mechanism: the field equals M(x) grad F with M = diag(x) - x x^T and the potential rate is nonnegative.",
         oph="A comparison class, not a realization.",
         fep="A comparison class, not a process theory.",
@@ -934,6 +1486,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="kissing-twelve",
         kind=COMPLEMENTARITY,
+        pair=SYNERGETICS_OPH,
         claim="The twelve-port carrier sits on the kissing-number-twelve configuration: the IVM shell one has twelve sites at squared distance eight, and the geometric icosahedral realisation is isomorphic to OPH's labelled carrier.",
         oph="The twelve-port carrier with its twelve neighbours.",
         fep="No fixed carrier.",
@@ -941,6 +1494,42 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         status="exact",
         source="QuadMath shell_count and IVM_NEIGHBOR_MOVES; OPH carrier counts",
         probe=_probe_kissing_twelve,
+    ),
+    Correspondence(
+        key="icosahedron-tetravolume",
+        kind=COMPLEMENTARITY,
+        pair=SYNERGETICS_OPH,
+        claim="Synergetics' tetravolume accounting extends to the carrier's own solid: the regular icosahedron measures 18.512295868219... tetravolumes, equal to (5/2)(3 sqrt 2 + sqrt 10), whose square is exactly 175 + 75 sqrt 5, so the carrier's polytope has an exact algebraic volume that no integral table entry can express.",
+        oph="The carrier's polytope: twelve ports, thirty seams, twenty faces.",
+        fep="No counterpart; the FEP assigns no volume to an interface.",
+        synergetics="The tetravolume of the regular icosahedron, measured against the equal-edge tetrahedron.",
+        status="exact",
+        source=_QUADRAY_SOURCE,
+        probe=_probe_icosahedron_tetravolume,
+    ),
+    Correspondence(
+        key="packing-density",
+        kind=COMPLEMENTARITY,
+        pair=SYNERGETICS_OPH,
+        claim="The IVM's Voronoi cell is the rhombic dodecahedron, fourteen vertices, twelve rhombic faces and twenty-four edges with Euler characteristic two, its tetravolume is exactly six, and the ball of radius half the prime vector gives the packing density pi / (3 sqrt 2): the carrier's coordination is the twelve-around-one of the densest lattice packing.",
+        oph="The carrier's degree-five coordination is the kissing configuration of the densest lattice packing.",
+        fep="No counterpart.",
+        synergetics="The rhombic dodecahedron's six tetravolumes, derived here from the cell rather than read from the table.",
+        status="exact",
+        source=_QUADRAY_SOURCE,
+        probe=_probe_packing_density,
+    ),
+    Correspondence(
+        key="tetravolume-arithmetic",
+        kind=COMPLEMENTARITY,
+        pair=THREE_WAY,
+        claim="The three programmes count in three currencies and only one stays integral: the FEP's equal-covariance cost for one IVM step is exactly four nats, OPH's shell gap is the rational (5 - sqrt 5) / 60, and the synergetic tetravolume table is integral (1, 3, 4, 6, 20, 96) with the cell volume six derived, while the carrier's own icosahedron enters at 18.512295868219..., whose square is 175 + 75 sqrt 5.",
+        oph="Integer loads and rational spectral data.",
+        fep="Real-valued information costs in nats.",
+        synergetics="Tetravolumes of the prime vector: integral on the IVM, algebraic irrational on the icosahedron.",
+        status="exact",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; {_PAPER_SOURCE}",
+        probe=_probe_tetravolume_arithmetic,
     ),
 )
 
@@ -950,33 +1539,62 @@ def by_key() -> dict[str, Correspondence]:
     return {entry.key: entry for entry in CORRESPONDENCES}
 
 
-def verify(*, keys: tuple[str, ...] | None = None) -> tuple[CorrespondenceResult, ...]:
-    """Run every registered probe, or only the named ones.
+def by_kind() -> dict[str, tuple[Correspondence, ...]]:
+    """Return the registered correspondences grouped by kind, in registry order."""
+    grouped: dict[str, list[Correspondence]] = {}
+    for entry in CORRESPONDENCES:
+        grouped.setdefault(entry.kind, []).append(entry)
+    return {kind: tuple(entries) for kind, entries in grouped.items()}
 
-    An unknown key raises ``ValueError`` instead of selecting nothing, so a
-    mistyped key cannot pass as an empty run.
+
+def by_pair() -> dict[str, tuple[Correspondence, ...]]:
+    """Return the registered correspondences grouped by pairwise scope.
+
+    Every declared pair has an entry in the result even when it is empty, so a
+    triangle drawn from it cannot silently lose an edge.
     """
-    if keys is None:
-        selected = CORRESPONDENCES
-    else:
+    grouped: dict[str, list[Correspondence]] = {pair: [] for pair in PAIRS}
+    for entry in CORRESPONDENCES:
+        grouped.setdefault(entry.pair, []).append(entry)
+    return {pair: tuple(entries) for pair, entries in grouped.items()}
+
+
+def verify(
+    *,
+    keys: tuple[str, ...] | None = None,
+    pairs: tuple[str, ...] | None = None,
+) -> tuple[CorrespondenceResult, ...]:
+    """Run every registered probe, or only the selected ones.
+
+    An unknown key or an unknown pairwise scope raises ``ValueError`` instead of
+    selecting nothing, so a mistyped argument cannot pass as an empty run.
+    """
+    selected = CORRESPONDENCES
+    if keys is not None:
         wanted = set(keys)
         unknown = sorted(wanted - {entry.key for entry in CORRESPONDENCES})
         if unknown:
             raise ValueError(f"unknown correspondence key(s): {', '.join(unknown)}")
-        selected = tuple(entry for entry in CORRESPONDENCES if entry.key in wanted)
+        selected = tuple(entry for entry in selected if entry.key in wanted)
+    if pairs is not None:
+        wanted_pairs = set(pairs)
+        unknown_pairs = sorted(wanted_pairs - set(PAIRS))
+        if unknown_pairs:
+            raise ValueError(f"unknown pairwise scope(s): {', '.join(unknown_pairs)}")
+        selected = tuple(entry for entry in selected if entry.pair in wanted_pairs)
     return tuple(entry.run() for entry in selected)
 
 
 def summary(results: tuple[CorrespondenceResult, ...]) -> dict[str, object]:
-    """Aggregate results by kind and by pass/fail."""
+    """Aggregate results by kind, by pairwise scope, and by pass/fail."""
     by_kind: dict[str, dict[str, int]] = {}
+    by_pair_count: dict[str, dict[str, int]] = {}
     failures: list[str] = []
     for result in results:
-        bucket = by_kind.setdefault(result.kind, {"passed": 0, "failed": 0})
-        if result.passed:
-            bucket["passed"] += 1
-        else:
-            bucket["failed"] += 1
+        for name, table in ((result.kind, by_kind), (result.pair, by_pair_count)):
+            bucket = table.setdefault(name, {"passed": 0, "failed": 0})
+            bucket["passed" if result.passed else "failed"] += 1
+        if not result.passed:
             failures.append(result.key)
     return {
         "total": len(results),
@@ -984,4 +1602,6 @@ def summary(results: tuple[CorrespondenceResult, ...]) -> dict[str, object]:
         "failed": len(failures),
         "failures": tuple(failures),
         "by_kind": by_kind,
+        "by_pair": by_pair_count,
+        "pairs": PAIRS,
     }

@@ -1,11 +1,13 @@
-# Complementarity: what each programme supplies {#sec:complementarities}
+# Complementarity: seven structures one programme supplies and another needs {#sec:complementarities}
 
-The four complementarities are not identifications and not failures. Each is a
-case where one programme supplies a structure that another needs and does not
-have, without either reducing to the other. They are the constructive part of the
-paper.
+The {{REGISTRY_COMPLEMENTARITIES}} complementarities are not identifications and
+not failures. Each is a case where one programme supplies a structure that
+another needs and does not have, without either reducing to the other. They are
+the constructive part of the paper: two of them are geometric, two are
+informational, one is a learning identity, one is a Lyapunov function, and one
+needs all three vocabularies at once.
 
-## Synergetics supplies the accounting {#sec:quadray}
+## Synergetics supplies the accounting in which the carrier's geometry is exact {#sec:quadray}
 
 The carrier of [@def:carrier] is a graph. To draw it, to count its shells, and to
 state the volume of the polyhedra it bounds, a graph is not enough: a metric is
@@ -110,10 +112,107 @@ synthesis that wants a free-energy descent for OPH's repairs should look for the
 metric in which the repair field is a gradient, and the replicator case shows what
 such a metric looks like when it exists.
 
+## The carrier's own solid has an exact algebraic volume {#sec:tetravolume}
+
+The tetravolume table of [@sec:quadray] is a table of integers, and the carrier's
+own solid is not in it. It has an exact volume all the same, and the fact that the
+volume is exact while being algebraic rather than integral is the sharpest
+statement of what the synergetic convention buys.
+
+::: {#prop:ico-volume .proposition}
+The regular icosahedron whose edge is the prime vector has tetravolume
+{{ICOSAHEDRON_TETRAVOLUME}}, equal to
+$\tfrac{5}{2}\bigl(3\sqrt{2} + \sqrt{10}\bigr)$ exactly, and the square of that
+tetravolume is {{ICOSAHEDRON_TETRAVOLUME_SQUARED}}, which is exactly
+$175 + 75\sqrt{5}$. Its twelve vertices are
+{{ICOSAHEDRON_DEGREE}}-valent, and its twenty triangles are all congruent.
+:::
+
+The probe computes the volume from the oriented surface by the divergence
+theorem, converts to tetravolumes by the unit tetrahedron's factor
+$6\sqrt{2}$-based ratio used throughout, and compares the square of the result
+against the closed form in the same field. Both the measured value and the
+algebraic identity are reported, so the reader can see that the agreement is to
+every digit the probe computes rather than to a tolerance chosen to make it hold.
+
+Two details of the computation are worth recording because they are corrections
+rather than conveniences. The first is that a face list is an *unordered* set of
+triangles: ten of the twenty faces enumerated from the vertex set come out
+facing inward ({{ICOSAHEDRON_FACES_REORIENTED}} of them), and the signed sum
+cancels exactly before they are reoriented. The second is that the tetravolume
+convention is a convention: changing the unit tetrahedron rescales every entry in
+the table, and the claim made here is the ratio the convention defines and not an
+absolute volume.
+
+Why this is a complementarity rather than an identification is now visible. OPH
+supplies the graph, and the graph's faces are triangles; Synergetics supplies the
+convention in which those triangles have exactly computable volumes; and neither
+programme as written states the volume of the solid its own graph bounds. The
+table's integral entries and the carrier's algebraic entry belong to the same
+accounting, which is what makes the disagreement of [@sec:cuboctahedron] a
+statement about solids and not about conventions.
+
+## The densest packing in three dimensions is the twelve-around-one cell {#sec:packing}
+
+::: {#prop:packing .proposition}
+The Voronoi cell of the twelve neighbours has {{VORONOI_VERTICES}} vertices,
+{{VORONOI_FACES}} rhombic faces and {{VORONOI_EDGES}} edges, with Euler
+characteristic two and no orientation flips. Its tetravolume is
+{{PACKING_CELL_TETRAVOLUME}}, and the ball of radius half the prime vector
+inscribed in it has tetravolume {{PACKING_BALL_TETRAVOLUME}}, so the packing
+fraction is {{PACKING_DENSITY}}, equal to $\pi/(3\sqrt{2})$.
+:::
+
+This is the paper's clearest case of a number that can be *derived* instead of
+read. The tetravolume of the cell is computed from the halved squared norm at each
+of its fourteen vertices, using the same quadratic form that makes the neighbour
+distances exact, and it arrives at six: the same six the synergetic table lists
+for the rhombic dodecahedron. A reader who suspects that a table entry is a
+stylised fact can therefore check it by an independent route, which is the
+pattern this package uses wherever a source table has consequences.
+
+The density is then derived rather than quoted. The cell's sixteen cubic units of
+Cartesian volume and the ball's inscribed radius give
+$\pi/(3\sqrt{2}) = {{PACKING_DENSITY}}$, which the probe compares against the
+closed form to machine precision. That number is the Kepler density, and it is
+attained by the face-centred cubic arrangement of which the IVM's twelve
+neighbours are the local picture [@schutte1953dreizehn; @conway1999sphere]. The
+complementarity is that Synergetics' twelve-around-one is not a drawing
+convention but the local configuration of the densest lattice packing in three
+dimensions, so a carrier's coordination number is a packing statement, and the
+FEP's blanket argument inherits a geometric fact when it is applied to this
+carrier.
+
+The same cell is also the reason the disagreement of [@sec:cuboctahedron] is not
+a quibble. The neighbours' *cell* is a rhombic dodecahedron of tetravolume six and
+its graph is four-regular; the carrier's *solid* is an icosahedron of tetravolume
+${{ICOSAHEDRON_TETRAVOLUME}}$ and its graph is {{ICOSAHEDRON_DEGREE}}-regular.
+Both are the twelve-around-one arrangement, and they are different objects.
+
+## Three currencies for one lattice step {#sec:currencies}
+
+::: {#prop:currencies .proposition}
+One step between adjacent IVM sites has three exact costs in the three
+vocabularies: a Gaussian divergence of {{KL_ONE_STEP}} nats in the FEP's units, a
+normalised spectral gap of {{CARRIER_SHELL_GAP}} in OPH's, and one unit of sign
+erasure in the tetravolume accounting, where the cell of the twelve neighbours
+measures {{PACKING_CELL_TETRAVOLUME}}. The three are not equal and do not reduce
+to one another; what they share is the step.
+:::
+
+This is the only entry in the registry that needs all three vocabularies at once,
+and it is a complementarity rather than an identification for that reason. Each
+programme is exact about the same lattice step in a different number field: the
+FEP's cost is rational (four nats, from squared distance $8$), OPH's is a
+quadratic surd ($(5-\sqrt{5})/60$), and Synergetics' is an integer. A reader who
+wants one number has to choose a currency and state the exchange rate; a reader
+who wants the object has three exact readings of it.
+
 ## What the complements add up to
 
-The four complements partition the labour cleanly. Synergetics supplies a metric
-and a volume convention in which the carrier's geometry is exact. The FEP
+The {{REGISTRY_COMPLEMENTARITIES}} complements partition the labour cleanly.
+Synergetics supplies a metric, a volume convention and an exact packing in which
+the carrier's geometry is computable rather than merely drawable. The FEP
 supplies a functional, a bound, and the two identities — equilibrium propagation
 and the metric gradient — that make the functional computationally and
 dynamically meaningful. OPH supplies a finite substrate and an explicit local

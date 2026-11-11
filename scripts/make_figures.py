@@ -17,6 +17,7 @@ import json
 import math
 import os
 import sys
+from collections import Counter
 from pathlib import Path
 
 os.environ.setdefault("MPLBACKEND", "Agg")
@@ -31,10 +32,21 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from oph_fep_synergetics.analysis.registry import CORRESPONDENCES  # noqa: E402
-from oph_fep_synergetics.core import controls  # noqa: E402
+from oph_fep_synergetics import geometry  # noqa: E402
+from oph_fep_synergetics.analysis.registry import (  # noqa: E402
+    CORRESPONDENCES,
+    FEP_SYNERGETICS,
+    OPH_FEP,
+    PAIRS,
+    SYNERGETICS_OPH,
+    THREE_WAY,
+    by_key,
+    by_pair,
+)
+from oph_fep_synergetics.core import controls, free_energy, invariants, sheaf, symmetry  # noqa: E402
 from oph_fep_synergetics.core.carrier import (  # noqa: E402
     OPH_ORIENTED_BASE_FACES,
+    IcosahedralCarrier,
     icosahedral_carrier,
 )
 from oph_fep_synergetics.geometry import lattice  # noqa: E402
@@ -48,6 +60,11 @@ KIND_COLOURS = {
 }
 STATUS_MARKERS = {"exact": "o", "exact-on-domain": "s", "obstructed": "X"}
 ALT_TEXT: dict[str, str] = {}
+
+
+def _counted(count: int, singular: str, plural: str) -> str:
+    """Format a count with the singular or plural noun."""
+    return f"{count} {singular if count == 1 else plural}"
 
 
 def _style() -> None:
@@ -68,11 +85,13 @@ def _style() -> None:
     )
 
 
-def _save(figure: plt.Figure, name: str, alt: str) -> Path:
+def _save(
+    figure: plt.Figure, name: str, alt: str, *, facecolor: str = "white"
+) -> Path:
     FIGURES.mkdir(parents=True, exist_ok=True)
     target = FIGURES / name
     figure.tight_layout()
-    figure.savefig(target, bbox_inches="tight", facecolor="white")
+    figure.savefig(target, bbox_inches="tight", facecolor=facecolor)
     plt.close(figure)
     ALT_TEXT[name] = alt
     return target
@@ -198,6 +217,32 @@ def _rotation(theta: float, phi: float) -> np.ndarray:
         ]
     )
     return about_y @ about_x
+
+
+def _projected_carrier() -> tuple[IcosahedralCarrier, np.ndarray]:
+    """Return the carrier and its deterministic planar spectral projection."""
+    carrier = icosahedral_carrier()
+    eigenvalues, eigenvectors = np.linalg.eigh(carrier.laplacian())
+    lam1 = 5.0 - math.sqrt(5.0)
+    columns = [index for index, value in enumerate(eigenvalues) if abs(value - lam1) < 1e-9]
+    if len(columns) != 3:
+        raise RuntimeError(f"expected a three-dimensional lambda_1 eigenspace, got {len(columns)}")
+    points = eigenvectors[:, columns] * math.sqrt(carrier.port_count)
+    best: tuple[float, np.ndarray] = (-1.0, np.zeros((carrier.port_count, 2)))
+    for theta in np.linspace(0.0, math.pi, 24, endpoint=False):
+        for phi in np.linspace(0.0, math.pi, 12, endpoint=False):
+            rotation = _rotation(theta, phi)
+            projected = points @ rotation.T
+            flat = projected[:, :2]
+            gaps = [
+                float(np.linalg.norm(flat[i] - flat[j]))
+                for i in range(carrier.port_count)
+                for j in range(i + 1, carrier.port_count)
+            ]
+            score = min(gaps)
+            if score > best[0]:
+                best = (score, flat)
+    return carrier, best[1]
 
 
 def registry_figure() -> Path:
@@ -624,14 +669,645 @@ def subdivision_figure() -> Path:
     )
 
 
+def cover_figure() -> Path:
+    """Cover art: the carrier's ports and seams on a dark field."""
+    carrier, flat = _projected_carrier()
+    figure = plt.figure(figsize=(7.0, 7.0))
+    figure.patch.set_facecolor("#0b0f14")
+    axis = figure.add_subplot(111)
+    axis.set_facecolor("#0b0f14")
+    axis.set_axis_off()
+    for port in range(carrier.port_count):
+        for other in carrier.neighbours(port):
+            if other > port:
+                axis.plot(
+                    [flat[port, 0], flat[other, 0]],
+                    [flat[port, 1], flat[other, 1]],
+                    color="#5c8f96",
+                    linewidth=1.2,
+                    alpha=0.9,
+                    zorder=1,
+                )
+    axis.scatter(
+        flat[:, 0],
+        flat[:, 1],
+        s=150,
+        color="#0b0f14",
+        edgecolor="#e6c27a",
+        linewidth=1.3,
+        zorder=3,
+    )
+    for port in range(carrier.port_count):
+        axis.text(
+            flat[port, 0],
+            flat[port, 1],
+            str(port),
+            ha="center",
+            va="center",
+            fontsize=7.5,
+            color="#e6c27a",
+            zorder=4,
+        )
+    axis.set_aspect("equal")
+    margin = 0.12
+    axis.set_xlim(flat[:, 0].min() - margin, flat[:, 0].max() + margin)
+    axis.set_ylim(flat[:, 1].min() - margin, flat[:, 1].max() + margin)
+    return _save(
+        figure,
+        "fig_cover.png",
+        "The twelve ports of the carrier as pale gold nodes on a dark field, joined by its "
+        "thirty seams in teal and arranged in the planar spectral projection of the "
+        "icosahedron; each port is labelled with its index and the wireframe carries no title.",
+        facecolor="#0b0f14",
+    )
+
+
+def ga_triangle_figure() -> Path:
+    """The three frameworks as a triangle, with each edge's ledger and its key claims."""
+    figure, axis = plt.subplots(figsize=(10.0, 7.0))
+    axis.set_axis_off()
+    axis.set_aspect("equal")
+    vertices = {
+        "OPH": (0.50, 0.94),
+        "FEP": (0.08, 0.10),
+        "Synergetics": (0.92, 0.10),
+    }
+    edges = (
+        ("OPH", "FEP", OPH_FEP, (0.22, 0.55), "center"),
+        ("FEP", "Synergetics", FEP_SYNERGETICS, (0.50, 0.035), "center"),
+        ("Synergetics", "OPH", SYNERGETICS_OPH, (0.78, 0.55), "center"),
+    )
+    for left, right, _pair, _position, _align in edges:
+        axis.plot(
+            [vertices[left][0], vertices[right][0]],
+            [vertices[left][1], vertices[right][1]],
+            color="#243b53",
+            linewidth=1.8,
+            zorder=1,
+        )
+    expansions = {
+        "OPH": "Observer Patch Holography",
+        "FEP": "Free Energy Principle",
+        "Synergetics": "quadray/IVM",
+    }
+    for name, (x_value, y_value) in vertices.items():
+        axis.scatter([x_value], [y_value], s=110, color="#102a43", zorder=3)
+        axis.text(
+            x_value,
+            y_value,
+            name,
+            ha="center",
+            va="center",
+            fontsize=10.5,
+            color="white",
+            zorder=4,
+        )
+        if name == "OPH":
+            expansion_y, vertical = y_value + 0.065, "bottom"
+        else:
+            expansion_y, vertical = y_value - 0.065, "top"
+        axis.text(
+            x_value,
+            expansion_y,
+            expansions[name],
+            ha="center",
+            va=vertical,
+            fontsize=7.2,
+            color="#243b53",
+            zorder=4,
+        )
+
+    grouped = by_pair()
+    named = [
+        key
+        for key in ("carrier-port-chart", "native-repair-law", "free-energy-dictionary")
+        if key in by_key()
+    ]
+    highlighted = named if len(named) == 3 else []
+    if not highlighted:
+        highlighted = [
+            next(
+                entry.key
+                for entry in grouped[pair]
+                if entry.kind == "isomorphism"
+            )
+            for _left, _right, pair, _position, _align in edges
+        ]
+
+    for left, right, pair, position, align in edges:
+        entries = grouped[pair]
+        counts = Counter(entry.kind for entry in entries)
+        ledger = ", ".join(
+            (
+                _counted(counts["isomorphism"], "isomorphism", "isomorphisms"),
+                _counted(counts["disagreement"], "disagreement", "disagreements"),
+                _counted(counts["complementarity"], "complementarity", "complementarities"),
+            )
+        )
+        keys = [key for key in highlighted if by_key()[key].pair == pair]
+        axis.text(
+            position[0],
+            position[1],
+            ledger,
+            ha=align,
+            va="center",
+            fontsize=8.2,
+            color="#243b53",
+            bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.86, "pad": 1.2},
+            zorder=5,
+        )
+        if keys:
+            axis.text(
+                position[0],
+                position[1] - 0.045,
+                "load-bearing: " + ", ".join(keys),
+                ha=align,
+                va="top",
+                fontsize=7.4,
+                color="#c98a00",
+                bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.86, "pad": 1.0},
+                zorder=6,
+            )
+
+    three = grouped.get(THREE_WAY, ())
+    if three:
+        three_counts = Counter(entry.kind for entry in three)
+        three_text = (
+            f"three-way: {len(three)} "
+            f"({_counted(three_counts['isomorphism'], 'isomorphism', 'isomorphisms')}, "
+            f"{_counted(three_counts['disagreement'], 'disagreement', 'disagreements')}, "
+            f"{_counted(three_counts['complementarity'], 'complementarity', 'complementarities')})\n"
+            + ", ".join(entry.key for entry in three)
+        )
+    else:
+        three_text = "three-way: no registered entry"
+    axis.text(
+        0.50,
+        0.45,
+        three_text,
+        ha="center",
+        va="center",
+        fontsize=8.6,
+        color="#102a43",
+        bbox={"facecolor": "#f2f5f8", "edgecolor": "#c9d6e4", "pad": 2.0},
+        zorder=2,
+    )
+    axis.set_xlim(-0.10, 1.10)
+    axis.set_ylim(-0.12, 1.10)
+    return _save(
+        figure,
+        "fig_ga_triangle.png",
+        "A large triangle whose vertices are OPH, Observer Patch Holography; FEP, Free Energy "
+        "Principle; and Synergetics, quadray/IVM. Each edge carries its pairwise ledger of "
+        "isomorphisms, disagreements and complementarities, and the three load-bearing "
+        "identifications are named beside the edge they belong to. The centre gives the three-way "
+        "count and its key, tetravolume-arithmetic.",
+    )
+
+
+def ga_carrier_figure() -> Path:
+    """The carrier graph beside the OPH-facing and FEP-facing invariant ledger."""
+    carrier, flat = _projected_carrier()
+    figure, (left, right) = plt.subplots(1, 2, figsize=(10.0, 7.0))
+    for port in range(carrier.port_count):
+        for other in carrier.neighbours(port):
+            if other > port:
+                left.plot(
+                    [flat[port, 0], flat[other, 0]],
+                    [flat[port, 1], flat[other, 1]],
+                    color="#243b53",
+                    linewidth=1.1,
+                    zorder=2,
+                )
+    left.scatter(
+        flat[:, 0],
+        flat[:, 1],
+        s=130,
+        color="white",
+        edgecolor="#102a43",
+        linewidth=1.1,
+        zorder=3,
+    )
+    for port in range(carrier.port_count):
+        left.text(
+            flat[port, 0],
+            flat[port, 1],
+            str(port),
+            ha="center",
+            va="center",
+            fontsize=7.2,
+            color="#102a43",
+            zorder=4,
+        )
+    left.set_aspect("equal")
+    left.set_axis_off()
+    left.set_title(f"{carrier.port_count} ports, {carrier.seam_count} seams")
+
+    cohomology = sheaf.cohomology_dimensions(sheaf.carrier_sheaf(carrier))
+    group = symmetry.carrier_automorphisms(carrier)
+    rotations = symmetry.rotation_subgroup(carrier)
+    reflections = symmetry.reflection_subgroup(carrier)
+    marginal = invariants.marginal_variance(carrier)
+    blanket = invariants.blanket_sizes(carrier)
+    precision = invariants.pairwise_precision(carrier)
+    tree_number = invariants.spanning_tree_number(carrier)
+
+    blanket_values = sorted(set(blanket))
+    blanket_text = (
+        str(blanket_values[0]) if len(blanket_values) == 1 else ", ".join(map(str, blanket_values))
+    )
+    precision_values = sorted(set(precision.values()))
+    precision_text = ", ".join(str(value) for value in precision_values)
+
+    oph_rows = [
+        ("spanning-tree number", f"{tree_number}"),
+        ("dim H0", f"{cohomology['h0']}"),
+        ("dim H1", f"{cohomology['h1']}"),
+        (
+            "group order",
+            f"{len(group)} = {len(rotations)} rot + {len(reflections)} refl",
+        ),
+    ]
+    fep_rows = [
+        ("marginal variance", f"{marginal.numerator}/{marginal.denominator}"),
+        ("blanket size", blanket_text),
+        ("pairwise precision", f"{precision_text} on {len(precision)} pairs"),
+    ]
+
+    right.set_axis_off()
+    right.set_xlim(0.0, 1.0)
+    right.set_ylim(0.0, 1.0)
+    right.text(0.02, 0.95, "OPH-facing", fontsize=10.5, color="#1f4e79", fontweight="bold")
+    right.text(0.54, 0.95, "FEP-facing", fontsize=10.5, color="#a4262c", fontweight="bold")
+    for index, (label, value) in enumerate(oph_rows):
+        y_value = 0.86 - 0.11 * index
+        right.text(0.02, y_value, label, fontsize=8.4, color="#243b53", va="center")
+        right.text(0.44, y_value, value, fontsize=8.4, color="#1f4e79", va="center", ha="right")
+    for index, (label, value) in enumerate(fep_rows):
+        y_value = 0.86 - 0.11 * index
+        right.text(0.54, y_value, label, fontsize=8.4, color="#243b53", va="center")
+        right.text(0.98, y_value, value, fontsize=8.4, color="#a4262c", va="center", ha="right")
+    return _save(
+        figure,
+        "fig_ga_carrier.png",
+        "Two panels. Left: the twelve ports and thirty seams of the carrier in its planar "
+        "spectral projection, with each port labelled by index. Right: a two-column ledger of "
+        "invariants, OPH-facing on the left and FEP-facing on the right, listing the spanning-tree "
+        "number, the dimensions of H0 and H1, the automorphism group order with its rotation and "
+        "reflection split, the marginal variance as a fraction, the blanket size and the pairwise "
+        "precision.",
+    )
+
+
+def ga_descent_figure() -> Path:
+    """The descent census and the free-energy levels of the first five IVM shells."""
+    census = controls.gated_descent_census()
+    multiplicities = controls.path_multiplicity_values()
+    figure, (left, right) = plt.subplots(1, 2, figsize=(10.0, 7.0))
+    labels = ["strict descent", "zero descent", "no-op"]
+    values = [census["strict"], census["zero"], census["noop"]]
+    bars = left.bar(labels, values, color=["#2f6b3a", "#c98a00", "#7a7a7a"])
+    for bar, value in zip(bars, values):
+        left.annotate(
+            str(value),
+            (bar.get_x() + bar.get_width() / 2, bar.get_height()),
+            textcoords="offset points",
+            xytext=(0, 3),
+            ha="center",
+            fontsize=8,
+        )
+    left.set_ylabel("transitions")
+    left.set_title(
+        f"{census['states']} states x 30 seams x 2 coins = {sum(values)} transitions"
+    )
+    left.set_ylim(0, max(values) * 1.18)
+    left.text(
+        0.02,
+        0.95,
+        "path multiplicities: " + ", ".join(str(value) for value in multiplicities),
+        transform=left.transAxes,
+        fontsize=8,
+        color="#243b53",
+        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.85, "pad": 1.2},
+    )
+
+    k_values = list(range(1, 6))
+    origin = np.zeros(3)
+    identity = np.eye(3)
+    shared: dict[float, list[int]] = {}
+    kl_by_k: dict[int, float] = {}
+    for k in k_values:
+        shell = geometry.generate_shell(k)
+        levels = sorted({float(0.5 * geometry.squared_norm(site)) for site in shell})
+        right.scatter([k] * len(levels), levels, color="#1f4e79", s=26, zorder=3)
+        for level in levels:
+            shared.setdefault(level, []).append(k)
+        target = geometry.NEIGHBOR_SQUARED_DISTANCE * k * k
+        site = next(site for site in shell if geometry.squared_norm(site) == target)
+        kl_by_k[k] = free_energy.gaussian_kl(origin, identity, geometry.to_xyz(site), identity)
+    right.plot(
+        k_values,
+        [kl_by_k[k] for k in k_values],
+        color="#c98a00",
+        linestyle="--",
+        marker="o",
+        linewidth=1.2,
+        label="Gaussian KL 4k^2",
+    )
+    for level, shells in shared.items():
+        if len(shells) > 1:
+            right.axhline(level, color="#a4262c", linestyle=":", linewidth=0.9)
+            right.annotate(
+                f"level {level:g} on shells {', '.join(str(k) for k in shells)}",
+                xy=(max(shells), level),
+                xytext=(max(shells) + 0.12, level + 0.6),
+                fontsize=7.8,
+                color="#a4262c",
+            )
+    right.set_xlabel("shell k")
+    right.set_ylabel("0.5 times squared norm")
+    right.set_title("levels 36 and 52 are shared between shells")
+    right.legend(fontsize=7.5, loc="upper left")
+    return _save(
+        figure,
+        "fig_ga_descent.png",
+        "Two panels. Left: the descent census as three bars, one hundred and twenty strict "
+        "descents, six hundred zero descents and three thousand nine hundred and sixty no-op "
+        "moves, annotated with the path-multiplicity values one, two, fifty and fifty-two. Right: "
+        "the distinct free-energy levels of the first five IVM shells, with levels 36 and 52 "
+        "visibly shared between shells and the Gaussian KL curve annotated as four k squared.",
+    )
+
+
+def ga_synergetics_figure() -> Path:
+    """The integral tetravolume table beside the icosahedron and its Voronoi cell."""
+    figure, (left, right) = plt.subplots(1, 2, figsize=(10.0, 7.0))
+    names = list(geometry.VOLUME_RATIOS)
+    volumes = [float(geometry.VOLUME_RATIOS[name]) for name in names]
+    icosahedron = geometry.icosahedron_tetravolume()
+    icosahedron_volume = float(icosahedron["tetravolume"])
+    icosahedron_integral = bool(icosahedron["integral"])
+    bar_names = [name.replace("_", " ") for name in names] + ["icosahedron"]
+    bar_values = volumes + [icosahedron_volume]
+    colours = ["#2f6b3a" if value == int(value) else "#a4262c" for value in bar_values]
+    bars = left.barh(bar_names, bar_values, color=colours)
+    left.set_xscale("log")
+    for bar, value in zip(bars, bar_values):
+        left.annotate(
+            f"{value:g}",
+            (value, bar.get_y() + bar.get_height() / 2),
+            textcoords="offset points",
+            xytext=(4, 0),
+            va="center",
+            fontsize=8,
+        )
+    left.set_xlabel("tetravolume, unit tetrahedron = 1 (log scale)")
+    left.set_title("integral table solids, non-integral icosahedron")
+    left.text(
+        0.02,
+        0.04,
+        f"icosahedron integral: {icosahedron_integral}",
+        transform=left.transAxes,
+        fontsize=8,
+        color="#a4262c" if not icosahedron_integral else "#2f6b3a",
+    )
+
+    cell = geometry.voronoi_cell()
+    density = geometry.packing_density()
+    cell_labels = ["vertices", "faces", "edges"]
+    cell_values = [
+        int(cell["vertex_count"]),
+        int(cell["face_count"]),
+        int(cell["edge_count"]),
+    ]
+    bars = right.bar(cell_labels, cell_values, color=["#1f4e79", "#2f6b3a", "#c98a00"])
+    for bar, value in zip(bars, cell_values):
+        right.annotate(
+            str(value),
+            (bar.get_x() + bar.get_width() / 2, bar.get_height()),
+            textcoords="offset points",
+            xytext=(0, 3),
+            ha="center",
+            fontsize=8,
+        )
+    right.set_ylabel("count")
+    right.set_title("Voronoi cell of the IVM")
+    right.text(
+        0.02,
+        0.95,
+        f"packing density {float(density['density']):.6f} vs closed form "
+        f"{float(density['closed_form']):.6f}",
+        transform=right.transAxes,
+        fontsize=8,
+        color="#243b53",
+        bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.85, "pad": 1.2},
+    )
+    return _save(
+        figure,
+        "fig_ga_synergetics.png",
+        "Two panels. Left: logarithmic bars of the tetravolumes in the synergetic table, the "
+        "tetrahedron, cube, octahedron, rhombic dodecahedron, cuboctahedron and truncated "
+        "octahedron, all integral, beside the icosahedron's measured tetravolume, which is not "
+        "integral. Right: the Voronoi cell's fourteen vertices, twelve faces and twenty-four "
+        "edges, with the measured packing density annotated against its closed form.",
+    )
+
+
+def pair_triangles_figure() -> Path:
+    """One small triangle for each pairwise scope, with its kind and status ledger."""
+    figure, axes = plt.subplots(1, 3, figsize=(11.0, 4.5))
+    pairs = (OPH_FEP, FEP_SYNERGETICS, SYNERGETICS_OPH)
+    pair_edges = {
+        OPH_FEP: ("OPH", "FEP"),
+        FEP_SYNERGETICS: ("FEP", "Synergetics"),
+        SYNERGETICS_OPH: ("Synergetics", "OPH"),
+    }
+    vertices = {
+        "OPH": (0.50, 0.92),
+        "FEP": (0.08, 0.12),
+        "Synergetics": (0.92, 0.12),
+    }
+    grouped = by_pair()
+    for axis, pair in zip(axes, pairs):
+        entries = grouped[pair]
+        counts = Counter(entry.kind for entry in entries)
+        statuses = Counter(entry.status for entry in entries)
+        for left_name, right_name in (
+            ("OPH", "FEP"),
+            ("FEP", "Synergetics"),
+            ("Synergetics", "OPH"),
+        ):
+            highlighted = pair_edges[pair] == (left_name, right_name)
+            axis.plot(
+                [vertices[left_name][0], vertices[right_name][0]],
+                [vertices[left_name][1], vertices[right_name][1]],
+                color="#c98a00" if highlighted else "#9aa9b8",
+                linewidth=3.0 if highlighted else 1.0,
+                zorder=1,
+            )
+        for name, (x_value, y_value) in vertices.items():
+            axis.scatter([x_value], [y_value], s=55, color="#102a43", zorder=3)
+            axis.text(
+                x_value,
+                y_value,
+                name,
+                ha="center",
+                va="center",
+                fontsize=7.2,
+                color="white",
+                zorder=4,
+            )
+        lines = [
+            f"isomorphisms {counts['isomorphism']}",
+            f"disagreements {counts['disagreement']}",
+            f"complementarities {counts['complementarity']}",
+            f"exact {statuses['exact']}",
+            f"exact-on-domain {statuses['exact-on-domain']}",
+            f"obstructed {statuses['obstructed']}",
+            f"not-reproduced {statuses['not-reproduced']}",
+        ]
+        axis.text(
+            0.50,
+            0.48,
+            "\n".join(lines),
+            ha="center",
+            va="center",
+            fontsize=7.0,
+            color="#243b53",
+            zorder=2,
+        )
+        axis.set_xlim(0.0, 1.0)
+        axis.set_ylim(0.0, 1.0)
+        axis.set_aspect("equal")
+        axis.set_axis_off()
+        axis.set_title(pair.replace("-", " / "), fontsize=9.5)
+    three = grouped.get(THREE_WAY, ())
+    if three:
+        figure.text(
+            0.50,
+            0.015,
+            "three-way: " + str(len(three)) + " " + ", ".join(entry.key for entry in three),
+            ha="center",
+            fontsize=7.8,
+            color="#243b53",
+        )
+    return _save(
+        figure,
+        "fig_pair_triangles.png",
+        "Three small triangles side by side, one for each pairwise scope: OPH and FEP, FEP and "
+        "Synergetics, and Synergetics and OPH. Each triangle names all three frameworks and "
+        "annotates its pair's counts by kind and its status breakdown, with the pair's edge "
+        "highlighted. A centre note records the single three-way complementarity, "
+        "tetravolume-arithmetic.",
+    )
+
+
+def scope_matrix_figure() -> Path:
+    """The registry as a dense categorical matrix in registry order."""
+    pair_colours = {
+        OPH_FEP: "#1f4e79",
+        FEP_SYNERGETICS: "#c98a00",
+        SYNERGETICS_OPH: "#2f6b3a",
+        THREE_WAY: "#7a7a7a",
+    }
+    status_colours = {
+        "exact": "#2f6b3a",
+        "exact-on-domain": "#c98a00",
+        "obstructed": "#a4262c",
+        "not-reproduced": "#7a7a7a",
+    }
+    probe_colours = {"own": "#1f4e79", "shared": "#7a7a7a"}
+
+    def text_colour(hex_colour: str) -> str:
+        value = hex_colour.lstrip("#")
+        red, green, blue = (int(value[index : index + 2], 16) for index in (0, 2, 4))
+        luminance = 0.299 * red + 0.587 * green + 0.114 * blue
+        return "black" if luminance > 150 else "white"
+
+    figure, axis = plt.subplots(figsize=(11.0, 9.0))
+    axis.set_axis_off()
+    axis.set_xlim(0.0, 5.05)
+    axis.set_ylim(0.0, len(CORRESPONDENCES) + 1.2)
+    probe_names = [entry.probe.__name__ for entry in CORRESPONDENCES]
+    unique_probes = len(set(probe_names)) == len(probe_names)
+    headers = ["pair", "kind", "status", "own probe"]
+    for column, header in enumerate(headers):
+        axis.text(
+            column + 1.50,
+            len(CORRESPONDENCES) + 0.55,
+            header,
+            ha="center",
+            va="center",
+            fontsize=8.2,
+            fontweight="bold",
+            color="#102a43",
+        )
+    for row, entry in enumerate(CORRESPONDENCES):
+        y_value = len(CORRESPONDENCES) - row - 0.5
+        axis.text(
+            0.02,
+            y_value,
+            entry.key,
+            ha="left",
+            va="center",
+            fontsize=6.2,
+            family="monospace",
+            color="#102a43",
+        )
+        probe_label = "own" if callable(entry.probe) and unique_probes else "shared"
+        cells = (
+            (pair_colours.get(entry.pair, "#7a7a7a"), entry.pair),
+            (KIND_COLOURS.get(entry.kind, "#7a7a7a"), entry.kind),
+            (status_colours.get(entry.status, "#7a7a7a"), entry.status),
+            (probe_colours[probe_label], probe_label),
+        )
+        for column, (colour, label) in enumerate(cells):
+            axis.add_patch(
+                plt.Rectangle(
+                    (column + 1.05, y_value - 0.42),
+                    0.90,
+                    0.84,
+                    facecolor=colour,
+                    edgecolor="white",
+                    linewidth=0.5,
+                )
+            )
+            axis.text(
+                column + 1.50,
+                y_value,
+                label,
+                ha="center",
+                va="center",
+                fontsize=6.4,
+                color=text_colour(colour),
+            )
+    axis.set_title("Registry scope matrix: pair, kind, status and probe ownership", fontsize=10)
+    return _save(
+        figure,
+        "fig_scope_matrix.png",
+        "A dense categorical matrix with one row per registry entry in registry order. The row "
+        "label is the entry key, and four coloured columns give its pair, kind, status and "
+        "whether the probe is the entry's own executable probe. Thirty-five rows are shown.",
+    )
+
+
 def write_registry() -> Path:
-    """Write the accessibility registry the renderer reads for figure alt text."""
+    """Write the accessibility registry the renderer reads for figure alt text.
+
+    A label is the file stem with underscores turned into hyphens, so that
+    `fig_ga_triangle.png` is `fig:ga-triangle` and matches the `{#fig:ga-triangle}`
+    label the manuscript writes under the same figure.
+    """
     FIGURES.mkdir(parents=True, exist_ok=True)
     payload = {
         "schema_version": "1.2",
         "generator": "scripts/make_figures.py",
         "figures": [
-            {"label": f"fig:{name.removeprefix('fig_').removesuffix('.png')}", "filename": name, "alt": alt}
+            {
+                "label": "fig:" + name.removeprefix("fig_").removesuffix(".png").replace("_", "-"),
+                "filename": name,
+                "alt": alt,
+            }
             for name, alt in sorted(ALT_TEXT.items())
         ],
     }
@@ -653,6 +1329,13 @@ def main() -> int:
         orbit_figure,
         ivm_figure,
         subdivision_figure,
+        cover_figure,
+        ga_triangle_figure,
+        ga_carrier_figure,
+        ga_descent_figure,
+        ga_synergetics_figure,
+        pair_triangles_figure,
+        scope_matrix_figure,
     )
     for builder in builders:
         print(builder())

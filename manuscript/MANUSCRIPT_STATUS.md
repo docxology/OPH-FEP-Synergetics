@@ -8,12 +8,19 @@ render [docs/MANUSCRIPT_VALUES.md](../docs/MANUSCRIPT_VALUES.md).
 Each section names the registry entries it rests on. A section may not claim
 more than its entries' statuses.
 
+The rendered edition adds a cover page (page 1) and a four-panel graphical
+abstract (pages 2 to 5) written in `00_00_graphical_abstract.md`, with the
+contents page re-emitted after the panels. The registry carries a pairwise scope
+per entry, and `oph-fep-synergetics verify --pair` executes one scope at a time.
+
 ---
 
 ## 1. One object, three languages
 
 **Entries:** `carrier-port-chart`, `sheath-agreement`, `kissing-twelve`,
-`quadray-ivm`.
+`quadray-ivm`, `tree-number`, `gmrf-independence`, `sheaf-cohomology`,
+`icosahedral-symmetry`, `eigenspace-irreducibility`, `law-equivariance`,
+`kl-lattice-metric`.
 
 The carrier is a fixed finite object: `carrier.ports` ports, `carrier.seams`
 seams, `carrier.faces` faces, every port meeting `carrier.degree` triangles.
@@ -55,7 +62,8 @@ non-Gaussian cases are outside this work; see [docs/SCOPE.md](../docs/SCOPE.md).
 `mediator-obstruction`, `stationary-blanket`, `solenoidal-freedom`,
 `d-stability`, `schedule-path`, `reduction-criterion`,
 `existence-without-reachability`, `directed-gradient`,
-`four-cycle-local-minimum`.
+`four-cycle-local-minimum`, `cuboctahedron-vs-icosahedron`,
+`shell-vs-free-energy`.
 
 These are results, not caveats. Each is an executable demonstration that an
 identification that looks natural in prose fails as stated.
@@ -99,11 +107,21 @@ identification that looks natural in prose fails as stated.
   `directed_gradient.adjoint`.
 - **A local minimum can be incompatible.** A four-cycle assignment can violate
   two edges while every single-bit flip also violates two.
+- **Twelve vertices is not one solid.** The neighbour graph is
+  `cuboctahedron.degree`-regular with tetravolume
+  `cuboctahedron.tetravolume`; the carrier is `icosahedron.degree`-regular with
+  tetravolume `icosahedron.tetravolume`. A shared vertex count is not an
+  identification.
+- **The shell index is not a function of the free energy.** The first five
+  shells carry `shell.free_energy_level_counts` distinct levels and
+  `shell.shared_free_energy_levels` of them are shared between shells, so a
+  bounded free energy does not bound the shell.
 
 ## 4. What each program supplies that the others do not
 
 **Entries:** `equilibrium-propagation`, `replicator-potential`,
-`native-repair-law`, `certificate-species`, `quadray-ivm`.
+`native-repair-law`, `certificate-species`, `quadray-ivm`,
+`icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic`.
 
 - **OPH** supplies a concrete, finite, conserving law on a fixed carrier, with
   an exact energy identity and a sharp certificate — a spectral gap, not a
@@ -115,6 +133,15 @@ identification that looks natural in prose fails as stated.
 - **Synergetics** supplies exact integer geometry: rational tetravolumes
   including `ivm.volume_ratios`, and the shell sequence
   `ivm.shell_counts` shared with the Goldberg and geodesic counts.
+- **Synergetics also supplies the volume of the carrier's own solid**, which its
+  table does not contain: `icosahedron.tetravolume` tetravolumes, whose square is
+  `icosahedron.tetravolume_squared` against the exact `175 + 75 sqrt 5`, and the
+  twelve-around-one cell, whose `packing.cell_tetravolume` and packing density
+  `packing.density` are derived from the same quadratic form rather than read
+  from the table.
+- **No single programme supplies the exchange rate.** One lattice step has three
+  exact costs in three number fields (`tetravolume-arithmetic`), which is why the
+  only three-way entry is a complementarity rather than an identification.
 
 The replicator potential is included as a comparison class: selection climbs a
 potential, so the repair language covers it without sharing its mechanism.

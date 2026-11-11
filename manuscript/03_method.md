@@ -1,17 +1,28 @@
-# Method: a registry that executes {#sec:method}
+# Method: a registry whose every claim is executed, scoped and re-runnable {#sec:method}
 
 ## The unit of work
 
 The paper's unit is a **correspondence**: a claim about the same object made in
-two or three vocabularies, together with executable evidence.
+two or three vocabularies, together with executable evidence and an explicit
+pairwise scope.
 
 ::: {#def:correspondence .definition}
-A **correspondence** is a record $c = (\kappa, \sigma, \pi)$ where $\kappa$ names
-the claim in the OPH, FEP and Synergetics vocabularies, $\sigma$ is a status from
-the fixed vocabulary below, and $\pi$ is a *probe*: a total function from no
-arguments to a mapping from names to values. The probe **passes** when every
-value it reports satisfies the assertion the claim makes.
+A **correspondence** is a record $c = (\kappa, \rho, \sigma, \pi)$ where $\kappa$
+names the claim in the OPH, FEP and Synergetics vocabularies, $\rho$ is the
+*pairwise scope*, one of `oph-fep`, `fep-synergetics`, `synergetics-oph` or
+`three-way`, naming the two or three programmes the claim relates, $\sigma$ is a
+status from the fixed vocabulary below, and $\pi$ is a *probe*: a total function
+from no arguments to a mapping from names to values. The probe **passes** when
+every value it reports satisfies the assertion the claim makes.
 :::
+
+The scope $\rho$ is not bookkeeping. A correspondence is a claim that two
+vocabularies are talking about one object, and which two they are is part of the
+claim: the same icosahedral symmetry is a statement about OPH and Synergetics,
+while the Markov blanket of the carrier precision is a statement about OPH and
+the FEP. [@sec:correspondences] reports the three pairwise ledgers separately for
+that reason, and `oph-fep-synergetics verify --pair synergetics-oph` executes one
+ledger on its own.
 
 Making the probe return values rather than a boolean is the single design choice
 that keeps the registry honest. A boolean can be made true by weakening a
@@ -28,48 +39,78 @@ against a source that states a different value.
 : The status vocabulary. It is closed: a new status requires a new definition.
 {#tbl:status}
 
-## The registry
+## The registry, grouped by pairwise scope
 
 [@tbl:registry] is the registry, reproduced from
 `src/oph_fep_synergetics/analysis/registry.py`. The grouping is the paper's
-argument in miniature: eight claims survive as identifications, eleven fail as
-identifications while remaining informative, and four are complements in which
-one program supplies what another lacks without either reducing to the other.
+argument in miniature: {{REGISTRY_ISOMORPHISMS}} claims survive as
+identifications, {{REGISTRY_DISAGREEMENTS}} fail as identifications while
+remaining informative, and {{REGISTRY_COMPLEMENTARITIES}} are complements in
+which one program supplies what another lacks without either reducing to the
+other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
+{{REGISTRY_SYNERGETICS_OPH}} relate Synergetics to OPH,
+{{REGISTRY_FEP_SYNERGETICS}} relate the FEP to Synergetics, and
+{{REGISTRY_THREE_WAY}} needs all three vocabularies at once.
 
-| Key | Kind | Status | What it tests |
-|:-----------------------------------|:----------------|:-------------------|:-------------------------------|
-| `carrier-port-chart` | isomorphism | `exact` | derived adjacency reproduces the twenty oriented faces |
-| `spectral-gap` | isomorphism | `exact` | $\lambda_1 = 5-\sqrt{5}$ and normalised gap $(5-\sqrt{5})/60$ |
-| `shell-counts` | isomorphism | `exact` | $\binom{13}{11}$ shell size and the binary sub-shell |
-| `native-repair-law` | isomorphism | `exact` | OPH's integer rule reimplemented, with its closed-form energy drop |
-| `variational-equivalence` | isomorphism | `exact-on-domain` | harmonic-extension residual equals a Schur complement |
-| `free-energy-dictionary` | isomorphism | `exact-on-domain` | numerical, Bayesian and surprisal free energy coincide to curvature |
-| `sheaf-agreement` | isomorphism | `exact` | the cellular sheaf Laplacian is the carrier Laplacian |
-| `certificate-species` | isomorphism | `exact` | the certificate species of the shell and its spectral gap |
-| `pr01-obstruction` | disagreement | `obstructed` | the native law is not confluent |
-| `free-energy-name-collision` | disagreement | `obstructed` | "free energy" names inequivalent functionals |
-| `mediator-obstruction` | disagreement | `obstructed` | pairwise boundary reduction needs a threshold |
-| `stationary-blanket` | disagreement | `obstructed` | a stationary blanket is not an attractor |
-| `solenoidal-freedom` | disagreement | `obstructed` | stationary blankets leave entropy production free |
-| `d-stability` | disagreement | `obstructed` | stability is not generic in the coupling |
-| `schedule-path` | disagreement | `obstructed` | iteration schedules are not interchangeable |
-| `reduction-criterion` | disagreement | `obstructed` | competing reduction criteria disagree |
-| `existence-without-reachability` | disagreement | `obstructed` | existence of an equilibrium does not imply reachability |
-| `directed-gradient` | disagreement | `obstructed` | direct and adjoint gradients differ |
-| `four-cycle-local-minimum` | disagreement | `obstructed` | the four-cycle has spurious local minima |
-| `quadray-ivm` | complementarity | `exact` | IVM coordinates supply the carrier's geometry |
-| `equilibrium-propagation` | complementarity | `exact` | the energy-based learning identity holds exactly |
-| `replicator-potential` | complementarity | `exact` | the replicator field is a metric gradient |
-| `kissing-twelve` | complementarity | `exact` | twelve neighbours at squared distance eight |
+| Key | Kind | Status | Pair | What it tests |
+|:-----------------------------------|:----------------|:-------------------|:-----------------|:-------------------------------|
+| `carrier-port-chart` | isomorphism | `exact` | `synergetics-oph` | derived adjacency reproduces the twenty oriented faces |
+| `spectral-gap` | isomorphism | `exact` | `oph-fep` | $\lambda_1 = 5-\sqrt{5}$ and normalised gap $(5-\sqrt{5})/60$ |
+| `shell-counts` | isomorphism | `exact` | `oph-fep` | $\binom{13}{11}$ shell size and the binary sub-shell |
+| `native-repair-law` | isomorphism | `exact` | `oph-fep` | OPH's integer rule reimplemented, with its closed-form energy drop |
+| `variational-equivalence` | isomorphism | `exact-on-domain` | `oph-fep` | harmonic-extension residual equals a Schur complement |
+| `free-energy-dictionary` | isomorphism | `exact-on-domain` | `oph-fep` | numerical, Bayesian and surprisal free energy coincide to curvature |
+| `sheaf-agreement` | isomorphism | `exact` | `oph-fep` | the cellular sheaf Laplacian is the carrier Laplacian |
+| `certificate-species` | isomorphism | `exact` | `oph-fep` | the certificate species of the shell and its spectral gap |
+| `tree-number` | isomorphism | `exact` | `oph-fep` | the reduced Laplacian determinant is 5 184 000, an integer tree count |
+| `gmrf-independence` | isomorphism | `exact` | `oph-fep` | independence on the seams and nowhere else; blanket five, variance $7/36$ |
+| `sheaf-cohomology` | isomorphism | `exact` | `oph-fep` | $\dim H^0 = 1$, $\dim H^1 = 19$, and $\dim H^0 - \dim H^1 = 12 - 30$ |
+| `icosahedral-symmetry` | isomorphism | `exact` | `synergetics-oph` | order $120$, transitive on ports, seams and faces: $60$ rotations, $60$ reflections |
+| `eigenspace-irreducibility` | isomorphism | `exact` | `synergetics-oph` | eigenspaces of dimensions 3, 5 and 3 irreducible under the icosahedral group |
+| `law-equivariance` | isomorphism | `exact` | `synergetics-oph` | $120 \times 78$ pairs preserve the outcome multiset: 4 orbits, 3 multisets |
+| `kl-lattice-metric` | isomorphism | `exact` | `fep-synergetics` | one IVM step costs four nats and squared norm $8k^2$ costs $4k^2$ |
+| `pr01-obstruction` | disagreement | `obstructed` | `oph-fep` | the native law is not confluent |
+| `free-energy-name-collision` | disagreement | `obstructed` | `oph-fep` | "free energy" names inequivalent functionals |
+| `mediator-obstruction` | disagreement | `obstructed` | `oph-fep` | pairwise boundary reduction needs a threshold |
+| `stationary-blanket` | disagreement | `obstructed` | `oph-fep` | a stationary blanket is not an attractor |
+| `solenoidal-freedom` | disagreement | `obstructed` | `oph-fep` | stationary blankets leave entropy production free |
+| `d-stability` | disagreement | `obstructed` | `oph-fep` | stability is not generic in the coupling |
+| `schedule-path` | disagreement | `obstructed` | `oph-fep` | iteration schedules are not interchangeable |
+| `reduction-criterion` | disagreement | `obstructed` | `oph-fep` | competing reduction criteria disagree |
+| `existence-without-reachability` | disagreement | `obstructed` | `oph-fep` | existence of an equilibrium does not imply reachability |
+| `directed-gradient` | disagreement | `obstructed` | `oph-fep` | direct and adjoint gradients differ |
+| `four-cycle-local-minimum` | disagreement | `obstructed` | `oph-fep` | the four-cycle has spurious local minima |
+| `cuboctahedron-vs-icosahedron` | disagreement | `obstructed` | `synergetics-oph` | twelve vertices is not one solid: tetravolume 20 against $18.5123\ldots$ |
+| `shell-vs-free-energy` | disagreement | `obstructed` | `fep-synergetics` | shell two spans three free energies, shell four seven; 36 and 52 are shared |
+| `quadray-ivm` | complementarity | `exact` | `synergetics-oph` | IVM coordinates supply the carrier's geometry |
+| `equilibrium-propagation` | complementarity | `exact` | `oph-fep` | the energy-based learning identity holds exactly |
+| `replicator-potential` | complementarity | `exact` | `oph-fep` | the replicator field is a metric gradient |
+| `kissing-twelve` | complementarity | `exact` | `synergetics-oph` | twelve neighbours at squared distance eight |
+| `icosahedron-tetravolume` | complementarity | `exact` | `synergetics-oph` | the carrier's solid is $18.5123\ldots$, squared exactly $175 + 75\sqrt{5}$ |
+| `packing-density` | complementarity | `exact` | `synergetics-oph` | Voronoi cell $14/12/24$, tetravolume six, density $\pi/(3\sqrt{2})$ |
+| `tetravolume-arithmetic` | complementarity | `exact` | `three-way` | four nats, the rational gap, and an integral table beside a non-integral carrier |
 
-: The twenty-three correspondences: {{REGISTRY_ISOMORPHISMS}} isomorphisms,
-{{REGISTRY_DISAGREEMENTS}} disagreements, {{REGISTRY_COMPLEMENTARITIES}}
-complementarities. Every row is executed by `oph-fep-synergetics verify`.
+: The {{REGISTRY_ENTRIES}} correspondences, in registry order:
+{{REGISTRY_ISOMORPHISMS}} isomorphisms, {{REGISTRY_DISAGREEMENTS}}
+disagreements and {{REGISTRY_COMPLEMENTARITIES}} complementarities, scoped
+`oph-fep` {{REGISTRY_OPH_FEP}}, `synergetics-oph`
+{{REGISTRY_SYNERGETICS_OPH}}, `fep-synergetics`
+{{REGISTRY_FEP_SYNERGETICS}}, `three-way` {{REGISTRY_THREE_WAY}}. Every row is
+executed by `oph-fep-synergetics verify`.
 {#tbl:registry}
 
 The registry is the source of truth for the paper. The prose in
 [@sec:correspondences], [@sec:disagreements] and [@sec:complementarities] says
 what the probes found; it does not add claims the probes do not carry.
+[@fig:scope-matrix] shows the same {{REGISTRY_ENTRIES}} rows as a matrix of
+scope, kind and status, so that the shape of the registry is visible without
+reading the table.
+
+![The registry as a scope matrix. Each row is one correspondence in registry
+order; the columns are its pairwise scope, its kind, its status, and whether the
+entry carries an executable probe, with cells coloured by category. The figure is
+drawn from `analysis/registry.py`, so an entry cannot appear in the matrix
+without appearing in `verify`.](../output/figures/fig_scope_matrix.png){#fig:scope-matrix width=90%}
 
 ## Reading a source without copying it
 

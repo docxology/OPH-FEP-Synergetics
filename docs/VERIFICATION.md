@@ -33,7 +33,7 @@ mistaken for a clean run.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-245 tests, no mocks, no network, no fixtures that fake a result. The suite runs
+308 tests, no mocks, no network, no fixtures that fake a result. The suite runs
 from a fresh process against the real code paths.
 
 | file | what it pins down |
@@ -45,7 +45,10 @@ from a fresh process against the real code paths.
 | `test_controls.py` | the descent census, the Routh column in closed form, the Lyapunov pair and its determinant, the mediator threshold, the affine contrast as an exact rational, the orbits, the four-cycle trap, and the replicator potential |
 | `test_geometry.py` | the twelve moves and their metric, the gauge, the exact xyz round-trip over shell sites, the shell sequence, the exact volumes, the vector equilibrium, and the subdivision identities |
 | `test_geometry_guards.py` | the icosahedral adjacency matrix and every range guard |
-| `test_registry.py` | the registry contract plus an exact-value assertion per probe |
+| `test_invariants.py` | the reduced-Laplacian determinant in exact rationals, the spanning-tree number against the spectral product, the reciprocal spectrum sum, the GMRF precision and its independence pattern, Markov blankets, and the guesses the invariants reject |
+| `test_symmetry.py` | the automorphism group by exhaustive search, closure, orbit counts, the rotation/reflection split from the face orientations, eigenspace irreducibility, and the equivariance of the descent law |
+| `test_solids.py` | oriented faces, the icosahedron's volume against its closed form and its exact squared ratio, and the rejection of an unoriented face list |
+| `test_registry.py` | the registry contract, the pairwise scopes, the selection commands, plus an exact-value assertion per probe |
 | `test_provenance.py` | the pin file, the licence split, identifier lookup, and `match`/`moved`/`absent`/`unavailable` against a real temporary repository |
 | `test_manuscript_variables.py` | every bound value, cross-checked against the function that produces it |
 | `test_cli.py` | every subcommand, the JSON payloads, the exit codes, and the console-script declaration |
@@ -61,7 +64,7 @@ identity.
 ## Coverage
 
 `pyproject.toml` enforces `fail_under = 90` with branch coverage over
-`src/oph_fep_synergetics`. The current result is **96.12%**. The remaining lines
+`src/oph_fep_synergetics`. The current result is **96.30%**. The remaining lines
 are defensive or unreachable branches (an assertion that cannot fire on a
 well-formed carrier, a guard behind a guard), not untested behaviour.
 
@@ -105,13 +108,19 @@ suite rather than in LaTeX, so a defect is reported by `pytest`:
 | `test_the_registry_table_lists_exactly_the_registered_keys` | a manuscript registry table that drifts from `analysis/registry.py` |
 | `test_figure_links_match_the_accessibility_registry` | a figure link without a registry entry, or a missing PNG |
 | `test_figures.py` | a builder that is not orchestrated, or a registry entry without alt text |
+| `test_render_contract.py` | a render whose cover, graphical-abstract panels or contents page are not on the pages the manuscript promises, a registry key that does not reach the printed text, or a log with an overfull box, an undefined reference or an unresolved token |
 
 The rendered result was checked the way a reader checks it, on the artefact
-itself: 32 pages, nine figures, twelve numbered equations, three definitions and
-sixteen numbered propositions, `0` undefined citations and `0` unresolved `??`
-cross-references in `_combined_manuscript.tex`, `0` overfull boxes in
-`_combined_manuscript.log`, and all 23 registry keys present and unbroken in the
-extracted text of the PDF.
+itself: 39 pages, the cover on page 1, the four graphical-abstract panels on
+pages 2 to 5, the contents page at 6, and a 0.500 in left text margin measured
+from the PDF's own text bounding boxes. The body carries fifteen numbered figures
+plus the cover image, fourteen numbered equations, three definitions, twenty-five
+numbered propositions and eight tables, with `0` undefined citations and `0`
+unresolved `??` cross-references in `_combined_manuscript.tex`, `0` overfull
+boxes in `_combined_manuscript.log`, and all 35 registry keys present and
+unbroken in the extracted text of the PDF. `scripts/check_render.py` performs
+that reading and exits non-zero when any of it drifts; `test_render_contract.py`
+runs it against the rendered PDF when one is present.
 
 ## What is deliberately not verified
 

@@ -18,6 +18,11 @@ domain.
 | obstruction and dynamics controls | the D-stability family, the mediator reduction, the reduction criterion, the two-node orbits, the solenoidal family, the four-cycle trap, the replicator potential |
 | QuadMath's conventions | quadray gauge and embedding, the twelve neighbour moves, the shell sequence, exact rational tetravolumes |
 | icosahedral subdivision | geodesic and Goldberg counts, duality, and the equality with the IVM shell sequence |
+| the carrier's counting identities | the reduced Laplacian determinant in exact rationals (the spanning-tree number), its cross-check against the spectral product, and the sheaf's two cohomology dimensions with their Euler characteristic |
+| the carrier's symmetry | the automorphism group by exhaustive search, closure under composition, the orbit decomposition of ports, seams and faces, the rotation/reflection split from OPH's oriented faces, eigenspace irreducibility, and the equivariance of the descent law over the full group |
+| the Gaussian reading of the same matrix | the precision's zeros as the conditional-independence pattern, the Markov blanket of every port, the pairwise precisions, and the exact marginal variance |
+| the information cost of a lattice step | equal-covariance Gaussian divergence against the IVM's squared distances: one step in nats, and the sequence `4k^2` |
+| the carrier's solid and the twelve-around-one cell | the icosahedron's tetravolume against its exact closed form, and the Voronoi cell's counts, derived tetravolume and packing density |
 
 ## Cited but not implemented
 

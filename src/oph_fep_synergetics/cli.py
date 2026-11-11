@@ -33,8 +33,9 @@ def _json_default(value: object) -> object:
 
 def _cmd_verify(args: argparse.Namespace) -> int:
     keys = tuple(args.key) if args.key else None
+    pairs = tuple(args.pair) if args.pair else None
     try:
-        results = verify(keys=keys)
+        results = verify(keys=keys, pairs=pairs)
     except ValueError as error:
         print(f"error: {error}", file=sys.stderr)
         return 2
@@ -46,6 +47,7 @@ def _cmd_verify(args: argparse.Namespace) -> int:
                 {
                     "key": result.key,
                     "kind": result.kind,
+                    "pair": result.pair,
                     "status": result.status,
                     "passed": result.passed,
                     "values": result.values,
@@ -57,8 +59,10 @@ def _cmd_verify(args: argparse.Namespace) -> int:
     else:
         for result in results:
             mark = "PASS" if result.passed else "FAIL"
-            print(f"[{mark}] {result.kind:<16} {result.status:<16} {result.key}")
+            print(f"[{mark}] {result.pair:<16} {result.kind:<16} {result.status:<16} {result.key}")
         print(f"\n{report['passed']}/{report['total']} probes passed")
+        for pair, bucket in report["by_pair"].items():
+            print(f"  {pair:<18} {bucket['passed']} passed, {bucket['failed']} failed")
         if report["failures"]:
             print("failed: " + ", ".join(report["failures"]))
     return 0 if report["failed"] == 0 else 1
@@ -198,6 +202,12 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     verify_parser.add_argument(
         "--key", action="append", default=[], help="run only this correspondence; repeatable"
+    )
+    verify_parser.add_argument(
+        "--pair",
+        action="append",
+        default=[],
+        help="run only this pairwise scope (oph-fep, fep-synergetics, synergetics-oph, three-way); repeatable",
     )
     verify_parser.add_argument("--json", action="store_true", help="emit machine-readable output")
     verify_parser.set_defaults(handler=_cmd_verify)

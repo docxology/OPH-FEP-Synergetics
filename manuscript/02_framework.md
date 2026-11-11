@@ -1,4 +1,4 @@
-# The three programs and the object they share {#sec:framework}
+# The three programs and the one object they share, stated in their own vocabularies {#sec:framework}
 
 ## The carrier
 
@@ -191,7 +191,7 @@ of `10k^2 + 2` sites with cumulative counts
 `{{IVM_VOLUME_RATIOS}}`.
 :::
 
-## One object, three vocabularies
+## One object, three vocabularies, and a dictionary this paper tests
 
 [@tbl:vocabulary] states the translation the rest of the paper tests. It is a
 dictionary, not an argument: each row asserts that two terms denote the same
@@ -206,11 +206,24 @@ survives execution.
 | seam repair | variational update | local re-accounting |
 | total load | conserved quantity of the dynamics | shell index |
 | \{12, 30, 20\} carrier | blanket-structured precision graph | icosahedron on the IVM |
+| carrier automorphisms | symmetries of the precision | icosahedral group of order {{SYMMETRY_GROUP_ORDER}} |
+| obstructed seam cycles | frustrated cycle space of the precision | cycle rank {{SHEAF_H1}} |
+| one shell step | one divergence step of {{KL_ONE_STEP}} nats | one move of squared distance {{KL_STEP_SQUARED_DISTANCE}} |
+| the carrier's twenty faces | faces of the simplicial complex | icosahedron of {{ICOSAHEDRON_TETRAVOLUME}} tetravolumes |
+| the twelve-around-one cell | neighbourhood of one coordinate | rhombic dodecahedron of {{PACKING_CELL_TETRAVOLUME}} tetravolumes |
 
 : The vocabulary dictionary this paper tests. Each row is a claim with a probe;
-[@sec:correspondences] reports the verdicts. {#tbl:vocabulary}
+[@sec:correspondences] reports the verdicts. The last two rows are the ones where
+the dictionary is least conservative, because a solid is not a graph: the
+agreements there are statements about the same geometry read from different
+constructions, and [@sec:cuboctahedron] reports where reading them as the same
+solid fails. {#tbl:vocabulary}
 
 The dictionary is deliberately conservative. It does not say that a port *is* a
 quadray site, only that the two play the same role in the three formalisms and
 that the resulting numbers must therefore agree where both are defined. Where the
-numbers do not agree, [@sec:disagreements] says so.
+numbers do not agree, [@sec:disagreements] says so. The carrier's counting
+invariants — {{CARRIER_TREE_NUMBER}} spanning trees,
+{{SHEAF_H1}} sheaf obstructions and {{SYMMETRY_GROUP_ORDER}} automorphisms — are
+derived from the same complex in [@sec:correspondences], and each of them is a
+statement that two vocabularies inherit rather than assert.

@@ -1,11 +1,12 @@
-# Disagreement: the eleven obstructions {#sec:disagreements}
+# Disagreement: the thirteen obstructions, each stated exactly {#sec:disagreements}
 
-An obstruction is a result. Each of the eleven claims below was proposed as an
-identification, and each fails in a way that can be stated exactly. The section is
-ordered by how much the failure costs a synthesis: the first failure is internal
-to OPH and blocks any confluence claim, the next two block the identification of
-"free energy", and the remainder block dynamical identifications that the
-literature makes routinely.
+An obstruction is a result. Each of the {{REGISTRY_DISAGREEMENTS}} claims below
+was proposed as an identification, and each fails in a way that can be stated
+exactly. The section is ordered by how much the failure costs a synthesis: the
+first failure is internal to OPH and blocks any confluence claim, the next two
+block the identification of "free energy", the remainder block dynamical
+identifications that the literature makes routinely, and the last two block
+identifications that are made by counting rather than by dynamics.
 
 ## The native law is not confluent {#sec:pr01}
 
@@ -240,9 +241,78 @@ exclude by hand. It is also a concrete instance of the general point: a descent
 guarantee is a statement about a landscape, and a landscape with plateaux has
 local minima that are not global ones.
 
-## What the eleven have in common
+## Twelve vertices is not one solid {#sec:cuboctahedron}
 
-Nine of the eleven obstructions reduce to one of two failures. The first is a
+The IVM's first shell and the carrier's vertex set both contain twelve points.
+That count is not an identification, and the probe exhibits the difference rather
+than the coincidence.
+
+::: {#prop:cuboctahedron .proposition}
+The twelve nearest neighbours, joined when their squared distance is eight,
+form the cuboctahedron graph: {{CUBOCTAHEDRON_DEGREE}}-regular, $24$ edges, eight
+triangles and six squares, with tetravolume
+${{CUBOCTAHEDRON_TETRAVOLUME}}$. The carrier's graph is
+{{ICOSAHEDRON_DEGREE}}-regular with $30$ edges and twenty triangles, and its
+solid has tetravolume ${{ICOSAHEDRON_TETRAVOLUME}}$. The two graphs have the same
+vertex count and are not isomorphic.
+:::
+
+The probe reports both degree sequences, both edge counts, both face
+decompositions, both volumes, and the fact that the icosahedral realisation of the
+carrier is isomorphic to the *carrier* and not to the neighbour graph. The
+tetravolumes settle it without reference to the graph at all: $20$ against
+$18.5123\ldots$, one integral and one algebraic.
+
+The failure costs more than a footnote, because the two solids support opposite
+dynamical readings. The cuboctahedron's neighbours are arranged so that each
+vertex sees four others, which gives a lattice with a four-fold local order; the
+carrier's ports see five, which is what makes the spectral gap the golden-ratio
+surrogate $(5-\sqrt{5})/60$ and what the FEP's blanket count of
+{{GMRF_BLANKET_SIZE}} inherits. A synthesis that identified the two by their
+common twelve would import a coordination number the carrier does not have.
+
+The same coincidence is why this entry is a disagreement rather than a
+complementarity: the neighbour *cell* of [@sec:packing] is the rhombic
+dodecahedron, of tetravolume six, whose graph is four-regular as well. Three
+distinct solids in this geometry have twelve-fold features, and only one of them
+is the carrier.
+
+## The shell index is not a function of the free energy {#sec:shell-energy}
+
+::: {#prop:shell-energy .proposition}
+The map from a configuration to its shell index and the map from a configuration
+to half its squared norm are not functions of one another. The first five shells
+carry {{SHELL_FREE_ENERGY_LEVEL_COUNTS}} distinct free-energy levels, and
+{{SHELL_SHARED_FREE_ENERGY_LEVELS}} of those levels are carried by more than one
+shell.
+:::
+
+The probe walks the first five shells, collects the distinct values of the
+halved squared norm on each, and reports the counts per shell and the levels that
+appear on more than one shell. It finds that the shell of radius $k$ is not a
+level set of the free energy and the free energy is not a function of the shell:
+shells two and four are each spread over several values, and whole values are
+shared between different shells.
+
+The reason is a gauge fact about the two quadratic forms, and it is worth stating
+because it is easy to conflate. OPH's repair energy is
+$E(q) = \tfrac{1}{2}\sum_i q_i^{2}$ in the quadray coordinates of a configuration,
+while the lattice metric is the form $\lVert q\rVert^{2} = 4\sum_i q_i^{2} -
+(\sum_i q_i)^{2}$ whose shells are the IVM's. The two agree exactly when the
+coordinates sum to zero, which is the gauge the repair law preserves and the
+lattice does not require. So a shell is a sphere in one form and a hyperplane
+family in the other, and a bounded free energy therefore does not bound the shell
+index.
+
+This is the paper's only *coordinate-level* obstruction. It does not say that the
+FEP's functional is wrong or that Synergetics' metric is wrong; it says that a
+composite vocabulary that treats "shell" and "free energy" as two names for the
+same stratification will be inconsistent at the first configuration whose
+coordinates do not sum to zero, and the probe exhibits such configurations.
+
+## What the thirteen have in common
+
+Most of the obstructions reduce to one of two failures. The first is a
 *plateau*: zero-descent moves (PR-01), plateaux in the violation landscape (the
 four-cycle), and constant-energy swaps all describe dynamics that cannot be
 ordered into a descent. The second is a *missing invariant*: the entropy
@@ -250,7 +320,14 @@ production of a stationary blanket, the stability of a coupling outside its stab
 region, and the direction of a gradient all vary within a class that a coarser
 vocabulary treats as fixed.
 
+The two newest obstructions sharpen a third failure, which is the one a
+correspondence registry is best placed to catch: *an invariant too coarse to
+identify the object it is asked to identify*. Twelve vertices do not determine a
+solid, and a shell index does not determine a free energy. Both claims failed not
+because a number disagreed but because the shared quantity was never an
+identification; a table of matched counts would have reported both as successes.
+
 A synthesis that wants to identify the three programmes must therefore add
-structure that excludes plateaux and fixes the missing invariants. That is a
-research programme, not a corollary, and the next section reports what each
-programme can contribute to it.
+structure that excludes plateaux, fixes the missing invariants, and refines the
+coarse ones. That is a research programme, not a corollary, and the next section
+reports what each programme can contribute to it.

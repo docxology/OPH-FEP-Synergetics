@@ -10,6 +10,23 @@ paper:
   subtitle: "Executable Correspondences, Obstructions, and Complementarities across Observer Patch Holography, the Free Energy Principle, and Fuller's Synergetics"
   version: "0.1.0"
   date: ""  # left empty: the renderer stamps the build date
+  cover:
+    # Page 1 is cover art: the carrier's twelve ports and thirty seams, drawn
+    # from the same projected icosahedron the body figures use.
+    image: "../output/figures/fig_cover.png"
+    alt: "Cover art. The twelve ports of the icosahedral carrier drawn in their projected positions with the thirty seams between them, on a dark field; the graph is the object all three programmes describe, and its symmetry, spectrum, cohomology and neighbour count are the paper's correspondences."
+
+# Layout. The front-matter bound is a shade tighter than the ordinary one on
+# purpose: the first figure in the document is panel 1 of the graphical
+# abstract, and at 0.44 that panel's last line spilled onto a second page, which
+# moved panels 2 to 4 one page later than `scripts/check_render.py` requires.
+# Both are fractions of the text height.
+rendering:
+  section_breaks: true
+  include_date: true
+  cover_height_fraction: 0.42
+  front_matter_figure_height_fraction: 0.42
+  figure_height_fraction: 0.44
 
 authors:
   - name: "Daniel Ari Friedman"
@@ -73,7 +90,8 @@ project_config:
   registry:
     status_vocabulary: ["exact", "exact-on-domain", "obstructed", "not-reproduced"]
     kinds: ["isomorphism", "disagreement", "complementarity"]
-    entry_count: 23
+    pairs: ["oph-fep", "fep-synergetics", "synergetics-oph", "three-way"]
+    entry_count: 35
   sources:
     - "Observer Patch Holography"
     - "FEP_Formal"

@@ -1,4 +1,4 @@
-# Introduction {#sec:introduction}
+# Introduction: three programmes of observer, one finite carrier, and a decision procedure for identification {#sec:introduction}
 
 ## Three programs, one question
 
@@ -26,10 +26,12 @@ as functions of the same object and the values coincide.
 
 ## What a correspondence is
 
-A correspondence is a record with three parts: a claim, a probe, and a status.
-The claim names what OPH, FEP and Synergetics each say. The probe is executable
-code that computes the values the claim rests on. The status is one of four
-terms, used in a fixed sense throughout [@sec:method].
+A correspondence is a record with four parts: a claim, a pairwise scope, a probe,
+and a status. The claim names what OPH, FEP and Synergetics each say. The scope
+names which two or three of them the claim relates, because a claim that two
+vocabularies are about one object is a claim *about those two*. The probe is
+executable code that computes the values the claim rests on. The status is one of
+four terms, used in a fixed sense throughout [@sec:method].
 
 `exact` means the probe reproduces the claimed value exactly, in integers or
 rationals, or to floating-point equality with the closed form. `exact-on-domain`
@@ -68,10 +70,28 @@ The contributions are the following.
    squared distance {{IVM_NEIGHBOR_SQUARED_DISTANCE}}, shells of
    `10k^2 + 2` sites, and the tetravolume ratios of the standard polyhedra
    [@prop:ivm].
-7. A provenance discipline in which every source claim is pinned to a commit and
-   every reimplementation cites the identifier it reimplements [@sec:reproducibility].
+7. Two counting identities for the same carrier that no dynamical reading
+   supplies: {{CARRIER_TREE_NUMBER}} spanning trees, and a sheaf with
+   {{SHEAF_H0}} global section and {{SHEAF_H1}} obstructions of the cycle rank
+   [@prop:tree; @prop:cohomology].
+8. The carrier's symmetry, which is what makes the census an invariant rather
+   than a coincidence: order {{SYMMETRY_GROUP_ORDER}} split into
+   {{SYMMETRY_ROTATIONS}} rotations and {{SYMMETRY_REFLECTIONS}} reflections,
+   irreducible eigenspaces, and a descent law equivariant over
+   {{SYMMETRY_CONFIGURATIONS}} configurations in {{SYMMETRY_ORBITS}} orbits
+   [@prop:symmetry].
+9. One place where the FEP's currency and Synergetics' metric are the same
+   function: an equal-covariance divergence of {{KL_ONE_STEP}} nats per lattice
+   step, so a site at squared norm $8k^{2}$ costs $4k^{2}$ [@prop:kl].
+10. An exact volume for the carrier's own solid and for the twelve-around-one
+    cell: {{ICOSAHEDRON_TETRAVOLUME}} tetravolumes, whose square is exactly
+    $175 + 75\sqrt{5}$, against an integral table, and a packing density of
+    {{PACKING_DENSITY}} derived from the cell rather than quoted
+    [@prop:ico-volume; @prop:packing].
+11. A provenance discipline in which every source claim is pinned to a commit and
+    every reimplementation cites the identifier it reimplements [@sec:reproducibility].
 
-Items 1 to 6 are executable: each is a function, and each section below reports
+Items 1 to 10 are executable: each is a function, and each section below reports
 the values that function returns.
 
 ## What this paper does not do

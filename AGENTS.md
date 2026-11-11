@@ -76,17 +76,26 @@ Never edit them by hand: change the registry or the values and re-render.
 12. **Every top-level heading carries a `{#sec:…}` label.** The render
     annotates a heading that lacks one and writes the annotation back into the
     source, so keeping the labels explicit is what makes a render idempotent.
+13. **The front matter is placed on purpose, and the tests check the page
+    positions.** Page 1 is the cover, pages 2 to 5 are the four panels of
+    `manuscript/00_00_graphical_abstract.md` (one panel per page, held in place
+    by `\floatplacement{figure}{H}`), and the contents page is re-emitted by
+    `\ophContentsPage` at the end of that file because `preamble.md` keeps the
+    renderer's automatic `\tableofcontents` from landing between the cover and
+    the panels. Changing the margin, the panel figure height fraction or a
+    panel's length without re-rendering moves a panel off its page.
 
 ## Commands
 
 ```
 .venv/bin/python -m pytest tests/ -q                  # the suite
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
-.venv/bin/oph-fep-synergetics verify                  # the registry, all 23 probes
+.venv/bin/oph-fep-synergetics verify                  # the registry, all 35 probes
+.venv/bin/oph-fep-synergetics verify --pair oph-fep   # one pairwise ledger
 .venv/bin/oph-fep-synergetics sources --vault-root /Volumes/GitVault
 .venv/bin/python scripts/render_docs.py               # regenerate the two documents
 .venv/bin/python scripts/render_docs.py --check       # fail when stale
-.venv/bin/python scripts/make_figures.py              # the nine figures and their registry
+.venv/bin/python scripts/make_figures.py              # the sixteen figures and their registry
 ```
 
 The manuscript renders through the `docxology/template` checkout, whose

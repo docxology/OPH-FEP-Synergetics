@@ -4,11 +4,31 @@ Every entry carries the value the prose may quote, the exact form where the
 source gives one, and the source that establishes it.  ``MANUSCRIPT_VALUES`` is
 the single place a number enters the prose, so a change in the code or a re-pin
 of a source shows up here rather than inside a sentence.
+
+Where a value can be *derived* from the package it is derived rather than
+restated: the registry counts are read from the registry, the tetravolume from
+the polyhedron it measures, the packing density from the Voronoi cell.  A
+transcribed copy is a number that can silently stop matching its source.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+
+from ..analysis import registry as registry_module
+from ..core import cohomology_dimensions, icosahedral_carrier, invariants as invariant_module
+from ..core import symmetry as symmetry_module
+from ..core.sheaf import carrier_sheaf
+from ..geometry import (
+    VOLUME_RATIOS,
+    cuboctahedron_adjacency,
+    generate_shell,
+    icosahedron_tetravolume,
+    neighbor_moves,
+    packing_density,
+    squared_norm,
+    voronoi_cell,
+)
 
 
 @dataclass(frozen=True)
@@ -65,6 +85,48 @@ def token_for(key: str) -> str:
 def as_tokens() -> dict[str, str]:
     """Return the manuscript token mapping, keyed by ``TOKEN`` name."""
     return {token_for(entry.key): format_value(entry.value) for entry in MANUSCRIPT_VALUES}
+
+
+def _carrier() -> object:
+    return icosahedral_carrier()
+
+
+def _registry_counts() -> dict[str, int]:
+    """Count the registry by kind and by pairwise scope, from the registry itself."""
+    counts = {"entries": len(registry_module.CORRESPONDENCES)}
+    for kind in (
+        registry_module.ISOMORPHISM,
+        registry_module.DISAGREEMENT,
+        registry_module.COMPLEMENTARITY,
+    ):
+        counts[kind] = sum(1 for entry in registry_module.CORRESPONDENCES if entry.kind == kind)
+    for pair in registry_module.PAIRS:
+        counts[pair] = sum(1 for entry in registry_module.CORRESPONDENCES if entry.pair == pair)
+    return counts
+
+
+def _shell_free_energy_levels() -> tuple[int, ...]:
+    """Count the distinct values of ``||q||^2 / 2`` on each of the first five shells."""
+    return tuple(len({squared_norm(site) for site in generate_shell(k)}) for k in range(1, 6))
+
+
+def _shared_free_energy_levels() -> tuple[float, ...]:
+    """Return the free-energy levels that occur on more than one of the first five shells."""
+    shells: dict[float, set[int]] = {}
+    for k in range(1, 6):
+        for site in generate_shell(k):
+            shells.setdefault(0.5 * float(squared_norm(site)), set()).add(k)
+    return tuple(sorted(level for level, carriers in shells.items() if len(carriers) > 1))
+
+
+_COUNTS = _registry_counts()
+_COHOMOLOGY = cohomology_dimensions(carrier_sheaf(icosahedral_carrier()))
+_EQUIVARIANCE = symmetry_module.law_equivariance()
+_ICOSAHEDRON = icosahedron_tetravolume()
+_DENSITY = packing_density()
+_CELL = voronoi_cell()
+_SHELL_LEVELS = _shell_free_energy_levels()
+_SHARED_LEVELS = _shared_free_energy_levels()
 
 
 MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
@@ -262,10 +324,240 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         None,
         note="the source states 7.58; this is the measurement the prose reports beside it",
     ),
-    BoundValue("registry.entries", 23, "analysis/registry.py CORRESPONDENCES", "23"),
-    BoundValue("registry.isomorphisms", 8, "analysis/registry.py CORRESPONDENCES", "8"),
-    BoundValue("registry.disagreements", 11, "analysis/registry.py CORRESPONDENCES", "11"),
-    BoundValue("registry.complementarities", 4, "analysis/registry.py CORRESPONDENCES", "4"),
+    BoundValue(
+        "registry.entries",
+        _COUNTS["entries"],
+        "analysis/registry.py CORRESPONDENCES",
+        str(_COUNTS["entries"]),
+    ),
+    BoundValue(
+        "registry.isomorphisms",
+        _COUNTS[registry_module.ISOMORPHISM],
+        "analysis/registry.py CORRESPONDENCES",
+        str(_COUNTS[registry_module.ISOMORPHISM]),
+    ),
+    BoundValue(
+        "registry.disagreements",
+        _COUNTS[registry_module.DISAGREEMENT],
+        "analysis/registry.py CORRESPONDENCES",
+        str(_COUNTS[registry_module.DISAGREEMENT]),
+    ),
+    BoundValue(
+        "registry.complementarities",
+        _COUNTS[registry_module.COMPLEMENTARITY],
+        "analysis/registry.py CORRESPONDENCES",
+        str(_COUNTS[registry_module.COMPLEMENTARITY]),
+    ),
+    BoundValue(
+        "registry.oph_fep",
+        _COUNTS[registry_module.OPH_FEP],
+        "analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep",
+        None,
+    ),
+    BoundValue(
+        "registry.fep_synergetics",
+        _COUNTS[registry_module.FEP_SYNERGETICS],
+        "analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics",
+        None,
+    ),
+    BoundValue(
+        "registry.synergetics_oph",
+        _COUNTS[registry_module.SYNERGETICS_OPH],
+        "analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph",
+        None,
+    ),
+    BoundValue(
+        "registry.three_way",
+        _COUNTS[registry_module.THREE_WAY],
+        "analysis/registry.py CORRESPONDENCES, pairwise scope three-way",
+        None,
+    ),
+    BoundValue(
+        "carrier.tree_number",
+        invariant_module.spanning_tree_number(),
+        "core/invariants.py, Kirchhoff: the exact reduced-Laplacian determinant",
+        "5184000",
+    ),
+    BoundValue(
+        "gmrf.marginal_variance",
+        float(invariant_module.marginal_variance()),
+        "core/invariants.py, the reciprocal spectrum summed exactly in the rationals",
+        "7/36",
+    ),
+    BoundValue(
+        "gmrf.blanket_size",
+        invariant_module.blanket_sizes()[0],
+        "core/invariants.py: the Markov blanket of a port is its neighbours",
+        "five",
+    ),
+    BoundValue(
+        "gmrf.pairwise_precision",
+        min(invariant_module.pairwise_precision().values()),
+        "core/invariants.py: every seam's pairwise precision entry",
+        "-1",
+    ),
+    BoundValue(
+        "sheaf.coboundary_rank",
+        _COHOMOLOGY["coboundary_rank"],
+        "core/sheaf.py cohomology_dimensions, the rank of the coboundary",
+        None,
+    ),
+    BoundValue(
+        "sheaf.h0",
+        _COHOMOLOGY["h0"],
+        "core/sheaf.py: the global sections of the carrier's scalar sheaf",
+        "one",
+    ),
+    BoundValue(
+        "sheaf.h1",
+        _COHOMOLOGY["h1"],
+        "core/sheaf.py: edge assignments modulo coboundaries",
+        None,
+    ),
+    BoundValue(
+        "sheaf.euler_characteristic",
+        _COHOMOLOGY["euler_characteristic"],
+        "core/sheaf.py: twelve nodes minus thirty edges",
+        "12 - 30",
+    ),
+    BoundValue(
+        "symmetry.group_order",
+        len(symmetry_module.carrier_automorphisms()),
+        "core/symmetry.py carrier_automorphisms, by exhaustive backtracking",
+        "120",
+    ),
+    BoundValue(
+        "symmetry.rotations",
+        len(symmetry_module.rotation_subgroup()),
+        "core/symmetry.py rotation_subgroup, from OPH's oriented faces",
+        "60",
+    ),
+    BoundValue(
+        "symmetry.reflections",
+        len(symmetry_module.reflection_subgroup()),
+        "core/symmetry.py reflection_subgroup",
+        "60",
+    ),
+    BoundValue(
+        "symmetry.configurations",
+        len(icosahedral_carrier().shell_configurations(total=2)),
+        "OPH shell configurations at total load two",
+        "C(13, 11)",
+    ),
+    BoundValue(
+        "symmetry.orbits",
+        _EQUIVARIANCE["orbits"],
+        "core/symmetry.py law_equivariance: orbits of configurations under the group",
+        None,
+    ),
+    BoundValue(
+        "symmetry.outcome_multisets",
+        _EQUIVARIANCE["distinct_outcome_multisets"],
+        "core/symmetry.py law_equivariance: distinct descent-outcome multisets",
+        None,
+    ),
+    BoundValue(
+        "icosahedron.tetravolume",
+        _ICOSAHEDRON["tetravolume"],
+        "geometry/solids.py icosahedron_tetravolume, measured from the oriented surface",
+        "(5/2)(3 sqrt 2 + sqrt 10)",
+    ),
+    BoundValue(
+        "icosahedron.tetravolume_squared",
+        _ICOSAHEDRON["tetravolume_squared"],
+        "geometry/solids.py, the measured square against the exact one",
+        "175 + 75 sqrt 5",
+    ),
+    BoundValue(
+        "icosahedron.faces_reoriented",
+        _ICOSAHEDRON["faces_reoriented"],
+        "geometry/solids.py orient_faces_outward: faces enumerated without an orientation",
+        None,
+    ),
+    BoundValue(
+        "icosahedron.degree",
+        icosahedral_carrier().degree(0),
+        "OPH carrier: every port meets five triangles",
+        "five",
+    ),
+    BoundValue(
+        "cuboctahedron.degree",
+        max(sum(row) for row in cuboctahedron_adjacency()),
+        "geometry/lattice.py cuboctahedron_adjacency: every vertex is four-valent",
+        "four",
+    ),
+    BoundValue(
+        "cuboctahedron.tetravolume",
+        float(VOLUME_RATIOS["cuboctahedron"]),
+        "QuadMath polyhedra table read through geometry.VOLUME_RATIOS",
+        "20",
+    ),
+    BoundValue(
+        "tetravolume.integral_solids",
+        tuple(int(value) for value in VOLUME_RATIOS.values()),
+        "geometry.VOLUME_RATIOS: the tetravolumes of the IVM's integral solids",
+        "1, 3, 4, 6, 20, 96",
+    ),
+    BoundValue(
+        "voronoi.vertices",
+        _CELL["vertex_count"],
+        "geometry/lattice.py voronoi_cell, the dual of the twelve neighbours",
+        None,
+    ),
+    BoundValue(
+        "voronoi.faces",
+        _CELL["face_count"],
+        "geometry/lattice.py voronoi_cell",
+        None,
+    ),
+    BoundValue(
+        "voronoi.edges",
+        _CELL["edge_count"],
+        "geometry/lattice.py voronoi_cell",
+        None,
+    ),
+    BoundValue(
+        "packing.density",
+        _DENSITY["density"],
+        "geometry/lattice.py packing_density, measured from the cell and the ball",
+        "pi / (3 sqrt 2)",
+    ),
+    BoundValue(
+        "packing.cell_tetravolume",
+        _DENSITY["cell_tetravolume"],
+        "geometry/lattice.py: the cell's volume in tetrahedra of the prime vector",
+        "6",
+    ),
+    BoundValue(
+        "packing.ball_tetravolume",
+        _DENSITY["ball_tetravolume"],
+        "geometry/lattice.py: the inscribed ball's volume in the same tetrahedra",
+        "pi sqrt 2",
+    ),
+    BoundValue(
+        "shell.free_energy_level_counts",
+        _SHELL_LEVELS,
+        "geometry.generate_shell: distinct values of half the squared norm per shell",
+        None,
+    ),
+    BoundValue(
+        "shell.shared_free_energy_levels",
+        _SHARED_LEVELS,
+        "geometry.generate_shell: free-energy levels carried by more than one shell",
+        None,
+    ),
+    BoundValue(
+        "kl.one_step",
+        0.5 * float(squared_norm(neighbor_moves()[0])),
+        "core/free_energy.py gaussian_kl at the IVM's first neighbour",
+        "half of 8",
+    ),
+    BoundValue(
+        "kl.step_squared_distance",
+        float(squared_norm(neighbor_moves()[0])),
+        "geometry.NEIGHBOR_SQUARED_DISTANCE, the IVM's squared neighbour distance",
+        "8",
+    ),
 )
 
 MANUSCRIPT_TOKENS: dict[str, str] = as_tokens()

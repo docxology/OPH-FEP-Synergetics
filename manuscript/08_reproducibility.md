@@ -1,4 +1,4 @@
-# Reproducibility {#sec:reproducibility}
+# Reproducibility: pins, commands, and the binding of every number to a function {#sec:reproducibility}
 
 ## What this manuscript is made of
 
@@ -57,8 +57,10 @@ queried. A `moved` result is not a failure: it says the reading is historical.
 # the suite, and the coverage gate (90% branch minimum)
 .venv/bin/python -m pytest tests/ --cov --cov-report=term-missing
 
-# every correspondence, twenty-three probes
+# every correspondence, in one run or one pairwise scope at a time
 .venv/bin/oph-fep-synergetics verify
+.venv/bin/oph-fep-synergetics verify --pair synergetics-oph
+.venv/bin/oph-fep-synergetics verify --json
 
 # the pins, checked against the live vault
 .venv/bin/oph-fep-synergetics sources --vault-root /Volumes/GitVault
@@ -74,9 +76,13 @@ queried. A `moved` result is not a failure: it says the reading is historical.
 uv run python scripts/pipeline/stage_03_render.py --project working/OPH-FEP-Synergetics
 ```
 
-: The reproduction commands, in order. The last two run from the
-`docxology/template` checkout, because the rendering infrastructure lives there.
-{#tbl:commands}
+: The reproduction commands, in order. The plain `verify` runs all
+{{REGISTRY_ENTRIES}} probes; `--pair` runs one ledger, of
+{{REGISTRY_OPH_FEP}}, {{REGISTRY_SYNERGETICS_OPH}},
+{{REGISTRY_FEP_SYNERGETICS}} and {{REGISTRY_THREE_WAY}} claims respectively, and
+`--json` writes the same report as machine-readable values. The last two commands
+run from the `docxology/template` checkout, because the rendering infrastructure
+lives there. {#tbl:commands}
 
 ## Environment
 

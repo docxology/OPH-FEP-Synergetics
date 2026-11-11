@@ -20,9 +20,10 @@ hidden as a gap.
 ## What runs
 
 ```
-oph-fep-synergetics verify                 # all 23 correspondence probes
+oph-fep-synergetics verify                 # all 35 correspondence probes
 oph-fep-synergetics verify --json          # the same, as a machine-readable report
 oph-fep-synergetics verify --key pr01-obstruction
+oph-fep-synergetics verify --pair synergetics-oph   # one pairwise ledger
 oph-fep-synergetics sources                # pins, licences and reuse policy
 oph-fep-synergetics sources --vault-root /path/to/vault   # check live checkouts
 oph-fep-synergetics values                 # every number the manuscript may quote
@@ -31,7 +32,7 @@ oph-fep-synergetics geometry               # IVM moves, shell counts, volumes
 ```
 
 `verify` exits non-zero when any probe fails, and exits `2` on a misspelled key
-so that a typo cannot pass as an empty run.
+or pair so that a typo cannot pass as an empty run.
 
 ## Install
 
@@ -49,22 +50,26 @@ The only runtime dependency is `numpy`. `figures` (matplotlib) and `dev`
 | --- | --- | --- |
 | `core` | `core/carrier.py` | OPH's twelve-port carrier, its port chart, Laplacian, spectrum and load shell |
 | | `core/repair.py` | the native seam-repair law, its conservation law and its exact energy decrease |
-| | `core/sheaf.py` | cellular sheaves, agreement energy, harmonic extension, record injectivity |
+| | `core/sheaf.py` | cellular sheaves, agreement energy, harmonic extension, record injectivity, cohomology dimensions |
 | | `core/free_energy.py` | the linear-Gaussian free-energy dictionary and the three named surprises |
 | | `core/controls.py` | the obstruction and dynamics controls: descent census, D-stability, mediators, orbits, free-energy forms |
+| | `core/invariants.py` | the Laplacian's counting identities: spanning trees, reciprocal spectrum, GMRF precision, Markov blankets |
+| | `core/symmetry.py` | the carrier's automorphism group, rotations versus reflections, orbit counts, law equivariance |
 | `geometry` | `geometry/quadray.py` | quadray coordinates, the A3/IVM embedding and exact tetravolumes |
-| | `geometry/lattice.py` | IVM shells, the cuboctahedral vector equilibrium, Goldberg/geodesic counts |
+| | `geometry/lattice.py` | IVM shells, the cuboctahedral vector equilibrium, Voronoi cell and packing density, Goldberg/geodesic counts |
 | | `geometry/subdivision.py` | icosahedral subdivision and the dual count identities |
-| `analysis` | `analysis/registry.py` | the 23 registered correspondences, each with an executable probe |
+| | `geometry/solids.py` | oriented faces, polyhedron volume, and the icosahedron's tetravolume against its closed form |
+| `analysis` | `analysis/registry.py` | the 35 registered correspondences, each with a pairwise scope and an executable probe |
 | | `analysis/provenance.py` | source pins, licence terms and reuse policy |
-| `manuscript_variables` | `manuscript_variables/values.py` | every number the prose may quote, with its source |
+| `manuscript_variables` | `manuscript_variables/values.py` | every number the prose may quote, derived from the package where a derivation exists |
 
 ## The registry
 
-23 entries: **8 isomorphisms**, **11 disagreements**, **4 complementarities**.
-All 23 probes pass. The full table, with the OPH / FEP / Synergetics reading of
-each entry and the values its probe asserts, is generated into
-[docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
+35 entries: **15 isomorphisms**, **13 disagreements**, **7 complementarities**,
+scoped to the pairs `oph-fep` (23), `synergetics-oph` (9), `fep-synergetics` (2)
+and `three-way` (1). All 35 probes pass. The full table, with the OPH / FEP /
+Synergetics reading of each entry and the values its probe asserts, is generated
+into [docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
 
 The load-bearing results are:
 
@@ -84,6 +89,15 @@ The load-bearing results are:
 | **Finite phases are path functions** | **obstructed** | full and half-damped iteration share every answer, yet their centered contrasts after twelve steps differ by exactly `921633999 / 40000000000` |
 | Quadray geometry supplies the exact integer side of the correspondence | exact | 12 neighbour moves at squared distance 8, shells `10k^2 + 2`, rational volumes `1, 3, 4, 6, 20, 96` |
 | Equilibrium propagation supplies the parameter gradient the repair law does not define | exact | the two-settle contrast is `(theta - target) / (1 + beta)` exactly and tends to the exact gradient |
+| The carrier counts its own spanning trees | exact | the reduced Laplacian's determinant is `5184000`, matched by the product of the eleven nonzero eigenvalues to nine digits |
+| The Gaussian reading puts conditional independence exactly on the seams | exact | pairwise precision `-1` at every seam, blanket size 5 at every port, marginal variance `7/36` exactly |
+| The agreement sheaf has one global section and nineteen obstructions | exact | `dim H^0 = 1`, `dim H^1 = 19`, coboundary rank 11, Euler characteristic `12 - 30` |
+| The symmetry group closes the descent census | exact | order 120 = 60 rotations + 60 reflections, transitive on ports/seams/faces, 4 configuration orbits and 3 outcome multisets over all 120 x 78 pairs |
+| Information cost is half the synergetic metric | exact | one IVM step costs 4 nats; sites at squared norm `8k^2` cost `4k^2` |
+| **Twelve vertices is not one solid** | **obstructed** | the neighbour graph is four-regular with tetravolume 20; the carrier is five-regular with tetravolume `18.512295868219...` |
+| **The shell index is not a function of the free energy** | **obstructed** | the first five shells carry 1, 3, 4, 7 and 7 distinct levels, and the levels 36 and 52 are shared by two shells |
+| The carrier's own solid has an exact algebraic volume | exact | `18.512295868219... = (5/2)(3 sqrt 2 + sqrt 10)`, squared exactly `175 + 75 sqrt 5` |
+| The twelve-around-one cell is the densest lattice packing | exact | 14 vertices, 12 rhombic faces, 24 edges, tetravolume 6 derived, density `pi / (3 sqrt 2)` |
 
 ## Scope
 
@@ -126,11 +140,11 @@ This project is released under the MIT licence; see [LICENSE](LICENSE).
 The paper, *Observers, Blankets, and Screens*, is a project of the
 `docxology/template` research monorepo, which owns the Pandoc and LaTeX
 pipeline. The source of truth is `manuscript/`: the render reads `config.yaml`,
-`references.bib`, the ten numbered sections and `output/figures/`, and writes
+`references.bib`, the eleven sections and `output/figures/`, and writes
 `output/pdf/OPH-FEP-Synergetics_combined.pdf`.
 
 ```
-# 1. the nine figures and their accessibility registry
+# 1. the sixteen figures and their accessibility registry
 .venv/bin/python scripts/make_figures.py
 
 # 2. the tokens and the resolved tree, with the template checkout's interpreter
@@ -147,6 +161,15 @@ pipeline resolves to its real path, so the PDF lands in this project's
 `output/pdf/`. The stage's own hydration call is skipped because it expects a
 project interpreter that passes the template's bytecode audit; step 2 does the
 same work with the interpreter that does.
+
+The rendered edition has a deliberate front matter. Page 1 is the cover, drawn
+from `output/figures/fig_cover.png`; pages 2 to 5 are the four panels of the
+graphical abstract, one panel per page, placed with `\floatplacement{figure}{H}`
+so that a panel cannot float away from its caption; the contents page follows the
+panels, which is why `preamble.md` keeps the renderer's automatic
+`\tableofcontents` from landing between the cover and the panels and re-emits it
+from the end of `00_00_graphical_abstract.md`. The margins are 0.5 in, because
+this is dense reference matter with wide tables.
 
 Three disciplines hold the manuscript together, and each one is a test:
 
@@ -167,17 +190,17 @@ Three disciplines hold the manuscript together, and each one is a test:
 
 ```
 data/sources.json                    pinned sources, licences, cited identifiers
-docs/CORRESPONDENCES.md              generated: the 23 entries and their probe values
+docs/CORRESPONDENCES.md              generated: the 35 entries and their probe values
 docs/MANUSCRIPT_VALUES.md            generated: every bound value
 docs/PROVENANCE.md                   the pins and the reuse rules
 docs/SCOPE.md                        what is reimplemented, what is cited, what is out
 docs/VERIFICATION.md                 the gates and how to run them
-manuscript/                          config.yaml, preamble.md, references.bib and ten sections
+manuscript/                          config.yaml, preamble.md, references.bib and eleven sections
 scripts/render_docs.py               regenerates the two generated documents
-scripts/make_figures.py              renders the nine figures and their accessibility registry
+scripts/make_figures.py              renders the sixteen figures and their accessibility registry
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (245 tests)
+tests/                               the suite (308 tests)
 ```
 
 ## Tests
@@ -186,11 +209,11 @@ tests/                               the suite (245 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-245 tests, no mocks, no network. The suite checks exact values rather than
+308 tests, no mocks, no network. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over
-shell sites, and the exact volume ratios. Coverage is 96.12% with a 90% gate
+shell sites, and the exact volume ratios. Coverage is 96.30% with a 90% gate
 enforced by `pyproject.toml`.
 
 ## Regenerating the documents

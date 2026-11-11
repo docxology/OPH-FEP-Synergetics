@@ -52,22 +52,32 @@ def render_registry() -> str:
         "One executable probe per entry. Each entry carries the operator-algebraic",
         "reading from Observer Patch Holography, the variational reading from the",
         "Free Energy Principle, and the geometric reading from Fuller's Synergetics,",
-        "together with the status the probe establishes.",
+        "together with the status the probe establishes and the pair of programmes the",
+        "claim is made across. Most claims are pairwise; `three-way` marks the few that",
+        "no pair of readings captures.",
         "",
-        "| kind | status | entry | claim |",
-        "| --- | --- | --- | --- |",
+        "| pair | kind | status | entry | claim |",
+        "| --- | --- | --- | --- | --- |",
     ]
     for entry in CORRESPONDENCES:
-        lines.append(f"| {entry.kind} | {entry.status} | `{entry.key}` | {entry.claim} |")
+        lines.append(
+            f"| {entry.pair} | {entry.kind} | {entry.status} | `{entry.key}` | {entry.claim} |"
+        )
     lines += [
         "",
         f"Totals: {report['passed']}/{report['total']} probes pass, "
         f"{report['failed']} fail.",
         "",
+        "By kind:",
+        "",
     ]
     for kind in ("isomorphism", "disagreement", "complementarity"):
         counts = report["by_kind"][kind]
         lines.append(f"- {kind}: {counts['passed']} passing, {counts['failed']} failing")
+    lines += ["", "By pairwise scope:", ""]
+    for pair in report["pairs"]:
+        counts = report["by_pair"].get(pair, {"passed": 0, "failed": 0})
+        lines.append(f"- {pair}: {counts['passed']} passing, {counts['failed']} failing")
     lines.append("")
 
     for entry in CORRESPONDENCES:
@@ -76,7 +86,7 @@ def render_registry() -> str:
         lines += [
             f"## `{entry.key}`",
             "",
-            f"**{entry.kind}** / **{entry.status}** / probe {mark}",
+            f"**{entry.kind}** / **{entry.status}** / **{entry.pair}** / probe {mark}",
             "",
             entry.claim,
             "",

@@ -41,7 +41,42 @@ gives one; `Note` records what is measured rather than quoted.
 | `two_node.relaxation_min_radius_measured` | 0.8400707833642703 |  | two_node_relaxation_orbit, measured in this package | the source states the bound 0.84; this is the measurement the prose reports beside it |
 | `two_node.relaxation_max_radius` | 1.0533912226419835 |  | two_node_relaxation_orbit, measured in this package | the outer radius of the annulus that contains the relaxation orbit |
 | `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | the source states 7.58; this is the measurement the prose reports beside it |
-| `registry.entries` | 23 | `23` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.isomorphisms` | 8 | `8` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.disagreements` | 11 | `11` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.complementarities` | 4 | `4` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.entries` | 35 | `35` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.isomorphisms` | 15 | `15` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.disagreements` | 13 | `13` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.complementarities` | 7 | `7` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.oph_fep` | 23 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
+| `registry.fep_synergetics` | 2 |  | analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics |  |
+| `registry.synergetics_oph` | 9 |  | analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph |  |
+| `registry.three_way` | 1 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
+| `carrier.tree_number` | 5184000 | `5184000` | core/invariants.py, Kirchhoff: the exact reduced-Laplacian determinant |  |
+| `gmrf.marginal_variance` | 0.19444444444444445 | `7/36` | core/invariants.py, the reciprocal spectrum summed exactly in the rationals |  |
+| `gmrf.blanket_size` | 5 | `five` | core/invariants.py: the Markov blanket of a port is its neighbours |  |
+| `gmrf.pairwise_precision` | -1 | `-1` | core/invariants.py: every seam's pairwise precision entry |  |
+| `sheaf.coboundary_rank` | 11 |  | core/sheaf.py cohomology_dimensions, the rank of the coboundary |  |
+| `sheaf.h0` | 1 | `one` | core/sheaf.py: the global sections of the carrier's scalar sheaf |  |
+| `sheaf.h1` | 19 |  | core/sheaf.py: edge assignments modulo coboundaries |  |
+| `sheaf.euler_characteristic` | -18 | `12 - 30` | core/sheaf.py: twelve nodes minus thirty edges |  |
+| `symmetry.group_order` | 120 | `120` | core/symmetry.py carrier_automorphisms, by exhaustive backtracking |  |
+| `symmetry.rotations` | 60 | `60` | core/symmetry.py rotation_subgroup, from OPH's oriented faces |  |
+| `symmetry.reflections` | 60 | `60` | core/symmetry.py reflection_subgroup |  |
+| `symmetry.configurations` | 78 | `C(13, 11)` | OPH shell configurations at total load two |  |
+| `symmetry.orbits` | 4 |  | core/symmetry.py law_equivariance: orbits of configurations under the group |  |
+| `symmetry.outcome_multisets` | 3 |  | core/symmetry.py law_equivariance: distinct descent-outcome multisets |  |
+| `icosahedron.tetravolume` | 18.51229586821915 | `(5/2)(3 sqrt 2 + sqrt 10)` | geometry/solids.py icosahedron_tetravolume, measured from the oriented surface |  |
+| `icosahedron.tetravolume_squared` | 342.70509831248387 | `175 + 75 sqrt 5` | geometry/solids.py, the measured square against the exact one |  |
+| `icosahedron.faces_reoriented` | 10 |  | geometry/solids.py orient_faces_outward: faces enumerated without an orientation |  |
+| `icosahedron.degree` | 5 | `five` | OPH carrier: every port meets five triangles |  |
+| `cuboctahedron.degree` | 4 | `four` | geometry/lattice.py cuboctahedron_adjacency: every vertex is four-valent |  |
+| `cuboctahedron.tetravolume` | 20.0 | `20` | QuadMath polyhedra table read through geometry.VOLUME_RATIOS |  |
+| `tetravolume.integral_solids` | (1, 3, 4, 6, 20, 96) | `1, 3, 4, 6, 20, 96` | geometry.VOLUME_RATIOS: the tetravolumes of the IVM's integral solids |  |
+| `voronoi.vertices` | 14 |  | geometry/lattice.py voronoi_cell, the dual of the twelve neighbours |  |
+| `voronoi.faces` | 12 |  | geometry/lattice.py voronoi_cell |  |
+| `voronoi.edges` | 24 |  | geometry/lattice.py voronoi_cell |  |
+| `packing.density` | 0.7404804896930608 | `pi / (3 sqrt 2)` | geometry/lattice.py packing_density, measured from the cell and the ball |  |
+| `packing.cell_tetravolume` | 5.999999999999998 | `6` | geometry/lattice.py: the cell's volume in tetrahedra of the prime vector |  |
+| `packing.ball_tetravolume` | 4.442882938158363 | `pi sqrt 2` | geometry/lattice.py: the inscribed ball's volume in the same tetrahedra |  |
+| `shell.free_energy_level_counts` | (1, 3, 4, 7, 7) |  | geometry.generate_shell: distinct values of half the squared norm per shell |  |
+| `shell.shared_free_energy_levels` | (36.0, 52.0) |  | geometry.generate_shell: free-energy levels carried by more than one shell |  |
+| `kl.one_step` | 4.0 | `half of 8` | core/free_energy.py gaussian_kl at the IVM's first neighbour |  |
+| `kl.step_squared_distance` | 8.0 | `8` | geometry.NEIGHBOR_SQUARED_DISTANCE, the IVM's squared neighbour distance |  |

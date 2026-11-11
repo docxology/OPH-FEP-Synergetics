@@ -28,6 +28,13 @@ EXPECTED_BUILDERS = (
     "orbit_figure",
     "ivm_figure",
     "subdivision_figure",
+    "cover_figure",
+    "ga_triangle_figure",
+    "ga_carrier_figure",
+    "ga_descent_figure",
+    "ga_synergetics_figure",
+    "pair_triangles_figure",
+    "scope_matrix_figure",
 )
 
 

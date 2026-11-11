@@ -61,6 +61,7 @@ def _prose_lines(path: Path) -> list[str]:
 
 def test_the_section_files_are_the_ones_the_renderer_discovers():
     expected = {
+        "00_00_graphical_abstract.md",
         "00_abstract.md",
         "01_introduction.md",
         "02_framework.md",
@@ -141,12 +142,20 @@ def test_figure_links_match_the_accessibility_registry():
     for path in SECTIONS:
         for match in FIGURE_LINK.finditer(path.read_text(encoding="utf-8")):
             links[match.group(2)] = match.group(1)
-    assert len(links) == 9, sorted(links)
+    assert len(links) == 15, sorted(links)
     registry = PROJECT / "output" / "figures" / "figure_registry.json"
     if not registry.is_file():  # the figures are generated artefacts
         return
     payload = json.loads(registry.read_text(encoding="utf-8"))
-    recorded = {entry["label"]: entry["filename"] for entry in payload["figures"]}
-    assert recorded == {f"fig:{key}": name for key, name in links.items()}
-    for name in links.values():
-        assert (registry.parent / name).stat().st_size > 10_000
+    entries = {entry["label"]: entry for entry in payload["figures"]}
+    linked = {f"fig:{key}": name for key, name in links.items()}
+    # The cover is the one registry entry no section links: `config.yaml` places
+    # it as the page-1 cover art through `paper.cover.image`, and its alt text
+    # lives in the same registry so that the tagged render and the EPUB cover
+    # share one source.
+    registry_only = {"fig:cover": "fig_cover.png"}
+    assert {label: entry["filename"] for label, entry in entries.items()} == linked | registry_only
+    for label in [*linked, *registry_only]:
+        assert entries[label]["alt"], label
+    for filename in [*linked.values(), *registry_only.values()]:
+        assert (registry.parent / filename).stat().st_size > 10_000, filename

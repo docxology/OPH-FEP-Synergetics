@@ -5,43 +5,66 @@
 One executable probe per entry. Each entry carries the operator-algebraic
 reading from Observer Patch Holography, the variational reading from the
 Free Energy Principle, and the geometric reading from Fuller's Synergetics,
-together with the status the probe establishes.
+together with the status the probe establishes and the pair of programmes the
+claim is made across. Most claims are pairwise; `three-way` marks the few that
+no pair of readings captures.
 
-| kind | status | entry | claim |
-| --- | --- | --- | --- |
-| isomorphism | exact | `carrier-port-chart` | OPH's twelve-port carrier has twelve ports, thirty seams and twenty faces, is five-regular, and its port chart is the one OPH declares. |
-| isomorphism | exact | `spectral-gap` | The carrier Laplacian is 5I - A, its first positive eigenvalue is 5 - sqrt(5), and the record-discarding shell gap is (5 - sqrt(5)) / 60. |
-| isomorphism | exact | `shell-counts` | The total-two load shell has 78 configurations and the binary shell has 66. |
-| isomorphism | exact | `native-repair-law` | The native seam law conserves total load on every transition and lowers the quadratic energy by exactly (d^2 - (|d| mod 2)) / 4. |
-| isomorphism | exact-on-domain | `variational-equivalence` | On the linear-Gaussian domain the interface-energy minimiser over the interior is the harmonic extension and the posterior mean, so A3-style constrained relative-entropy minimisation and predictive-coding perception are the same object. |
-| isomorphism | exact-on-domain | `free-energy-dictionary` | Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, and the update residual pins the Bayesian surprise between the extreme interior eigenvalues. |
-| isomorphism | exact | `sheaf-agreement` | Patch agreement is the global-section condition of a cellular sheaf over the carrier complex, and the sheaf Laplacian is the carrier Laplacian. |
-| isomorphism | exact | `certificate-species` | The native law's sharp certificate is a spectral gap: the mean repair operator is symmetric, nonnegative and doubly stochastic with second eigenvalue 1 - (5 - sqrt(5)) / 60, and its induced infinity norm is exactly one, so no sup-norm contraction certifies it. |
-| disagreement | obstructed | `pr01-obstruction` | The native repair law is not confluent and accepted repairs need not lower a measure: 600 of the 4680 shell transitions move at mismatch one with zero energy decrease, and a one-unit walk keeps energy 1/2 while changing state. |
-| disagreement | obstructed | `free-energy-name-collision` | The interface energy minimised over the interior and the variational free energy at the posterior are different objects that differ by a model-dependent constant, so identifying them numerically is a gauge choice rather than a theorem. |
-| disagreement | obstructed | `mediator-obstruction` | Eliminating an interior mediator leaves a genuinely three-way boundary term: the reduced precision is (1/3) v v^T + epsilon I with v = (1, 1, -1), and a sum of pairwise semidefinite terms reproduces it if and only if epsilon >= 1/3. |
-| disagreement | obstructed | `stationary-blanket` | A blanket visible in the stationary statistics need not bound the dynamics: with zero (mu, eta) precision entry the internal drift is 2q eta + (q - 1) b - 2 mu, so two states with equal blanket and internal values differ in internal motion by 2|q| |eta - eta'|. |
-| disagreement | obstructed | `solenoidal-freedom` | One stationary density is shared by a family of laws: the diffusion with drift -(Gamma - Q) H has stationary law N(0, H^{-1}) for every antisymmetric Q, with spectrum -1 +/- i q and entropy production 2 q^2 in the two-dimensional case. |
-| disagreement | obstructed | `d-stability` | A linear rest admits a free-energy form exactly when it is stable, and one positive local gain removes that form without moving the rest: at k = 4 the Routh first column is (1, 6, -2, 24) and the scaled matrix has two right-half-plane roots. |
-| disagreement | obstructed | `schedule-path` | Agreement and dissipation are state functions while finite phases are path functions: full and half-damped iteration of the same affine rule share every answer, yet their centered contrasts after twelve steps differ by exactly 921633999 / 40000000000. |
-| disagreement | obstructed | `reduction-criterion` | Two histories can share the present observation and need different futures, so a summary that drops the record must err by at least half the response distance on one of them: here the worst-case error floor is exactly one. |
-| disagreement | obstructed | `existence-without-reachability` | An agreement can exist and be unreachable: the clipped two-node map has the origin as its only equilibrium and a source there, and the relaxation orbit stays at radius at least 0.84 with period about 7.58, while the synchronous clipped map stays at radius at least one. |
-| disagreement | obstructed | `directed-gradient` | A directed network's forward response need not carry its exact gradient: for J = [[-1, 2], [0, -1]] and c = (1, 0), the direct nudging response is (1, 0) while the adjoint is (1, 2). |
-| disagreement | obstructed | `four-cycle-local-minimum` | A local minimum of an independently defined discrepancy can be incompatible: on a four-cycle, 0011 violates two edges and every single-bit flip also violates two. |
-| complementarity | exact | `quadray-ivm` | Quadray coordinates give the synergetic side exact integer geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and rational tetravolumes including 1, 3, 4, 6, 20 and 96. |
-| complementarity | exact | `equilibrium-propagation` | The two-settle contrast of equilibrium propagation supplies the parameter gradient that the native repair law does not define: the contrast equals (theta - target) / (1 + beta) exactly and tends to the exact loss gradient as the nudge vanishes. |
-| complementarity | exact | `replicator-potential` | Replicator selection climbs a potential, so the repair language covers it as a comparison class rather than a shared mechanism: the field equals M(x) grad F with M = diag(x) - x x^T and the potential rate is nonnegative. |
-| complementarity | exact | `kissing-twelve` | The twelve-port carrier sits on the kissing-number-twelve configuration: the IVM shell one has twelve sites at squared distance eight, and the geometric icosahedral realisation is isomorphic to OPH's labelled carrier. |
+| pair | kind | status | entry | claim |
+| --- | --- | --- | --- | --- |
+| synergetics-oph | isomorphism | exact | `carrier-port-chart` | OPH's twelve-port carrier has twelve ports, thirty seams and twenty faces, is five-regular, and its port chart is the one OPH declares. |
+| oph-fep | isomorphism | exact | `spectral-gap` | The carrier Laplacian is 5I - A, its first positive eigenvalue is 5 - sqrt(5), and the record-discarding shell gap is (5 - sqrt(5)) / 60. |
+| oph-fep | isomorphism | exact | `shell-counts` | The total-two load shell has 78 configurations and the binary shell has 66. |
+| oph-fep | isomorphism | exact | `native-repair-law` | The native seam law conserves total load on every transition and lowers the quadratic energy by exactly (d^2 - (|d| mod 2)) / 4. |
+| oph-fep | isomorphism | exact-on-domain | `variational-equivalence` | On the linear-Gaussian domain the interface-energy minimiser over the interior is the harmonic extension and the posterior mean, so A3-style constrained relative-entropy minimisation and predictive-coding perception are the same object. |
+| oph-fep | isomorphism | exact-on-domain | `free-energy-dictionary` | Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, and the update residual pins the Bayesian surprise between the extreme interior eigenvalues. |
+| oph-fep | isomorphism | exact | `sheaf-agreement` | Patch agreement is the global-section condition of a cellular sheaf over the carrier complex, and the sheaf Laplacian is the carrier Laplacian. |
+| oph-fep | isomorphism | exact | `certificate-species` | The native law's sharp certificate is a spectral gap: the mean repair operator is symmetric, nonnegative and doubly stochastic with second eigenvalue 1 - (5 - sqrt(5)) / 60, and its induced infinity norm is exactly one, so no sup-norm contraction certifies it. |
+| oph-fep | isomorphism | exact | `tree-number` | The carrier's Laplacian carries an exact integer spanning-tree number: the reduced Laplacian's determinant is 5184000, equal to (1/12) times the product of the eleven nonzero eigenvalues, so the count of acyclic seam sets is an invariant both readings share. |
+| oph-fep | isomorphism | exact | `gmrf-independence` | With the carrier Laplacian as a Gaussian precision, conditional independence holds exactly on the seams and nowhere else: each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the exact marginal variance of a port is 7/36. |
+| oph-fep | isomorphism | exact | `sheaf-cohomology` | The carrier complex's scalar sheaf has H^0 of dimension one and H^1 of dimension nineteen: one global section up to a constant, and nineteen independent ways for edges to disagree that no coboundary explains, with dim H^0 - dim H^1 equal to 12 - 30. |
+| synergetics-oph | isomorphism | exact | `icosahedral-symmetry` | The carrier's automorphism group has order 120, is closed under composition, acts transitively on the twelve ports, the thirty seams and the twenty faces, and splits into sixty rotations and sixty reflections detected from OPH's own oriented faces. |
+| synergetics-oph | isomorphism | exact | `eigenspace-irreducibility` | The Laplacian's eigenspaces of dimensions 3, 5 and 3 are irreducible under the icosahedral group, so the spectrum 0, (5 - sqrt 5) three times, 6 five times and (5 + sqrt 5) three times is an invariant of the symmetry rather than a numerical accident. |
+| synergetics-oph | isomorphism | exact | `law-equivariance` | The native repair law is equivariant: across all 120 automorphisms and all 78 total-two configurations the multiset of strict, zero and no-op outcomes is unchanged, giving four configuration orbits and three distinct outcome multisets, so the census is a group invariant and no symmetry-breaking witness exists. |
+| fep-synergetics | isomorphism | exact | `kl-lattice-metric` | Equal-covariance Gaussian KL is half the squared distance, and the IVM's first shell sits at squared distance eight, so one lattice step costs exactly four nats and the sites at squared norm 8 k^2 cost 4 k^2: the information cost is the synergetic metric over two. |
+| oph-fep | disagreement | obstructed | `pr01-obstruction` | The native repair law is not confluent and accepted repairs need not lower a measure: 600 of the 4680 shell transitions move at mismatch one with zero energy decrease, and a one-unit walk keeps energy 1/2 while changing state. |
+| oph-fep | disagreement | obstructed | `free-energy-name-collision` | The interface energy minimised over the interior and the variational free energy at the posterior are different objects that differ by a model-dependent constant, so identifying them numerically is a gauge choice rather than a theorem. |
+| oph-fep | disagreement | obstructed | `mediator-obstruction` | Eliminating an interior mediator leaves a genuinely three-way boundary term: the reduced precision is (1/3) v v^T + epsilon I with v = (1, 1, -1), and a sum of pairwise semidefinite terms reproduces it if and only if epsilon >= 1/3. |
+| oph-fep | disagreement | obstructed | `stationary-blanket` | A blanket visible in the stationary statistics need not bound the dynamics: with zero (mu, eta) precision entry the internal drift is 2q eta + (q - 1) b - 2 mu, so two states with equal blanket and internal values differ in internal motion by 2|q| |eta - eta'|. |
+| oph-fep | disagreement | obstructed | `solenoidal-freedom` | One stationary density is shared by a family of laws: the diffusion with drift -(Gamma - Q) H has stationary law N(0, H^{-1}) for every antisymmetric Q, with spectrum -1 +/- i q and entropy production 2 q^2 in the two-dimensional case. |
+| oph-fep | disagreement | obstructed | `d-stability` | A linear rest admits a free-energy form exactly when it is stable, and one positive local gain removes that form without moving the rest: at k = 4 the Routh first column is (1, 6, -2, 24) and the scaled matrix has two right-half-plane roots. |
+| oph-fep | disagreement | obstructed | `schedule-path` | Agreement and dissipation are state functions while finite phases are path functions: full and half-damped iteration of the same affine rule share every answer, yet their centered contrasts after twelve steps differ by exactly 921633999 / 40000000000. |
+| oph-fep | disagreement | obstructed | `reduction-criterion` | Two histories can share the present observation and need different futures, so a summary that drops the record must err by at least half the response distance on one of them: here the worst-case error floor is exactly one. |
+| oph-fep | disagreement | obstructed | `existence-without-reachability` | An agreement can exist and be unreachable: the clipped two-node map has the origin as its only equilibrium and a source there, and the relaxation orbit stays at radius at least 0.84 with period about 7.58, while the synchronous clipped map stays at radius at least one. |
+| oph-fep | disagreement | obstructed | `directed-gradient` | A directed network's forward response need not carry its exact gradient: for J = [[-1, 2], [0, -1]] and c = (1, 0), the direct nudging response is (1, 0) while the adjoint is (1, 2). |
+| oph-fep | disagreement | obstructed | `four-cycle-local-minimum` | A local minimum of an independently defined discrepancy can be incompatible: on a four-cycle, 0011 violates two edges and every single-bit flip also violates two. |
+| synergetics-oph | disagreement | obstructed | `cuboctahedron-vs-icosahedron` | The twelve-around-one shell and the carrier are not the same solid although each has twelve vertices: the cuboctahedron is four-regular with eight triangles and six squares and tetravolume 20, while the carrier is the icosahedron, five-regular with twenty triangles and tetravolume 18.512295868219..., so a count coincidence of twelve is not an identification. |
+| fep-synergetics | disagreement | obstructed | `shell-vs-free-energy` | The IVM shell index is not a function of the free energy: shell two spans three distinct free energies and shell four spans seven, the level 36 occurs on shells three and four, and the level 52 on shells four and five, so a bounded free energy does not bound the shell. |
+| synergetics-oph | complementarity | exact | `quadray-ivm` | Quadray coordinates give the synergetic side exact integer geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and rational tetravolumes including 1, 3, 4, 6, 20 and 96. |
+| oph-fep | complementarity | exact | `equilibrium-propagation` | The two-settle contrast of equilibrium propagation supplies the parameter gradient that the native repair law does not define: the contrast equals (theta - target) / (1 + beta) exactly and tends to the exact loss gradient as the nudge vanishes. |
+| oph-fep | complementarity | exact | `replicator-potential` | Replicator selection climbs a potential, so the repair language covers it as a comparison class rather than a shared mechanism: the field equals M(x) grad F with M = diag(x) - x x^T and the potential rate is nonnegative. |
+| synergetics-oph | complementarity | exact | `kissing-twelve` | The twelve-port carrier sits on the kissing-number-twelve configuration: the IVM shell one has twelve sites at squared distance eight, and the geometric icosahedral realisation is isomorphic to OPH's labelled carrier. |
+| synergetics-oph | complementarity | exact | `icosahedron-tetravolume` | Synergetics' tetravolume accounting extends to the carrier's own solid: the regular icosahedron measures 18.512295868219... tetravolumes, equal to (5/2)(3 sqrt 2 + sqrt 10), whose square is exactly 175 + 75 sqrt 5, so the carrier's polytope has an exact algebraic volume that no integral table entry can express. |
+| synergetics-oph | complementarity | exact | `packing-density` | The IVM's Voronoi cell is the rhombic dodecahedron, fourteen vertices, twelve rhombic faces and twenty-four edges with Euler characteristic two, its tetravolume is exactly six, and the ball of radius half the prime vector gives the packing density pi / (3 sqrt 2): the carrier's coordination is the twelve-around-one of the densest lattice packing. |
+| three-way | complementarity | exact | `tetravolume-arithmetic` | The three programmes count in three currencies and only one stays integral: the FEP's equal-covariance cost for one IVM step is exactly four nats, OPH's shell gap is the rational (5 - sqrt 5) / 60, and the synergetic tetravolume table is integral (1, 3, 4, 6, 20, 96) with the cell volume six derived, while the carrier's own icosahedron enters at 18.512295868219..., whose square is 175 + 75 sqrt 5. |
 
-Totals: 23/23 probes pass, 0 fail.
+Totals: 35/35 probes pass, 0 fail.
 
-- isomorphism: 8 passing, 0 failing
-- disagreement: 11 passing, 0 failing
-- complementarity: 4 passing, 0 failing
+By kind:
+
+- isomorphism: 15 passing, 0 failing
+- disagreement: 13 passing, 0 failing
+- complementarity: 7 passing, 0 failing
+
+By pairwise scope:
+
+- oph-fep: 23 passing, 0 failing
+- fep-synergetics: 2 passing, 0 failing
+- synergetics-oph: 9 passing, 0 failing
+- three-way: 1 passing, 0 failing
 
 ## `carrier-port-chart`
 
-**isomorphism** / **exact** / probe PASS
+**isomorphism** / **exact** / **synergetics-oph** / probe PASS
 
 OPH's twelve-port carrier has twelve ports, thirty seams and twenty faces, is five-regular, and its port chart is the one OPH declares.
 
@@ -61,7 +84,7 @@ Probe values:
 
 ## `spectral-gap`
 
-**isomorphism** / **exact** / probe PASS
+**isomorphism** / **exact** / **oph-fep** / probe PASS
 
 The carrier Laplacian is 5I - A, its first positive eigenvalue is 5 - sqrt(5), and the record-discarding shell gap is (5 - sqrt(5)) / 60.
 
@@ -81,7 +104,7 @@ Probe values:
 
 ## `shell-counts`
 
-**isomorphism** / **exact** / probe PASS
+**isomorphism** / **exact** / **oph-fep** / probe PASS
 
 The total-two load shell has 78 configurations and the binary shell has 66.
 
@@ -99,7 +122,7 @@ Probe values:
 
 ## `native-repair-law`
 
-**isomorphism** / **exact** / probe PASS
+**isomorphism** / **exact** / **oph-fep** / probe PASS
 
 The native seam law conserves total load on every transition and lowers the quadratic energy by exactly (d^2 - (|d| mod 2)) / 4.
 
@@ -116,7 +139,7 @@ Probe values:
 
 ## `variational-equivalence`
 
-**isomorphism** / **exact-on-domain** / probe PASS
+**isomorphism** / **exact-on-domain** / **oph-fep** / probe PASS
 
 On the linear-Gaussian domain the interface-energy minimiser over the interior is the harmonic extension and the posterior mean, so A3-style constrained relative-entropy minimisation and predictive-coding perception are the same object.
 
@@ -138,7 +161,7 @@ Probe values:
 
 ## `free-energy-dictionary`
 
-**isomorphism** / **exact-on-domain** / probe PASS
+**isomorphism** / **exact-on-domain** / **oph-fep** / probe PASS
 
 Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, and the update residual pins the Bayesian surprise between the extreme interior eigenvalues.
 
@@ -161,7 +184,7 @@ Probe values:
 
 ## `sheaf-agreement`
 
-**isomorphism** / **exact** / probe PASS
+**isomorphism** / **exact** / **oph-fep** / probe PASS
 
 Patch agreement is the global-section condition of a cellular sheaf over the carrier complex, and the sheaf Laplacian is the carrier Laplacian.
 
@@ -183,7 +206,7 @@ Probe values:
 
 ## `certificate-species`
 
-**isomorphism** / **exact** / probe PASS
+**isomorphism** / **exact** / **oph-fep** / probe PASS
 
 The native law's sharp certificate is a spectral gap: the mean repair operator is symmetric, nonnegative and doubly stochastic with second eigenvalue 1 - (5 - sqrt(5)) / 60, and its induced infinity norm is exactly one, so no sup-norm contraction certifies it.
 
@@ -201,9 +224,165 @@ Probe values:
 - `expected_second_eigenvalue` = 0.9539344662916631
 - `induced_infinity_norm` = 1.0
 
+## `tree-number`
+
+**isomorphism** / **exact** / **oph-fep** / probe PASS
+
+The carrier's Laplacian carries an exact integer spanning-tree number: the reduced Laplacian's determinant is 5184000, equal to (1/12) times the product of the eleven nonzero eigenvalues, so the count of acyclic seam sets is an invariant both readings share.
+
+- OPH: The seam structure of the twelve-port carrier, whose Laplacian is the repair energy's quadratic form.
+- FEP: The same matrix as a Gaussian precision, whose determinant normalises the linear-Gaussian interface integral.
+- Synergetics: The icosahedron's own graph, counted by its seam structure.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
+
+Probe values:
+
+- `spanning_trees_exact` = 5184000
+- `spanning_trees_from_spectrum` = 5183999.999999992
+- `relative_residual` = 1.6168794698185392e-15
+- `reduced_laplacian_is_integral` = True
+- `nonzero_eigenvalue_count` = 11
+- `seams` = 30
+
+## `gmrf-independence`
+
+**isomorphism** / **exact** / **oph-fep** / probe PASS
+
+With the carrier Laplacian as a Gaussian precision, conditional independence holds exactly on the seams and nowhere else: each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the exact marginal variance of a port is 7/36.
+
+- OPH: Seams are the only coupling between ports, and a repair touches one seam.
+- FEP: A Markov blanket is the graph neighbourhood of a port, and the interface energy is the precision-quadratic form on the linear-Gaussian domain.
+- Synergetics: Every vertex of the icosahedron is five-coordinated.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Section 7.2
+
+Probe values:
+
+- `laplacian_is_precision` = True
+- `proper_precision_shift` = 0.08333333333333333
+- `independence_matches_graph` = True
+- `pairwise_precision_values` = (-1)
+- `pairwise_precision_entries` = 60
+- `blanket_sizes` = (5)
+- `reciprocal_spectrum_sum` = 7/3
+- `marginal_variance` = (7, 36)
+- `pseudoinverse_diagonal` = 0.1944444444444445
+- `offsets_cancel` = True
+
+## `sheaf-cohomology`
+
+**isomorphism** / **exact** / **oph-fep** / probe PASS
+
+The carrier complex's scalar sheaf has H^0 of dimension one and H^1 of dimension nineteen: one global section up to a constant, and nineteen independent ways for edges to disagree that no coboundary explains, with dim H^0 - dim H^1 equal to 12 - 30.
+
+- OPH: A public record is a global section; what prevents agreement is not counted by the seam count alone.
+- FEP: The harmonic-extension problem is well posed up to a constant, and its residual space is nineteen-dimensional.
+- Synergetics: A closed triangulated surface whose twelve vertices, thirty edges and twenty faces give the same Euler characteristic.
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Proposition 4 and Section 7.2 (the cellular sheaf over the carrier complex)
+
+Probe values:
+
+- `nodes` = 12
+- `edges` = 30
+- `total_dim` = 12
+- `edge_total_dim` = 30
+- `coboundary_rank` = 11
+- `h0` = 1
+- `h1` = 19
+- `euler_characteristic` = -18
+- `h0_minus_h1` = -18
+- `laplacian_equals_coboundary_square` = True
+- `laplacian_equals_carrier_laplacian` = True
+- `global_section_basis_columns` = 1
+- `coboundary_rank_direct` = 11
+
+## `icosahedral-symmetry`
+
+**isomorphism** / **exact** / **synergetics-oph** / probe PASS
+
+The carrier's automorphism group has order 120, is closed under composition, acts transitively on the twelve ports, the thirty seams and the twenty faces, and splits into sixty rotations and sixty reflections detected from OPH's own oriented faces.
+
+- OPH: The port chart's oriented faces decide which automorphisms preserve orientation.
+- FEP: The group is a property of the chosen interface, not of any free-energy functional.
+- Synergetics: The full icosahedral group of the icosahedron.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
+
+Probe values:
+
+- `order` = 120
+- `distinct` = 120
+- `closed_under_composition` = True
+- `identity_present` = True
+- `rotations` = 60
+- `reflections` = 60
+- `halves_disjoint` = True
+- `orbits` = ports=1, seams=1, faces=1
+- `transitive_on_ports` = True
+
+## `eigenspace-irreducibility`
+
+**isomorphism** / **exact** / **synergetics-oph** / probe PASS
+
+The Laplacian's eigenspaces of dimensions 3, 5 and 3 are irreducible under the icosahedral group, so the spectrum 0, (5 - sqrt 5) three times, 6 five times and (5 + sqrt 5) three times is an invariant of the symmetry rather than a numerical accident.
+
+- OPH: The spectral certificate of the native repair law.
+- FEP: A precision spectrum that no relabelling of the interface can change.
+- Synergetics: The icosahedral group's real irreducible representations of dimensions 1, 3, 3 and 5 appear as the eigenspaces.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
+
+Probe values:
+
+- `eigenspaces` = 0.000000=dim=1, orbit_rank=1, irreducible=True, 2.763932=dim=3, orbit_rank=3, min_orbit_rank=3, irreducible=True, 6.000000=dim=5, orbit_rank=5, min_orbit_rank=5, irreducible=True, 7.236068=dim=3, orbit_rank=3, min_orbit_rank=3, irreducible=True
+- `dimensions` = (1, 3, 3, 5)
+- `orbit_ranks` = (1, 3, 3, 5)
+- `irreducible` = True
+- `eigenvalue_count` = 4
+
+## `law-equivariance`
+
+**isomorphism** / **exact** / **synergetics-oph** / probe PASS
+
+The native repair law is equivariant: across all 120 automorphisms and all 78 total-two configurations the multiset of strict, zero and no-op outcomes is unchanged, giving four configuration orbits and three distinct outcome multisets, so the census is a group invariant and no symmetry-breaking witness exists.
+
+- OPH: The repair law commutes with any relabelling of the carrier's ports.
+- FEP: A local update whose outcome statistics a relabelling cannot change.
+- Synergetics: The icosahedral group acting on the coordination structure.
+- Source: OPH model/observer/native.py:45-51 and the 'Agreement and Surprise' paper, Section 6.2
+
+Probe values:
+
+- `invariant` = True
+- `configurations` = 78
+- `group_order` = 120
+- `orbits` = 4
+- `distinct_outcome_multisets` = 3
+- `witness` = None
+- `sample_configuration` = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2)
+- `sample_outcomes` = strict=10, zero=0, noop=50
+- `sample_transitions` = 60
+
+## `kl-lattice-metric`
+
+**isomorphism** / **exact** / **fep-synergetics** / probe PASS
+
+Equal-covariance Gaussian KL is half the squared distance, and the IVM's first shell sits at squared distance eight, so one lattice step costs exactly four nats and the sites at squared norm 8 k^2 cost 4 k^2: the information cost is the synergetic metric over two.
+
+- OPH: No counterpart; OPH's own step cost is the change of its quadratic seam energy.
+- FEP: The linear-Gaussian KL of a mean shift at fixed covariance.
+- Synergetics: The IVM's squared distance in quadray coordinates.
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Theorem 7 item 5; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+
+Probe values:
+
+- `one_step_kl` = np.float64(4.0)
+- `one_step_squared_distance` = 8.0
+- `one_step_expected` = 4.0
+- `norm_sphere_kl` = 1=np.float64(4.0), 2=np.float64(16.0), 3=np.float64(36.0), 4=np.float64(64.0)
+- `norm_sphere_expected` = 1=4.0, 2=16.0, 3=36.0, 4=64.0
+- `kl_is_half_the_squared_distance` = True
+
 ## `pr01-obstruction`
 
-**disagreement** / **obstructed** / probe PASS
+**disagreement** / **obstructed** / **oph-fep** / probe PASS
 
 The native repair law is not confluent and accepted repairs need not lower a measure: 600 of the 4680 shell transitions move at mismatch one with zero energy decrease, and a one-unit walk keeps energy 1/2 while changing state.
 
@@ -229,7 +408,7 @@ Probe values:
 
 ## `free-energy-name-collision`
 
-**disagreement** / **obstructed** / probe PASS
+**disagreement** / **obstructed** / **oph-fep** / probe PASS
 
 The interface energy minimised over the interior and the variational free energy at the posterior are different objects that differ by a model-dependent constant, so identifying them numerically is a gauge choice rather than a theorem.
 
@@ -248,7 +427,7 @@ Probe values:
 
 ## `mediator-obstruction`
 
-**disagreement** / **obstructed** / probe PASS
+**disagreement** / **obstructed** / **oph-fep** / probe PASS
 
 Eliminating an interior mediator leaves a genuinely three-way boundary term: the reduced precision is (1/3) v v^T + epsilon I with v = (1, 1, -1), and a sum of pairwise semidefinite terms reproduces it if and only if epsilon >= 1/3.
 
@@ -271,7 +450,7 @@ Probe values:
 
 ## `stationary-blanket`
 
-**disagreement** / **obstructed** / probe PASS
+**disagreement** / **obstructed** / **oph-fep** / probe PASS
 
 A blanket visible in the stationary statistics need not bound the dynamics: with zero (mu, eta) precision entry the internal drift is 2q eta + (q - 1) b - 2 mu, so two states with equal blanket and internal values differ in internal motion by 2|q| |eta - eta'|.
 
@@ -291,7 +470,7 @@ Probe values:
 
 ## `solenoidal-freedom`
 
-**disagreement** / **obstructed** / probe PASS
+**disagreement** / **obstructed** / **oph-fep** / probe PASS
 
 One stationary density is shared by a family of laws: the diffusion with drift -(Gamma - Q) H has stationary law N(0, H^{-1}) for every antisymmetric Q, with spectrum -1 +/- i q and entropy production 2 q^2 in the two-dimensional case.
 
@@ -310,7 +489,7 @@ Probe values:
 
 ## `d-stability`
 
-**disagreement** / **obstructed** / probe PASS
+**disagreement** / **obstructed** / **oph-fep** / probe PASS
 
 A linear rest admits a free-energy form exactly when it is stable, and one positive local gain removes that form without moving the rest: at k = 4 the Routh first column is (1, 6, -2, 24) and the scaled matrix has two right-half-plane roots.
 
@@ -341,7 +520,7 @@ Probe values:
 
 ## `schedule-path`
 
-**disagreement** / **obstructed** / probe PASS
+**disagreement** / **obstructed** / **oph-fep** / probe PASS
 
 Agreement and dissipation are state functions while finite phases are path functions: full and half-damped iteration of the same affine rule share every answer, yet their centered contrasts after twelve steps differ by exactly 921633999 / 40000000000.
 
@@ -359,7 +538,7 @@ Probe values:
 
 ## `reduction-criterion`
 
-**disagreement** / **obstructed** / probe PASS
+**disagreement** / **obstructed** / **oph-fep** / probe PASS
 
 Two histories can share the present observation and need different futures, so a summary that drops the record must err by at least half the response distance on one of them: here the worst-case error floor is exactly one.
 
@@ -379,7 +558,7 @@ Probe values:
 
 ## `existence-without-reachability`
 
-**disagreement** / **obstructed** / probe PASS
+**disagreement** / **obstructed** / **oph-fep** / probe PASS
 
 An agreement can exist and be unreachable: the clipped two-node map has the origin as its only equilibrium and a source there, and the relaxation orbit stays at radius at least 0.84 with period about 7.58, while the synchronous clipped map stays at radius at least one.
 
@@ -400,7 +579,7 @@ Probe values:
 
 ## `directed-gradient`
 
-**disagreement** / **obstructed** / probe PASS
+**disagreement** / **obstructed** / **oph-fep** / probe PASS
 
 A directed network's forward response need not carry its exact gradient: for J = [[-1, 2], [0, -1]] and c = (1, 0), the direct nudging response is (1, 0) while the adjoint is (1, 2).
 
@@ -418,7 +597,7 @@ Probe values:
 
 ## `four-cycle-local-minimum`
 
-**disagreement** / **obstructed** / probe PASS
+**disagreement** / **obstructed** / **oph-fep** / probe PASS
 
 A local minimum of an independently defined discrepancy can be incompatible: on a four-cycle, 0011 violates two edges and every single-bit flip also violates two.
 
@@ -436,9 +615,58 @@ Probe values:
 - `flip_violations` = (2, 2, 2, 2)
 - `is_local_minimum` = True
 
+## `cuboctahedron-vs-icosahedron`
+
+**disagreement** / **obstructed** / **synergetics-oph** / probe PASS
+
+The twelve-around-one shell and the carrier are not the same solid although each has twelve vertices: the cuboctahedron is four-regular with eight triangles and six squares and tetravolume 20, while the carrier is the icosahedron, five-regular with twenty triangles and tetravolume 18.512295868219..., so a count coincidence of twelve is not an identification.
+
+- OPH: The carrier is the icosahedron; its twenty faces are the faces the repair law uses.
+- FEP: No counterpart.
+- Synergetics: The vector equilibrium is the twelve-around-one cuboctahedron; the icosahedron is a different twelve-vertex solid.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+
+Probe values:
+
+- `cuboctahedron_vertices` = 12
+- `cuboctahedron_degrees` = (4)
+- `cuboctahedron_edges` = 24
+- `cuboctahedron_faces` = 14
+- `cuboctahedron_square_faces` = 6
+- `cuboctahedron_tetravolume` = 20.0
+- `icosahedron_vertices` = 12
+- `icosahedron_degrees` = (5)
+- `icosahedron_edges` = 30
+- `icosahedron_faces` = 20
+- `icosahedron_tetravolume` = 18.51229586821915
+- `adjacency_equal` = False
+- `carrier_is_the_icosahedron` = True
+- `carrier_is_the_cuboctahedron` = False
+
+## `shell-vs-free-energy`
+
+**disagreement** / **obstructed** / **fep-synergetics** / probe PASS
+
+The IVM shell index is not a function of the free energy: shell two spans three distinct free energies and shell four spans seven, the level 36 occurs on shells three and four, and the level 52 on shells four and five, so a bounded free energy does not bound the shell.
+
+- OPH: OPH's shell is a graph-distance shell of configurations, not a level set of a quadratic form.
+- FEP: The free energy of a Gaussian mean is a quadratic form whose level sets cut across the coordination shells.
+- Synergetics: The shells are 10 k^2 + 2 sites at graph distance k from the centre.
+- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+
+Probe values:
+
+- `shell_sizes` = 1=12, 2=42, 3=92, 4=162, 5=252
+- `counted_shell_sizes` = 1=12, 2=42, 3=92, 4=162, 5=252
+- `free_energy_levels` = 1=(4.0), 2=(8.0, 12.0, 16.0), 3=(20.0, 24.0, 28.0, 36.0), 4=(32.0, 36.0, 40.0, 44.0, 48.0, 52.0, 64.0), 5=(52.0, 60.0, 68.0, 72.0, 76.0, 84.0, 100.0)
+- `levels_per_shell` = 1=1, 2=3, 3=4, 4=7, 5=7
+- `levels_shared_across_shells` = 36.0=(3, 4), 52.0=(4, 5)
+- `shell_one_is_one_sphere` = True
+- `shell_two_spans_three_spheres` = True
+
 ## `quadray-ivm`
 
-**complementarity** / **exact** / probe PASS
+**complementarity** / **exact** / **synergetics-oph** / probe PASS
 
 Quadray coordinates give the synergetic side exact integer geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and rational tetravolumes including 1, 3, 4, 6, 20 and 96.
 
@@ -461,7 +689,7 @@ Probe values:
 
 ## `equilibrium-propagation`
 
-**complementarity** / **exact** / probe PASS
+**complementarity** / **exact** / **oph-fep** / probe PASS
 
 The two-settle contrast of equilibrium propagation supplies the parameter gradient that the native repair law does not define: the contrast equals (theta - target) / (1 + beta) exactly and tends to the exact loss gradient as the nudge vanishes.
 
@@ -481,7 +709,7 @@ Probe values:
 
 ## `replicator-potential`
 
-**complementarity** / **exact** / probe PASS
+**complementarity** / **exact** / **oph-fep** / probe PASS
 
 Replicator selection climbs a potential, so the repair language covers it as a comparison class rather than a shared mechanism: the field equals M(x) grad F with M = diag(x) - x x^T and the potential rate is nonnegative.
 
@@ -500,7 +728,7 @@ Probe values:
 
 ## `kissing-twelve`
 
-**complementarity** / **exact** / probe PASS
+**complementarity** / **exact** / **synergetics-oph** / probe PASS
 
 The twelve-port carrier sits on the kissing-number-twelve configuration: the IVM shell one has twelve sites at squared distance eight, and the geometric icosahedral realisation is isomorphic to OPH's labelled carrier.
 
@@ -517,4 +745,94 @@ Probe values:
 - `ivm_moves` = 12
 - `move_squared_norm` = 8.0
 - `geometric_adjacency_isomorphic` = True
+
+## `icosahedron-tetravolume`
+
+**complementarity** / **exact** / **synergetics-oph** / probe PASS
+
+Synergetics' tetravolume accounting extends to the carrier's own solid: the regular icosahedron measures 18.512295868219... tetravolumes, equal to (5/2)(3 sqrt 2 + sqrt 10), whose square is exactly 175 + 75 sqrt 5, so the carrier's polytope has an exact algebraic volume that no integral table entry can express.
+
+- OPH: The carrier's polytope: twelve ports, thirty seams, twenty faces.
+- FEP: No counterpart; the FEP assigns no volume to an interface.
+- Synergetics: The tetravolume of the regular icosahedron, measured against the equal-edge tetrahedron.
+- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+
+Probe values:
+
+- `vertices` = 12
+- `edges` = 30
+- `faces` = 20
+- `faces_reoriented` = 10
+- `edge` = 2.0
+- `edge_spread` = 0.0
+- `volume` = 17.453559924999293
+- `tetraunit` = 0.9428090415820635
+- `tetravolume` = 18.51229586821915
+- `closed_form_tetravolume` = 18.512295868219162
+- `tetravolume_residual` = 1.0658141036401503e-14
+- `tetravolume_squared` = 342.70509831248387
+- `exact_squared` = 342.7050983124842
+- `exact_squared_parts` = (175, 75)
+- `exact_squared_residual` = 3.410605131648481e-13
+- `integral` = False
+
+## `packing-density`
+
+**complementarity** / **exact** / **synergetics-oph** / probe PASS
+
+The IVM's Voronoi cell is the rhombic dodecahedron, fourteen vertices, twelve rhombic faces and twenty-four edges with Euler characteristic two, its tetravolume is exactly six, and the ball of radius half the prime vector gives the packing density pi / (3 sqrt 2): the carrier's coordination is the twelve-around-one of the densest lattice packing.
+
+- OPH: The carrier's degree-five coordination is the kissing configuration of the densest lattice packing.
+- FEP: No counterpart.
+- Synergetics: The rhombic dodecahedron's six tetravolumes, derived here from the cell rather than read from the table.
+- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+
+Probe values:
+
+- `cell_vertex_count` = 14
+- `cell_face_count` = 12
+- `cell_edge_count` = 24
+- `cell_euler_characteristic` = 2
+- `cell_all_faces_quadrilateral` = True
+- `cell_all_faces_rhombic` = True
+- `cell_feasible` = True
+- `cell_orientation_flips` = 0
+- `cell_volume` = 16.0
+- `cell_pyramid_volume` = 16.0
+- `cell_volume_residual` = 0.0
+- `cell_tetravolume` = 5.999999999999998
+- `cell_tetravolume_matches_table` = True
+- `ball_tetravolume` = 4.442882938158363
+- `density` = 0.7404804896930608
+- `closed_form` = 0.7404804896930609
+- `density_residual` = 1.1102230246251565e-16
+- `inradius_is_half_the_prime_vector` = True
+
+## `tetravolume-arithmetic`
+
+**complementarity** / **exact** / **three-way** / probe PASS
+
+The three programmes count in three currencies and only one stays integral: the FEP's equal-covariance cost for one IVM step is exactly four nats, OPH's shell gap is the rational (5 - sqrt 5) / 60, and the synergetic tetravolume table is integral (1, 3, 4, 6, 20, 96) with the cell volume six derived, while the carrier's own icosahedron enters at 18.512295868219..., whose square is 175 + 75 sqrt 5.
+
+- OPH: Integer loads and rational spectral data.
+- FEP: Real-valued information costs in nats.
+- Synergetics: Tetravolumes of the prime vector: integral on the IVM, algebraic irrational on the icosahedron.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026
+
+Probe values:
+
+- `fep_currency` = nats
+- `fep_one_step_kl` = np.float64(4.0)
+- `fep_one_step_is_integral` = True
+- `oph_currency` = integer loads and rational spectral data
+- `oph_shell_gap` = 0.04606553370833684
+- `oph_shell_gap_is_smaller_than_one` = True
+- `synergetics_currency` = tetravolumes of the prime vector
+- `synergetics_table` = cube=3, cuboctahedron=20, octahedron=4, rhombic_dodecahedron=6, tetrahedron=1, truncated_octahedron=96
+- `synergetics_table_is_integral` = True
+- `synergetics_icosahedron_tetravolume` = 18.51229586821915
+- `synergetics_icosahedron_is_integral` = False
+- `synergetics_icosahedron_squared_parts` = (175, 75)
+- `ivm_cell_tetravolume` = 5.999999999999998
+- `ivm_density_is_below_one` = True
 

@@ -1,15 +1,18 @@
-# Scope and limits {#sec:scope}
+# Scope, limits and falsifiers of a correspondence battery {#sec:scope}
 
 ## What is verified
 
 Everything in [@sec:correspondences], [@sec:disagreements] and
 [@sec:complementarities] is executed by `oph-fep-synergetics verify`, which runs
-{{REGISTRY_ENTRIES}} probes and exits non-zero if any of them fails. The values
+{{REGISTRY_ENTRIES}} probes and exits non-zero if any of them fails. The command
+can be narrowed to one pairwise scope with `--pair`, so a reader who only wants
+the Synergetics–OPH ledger does not have to take the rest on trust. The values
 quoted in the prose are the values the probes report; a change in any of them
 changes the probe's output and, where the change is a failure, changes the exit
 code.
 
-Three limits of that verification should be stated.
+Three limits of that verification should be stated, and a fourth applies to the
+newer entries specifically.
 
 The first is domain. The variational equivalence [@prop:ve], the dictionary
 [@sec:dictionary] and the two FEP identities hold in the linear-Gaussian corner.
@@ -29,6 +32,19 @@ source states them, the package's own measurements are reported alongside, and a
 reader who disagrees with the draft can still use the measurements. The three
 software programmes are pinned to commits, and the pins are point-in-time
 readings rather than perpetual guarantees.
+
+The fourth is arithmetic. The newer identifications fall into two groups, and the
+probes treat them differently. The counting identities are exact: the
+spanning-tree number is an integer determinant computed over the rationals, the
+cohomology dimensions are ranks, the group order and its rotation/reflection
+split are integers, and the equivariance claim is a finite search over
+{{SYMMETRY_GROUP_ORDER}} group elements and {{SYMMETRY_CONFIGURATIONS}}
+configurations. The geometric claims are not of that kind: tetravolumes and the
+packing density are floating-point measurements compared against closed forms,
+and the probes report the residual rather than only a verdict. The statuses are
+`exact` in both groups because the residuals are at the level of double
+precision, and a reader who wants a stronger statement should read the residual,
+which is reported.
 
 ## What is not reproduced
 
@@ -83,7 +99,10 @@ temptation visible.
 **Distinguish numerology from prediction.** The twelve-fold and sixty-fold
 coincidences in this paper are derived, and the derivation is part of the
 probe. A numerical coincidence that is not derived is not evidence, and the
-Synergetics literature contains both kinds.
+Synergetics literature contains both kinds. The two newest obstructions are the
+sharpest examples: twelve vertices are shared by a cuboctahedron, a rhombic
+dodecahedron's neighbour graph and an icosahedron, and only one of the three is
+the carrier [@sec:cuboctahedron].
 
 **Respect scale separation.** The linear-Gaussian results are exact at finite
 size and say nothing about a continuum limit. A claim that survives at twelve
