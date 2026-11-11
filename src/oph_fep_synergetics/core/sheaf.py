@@ -248,3 +248,64 @@ def carrier_sheaf(carrier: IcosahedralCarrier) -> CellularSheaf:
         for a, b in carrier.edges
     )
     return CellularSheaf(stalk_dims=(1,) * carrier.port_count, edges=edges)
+
+
+# ---------------------------------------------------------------------------
+# Cohomology of a sheaf
+# ---------------------------------------------------------------------------
+
+
+def coboundary_matrix(sheaf: CellularSheaf) -> np.ndarray:
+    """Return the coboundary ``delta^0`` as one dense matrix.
+
+    Row blocks are edges and column blocks are nodes, with ``-map_u`` on the
+    edge's tail and ``+map_v`` on its head, so ``delta z`` is a single product
+    and the rank of the map can be read from it.
+    """
+    offsets = sheaf.offsets()
+    row_count = int(sum(edge.map_u.shape[0] for edge in sheaf.edges))
+    matrix = np.zeros((row_count, sheaf.total_dim))
+    row = 0
+    for edge in sheaf.edges:
+        block = edge.map_u.shape[0]
+        matrix[row : row + block, offsets[edge.u] : offsets[edge.u + 1]] -= edge.map_u
+        matrix[row : row + block, offsets[edge.v] : offsets[edge.v + 1]] += edge.map_v
+        row += block
+    return matrix
+
+
+def coboundary_rank(sheaf: CellularSheaf, *, tolerance: float = 1e-9) -> int:
+    """Return the rank of ``delta^0``."""
+    return int(np.linalg.matrix_rank(coboundary_matrix(sheaf), tol=tolerance))
+
+
+def cohomology_dimensions(sheaf: CellularSheaf, *, tolerance: float = 1e-9) -> dict[str, object]:
+    """Return the dimensions of ``H^0`` and ``H^1`` of a sheaf over a graph.
+
+    ``H^0 = ker(delta^0)`` is the space of global sections -- the assignments on
+    which every edge agrees -- and ``H^1 = C^1 / im(delta^0)`` is the space of
+    edge assignments modulo coboundaries.  Their difference is the graph's Euler
+    characteristic ``nodes - edges``, which for the carrier's scalar identity
+    sheaf is ``12 - 30 = -18``: one global section up to a constant, and nineteen
+    independent ways for edges to disagree without a coboundary explaining them.
+    """
+    matrix = coboundary_matrix(sheaf)
+    rank = int(np.linalg.matrix_rank(matrix, tol=tolerance))
+    eigenvalues = np.linalg.eigvalsh(sheaf.laplacian())
+    h0 = int((eigenvalues <= tolerance).sum())
+    h1 = int(matrix.shape[0] - rank)
+    euler = sheaf.node_count - len(sheaf.edges)
+    return {
+        "nodes": sheaf.node_count,
+        "edges": len(sheaf.edges),
+        "total_dim": sheaf.total_dim,
+        "edge_total_dim": int(matrix.shape[0]),
+        "coboundary_rank": rank,
+        "h0": h0,
+        "h1": h1,
+        "euler_characteristic": euler,
+        "h0_minus_h1": h0 - h1,
+        "laplacian_equals_coboundary_square": bool(
+            np.allclose(matrix.T @ matrix, sheaf.laplacian())
+        ),
+    }

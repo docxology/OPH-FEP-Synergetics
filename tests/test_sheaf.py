@@ -9,6 +9,9 @@ from oph_fep_synergetics.core import (
     CellularSheaf,
     EdgeRestriction,
     carrier_sheaf,
+    coboundary_matrix,
+    coboundary_rank,
+    cohomology_dimensions,
     icosahedral_carrier,
     linear_chain_sheaf,
 )
@@ -178,3 +181,43 @@ def test_carrier_sheaf_reproduces_the_carrier_laplacian():
     assert len(sheaf.edges) == 30
     assert np.allclose(sheaf.laplacian(), carrier.laplacian())
     assert sheaf.record_injectivity([0, 5])
+
+
+def test_coboundary_matrix_of_the_carrier_has_thirty_rows_and_eleven_rank():
+    sheaf = carrier_sheaf(icosahedral_carrier())
+    assert coboundary_matrix(sheaf).shape == (30, 12)
+    assert coboundary_rank(sheaf) == 11
+
+
+def test_carrier_cohomology_dimensions():
+    assert cohomology_dimensions(carrier_sheaf(icosahedral_carrier())) == {
+        "nodes": 12,
+        "edges": 30,
+        "total_dim": 12,
+        "edge_total_dim": 30,
+        "coboundary_rank": 11,
+        "h0": 1,
+        "h1": 19,
+        "euler_characteristic": -18,
+        "h0_minus_h1": -18,
+        "laplacian_equals_coboundary_square": True,
+    }
+
+
+def test_carrier_global_section_basis_is_the_constants():
+    sheaf = carrier_sheaf(icosahedral_carrier())
+    basis = sheaf.global_section_basis()
+    assert basis.shape == (12, 1)
+    assert sheaf.is_global_section(np.ones(12))
+
+
+def test_chain_cohomology_dimensions():
+    report = cohomology_dimensions(linear_chain_sheaf(4))
+    assert report["nodes"] == 4
+    assert report["edges"] == 3
+    assert report["coboundary_rank"] == 3
+    assert report["h0"] == 1
+    assert report["h1"] == 0
+    assert report["euler_characteristic"] == 1
+    assert report["h0_minus_h1"] == 1
+    assert report["laplacian_equals_coboundary_square"] is True
