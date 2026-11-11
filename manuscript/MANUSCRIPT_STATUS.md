@@ -147,7 +147,7 @@ identification that looks natural in prose fails as stated.
   from the table.
 - **No single programme supplies the exchange rate.** One lattice step has three
   exact costs in three number fields (`tetravolume-arithmetic`), which is why the
-  only three-way entry is a complementarity rather than an identification.
+  two three-way entries are complementarities rather than identifications.
 
 The replicator potential is included as a comparison class: selection climbs a
 potential, so the repair language covers it without sharing its mechanism.

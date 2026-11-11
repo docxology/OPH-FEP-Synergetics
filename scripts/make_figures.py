@@ -878,7 +878,7 @@ def ga_triangle_figure() -> Path:
         "Principle; and Synergetics, quadray/IVM. Each edge carries its pairwise ledger of "
         "isomorphisms, disagreements and complementarities, and the three load-bearing "
         "identifications are named beside the edge they belong to. The centre gives the three-way "
-        "count and its key, tetravolume-arithmetic.",
+        "count and its two keys, tetravolume-arithmetic and conjugation-norm.",
     )
 
 
@@ -1214,8 +1214,8 @@ def pair_triangles_figure() -> Path:
         "Three small triangles side by side, one for each pairwise scope: OPH and FEP, FEP and "
         "Synergetics, and Synergetics and OPH. Each triangle names all three frameworks and "
         "annotates its pair's counts by kind and its status breakdown, with the pair's edge "
-        "highlighted. A centre note records the single three-way complementarity, "
-        "tetravolume-arithmetic.",
+        "highlighted. A centre note records the three-way count and its two entries, "
+        "tetravolume-arithmetic and conjugation-norm.",
     )
 
 

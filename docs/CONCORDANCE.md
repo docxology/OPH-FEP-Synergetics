@@ -45,14 +45,14 @@ argue by key.
 | `kissing-twelve` | complementarity | exact | synergetics-oph | `02_framework.md` | yes |
 | `icosahedron-tetravolume` | complementarity | exact | synergetics-oph | `02_framework.md` | yes |
 | `packing-density` | complementarity | exact | synergetics-oph | `02_framework.md` | yes |
-| `tetravolume-arithmetic` | complementarity | exact | three-way | `02_framework.md` | yes |
+| `tetravolume-arithmetic` | complementarity | exact | three-way | `00_00_graphical_abstract.md`, `02_framework.md` | yes |
 | `effective-resistance` | complementarity | exact | oph-fep | `06_complementarities.md` | yes |
 | `vertex-shells` | disagreement | obstructed | synergetics-oph | `05_disagreements.md` | yes |
 | `subgraph-census` | isomorphism | exact | synergetics-oph | `01_introduction.md`, `02_framework.md`, `04_correspondences.md` | yes |
 | `angle-defect` | isomorphism | exact | synergetics-oph | `04_correspondences.md` | yes |
 | `twelve-around-one-families` | disagreement | obstructed | synergetics-oph | `05_disagreements.md` | yes |
 | `dual-cells` | complementarity | exact | synergetics-oph | `02_framework.md`, `06_complementarities.md` | yes |
-| `conjugation-norm` | complementarity | exact | three-way | `06_complementarities.md` | yes |
+| `conjugation-norm` | complementarity | exact | three-way | `00_00_graphical_abstract.md`, `06_complementarities.md` | yes |
 
 42 of 42 claims are named by at least one section's prose.
 
@@ -60,7 +60,7 @@ argue by key.
 
 | section | claims its prose names |
 | --- | --- |
-| `00_00_graphical_abstract.md` | `carrier-port-chart`, `spectral-gap`, `kl-lattice-metric` |
+| `00_00_graphical_abstract.md` | `carrier-port-chart`, `spectral-gap`, `kl-lattice-metric`, `tetravolume-arithmetic`, `conjugation-norm` |
 | `00_abstract.md` | *none* |
 | `01_introduction.md` | `subgraph-census` |
 | `02_framework.md` | `carrier-port-chart`, `shell-counts`, `native-repair-law`, `variational-equivalence`, `gmrf-independence`, `sheaf-cohomology`, `icosahedral-symmetry`, `kl-lattice-metric`, `kissing-twelve`, `icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic`, `subgraph-census`, `dual-cells` |
@@ -177,12 +177,12 @@ argue by key.
 | `{{CARRIER_FACES}}` | `00_abstract.md`, `02_framework.md`, `02_framework.md`, `04_correspondences.md`, `04_correspondences.md` |
 | `{{CARRIER_HAMILTONIAN_CYCLES}}` | `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md` |
 | `{{CARRIER_INTERSECTION_ARRAY}}` | `03_method.md`, `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
-| `{{CARRIER_LAMBDA1}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md` |
+| `{{CARRIER_LAMBDA1}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `02_framework.md`, `04_correspondences.md` |
 | `{{CARRIER_PENTAGONS}}` | `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md` |
 | `{{CARRIER_PERFECT_MATCHINGS}}` | `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md` |
 | `{{CARRIER_PORTS}}` | `00_abstract.md`, `02_framework.md`, `02_framework.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `06_complementarities.md` |
 | `{{CARRIER_SEAMS}}` | `00_abstract.md`, `02_framework.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md` |
-| `{{CARRIER_SHELL_GAP}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `02_framework.md`, `04_correspondences.md`, `06_complementarities.md` |
+| `{{CARRIER_SHELL_GAP}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md`, `06_complementarities.md` |
 | `{{CARRIER_SHELL_SIZES}}` | `03_method.md`, `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
 | `{{CARRIER_TOTAL_DEFECT}}` | `00_abstract.md`, `01_introduction.md`, `04_correspondences.md`, `04_correspondences.md` |
 | `{{CARRIER_TREE_NUMBER}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `03_method.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md`, `06_complementarities.md`, `06_complementarities.md` |

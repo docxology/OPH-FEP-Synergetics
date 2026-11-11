@@ -18,11 +18,11 @@ isomorphisms, {{REGISTRY_DISAGREEMENTS}} disagreements and
 {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 {{REGISTRY_SYNERGETICS_OPH}} relate Synergetics to OPH,
 {{REGISTRY_FEP_SYNERGETICS}} relate the FEP to Synergetics, and
-{{REGISTRY_THREE_WAY}} needs all three vocabularies at once. The load-bearing
+{{REGISTRY_THREE_WAY}} entries need all three vocabularies at once. The load-bearing
 agreements are structural. OPH's carrier is a {{CARRIER_PORTS}}-port,
 {{CARRIER_SEAMS}}-seam, {{CARRIER_FACES}}-face complex whose adjacency is
 recovered from its own oriented faces, and its Laplacian spectrum is closed-form,
-with spectral gap `{{CARRIER_SHELL_GAP}}`. The native repair law conserves load
+with spectral gap `{{CARRIER_LAMBDA1}}`. The native repair law conserves load
 and lowers a quadratic energy by a closed-form amount, and over the
 {{SHELL_TOTAL_TWO}}-configuration load shell it produces {{SHELL_STRICT_DESCENT}}
 strict descents, {{SHELL_ZERO_DESCENT}} zero descents and {{SHELL_NOOP}} no-op
@@ -72,6 +72,6 @@ Two quantities asserted in the source literature are reported as not reproduced,
 and the scope limits are stated rather than trimmed. Every number in this
 manuscript is bound to the function that produces it, every claim is executed by
 `oph-fep-synergetics verify` (or narrowed with `--pair` and `--kind`), and the
-graphical abstract on the following pages states the same results as four drawn
+graphical abstract on the preceding pages states the same results as four drawn
 panels.
 

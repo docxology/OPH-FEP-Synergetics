@@ -171,6 +171,27 @@ def reflection_subgroup(carrier: IcosahedralCarrier | None = None) -> tuple[tupl
     return tuple(reflections)
 
 
+def _commutant_dimension(basis: np.ndarray, group) -> int:
+    """Count the dimensions of the space of matrices commuting with every group action.
+
+    Each automorphism acts on the eigenspace basis as ``action = basis.T @ basis[perm]``;
+    a real representation is irreducible exactly when the only matrices ``X`` with
+    ``action @ X == X @ action`` for every group element are the scalars.  The
+    commutator operators are stacked and the null-space dimension read off an SVD.
+    """
+    dim = basis.shape[1]
+    stacked = np.empty((len(group) * dim * dim, dim * dim))
+    row = 0
+    for permutation in group:
+        action = basis.T @ basis[list(permutation)]
+        commutator = np.kron(np.eye(dim), action) - np.kron(action.T, np.eye(dim))
+        stacked[row:row + dim * dim] = commutator.reshape(dim * dim, dim * dim)
+        row += dim * dim
+    singular_values = np.linalg.svd(stacked, compute_uv=False)
+    tolerance = float(singular_values[0]) * 1e-8
+    return int(np.sum(singular_values < tolerance))
+
+
 def eigenspace_irreducibility(
     carrier: IcosahedralCarrier | None = None,
     *,
@@ -178,10 +199,12 @@ def eigenspace_irreducibility(
 ) -> dict[str, dict[str, int | bool]]:
     """Return, per eigenvalue, the dimension and whether the group acts irreducibly.
 
-    Irreducibility is decided by Burnside's criterion in the constructive form:
-    the orbit of a single generic vector must span the whole eigenspace.  Several
-    deterministic probe vectors are used so that one unlucky choice cannot pass,
-    and ``probes`` bounds how many of them are tried per eigenspace.
+    Irreducibility is decided by the commutant: the representation is irreducible
+    exactly when the only matrices commuting with every group action are the
+    scalars, so the commutant is one-dimensional.  The orbit span of generic
+    probe vectors is kept as an independent necessary check -- a cyclic action
+    is implied by irreducibility, so a short orbit rank refutes it outright --
+    and ``probes`` bounds how many deterministic seeds are tried per eigenspace.
     """
     carrier = carrier or icosahedral_carrier()
     group = carrier_automorphisms(carrier)
@@ -194,9 +217,15 @@ def eigenspace_irreducibility(
     for value, indices in sorted(groups.items()):
         dimension = len(indices)
         if dimension <= 1:
-            report[f"{value:.6f}"] = {"dim": dimension, "orbit_rank": dimension, "irreducible": True}
+            report[f"{value:.6f}"] = {
+                "dim": dimension,
+                "orbit_rank": dimension,
+                "commutant_dim": 1,
+                "irreducible": True,
+            }
             continue
         basis = eigenvectors[:, indices]
+        commutant_dim = _commutant_dimension(basis, group)
         ranks: list[int] = []
         for weights in product((1.0, -0.5, 2.0), repeat=min(dimension, 3)):
             seed = np.array(list(weights) + [0.0] * (dimension - len(weights)))[:dimension]
@@ -209,7 +238,8 @@ def eigenspace_irreducibility(
             "dim": dimension,
             "orbit_rank": max(ranks),
             "min_orbit_rank": min(ranks),
-            "irreducible": bool(max(ranks) == dimension),
+            "commutant_dim": commutant_dim,
+            "irreducible": bool(commutant_dim == 1 and max(ranks) == dimension),
         }
     return report
 

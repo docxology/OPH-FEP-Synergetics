@@ -52,7 +52,7 @@ which one program supplies what another lacks without either reducing to the
 other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 {{REGISTRY_SYNERGETICS_OPH}} relate Synergetics to OPH,
 {{REGISTRY_FEP_SYNERGETICS}} relate the FEP to Synergetics, and
-{{REGISTRY_THREE_WAY}} needs all three vocabularies at once.
+{{REGISTRY_THREE_WAY}} entries need all three vocabularies at once.
 
 | Key | Kind | Status | Pair | What it tests |
 |:-----------------------------------|:----------------|:-------------------|:-----------------|:-------------------------------|

@@ -202,8 +202,9 @@ measures {{PACKING_CELL_TETRAVOLUME}}. The three are not equal and do not reduce
 to one another; what they share is the step.
 :::
 
-This is the only entry in the registry that needs all three vocabularies at once,
-and it is a complementarity rather than an identification for that reason. Each
+This is one of the two entries in the registry that need all three vocabularies
+at once -- the other is the conjugation norm of [@sec:conjugation] -- and both
+are complementarities rather than identifications for that reason. Each
 programme is exact about the same lattice step in a different number field: the
 FEP's cost is rational (four nats, from squared distance
 {{IVM_NEIGHBOR_SQUARED_DISTANCE}}), OPH's is a

@@ -18,7 +18,7 @@ no pair of readings captures.
 | oph-fep | isomorphism | exact-on-domain | `variational-equivalence` | On the linear-Gaussian domain the interface-energy minimiser over the interior is the harmonic extension and the posterior mean, so A3-style constrained relative-entropy minimisation and predictive-coding perception are the same object. |
 | oph-fep | isomorphism | exact-on-domain | `free-energy-dictionary` | Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, and the update residual pins the Bayesian surprise between the extreme interior eigenvalues. |
 | oph-fep | isomorphism | exact | `sheaf-agreement` | Patch agreement is the global-section condition of a cellular sheaf over the carrier complex, and the sheaf Laplacian is the carrier Laplacian. |
-| oph-fep | isomorphism | exact | `certificate-species` | The native law's sharp certificate is a spectral gap: the mean repair operator is symmetric, nonnegative and doubly stochastic with second eigenvalue 1 - (5 - sqrt(5)) / 60, and its induced infinity norm is exactly one, so no sup-norm contraction certifies it. |
+| oph-fep | isomorphism | exact | `certificate-species` | The native law's sharp certificate is a spectral gap: the mean repair operator is symmetric, nonnegative and doubly stochastic by construction from the five-regular Laplacian, with second eigenvalue 1 - (5 - sqrt(5)) / 60, and its induced infinity norm is exactly one, so no sup-norm contraction certifies it. |
 | oph-fep | isomorphism | exact | `tree-number` | The carrier's Laplacian carries an exact integer spanning-tree number: the reduced Laplacian's determinant is 5184000, equal to (1/12) times the product of the eleven nonzero eigenvalues, so the count of acyclic seam sets is an invariant both readings share. |
 | oph-fep | isomorphism | exact | `gmrf-independence` | With the carrier Laplacian as a Gaussian precision, conditional independence holds exactly on the seams and nowhere else: each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the exact marginal variance of a port is 7/36. |
 | oph-fep | isomorphism | exact | `sheaf-cohomology` | The carrier complex's scalar sheaf has H^0 of dimension one and H^1 of dimension nineteen: one global section up to a constant, and nineteen independent ways for edges to disagree that no coboundary explains, with dim H^0 - dim H^1 equal to 12 - 30. |
@@ -48,8 +48,8 @@ no pair of readings captures.
 | three-way | complementarity | exact | `tetravolume-arithmetic` | The three programmes count in three currencies and only one stays integral: the FEP's equal-covariance cost for one IVM step is exactly four nats, OPH's shell gap is the rational (5 - sqrt 5) / 60, and the synergetic tetravolume table is integral (1, 3, 4, 6, 20, 96) with the cell volume six derived, while the carrier's own icosahedron enters at 18.512295868219..., whose square is 175 + 75 sqrt 5. |
 | oph-fep | complementarity | exact | `effective-resistance` | The precision carries a metric neither programme computes: the effective resistance between two ports, exact and rational, is 11/30 across a seam, 7/15 at distance two and 1/2 across the carrier, and the 66 of them sum to 28, which is twelve times the reciprocal spectrum sum 7/3 exactly. |
 | synergetics-oph | disagreement | obstructed | `vertex-shells` | The shells of ports around a port are 5, 5 and 1, not the lattice's 12, 42 and 92: the carrier is distance-regular with intersection array {5, 2, 1; 1, 2, 5} and diameter three, so reading its neighbourhoods as IVM shells fails at the first shell, 5 against 12. |
-| synergetics-oph | isomorphism | exact | `subgraph-census` | The carrier's subgraph census reproduces the icosahedron's own counts without being given them: 20 triangles, exactly its twenty faces; 12 five-cycles, the vertices of its dual dodecahedron; 125 perfect matchings; and 1280 labelled Hamiltonian cycles. |
-| synergetics-oph | isomorphism | exact | `angle-defect` | Gauss-Bonnet on the carrier is exact in units of pi: five equilateral triangles meet at every port, so the defect is 1/3 pi there and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the triangulated sphere. |
+| synergetics-oph | isomorphism | exact | `subgraph-census` | The carrier's subgraph census, computed from the derived graph alone, is asserted equal to the icosahedron's own counts: 20 triangles, exactly its twenty faces; 12 five-cycles, the vertices of its dual dodecahedron; 125 perfect matchings; and 1280 labelled Hamiltonian cycles. |
+| synergetics-oph | isomorphism | exact | `angle-defect` | Gauss-Bonnet on the carrier is exact in units of pi: five equilateral triangles meet at every port in the derived chart, so the defect is 1/3 pi there and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the triangulated sphere; the probe verifies the five-fold vertex figure and the bookkeeping that follows from the definition of the defect. |
 | synergetics-oph | disagreement | obstructed | `twelve-around-one-families` | `Twelve around one` names a family and not an object: the icosahedron has degree 5 and 5184000 spanning trees, while the cuboctahedron has degree 4, eight triangles, 32 perfect matchings and 331776 = 576^2 spanning trees, so the counting invariant separates the two solids the phrase covers. |
 | synergetics-oph | complementarity | exact | `dual-cells` | The twelve-around-one cell and the cuboctahedron are duals edge for edge: 14 vertices against 12, 12 faces against 14, 24 edges each, Euler characteristic 2 each, and tetravolumes 6 and 20 in the ratio 10/3, with the cuboctahedron derived a second time as the cube's line graph. |
 | three-way | complementarity | exact | `conjugation-norm` | Conjugation of sqrt 5 fixes the counting invariants and moves the geometric ones: the spanning-tree number 5184000 is a rational integer and is fixed, while the icosahedron's tetravolume and its conjugate multiply to exactly 50, since (175 + 75 sqrt 5)(175 - 75 sqrt 5) = 2500. |
@@ -188,6 +188,7 @@ Probe values:
 - `surprisal` = np.float64(-0.9135709220752906)
 - `variational_free_energy` = np.float64(-0.9135709220752906)
 - `numerical_surprise` = 1.118033988749895
+- `surprisal_drop_residual` = 0.0
 
 ## `sheaf-agreement`
 
@@ -215,7 +216,7 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-The native law's sharp certificate is a spectral gap: the mean repair operator is symmetric, nonnegative and doubly stochastic with second eigenvalue 1 - (5 - sqrt(5)) / 60, and its induced infinity norm is exactly one, so no sup-norm contraction certifies it.
+The native law's sharp certificate is a spectral gap: the mean repair operator is symmetric, nonnegative and doubly stochastic by construction from the five-regular Laplacian, with second eigenvalue 1 - (5 - sqrt(5)) / 60, and its induced infinity norm is exactly one, so no sup-norm contraction certifies it.
 
 - OPH: The capacity-weighted two-norm spectral certificate.
 - FEP: Precision-weighted quadratic norms for the linearised update.
@@ -247,7 +248,7 @@ Probe values:
 - `spanning_trees_exact` = 5184000
 - `spanning_trees_from_spectrum` = 5183999.999999992
 - `relative_residual` = 1.6168794698185392e-15
-- `reduced_laplacian_is_integral` = True
+- `laplacian_is_integral` = True
 - `nonzero_eigenvalue_count` = 11
 - `seams` = 30
 
@@ -338,9 +339,10 @@ The Laplacian's eigenspaces of dimensions 3, 5 and 3 are irreducible under the i
 
 Probe values:
 
-- `eigenspaces` = 0.000000=dim=1, orbit_rank=1, irreducible=True, 2.763932=dim=3, orbit_rank=3, min_orbit_rank=3, irreducible=True, 6.000000=dim=5, orbit_rank=5, min_orbit_rank=5, irreducible=True, 7.236068=dim=3, orbit_rank=3, min_orbit_rank=3, irreducible=True
+- `eigenspaces` = 0.000000=dim=1, orbit_rank=1, commutant_dim=1, irreducible=True, 2.763932=dim=3, orbit_rank=3, min_orbit_rank=3, commutant_dim=1, irreducible=True, 6.000000=dim=5, orbit_rank=5, min_orbit_rank=5, commutant_dim=1, irreducible=True, 7.236068=dim=3, orbit_rank=3, min_orbit_rank=3, commutant_dim=1, irreducible=True
 - `dimensions` = (1, 3, 3, 5)
 - `orbit_ranks` = (1, 3, 3, 5)
+- `commutant_dims` = (1, 1, 1)
 - `irreducible` = True
 - `eigenvalue_count` = 4
 
@@ -893,7 +895,7 @@ Probe values:
 
 **isomorphism** / **exact** / **synergetics-oph** / probe PASS
 
-The carrier's subgraph census reproduces the icosahedron's own counts without being given them: 20 triangles, exactly its twenty faces; 12 five-cycles, the vertices of its dual dodecahedron; 125 perfect matchings; and 1280 labelled Hamiltonian cycles.
+The carrier's subgraph census, computed from the derived graph alone, is asserted equal to the icosahedron's own counts: 20 triangles, exactly its twenty faces; 12 five-cycles, the vertices of its dual dodecahedron; 125 perfect matchings; and 1280 labelled Hamiltonian cycles.
 
 - OPH: The 20 triangles of the derived face set.
 - FEP: Nothing: a census of the same graph, not a probabilistic reading of it.
@@ -913,7 +915,7 @@ Probe values:
 
 **isomorphism** / **exact** / **synergetics-oph** / probe PASS
 
-Gauss-Bonnet on the carrier is exact in units of pi: five equilateral triangles meet at every port, so the defect is 1/3 pi there and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the triangulated sphere.
+Gauss-Bonnet on the carrier is exact in units of pi: five equilateral triangles meet at every port in the derived chart, so the defect is 1/3 pi there and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the triangulated sphere; the probe verifies the five-fold vertex figure and the bookkeeping that follows from the definition of the defect.
 
 - OPH: A patch complex with five faces at every port.
 - FEP: Nothing: curvature is a property of the complex, not of a belief.

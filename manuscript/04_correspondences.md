@@ -281,8 +281,9 @@ configurations.
 
 The probe reports each part separately: the group order from an exhaustive
 backtracking search, closure under composition, the orbit decomposition of ports,
-seams and faces, the split into rotations and reflections, the orbit ranks of the
-three nontrivial eigenspaces against their dimensions, and the equivariance of
+seams and faces, the split into rotations and reflections, the orbit ranks and
+commutant dimensions of the three nontrivial eigenspaces against their
+dimensions, and the equivariance of
 the descent law over the full product of ${{SYMMETRY_GROUP_ORDER}}$ group
 elements and ${{SYMMETRY_CONFIGURATIONS}}$ configurations.
 
