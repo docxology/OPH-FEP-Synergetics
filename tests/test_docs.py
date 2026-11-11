@@ -63,6 +63,16 @@ def test_check_mode_reports_stale_documents(tmp_path, monkeypatch, capsys):
 
 
 def test_write_mode_creates_missing_documents(tmp_path, monkeypatch, capsys):
+
+
+def test_the_concordance_reports_no_uncited_formal_statement():
+    """A stated proposition, definition or equation that no prose cites is a
+
+    loose thread: the concordance renders it as '*never cited*', and this test
+    fails when one appears.
+    """
+    renderer = _load_renderer()
+    assert "never cited" not in renderer.render_concordance()
     renderer = _load_renderer()
     target = tmp_path / "nested" / "registry.md"
     monkeypatch.setattr(renderer, "REGISTRY_DOC", target)

@@ -150,7 +150,7 @@ statement about dynamics only under further conditions, which is the content of
 ## Synergetics: tetravolume accounting
 
 Synergetics replaces Cartesian coordinates with four signed counts whose sum is
-free, the **quadray** coordinates. A quadray $q=(a,b,c,d)$ is an equivalence
+free, the **quadray** coordinates [@eq:quadray]. A quadray $q=(a,b,c,d)$ is an equivalence
 class,
 
 $$

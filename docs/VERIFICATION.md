@@ -123,7 +123,7 @@ The rendered result was checked the way a reader checks it, on the artefact
 itself: 43 pages, the cover on page 1, the four graphical-abstract panels on
 pages 2 to 5, the contents page at 6, and a 0.500 in left text margin measured
 from the PDF's own text bounding boxes. Each panel page carries its own figure
-caption, so no panel floated away from its figure. The body carries nineteen
+caption, so no panel floated away from its figure. The body carries twenty-one
 numbered figures plus the cover image, fourteen numbered equations, three
 definitions, thirty-two numbered propositions and eight tables, with `0`
 undefined citations and `0` unresolved `??` cross-references in

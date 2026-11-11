@@ -23,13 +23,16 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from oph_fep_synergetics.analysis import CORRESPONDENCES, summary, verify  # noqa: E402
-from oph_fep_synergetics.manuscript_variables import MANUSCRIPT_VALUES  # noqa: E402
+from oph_fep_synergetics.manuscript_variables import MANUSCRIPT_VALUES, token_for  # noqa: E402
 
 DOCS = ROOT / "docs"
 
 REGISTRY_DOC = DOCS / "CORRESPONDENCES.md"
 VALUES_DOC = DOCS / "MANUSCRIPT_VALUES.md"
 CONCORDANCE_DOC = DOCS / "CONCORDANCE.md"
+
+#: The manuscript's value tokens, as they appear in prose and figure captions.
+TOKEN_CAPTION = re.compile(r"\{\{([A-Z][A-Z0-9_]*)\}\}")
 
 
 def format_value(value: object) -> str:
@@ -201,19 +204,79 @@ def render_concordance() -> str:
         "",
         "## Figures",
         "",
-        "| figure | included by |",
-        "| --- | --- |",
+        "| figure | included by | claims whose values it draws |",
+        "| --- | --- | --- |",
     ]
     included: dict[str, list[str]] = {}
+    captions: dict[str, str] = {}
     for path in section_paths:
-        for _, label in figure_link.findall(path.read_text(encoding="utf-8")):
+        text = path.read_text(encoding="utf-8")
+        for _, label in figure_link.findall(text):
             included.setdefault(label, []).append(path.name)
+        for alt, filename in re.findall(
+            r"!\[([^\]]+)\]\(\.\./output/figures/(fig_[a-z0-9_]+\.png)\)", text
+        ):
+            captions[filename] = alt
+    probe_of_token = {
+        token_for(entry.key): entry.source.split(":")[1]
+        for entry in MANUSCRIPT_VALUES
+        if entry.source.startswith("probe:")
+    }
     for label in sorted(included):
-        lines.append(f"| `fig:{label[4:].replace('_', '-')}` | " + ", ".join(f"`{name}`" for name in included[label]) + " |")
+        filename = "fig_" + label.replace("-", "_") + ".png"
+        tokens = TOKEN_CAPTION.findall(captions.get(filename, ""))
+        claims = sorted({probe_of_token[token] for token in tokens if token in probe_of_token})
+        if claims:
+            drawn = ", ".join(f"`{key}`" for key in claims)
+        elif any(token.startswith("REGISTRY_") for token in tokens):
+            drawn = "*every entry (drawn from the registry itself)*"
+        else:
+            drawn = "*package readings, no single claim*"
+        lines.append(
+            f"| `fig:{label.replace('_', '-')}` | "
+            + ", ".join(f"`{name}`" for name in included[label])
+            + f" | {drawn} |"
+        )
+    declared: dict[str, dict[str, str]] = {}
+    for path in section_paths:
+        text = path.read_text(encoding="utf-8")
+        for kind, label in re.findall(r"\{#(prop|def):([a-z0-9_-]+)", text):
+            declared.setdefault(kind, {})[label] = path.name
+        for label in re.findall(r"\{#eq:([a-z0-9_-]+)\}", text):
+            declared.setdefault("eq", {})[label] = path.name
+    referenced: dict[str, list[str]] = {}
+    for path in section_paths:
+        for label in re.findall(r"\[@((?:prop|def|eq):[a-z0-9_-]+)\]", path.read_text(encoding="utf-8")):
+            referenced.setdefault(label, []).append(path.name)
     lines += [
         "",
-        f"{len(included)} distinct figures are included by the sections; the cover is",
-        "placed by `manuscript/config.yaml`. The accessibility registry that gives",
+        "## Formal statements and equations",
+        "",
+        "| label | kind | stated in | cited by |",
+        "| --- | --- | --- | --- |",
+    ]
+    for kind in ("def", "prop", "eq"):
+        for label, where in declared.get(kind, {}).items():
+            citing = referenced.get(f"{kind}:{label}", [])
+            cell = ", ".join(f"`{name}`" for name in citing) if citing else "*never cited*"
+            lines.append(f"| `{kind}:{label}` | {kind} | `{where}` | {cell} |")
+    lines += [
+        "",
+        "## Values",
+        "",
+        "| token | quoted in |",
+        "| --- | --- |",
+    ]
+    quoted: dict[str, list[str]] = {}
+    for path in section_paths:
+        for token in TOKEN_CAPTION.findall(path.read_text(encoding="utf-8")):
+            quoted.setdefault(token, []).append(path.name)
+    for token in sorted(quoted):
+        lines.append(f"| `{{{{{token}}}}}` | " + ", ".join(f"`{name}`" for name in quoted[token]) + " |")
+    lines += [
+        "",
+        f"{len(quoted)} of the bound values are quoted by the prose. The cover is",
+        "placed by `manuscript/config.yaml`; the accessibility registry that gives",
         "each figure its alternative text is `output/figures/figure_registry.json`,",
         "written by `scripts/make_figures.py`.",
         "",

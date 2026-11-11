@@ -1711,6 +1711,121 @@ def families_figure() -> Path:
     )
 
 
+def sandwich_figure() -> Path:
+    """The surprise sandwich and the functionals that share the name free energy."""
+    dictionary = by_key()["free-energy-dictionary"].run().values
+    collision = by_key()["free-energy-name-collision"].run().values
+    lower = float(dictionary["sandwich_lower"])
+    upper = float(dictionary["sandwich_upper"])
+    bayesian = float(dictionary["bayesian_surprise"])
+    numerical = float(dictionary["numerical_surprise"])
+    surprisal = float(dictionary["surprisal"])
+    variational = float(dictionary["variational_free_energy"])
+    interface = float(collision["interface_energy_minimised_over_interior"])
+    at_posterior = float(collision["variational_free_energy_at_posterior"])
+    constant = float(collision["difference"])
+    figure, (left, right) = plt.subplots(1, 2, figsize=(10.0, 4.2))
+    left.axvspan(lower, upper, color="#dfe9f3", label="the sandwich")
+    left.axvline(bayesian, color="#a4262c", linewidth=2.0)
+    left.annotate(
+        f"Bayesian surprise {bayesian:.7g}",
+        (bayesian, 0.5),
+        ha="center",
+        va="center",
+        fontsize=8,
+        color="#a4262c",
+    )
+    for value, name in ((lower, "lower bound"), (upper, "upper bound")):
+        left.axvline(value, color="#1f4e79", linewidth=1.0, linestyle="--")
+        left.annotate(
+            f"{name} {value:.7g}",
+            (value, 0.9),
+            ha="center",
+            va="center",
+            fontsize=7.5,
+            color="#1f4e79",
+        )
+    left.set_ylim(0.0, 1.0)
+    left.set_yticks([])
+    left.set_xlabel("surprisal units")
+    left.set_title("the sandwich brackets the Bayesian value", fontsize=10)
+    names = ("numerical", "Bayesian", "interface", "surprisal", "variational", "VFE at posterior")
+    values = (numerical, bayesian, interface, surprisal, variational, at_posterior)
+    colours = ["#1f4e79", "#1f4e79", "#a4262c", "#2f6b3a", "#2f6b3a", "#a4262c"]
+    bars = right.barh(names, values, color=colours)
+    right.axvline(0.0, color="black", linewidth=0.8)
+    for bar, value in zip(bars, values):
+        right.annotate(
+            f"{value:.7g}",
+            (value, bar.get_y() + bar.get_height() / 2),
+            ha="left" if value >= 0 else "right",
+            va="center",
+            fontsize=7.2,
+            xytext=(4 if value >= 0 else -4, 0),
+            textcoords="offset points",
+        )
+    right.set_xlim(min(values) * 1.35, max(values) * 1.3)
+    right.set_title(
+        f"five readings, one name; interface and VFE differ by {constant:.7g}",
+        fontsize=10,
+    )
+    right.tick_params(axis="y", labelsize=8)
+    figure.suptitle("what the probes report about the values called free energy", fontsize=10)
+    return _save(
+        figure,
+        "fig_sandwich.png",
+        "Two panels read from the executed probes. Left: the sandwich interval with "
+        f"its lower bound {lower:.7g} and upper bound {upper:.7g}, and the Bayesian surprise "
+        f"{bayesian:.7g} marked inside it. Right: horizontal bars for the functionals the "
+        f"literature calls free energy in the same linear-Gaussian model: the numerical "
+        f"surprise {numerical:.7g}, the Bayesian surprise {bayesian:.7g}, the interface energy "
+        f"minimised over the interior {interface:.7g}, the surprisal {surprisal:.7g}, the "
+        f"variational free energy {variational:.7g}, and the variational free energy at the "
+        f"posterior {at_posterior:.7g}; the interior and posterior values differ by the model "
+        f"constant {constant:.7g}.",
+    )
+
+
+def schedule_figure() -> Path:
+    """The centered contrast between two schedules, one exact fraction per step."""
+    steps_list = list(range(1, 13))
+    contrasts = [
+        abs(float(controls.affine_path_contrast_exact(steps=step)))
+        for step in steps_list
+    ]
+    exact = controls.affine_path_contrast_exact(steps=12)
+    figure, axis = plt.subplots(figsize=(8.4, 4.2))
+    bars = axis.bar([str(step) for step in steps_list], contrasts, color="#a4262c")
+    for bar, value in zip(bars, contrasts):
+        if value > 0:
+            axis.annotate(
+                f"{value:.4g}",
+                (bar.get_x() + bar.get_width() / 2, value),
+                ha="center",
+                va="bottom",
+                fontsize=7,
+            )
+    axis.annotate(
+        f"after twelve steps: {exact}",
+        (11, contrasts[-1]),
+        ha="right",
+        va="bottom",
+        fontsize=8,
+        color="#102a43",
+    )
+    axis.set_xlabel("steps of the affine iteration")
+    axis.set_ylabel("absolute centered-contrast difference")
+    axis.set_title("full and half-damped schedules agree on answers, not on contrasts", fontsize=10)
+    return _save(
+        figure,
+        "fig_schedule.png",
+        "The absolute difference between the full and the half-damped schedules' centered "
+        "contrasts, one exact value per step count from one to twelve. The schedules share "
+        f"every answer while the contrast difference grows to {contrasts[-1]:.7g}, which is "
+        f"exactly {exact} after twelve steps.",
+    )
+
+
 def write_registry() -> Path:
     """Write the accessibility registry the renderer reads for figure alt text.
 
@@ -1760,6 +1875,8 @@ def main() -> int:
         vertex_shells_figure,
         conjugation_figure,
         families_figure,
+        sandwich_figure,
+        schedule_figure,
     )
     for builder in builders:
         print(builder())

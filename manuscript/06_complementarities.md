@@ -292,6 +292,13 @@ and the metric gradient — that make the functional computationally and
 dynamically meaningful. OPH supplies a finite substrate and an explicit local
 update that neither of the others has.
 
+Each complement is stated as a numbered proposition: the quadray accounting
+([@prop:quadray-ivm]), the subdivision identity ([@prop:subdivision]), the
+learning identity ([@prop:ep]), the replicator metric ([@prop:replicator]), the
+carrier's solid ([@prop:ico-volume]), the packing ([@prop:packing]), the three
+currencies ([@prop:currencies]), the resistance metric ([@prop:resistance]), the
+dual pair ([@prop:dual-cells]) and the conjugation check ([@prop:conjugation]).
+
 The synthesis that the complements suggest is therefore not a reduction but an
 assignment: the carrier is OPH's, the functional is the FEP's, and the accounting
 is Synergetics'. Two of the complements add a reading neither programme asks

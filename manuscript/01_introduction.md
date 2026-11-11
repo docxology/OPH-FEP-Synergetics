@@ -26,7 +26,7 @@ as functions of the same object and the values coincide.
 
 ## What a correspondence is
 
-A correspondence is a record with four parts: a claim, a pairwise scope, a probe,
+A correspondence is a record with four parts [@def:correspondence]: a claim, a pairwise scope, a probe,
 and a status. The claim names what OPH, FEP and Synergetics each say. The scope
 names which two or three of them the claim relates, because a claim that two
 vocabularies are about one object is a claim *about those two*. The probe is

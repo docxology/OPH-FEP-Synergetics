@@ -165,7 +165,7 @@ pipeline. The source of truth is `manuscript/`: the render reads `config.yaml`,
 `output/pdf/OPH-FEP-Synergetics_combined.pdf`.
 
 ```
-# 1. the twenty figures and their accessibility registry
+# 1. the twenty-two figures and their accessibility registry
 .venv/bin/python scripts/make_figures.py
 
 # 2. the tokens and the resolved tree, with the template checkout's interpreter
@@ -231,7 +231,7 @@ docs/SCOPE.md                        what is reimplemented, what is cited, what 
 docs/VERIFICATION.md                 the gates and how to run them
 manuscript/                          config.yaml, preamble.md, references.bib and eleven sections
 scripts/render_docs.py               regenerates the three generated documents
-scripts/make_figures.py              renders the twenty figures and their accessibility registry
+scripts/make_figures.py              renders the twenty-two figures and their accessibility registry
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package

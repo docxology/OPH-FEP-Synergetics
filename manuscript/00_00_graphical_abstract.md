@@ -49,7 +49,8 @@ triangular faces, every port of degree {{CARRIER_DEGREE}}, spectral gap
 FEP reads the same graph as a Gaussian precision, where conditional independence
 holds exactly on the seams and nowhere else. The panel also carries two counting
 identities that neither programme states but both inherit from the graph: the
-number of acyclic seam sets, and the two dimensions of the agreement sheaf.
+number of acyclic seam sets, and the two dimensions of the agreement sheaf
+([@prop:sheaf]; [@prop:cohomology]).
 
 ![The carrier and its exact invariants. Left: the twelve ports and thirty seams of the icosahedral carrier drawn from its derived adjacency. Right: the invariants read from the same graph at draw time, the spanning-tree number of the seam graph, the dimension of the global sections and of the obstructions of the scalar sheaf with their Euler characteristic, the automorphism group order split into rotations and reflections, the number of shell configurations and the orbits the group has on them, the Markov blanket size and pairwise precision of the Gaussian reading, and the marginal variance of a port.](../output/figures/fig_ga_carrier.png){#fig:ga-carrier width=100%}
 

@@ -74,29 +74,254 @@ argue by key.
 
 ## Figures
 
-| figure | included by |
-| --- | --- |
-| `fig:ket` | `05_disagreements.md` |
-| `fig:ier` | `02_framework.md` |
-| `fig:ugation` | `06_complementarities.md` |
-| `fig:ent` | `05_disagreements.md` |
-| `fig:bility` | `05_disagreements.md` |
-| `fig:lies` | `05_disagreements.md` |
-| `fig:arrier` | `00_00_graphical_abstract.md` |
-| `fig:escent` | `00_00_graphical_abstract.md` |
-| `fig:ynergetics` | `00_00_graphical_abstract.md` |
-| `fig:riangle` | `00_00_graphical_abstract.md` |
-| `fig:` | `06_complementarities.md` |
-| `fig:ator` | `05_disagreements.md` |
-| `fig:ork` | `04_correspondences.md` |
-| `fig:t` | `05_disagreements.md` |
-| `fig:-triangles` | `04_correspondences.md` |
-| `fig:stry` | `04_correspondences.md` |
-| `fig:e-matrix` | `03_method.md` |
-| `fig:ivision` | `06_complementarities.md` |
-| `fig:ex-shells` | `05_disagreements.md` |
+| figure | included by | claims whose values it draws |
+| --- | --- | --- |
+| `fig:blanket` | `05_disagreements.md` | `stationary-blanket` |
+| `fig:carrier` | `02_framework.md` | *package readings, no single claim* |
+| `fig:conjugation` | `06_complementarities.md` | *package readings, no single claim* |
+| `fig:descent` | `05_disagreements.md` | `pr01-obstruction` |
+| `fig:dstability` | `05_disagreements.md` | *package readings, no single claim* |
+| `fig:families` | `05_disagreements.md` | *package readings, no single claim* |
+| `fig:ga-carrier` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
+| `fig:ga-descent` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
+| `fig:ga-synergetics` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
+| `fig:ga-triangle` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
+| `fig:ivm` | `06_complementarities.md` | *package readings, no single claim* |
+| `fig:mediator` | `05_disagreements.md` | `mediator-obstruction`, `reduction-criterion` |
+| `fig:network` | `04_correspondences.md` | *package readings, no single claim* |
+| `fig:orbit` | `05_disagreements.md` | *package readings, no single claim* |
+| `fig:pair-triangles` | `04_correspondences.md` | *package readings, no single claim* |
+| `fig:registry` | `04_correspondences.md` | *package readings, no single claim* |
+| `fig:sandwich` | `04_correspondences.md` | `free-energy-dictionary`, `free-energy-name-collision` |
+| `fig:schedule` | `05_disagreements.md` | *package readings, no single claim* |
+| `fig:scope-matrix` | `03_method.md` | *package readings, no single claim* |
+| `fig:subdivision` | `06_complementarities.md` | *package readings, no single claim* |
+| `fig:vertex-shells` | `05_disagreements.md` | *package readings, no single claim* |
 
-19 distinct figures are included by the sections; the cover is
-placed by `manuscript/config.yaml`. The accessibility registry that gives
+## Formal statements and equations
+
+| label | kind | stated in | cited by |
+| --- | --- | --- | --- |
+| `def:carrier` | def | `02_framework.md` | `06_complementarities.md` |
+| `def:shell` | def | `02_framework.md` | `04_correspondences.md` |
+| `def:correspondence` | def | `03_method.md` | `01_introduction.md` |
+| `prop:carrier` | prop | `02_framework.md` | `04_correspondences.md` |
+| `prop:spectrum` | prop | `02_framework.md` | `01_introduction.md`, `04_correspondences.md` |
+| `prop:descent` | prop | `02_framework.md` | `05_disagreements.md` |
+| `prop:ivm` | prop | `02_framework.md` | `01_introduction.md` |
+| `prop:ve` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `04_correspondences.md`, `07_scope.md` |
+| `prop:sheaf` | prop | `04_correspondences.md` | `00_00_graphical_abstract.md` |
+| `prop:tree` | prop | `04_correspondences.md` | `05_disagreements.md` |
+| `prop:cohomology` | prop | `04_correspondences.md` | `00_00_graphical_abstract.md` |
+| `prop:symmetry` | prop | `04_correspondences.md` | `01_introduction.md` |
+| `prop:kl` | prop | `04_correspondences.md` | `01_introduction.md` |
+| `prop:subgraph-census` | prop | `04_correspondences.md` | `04_correspondences.md` |
+| `prop:defect` | prop | `04_correspondences.md` | `04_correspondences.md` |
+| `prop:census` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md`, `07_scope.md` |
+| `prop:stationary` | prop | `05_disagreements.md` | `02_framework.md` |
+| `prop:solenoid` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
+| `prop:dstability` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
+| `prop:mediator` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
+| `prop:existence` | prop | `05_disagreements.md` | `03_method.md` |
+| `prop:cuboctahedron` | prop | `05_disagreements.md` | `05_disagreements.md` |
+| `prop:shell-energy` | prop | `05_disagreements.md` | `05_disagreements.md` |
+| `prop:vertex-shells` | prop | `05_disagreements.md` | `05_disagreements.md` |
+| `prop:families` | prop | `05_disagreements.md` | `05_disagreements.md` |
+| `prop:quadray-ivm` | prop | `06_complementarities.md` | `06_complementarities.md` |
+| `prop:subdivision` | prop | `06_complementarities.md` | `06_complementarities.md` |
+| `prop:ep` | prop | `06_complementarities.md` | `06_complementarities.md` |
+| `prop:replicator` | prop | `06_complementarities.md` | `06_complementarities.md` |
+| `prop:ico-volume` | prop | `06_complementarities.md` | `06_complementarities.md` |
+| `prop:packing` | prop | `06_complementarities.md` | `06_complementarities.md` |
+| `prop:currencies` | prop | `06_complementarities.md` | `06_complementarities.md` |
+| `prop:resistance` | prop | `06_complementarities.md` | `06_complementarities.md` |
+| `prop:dual-cells` | prop | `06_complementarities.md` | `06_complementarities.md` |
+| `prop:conjugation` | prop | `06_complementarities.md` | `06_complementarities.md` |
+| `eq:repair` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `05_disagreements.md` |
+| `eq:energy` | eq | `02_framework.md` | `05_disagreements.md` |
+| `eq:vfe` | eq | `02_framework.md` | `04_correspondences.md` |
+| `eq:gaussian` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `eq:blanket` | eq | `02_framework.md` | `02_framework.md`, `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `eq:quadray` | eq | `02_framework.md` | `02_framework.md` |
+| `eq:neighbours` | eq | `02_framework.md` | `02_framework.md`, `06_complementarities.md` |
+| `eq:shell` | eq | `02_framework.md` | `06_complementarities.md` |
+| `eq:gamma` | eq | `04_correspondences.md` | `05_disagreements.md` |
+| `eq:chain` | eq | `04_correspondences.md` | `04_correspondences.md` |
+| `eq:ve` | eq | `04_correspondences.md` | `04_correspondences.md` |
+| `eq:tree` | eq | `04_correspondences.md` | `05_disagreements.md` |
+| `eq:kl` | eq | `04_correspondences.md` | `04_correspondences.md` |
+| `eq:routh` | eq | `05_disagreements.md` | `05_disagreements.md` |
+
+## Values
+
+| token | quoted in |
+| --- | --- |
+| `{{BLANKET_CROSS_DRIFT}}` | `05_disagreements.md` |
+| `{{BLANKET_DRIFT}}` | `05_disagreements.md` |
+| `{{BLANKET_Q}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{CARRIER_CHART_0}}` | `02_framework.md` |
+| `{{CARRIER_CHART_1}}` | `02_framework.md` |
+| `{{CARRIER_CHART_10}}` | `02_framework.md` |
+| `{{CARRIER_CHART_11}}` | `02_framework.md` |
+| `{{CARRIER_CHART_2}}` | `02_framework.md` |
+| `{{CARRIER_CHART_3}}` | `02_framework.md` |
+| `{{CARRIER_CHART_4}}` | `02_framework.md` |
+| `{{CARRIER_CHART_5}}` | `02_framework.md` |
+| `{{CARRIER_CHART_6}}` | `02_framework.md` |
+| `{{CARRIER_CHART_7}}` | `02_framework.md` |
+| `{{CARRIER_CHART_8}}` | `02_framework.md` |
+| `{{CARRIER_CHART_9}}` | `02_framework.md` |
+| `{{CARRIER_DEFECT_PER_PORT}}` | `04_correspondences.md`, `04_correspondences.md` |
+| `{{CARRIER_DEGREE}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md`, `06_complementarities.md` |
+| `{{CARRIER_DIAMETER}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{CARRIER_FACES}}` | `00_abstract.md`, `02_framework.md`, `02_framework.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `{{CARRIER_HAMILTONIAN_CYCLES}}` | `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md` |
+| `{{CARRIER_INTERSECTION_ARRAY}}` | `03_method.md`, `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{CARRIER_LAMBDA1}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md` |
+| `{{CARRIER_PENTAGONS}}` | `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md` |
+| `{{CARRIER_PERFECT_MATCHINGS}}` | `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md` |
+| `{{CARRIER_PORTS}}` | `00_abstract.md`, `02_framework.md`, `02_framework.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `06_complementarities.md` |
+| `{{CARRIER_SEAMS}}` | `00_abstract.md`, `02_framework.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{CARRIER_SHELL_GAP}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `02_framework.md`, `04_correspondences.md`, `06_complementarities.md` |
+| `{{CARRIER_SHELL_SIZES}}` | `03_method.md`, `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{CARRIER_TOTAL_DEFECT}}` | `00_abstract.md`, `01_introduction.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `{{CARRIER_TREE_NUMBER}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `03_method.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{CARRIER_TRIANGLES}}` | `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `06_complementarities.md` |
+| `{{CERTIFICATE_INFINITY_NORM}}` | `04_correspondences.md` |
+| `{{CERTIFICATE_SECOND_EIGENVALUE}}` | `04_correspondences.md` |
+| `{{CUBOCTAHEDRON_DEGREE}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{CUBOCTAHEDRON_EDGES}}` | `03_method.md`, `05_disagreements.md`, `06_complementarities.md` |
+| `{{CUBOCTAHEDRON_FACES}}` | `03_method.md`, `06_complementarities.md` |
+| `{{CUBOCTAHEDRON_MATCHINGS}}` | `05_disagreements.md` |
+| `{{CUBOCTAHEDRON_SPANNING_TREES}}` | `03_method.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{CUBOCTAHEDRON_SPANNING_TREES_ROOT}}` | `03_method.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{CUBOCTAHEDRON_SQUARES}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{CUBOCTAHEDRON_TETRAVOLUME}}` | `03_method.md`, `03_method.md`, `05_disagreements.md`, `05_disagreements.md`, `06_complementarities.md` |
+| `{{CUBOCTAHEDRON_TRIANGLES}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{CUBOCTAHEDRON_VERTICES}}` | `03_method.md`, `06_complementarities.md` |
+| `{{DIRECTED_GRADIENT_ADJOINT}}` | `05_disagreements.md` |
+| `{{DIRECTED_GRADIENT_DIRECT}}` | `05_disagreements.md` |
+| `{{DUAL_VOLUME_RATIO}}` | `06_complementarities.md`, `06_complementarities.md` |
+| `{{D_STABILITY_IMAG_UNSTABLE}}` | `05_disagreements.md` |
+| `{{D_STABILITY_LYAPUNOV_DETERMINANT}}` | `05_disagreements.md` |
+| `{{D_STABILITY_LYAPUNOV_RESIDUAL}}` | `05_disagreements.md` |
+| `{{D_STABILITY_REAL_STABLE}}` | `05_disagreements.md` |
+| `{{D_STABILITY_REAL_UNSTABLE}}` | `05_disagreements.md` |
+| `{{D_STABILITY_ROUTH_K4}}` | `05_disagreements.md` |
+| `{{D_STABILITY_ROUTH_K4_THIRD}}` | `05_disagreements.md` |
+| `{{D_STABILITY_ROUTH_ONSET}}` | `01_introduction.md`, `05_disagreements.md` |
+| `{{D_STABILITY_SAMPLES}}` | `05_disagreements.md` |
+| `{{EP_CLOSED_FORM}}` | `06_complementarities.md` |
+| `{{EP_CLOSED_FORM_ERROR}}` | `06_complementarities.md` |
+| `{{EP_EXACT_GRADIENT}}` | `06_complementarities.md` |
+| `{{EP_GRADIENT_DISTANCE}}` | `06_complementarities.md` |
+| `{{EP_RELAXED}}` | `06_complementarities.md` |
+| `{{FEP_FORMAL_TOPICS}}` | `03_method.md` |
+| `{{FE_BAYESIAN}}` | `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `{{FE_DIFFERENCE}}` | `04_correspondences.md`, `05_disagreements.md` |
+| `{{FE_INTERFACE}}` | `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md` |
+| `{{FE_MODEL_CONSTANT}}` | `04_correspondences.md`, `04_correspondences.md` |
+| `{{FE_NUMERICAL}}` | `04_correspondences.md`, `04_correspondences.md` |
+| `{{FE_SANDWICH_LOWER}}` | `04_correspondences.md`, `04_correspondences.md` |
+| `{{FE_SANDWICH_UPPER}}` | `04_correspondences.md`, `04_correspondences.md` |
+| `{{FE_SURPRISAL}}` | `04_correspondences.md`, `04_correspondences.md` |
+| `{{FE_VARIATIONAL}}` | `04_correspondences.md`, `04_correspondences.md` |
+| `{{FE_VARIATIONAL_AT_POSTERIOR}}` | `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md` |
+| `{{FOUR_CYCLE_VIOLATIONS}}` | `05_disagreements.md` |
+| `{{GMRF_BLANKET_SIZE}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `04_correspondences.md`, `05_disagreements.md` |
+| `{{GMRF_MARGINAL_VARIANCE}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md` |
+| `{{GMRF_MARGINAL_VARIANCE_EXACT}}` | `00_00_graphical_abstract.md`, `04_correspondences.md` |
+| `{{GMRF_ORDERED_PAIRS}}` | `04_correspondences.md` |
+| `{{GMRF_PAIRWISE_PRECISION}}` | `00_00_graphical_abstract.md`, `04_correspondences.md` |
+| `{{GMRF_RECIPROCAL_SPECTRUM_SUM}}` | `06_complementarities.md` |
+| `{{ICOSAHEDRON_DEGREE}}` | `05_disagreements.md`, `05_disagreements.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{ICOSAHEDRON_FACES_REORIENTED}}` | `06_complementarities.md` |
+| `{{ICOSAHEDRON_TETRAVOLUME}}` | `00_00_graphical_abstract.md`, `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `03_method.md`, `03_method.md`, `05_disagreements.md`, `05_disagreements.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{ICOSAHEDRON_TETRAVOLUME_CONJUGATE}}` | `06_complementarities.md`, `06_complementarities.md`, `07_scope.md` |
+| `{{ICOSAHEDRON_TETRAVOLUME_SQUARED}}` | `00_00_graphical_abstract.md`, `06_complementarities.md` |
+| `{{IVM_CUMULATIVE_COUNTS}}` | `02_framework.md`, `06_complementarities.md` |
+| `{{IVM_NEIGHBOR_MOVES}}` | `02_framework.md`, `02_framework.md`, `06_complementarities.md` |
+| `{{IVM_NEIGHBOR_SQUARED_DISTANCE}}` | `01_introduction.md`, `02_framework.md`, `02_framework.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{IVM_SHELL_COUNTS}}` | `06_complementarities.md` |
+| `{{IVM_VOLUME_RATIOS}}` | `02_framework.md`, `02_framework.md`, `06_complementarities.md` |
+| `{{KL_ONE_STEP}}` | `00_00_graphical_abstract.md`, `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `04_correspondences.md`, `06_complementarities.md` |
+| `{{KL_STEP_SQUARED_DISTANCE}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md` |
+| `{{LATTICE_SHELL_SIZES}}` | `03_method.md`, `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{MEDIATOR_EPSILON_BELOW}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{MEDIATOR_MARGIN_AT}}` | `05_disagreements.md` |
+| `{{MEDIATOR_MARGIN_BELOW}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{MEDIATOR_THRESHOLD}}` | `00_abstract.md`, `01_introduction.md`, `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md`, `07_scope.md` |
+| `{{NOT_REPRODUCED_MOVE_PROBABILITIES}}` | `07_scope.md` |
+| `{{NOT_REPRODUCED_PORT_ZERO_OCCUPATION}}` | `07_scope.md` |
+| `{{PACKING_BALL_TETRAVOLUME}}` | `00_00_graphical_abstract.md`, `06_complementarities.md` |
+| `{{PACKING_CELL_TETRAVOLUME}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `02_framework.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{PACKING_DENSITY}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{PAPER_FIVE_SURPRISES}}` | `04_correspondences.md` |
+| `{{PR01_COIN_ONE_CURRENT}}` | `05_disagreements.md` |
+| `{{PR01_COIN_ONE_DECREASE}}` | `05_disagreements.md` |
+| `{{PR01_COIN_ZERO_CURRENT}}` | `05_disagreements.md` |
+| `{{PR01_COIN_ZERO_DECREASE}}` | `05_disagreements.md` |
+| `{{PR01_WALK_ENERGY}}` | `05_disagreements.md` |
+| `{{REDUCTION_FIRST_AFTER}}` | `05_disagreements.md` |
+| `{{REDUCTION_RESPONSE_DISTANCE}}` | `05_disagreements.md` |
+| `{{REDUCTION_SAME_OBSERVATION}}` | `05_disagreements.md` |
+| `{{REDUCTION_SECOND_AFTER}}` | `05_disagreements.md` |
+| `{{REDUCTION_WORST_CASE}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{REGISTRY_COMPLEMENTARITIES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{REGISTRY_DISAGREEMENTS}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `05_disagreements.md` |
+| `{{REGISTRY_ENTRIES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `07_scope.md`, `08_reproducibility.md` |
+| `{{REGISTRY_FEP_SYNERGETICS}}` | `00_00_graphical_abstract.md`, `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `08_reproducibility.md` |
+| `{{REGISTRY_ISOMORPHISMS}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `04_correspondences.md` |
+| `{{REGISTRY_OPH_FEP}}` | `00_00_graphical_abstract.md`, `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `08_reproducibility.md` |
+| `{{REGISTRY_SYNERGETICS_OPH}}` | `00_00_graphical_abstract.md`, `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `08_reproducibility.md` |
+| `{{REGISTRY_THREE_WAY}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `08_reproducibility.md` |
+| `{{REPLICATOR_FIELD_NORM}}` | `06_complementarities.md` |
+| `{{REPLICATOR_RATE}}` | `06_complementarities.md` |
+| `{{RESISTANCE_ADJACENT}}` | `03_method.md`, `06_complementarities.md` |
+| `{{RESISTANCE_ANTIPODAL}}` | `03_method.md`, `06_complementarities.md` |
+| `{{RESISTANCE_DISTANCE_TWO}}` | `03_method.md`, `06_complementarities.md` |
+| `{{RESISTANCE_KIRCHHOFF_INDEX}}` | `00_abstract.md`, `01_introduction.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{RESISTANCE_PAIR_COUNTS}}` | `06_complementarities.md` |
+| `{{SCHEDULE_AFFINE_CONTRAST}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{SHEAF_COBOUNDARY_RANK}}` | `00_00_graphical_abstract.md`, `04_correspondences.md` |
+| `{{SHEAF_EULER_CHARACTERISTIC}}` | `00_00_graphical_abstract.md`, `04_correspondences.md` |
+| `{{SHEAF_H0}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `{{SHEAF_H1}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `06_complementarities.md` |
+| `{{SHELL_BINARY}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md` |
+| `{{SHELL_FREE_ENERGY_LEVEL_COUNTS}}` | `00_00_graphical_abstract.md`, `05_disagreements.md` |
+| `{{SHELL_MULTIPLICITIES}}` | `05_disagreements.md` |
+| `{{SHELL_NOOP}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{SHELL_SHARED_FREE_ENERGY_LEVELS}}` | `00_00_graphical_abstract.md`, `03_method.md`, `05_disagreements.md` |
+| `{{SHELL_STRICT_DESCENT}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{SHELL_TOTAL_TWO}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `07_scope.md` |
+| `{{SHELL_TRANSITIONS}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{SHELL_ZERO_DESCENT}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{SOLENOIDAL_ENTROPY_PRODUCTION}}` | `05_disagreements.md` |
+| `{{SOLENOIDAL_Q_GRID}}` | `05_disagreements.md` |
+| `{{SPECTRAL_LAMBDA_MAX}}` | `04_correspondences.md` |
+| `{{SYMMETRY_CONFIGURATIONS}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `04_correspondences.md`, `04_correspondences.md`, `07_scope.md` |
+| `{{SYMMETRY_EIGENSPACE_DIMENSIONS}}` | `03_method.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `{{SYMMETRY_GROUP_ORDER}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `02_framework.md`, `03_method.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `06_complementarities.md`, `07_scope.md` |
+| `{{SYMMETRY_ORBITS}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `{{SYMMETRY_OUTCOME_MULTISETS}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md` |
+| `{{SYMMETRY_REFLECTIONS}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `{{SYMMETRY_ROTATIONS}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `{{TETRAVOLUME_GALOIS_NORM}}` | `03_method.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md`, `07_scope.md` |
+| `{{TETRAVOLUME_INTEGRAL_SOLIDS}}` | `00_00_graphical_abstract.md`, `00_abstract.md` |
+| `{{TWO_NODE_RELAXATION_MAX_RADIUS}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{TWO_NODE_RELAXATION_MIN_RADIUS}}` | `05_disagreements.md` |
+| `{{TWO_NODE_RELAXATION_MIN_RADIUS_MEASURED}}` | `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{TWO_NODE_RELAXATION_PERIOD}}` | `05_disagreements.md` |
+| `{{TWO_NODE_RELAXATION_PERIOD_MEASURED}}` | `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{TWO_NODE_SYNC_MIN_RADIUS}}` | `05_disagreements.md` |
+| `{{VE_EXCESS}}` | `04_correspondences.md` |
+| `{{VE_ITERATIONS}}` | `04_correspondences.md` |
+| `{{VE_RESIDUAL}}` | `04_correspondences.md` |
+| `{{VORONOI_EDGES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md` |
+| `{{VORONOI_FACES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{VORONOI_VERTICES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
+
+164 of the bound values are quoted by the prose. The cover is
+placed by `manuscript/config.yaml`; the accessibility registry that gives
 each figure its alternative text is `output/figures/figure_registry.json`,
 written by `scripts/make_figures.py`.
