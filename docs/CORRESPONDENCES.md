@@ -12,18 +12,18 @@ no pair of readings captures.
 | pair | kind | status | entry | claim |
 | --- | --- | --- | --- | --- |
 | synergetics-oph | isomorphism | exact | `carrier-port-chart` | OPH's twelve-port carrier has twelve ports, thirty seams and twenty faces, is five-regular, and its port chart is the one OPH declares. |
-| oph-fep | isomorphism | exact | `spectral-gap` | The carrier Laplacian is 5I - A, its first positive eigenvalue is 5 - sqrt(5), and the record-discarding shell gap is (5 - sqrt(5)) / 60. |
-| oph-fep | isomorphism | exact | `shell-counts` | The total-two load shell has 78 configurations and the binary shell has 66. |
+| oph-fep | isomorphism | exact | `spectral-gap` | One matrix carries both readings: the carrier Laplacian is 5I - A, it is OPH's repair-energy quadratic form and, unweighted, the precision the FEP reading factorises through; its first positive eigenvalue is 5 - sqrt(5) in both readings, and the normalised gap lambda_1 / (2 |E|) is exactly (5 - sqrt(5)) / 60. |
+| oph-fep | isomorphism | exact | `shell-counts` | The finite state space both oph-fep readings evaluate on is the total-two load shell: 78 configurations, of which 66 are binary; the repair module enumerates it independently and agrees, and every transition census and FEP-side comparison in this package ranges over exactly these states. |
 | oph-fep | isomorphism | exact | `native-repair-law` | The native seam law conserves total load on every transition and lowers the quadratic energy by exactly (d^2 - (|d| mod 2)) / 4. |
 | oph-fep | isomorphism | exact-on-domain | `variational-equivalence` | On the linear-Gaussian domain the interface-energy minimiser over the interior is the harmonic extension and the posterior mean, so A3-style constrained relative-entropy minimisation and predictive-coding perception are the same object. |
 | oph-fep | isomorphism | exact-on-domain | `free-energy-dictionary` | Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, the update residual pins the Bayesian surprise between the extreme interior eigenvalues, and the interior free energy's drop from the old minimiser to the new one equals the Bayesian surprise on this domain. |
 | oph-fep | isomorphism | exact | `sheaf-agreement` | Patch agreement is the global-section condition of a cellular sheaf over the carrier complex, and the sheaf Laplacian is the carrier Laplacian. |
 | oph-fep | isomorphism | exact | `certificate-species` | The native law's sharp certificate is a spectral gap: the mean repair operator is symmetric, nonnegative and doubly stochastic by construction from the five-regular Laplacian, with second eigenvalue 1 - (5 - sqrt(5)) / 60, and its induced infinity norm is exactly one, so no sup-norm contraction certifies it. |
-| oph-fep | isomorphism | exact | `tree-number` | The carrier's Laplacian carries an exact integer spanning-tree number: the reduced Laplacian's determinant is 5184000, equal to (1/12) times the product of the eleven nonzero eigenvalues, so the count of acyclic seam sets is an invariant both readings share. |
-| oph-fep | isomorphism | exact | `gmrf-independence` | With the carrier Laplacian as a Gaussian precision, conditional independence holds exactly on the seams and nowhere else: each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the exact marginal variance of a port is 7/36. |
-| oph-fep | isomorphism | exact | `sheaf-cohomology` | The carrier complex's scalar sheaf has H^0 of dimension one and H^1 of dimension nineteen: one global section up to a constant, and nineteen independent ways for edges to disagree that no coboundary explains, with dim H^0 - dim H^1 equal to 12 - 30. |
+| oph-fep | isomorphism | exact | `tree-number` | One determinant, two readings: the reduced carrier Laplacian's determinant is 5184000 — the number of acyclic seam sets in OPH's reading and, as the determinant of the same matrix read as a Gaussian precision, the normalisation of the FEP's linear-Gaussian interface integral — and it equals the product of the eleven nonzero eigenvalues over 12. |
+| oph-fep | isomorphism | exact | `gmrf-independence` | The seam structure OPH repairs along is exactly the conditional-independence structure of the precision read from the same matrix: independence holds on the seams and nowhere else, each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the exact marginal variance of a port is 7/36. |
+| oph-fep | isomorphism | exact | `sheaf-cohomology` | Patch agreement in OPH is the global-section condition of the carrier's scalar sheaf, and the obstruction to it is the same space the FEP's harmonic-extension residual lives in: dim H^0 = 1, dim H^1 = 19 — nineteen independent edge disagreements no coboundary explains — with dim H^0 - dim H^1 = 12 - 30. |
 | synergetics-oph | isomorphism | exact | `icosahedral-symmetry` | The carrier's automorphism group has order 120, is closed under composition, acts transitively on the twelve ports, the thirty seams and the twenty faces, and splits into sixty rotations and sixty reflections detected from OPH's own oriented faces. |
-| synergetics-oph | isomorphism | exact | `eigenspace-irreducibility` | The Laplacian's eigenspaces of dimensions 3, 5 and 3 are irreducible under the icosahedral group, so the spectrum 0, (5 - sqrt 5) three times, 6 five times and (5 + sqrt 5) three times is an invariant of the symmetry rather than a numerical accident. |
+| synergetics-oph | isomorphism | exact | `eigenspace-irreducibility` | The carrier Laplacian's eigenspaces of dimensions 3, 5 and 3 are the icosahedral group's non-trivial real irreducible representations acting on the carrier, so the spectrum 0, (5 - sqrt 5) three times, 6 five times and (5 + sqrt 5) three times is forced by Synergetics' group rather than computed into OPH's matrix: each eigenspace is one irreducible, and the multiplicities are the representation dimensions. |
 | synergetics-oph | isomorphism | exact | `law-equivariance` | The native repair law is equivariant: across all 120 automorphisms and all 78 total-two configurations the multiset of strict, zero and no-op outcomes is unchanged, giving four configuration orbits and three distinct outcome multisets, so the census is a group invariant and no symmetry-breaking witness exists. |
 | fep-synergetics | isomorphism | exact | `kl-lattice-metric` | Equal-covariance Gaussian KL is half the squared distance, and the IVM's first shell sits at squared distance eight, so one lattice step costs exactly four nats and the sites at squared norm 8 k^2 cost 4 k^2: the information cost is the synergetic metric over two. |
 | oph-fep | disagreement | obstructed | `pr01-obstruction` | The native repair law is not confluent and accepted repairs need not lower a measure: 600 of the 4680 shell transitions move at mismatch one with zero energy decrease, and a one-unit walk keeps energy 1/2 while changing state. |
@@ -49,7 +49,7 @@ no pair of readings captures.
 | oph-fep | complementarity | exact | `effective-resistance` | The precision carries a metric neither programme computes: the effective resistance between two ports, exact and rational, is 11/30 across a seam, 7/15 at distance two and 1/2 across the carrier, and the 66 of them sum to 28, which is twelve times the reciprocal spectrum sum 7/3 exactly. |
 | synergetics-oph | disagreement | obstructed | `vertex-shells` | The shells of ports around a port are 5, 5 and 1, not the lattice's 12, 42 and 92: the carrier is distance-regular with intersection array {5, 2, 1; 1, 2, 5} and diameter three, so reading its neighbourhoods as IVM shells fails at the first shell, 5 against 12. |
 | synergetics-oph | isomorphism | exact | `subgraph-census` | The carrier's subgraph census, computed from the derived graph alone, is asserted equal to the icosahedron's own counts: 20 triangles, exactly its twenty faces; 12 five-cycles, the vertices of its dual dodecahedron; 125 perfect matchings; and 1280 labelled Hamiltonian cycles. |
-| synergetics-oph | isomorphism | exact | `angle-defect` | Gauss-Bonnet on the carrier is exact in units of pi: five equilateral triangles meet at every port in the derived chart, so the defect is 1/3 pi there and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the triangulated sphere; the probe verifies the five-fold vertex figure and the bookkeeping that follows from the definition of the defect. |
+| synergetics-oph | isomorphism | exact | `angle-defect` | OPH's derived chart is the icosahedron's triangulation, so Synergetics' angular-defect accounting applies unchanged: five equilateral triangles meet at every port, the defect is 1/3 pi at each of the twelve ports and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the sphere both programmes triangulate. |
 | synergetics-oph | disagreement | obstructed | `twelve-around-one-families` | `Twelve around one` names a family and not an object: the icosahedron has degree 5 and 5184000 spanning trees, while the cuboctahedron has degree 4, eight triangles, 32 perfect matchings and 331776 = 576^2 spanning trees, so the counting invariant separates the two solids the phrase covers. |
 | synergetics-oph | complementarity | exact | `dual-cells` | The twelve-around-one cell and the cuboctahedron are duals edge for edge: 14 vertices against 12, 12 faces against 14, 24 edges each, Euler characteristic 2 each, and tetravolumes 6 and 20 in the ratio 10/3, with the cuboctahedron derived a second time as the cube's line graph. |
 | three-way | complementarity | exact | `conjugation-norm` | Conjugation of sqrt 5 fixes the counting invariants and moves the geometric ones: the spanning-tree number 5184000 is a rational integer and is fixed, while the icosahedron's tetravolume and its conjugate multiply to exactly 50, since (175 + 75 sqrt 5)(175 - 75 sqrt 5) = 2500. |
@@ -93,10 +93,10 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-The carrier Laplacian is 5I - A, its first positive eigenvalue is 5 - sqrt(5), and the record-discarding shell gap is (5 - sqrt(5)) / 60.
+One matrix carries both readings: the carrier Laplacian is 5I - A, it is OPH's repair-energy quadratic form and, unweighted, the precision the FEP reading factorises through; its first positive eigenvalue is 5 - sqrt(5) in both readings, and the normalised gap lambda_1 / (2 |E|) is exactly (5 - sqrt(5)) / 60.
 
 - OPH: The spectral certificate of the native repair law.
-- FEP: A precision-weighted sheaf Laplacian, of which this is the unweighted case.
+- FEP: The same matrix as a Gaussian precision, read unweighted; the FEP-side sheaf Laplacian is its weighted generalisation, so the gap is inherited from the shared object, not re-derived.
 - Synergetics: The icosahedral coordination shell of the A3 packing.
 - Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
 
@@ -113,10 +113,10 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-The total-two load shell has 78 configurations and the binary shell has 66.
+The finite state space both oph-fep readings evaluate on is the total-two load shell: 78 configurations, of which 66 are binary; the repair module enumerates it independently and agrees, and every transition census and FEP-side comparison in this package ranges over exactly these states.
 
 - OPH: The finite shell the executable observer runs on.
-- FEP: The finite state space of a bounded system.
+- FEP: No independent FEP count is claimed: the entry fixes the finite domain on which the oph-fep comparisons run, and its second reading is that domain, not a number.
 - Synergetics: A finite coordination shell of the closest packing.
 - Source: OPH model/observer/native.py (states) and the paper, Section 6.2
 
@@ -237,7 +237,7 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-The carrier's Laplacian carries an exact integer spanning-tree number: the reduced Laplacian's determinant is 5184000, equal to (1/12) times the product of the eleven nonzero eigenvalues, so the count of acyclic seam sets is an invariant both readings share.
+One determinant, two readings: the reduced carrier Laplacian's determinant is 5184000 — the number of acyclic seam sets in OPH's reading and, as the determinant of the same matrix read as a Gaussian precision, the normalisation of the FEP's linear-Gaussian interface integral — and it equals the product of the eleven nonzero eigenvalues over 12.
 
 - OPH: The seam structure of the twelve-port carrier, whose Laplacian is the repair energy's quadratic form.
 - FEP: The same matrix as a Gaussian precision, whose determinant normalises the linear-Gaussian interface integral.
@@ -257,9 +257,9 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-With the carrier Laplacian as a Gaussian precision, conditional independence holds exactly on the seams and nowhere else: each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the exact marginal variance of a port is 7/36.
+The seam structure OPH repairs along is exactly the conditional-independence structure of the precision read from the same matrix: independence holds on the seams and nowhere else, each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the exact marginal variance of a port is 7/36.
 
-- OPH: Seams are the only coupling between ports, and a repair touches one seam.
+- OPH: The declared seam graph is the independence graph: a repair touches one seam, which is exactly one conditional-independence edge.
 - FEP: A Markov blanket is the graph neighbourhood of a port, and the interface energy is the precision-quadratic form on the linear-Gaussian domain.
 - Synergetics: Every vertex of the icosahedron is five-coordinated.
 - Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Section 7.2
@@ -281,7 +281,7 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-The carrier complex's scalar sheaf has H^0 of dimension one and H^1 of dimension nineteen: one global section up to a constant, and nineteen independent ways for edges to disagree that no coboundary explains, with dim H^0 - dim H^1 equal to 12 - 30.
+Patch agreement in OPH is the global-section condition of the carrier's scalar sheaf, and the obstruction to it is the same space the FEP's harmonic-extension residual lives in: dim H^0 = 1, dim H^1 = 19 — nineteen independent edge disagreements no coboundary explains — with dim H^0 - dim H^1 = 12 - 30.
 
 - OPH: A public record is a global section; what prevents agreement is not counted by the seam count alone.
 - FEP: The harmonic-extension problem is well posed up to a constant, and its residual space is nineteen-dimensional.
@@ -331,9 +331,9 @@ Probe values:
 
 **isomorphism** / **exact** / **synergetics-oph** / probe PASS
 
-The Laplacian's eigenspaces of dimensions 3, 5 and 3 are irreducible under the icosahedral group, so the spectrum 0, (5 - sqrt 5) three times, 6 five times and (5 + sqrt 5) three times is an invariant of the symmetry rather than a numerical accident.
+The carrier Laplacian's eigenspaces of dimensions 3, 5 and 3 are the icosahedral group's non-trivial real irreducible representations acting on the carrier, so the spectrum 0, (5 - sqrt 5) three times, 6 five times and (5 + sqrt 5) three times is forced by Synergetics' group rather than computed into OPH's matrix: each eigenspace is one irreducible, and the multiplicities are the representation dimensions.
 
-- OPH: The spectral certificate of the native repair law.
+- OPH: The native law's spectral certificate, whose multiplicities the law does not choose.
 - FEP: A precision spectrum that no relabelling of the interface can change.
 - Synergetics: The icosahedral group's real irreducible representations of dimensions 1, 3, 3 and 5 appear as the eigenspaces.
 - Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
@@ -916,9 +916,9 @@ Probe values:
 
 **isomorphism** / **exact** / **synergetics-oph** / probe PASS
 
-Gauss-Bonnet on the carrier is exact in units of pi: five equilateral triangles meet at every port in the derived chart, so the defect is 1/3 pi there and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the triangulated sphere; the probe verifies the five-fold vertex figure and the bookkeeping that follows from the definition of the defect.
+OPH's derived chart is the icosahedron's triangulation, so Synergetics' angular-defect accounting applies unchanged: five equilateral triangles meet at every port, the defect is 1/3 pi at each of the twelve ports and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the sphere both programmes triangulate.
 
-- OPH: A patch complex with five faces at every port.
+- OPH: The derived patch complex: five faces at every port, the very vertex figure the defect accounting measures.
 - FEP: Curvature of the shared complex; the FEP vocabulary adds no reading of a geometric defect, and none is claimed.
 - Synergetics: The icosahedron's five-fold vertex figures, whose angular accounting is the classical one.
 - Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b

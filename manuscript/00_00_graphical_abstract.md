@@ -32,8 +32,9 @@ about the meaning of a number.
 ![The pairwise ledger triangle. Vertices are the three programmes, Observer Patch Holography, the Free Energy Principle and Fuller's Synergetics. Each edge is annotated with the counts of identifications, obstructions and complementarities for that pair, and the three load-bearing identifications are named on the edge where they sit. The centre carries the three-way ledger: the two claims that need all three vocabularies at once, `tetravolume-arithmetic` -- the three currencies of one lattice step -- and `conjugation-norm`. Every count is read from the executed registry at draw time rather than transcribed.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
 
 The scope of a claim is part of the claim: `carrier-port-chart` is a statement
-about OPH's chart and the icosahedron's vertex set, `spectral-gap` is a statement
-about OPH's repair operator and the FEP's second eigenvalue, and
+about OPH's chart and the icosahedron's vertex set, `spectral-gap` is a
+statement about one matrix read two ways — OPH's repair-energy form and the
+FEP's precision — with the gap inherited from the shared object, and
 `kl-lattice-metric` is a statement about the FEP's divergence and Synergetics'
 lattice metric. [@sec:correspondences] reports the three ledgers separately, and
 [@tbl:registry] carries the scope of every row.

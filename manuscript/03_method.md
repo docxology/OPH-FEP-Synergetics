@@ -57,18 +57,18 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | Key | Kind | Status | Pair | What it tests |
 |:-----------------------------------|:----------------|:-------------------|:-----------------|:-------------------------------|
 | `carrier-port-chart` | isomorphism | `exact` | `synergetics-oph` | derived adjacency reproduces the twenty oriented faces |
-| `spectral-gap` | isomorphism | `exact` | `oph-fep` | $\lambda_1 = 5-\sqrt{5}$ and normalised gap $(5-\sqrt{5})/60$ |
-| `shell-counts` | isomorphism | `exact` | `oph-fep` | $\binom{13}{11}$ shell size and the binary sub-shell |
+| `spectral-gap` | isomorphism | `exact` | `oph-fep` | one matrix read two ways (repair-energy form and precision): $\lambda_1 = 5-\sqrt{5}$, normalised gap $(5-\sqrt{5})/60$ |
+| `shell-counts` | isomorphism | `exact` | `oph-fep` | the total-two load shell and its binary sub-shell — the finite domain both oph-fep readings evaluate on |
 | `native-repair-law` | isomorphism | `exact` | `oph-fep` | OPH's integer rule reimplemented, with its closed-form energy drop |
 | `variational-equivalence` | isomorphism | `exact-on-domain` | `oph-fep` | harmonic-extension residual equals a Schur complement |
 | `free-energy-dictionary` | isomorphism | `exact-on-domain` | `oph-fep` | numerical, Bayesian and surprisal free energy coincide to curvature |
 | `sheaf-agreement` | isomorphism | `exact` | `oph-fep` | the cellular sheaf Laplacian is the carrier Laplacian |
 | `certificate-species` | isomorphism | `exact` | `oph-fep` | the certificate species of the shell and its spectral gap |
-| `tree-number` | isomorphism | `exact` | `oph-fep` | the reduced Laplacian determinant is {{CARRIER_TREE_NUMBER}}, an integer tree count |
-| `gmrf-independence` | isomorphism | `exact` | `oph-fep` | independence on the seams and nowhere else; blanket {{GMRF_BLANKET_SIZE}}, variance {{GMRF_MARGINAL_VARIANCE}} |
-| `sheaf-cohomology` | isomorphism | `exact` | `oph-fep` | $\dim H^0 = {{SHEAF_H0}}$, $\dim H^1 = {{SHEAF_H1}}$, and $\dim H^0 - \dim H^1 = {{CARRIER_PORTS}} - {{CARRIER_SEAMS}}$ |
+| `tree-number` | isomorphism | `exact` | `oph-fep` | one determinant, two readings: {{CARRIER_TREE_NUMBER}} counts acyclic seam sets and normalises the FEP's Gaussian interface integral |
+| `gmrf-independence` | isomorphism | `exact` | `oph-fep` | the seam graph is the conditional-independence graph of the precision: independence on the seams and nowhere else; blanket {{GMRF_BLANKET_SIZE}}, variance {{GMRF_MARGINAL_VARIANCE}} |
+| `sheaf-cohomology` | isomorphism | `exact` | `oph-fep` | patch agreement is the global-section condition, and the obstruction is the harmonic-extension residual space: $\dim H^0 = {{SHEAF_H0}}$, $\dim H^1 = {{SHEAF_H1}}$, $\dim H^0 - \dim H^1 = {{CARRIER_PORTS}} - {{CARRIER_SEAMS}}$ |
 | `icosahedral-symmetry` | isomorphism | `exact` | `synergetics-oph` | order {{SYMMETRY_GROUP_ORDER}}, transitive on ports, seams and faces: {{SYMMETRY_ROTATIONS}} rotations, {{SYMMETRY_REFLECTIONS}} reflections |
-| `eigenspace-irreducibility` | isomorphism | `exact` | `synergetics-oph` | eigenspaces of dimensions {{SYMMETRY_EIGENSPACE_DIMENSIONS}} irreducible under the icosahedral group |
+| `eigenspace-irreducibility` | isomorphism | `exact` | `synergetics-oph` | the eigenspaces are the group's non-trivial real irreducibles: dimensions {{SYMMETRY_EIGENSPACE_DIMENSIONS}} forced by the group and established by the commutant test |
 | `law-equivariance` | isomorphism | `exact` | `synergetics-oph` | ${{SYMMETRY_GROUP_ORDER}} \times {{SHELL_TOTAL_TWO}}$ pairs preserve the outcome multiset: {{SYMMETRY_ORBITS}} orbits, {{SYMMETRY_OUTCOME_MULTISETS}} multisets |
 | `kl-lattice-metric` | isomorphism | `exact` | `fep-synergetics` | one IVM step costs four nats and squared norm $8k^2$ costs $4k^2$ |
 | `pr01-obstruction` | disagreement | `obstructed` | `oph-fep` | the native law is not confluent |
@@ -94,7 +94,7 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `effective-resistance` | complementarity | `exact` | `oph-fep` | effective resistance {{RESISTANCE_ADJACENT}}, {{RESISTANCE_DISTANCE_TWO}}, {{RESISTANCE_ANTIPODAL}} by distance class, Kirchhoff index {{RESISTANCE_KIRCHHOFF_INDEX}} twice over |
 | `vertex-shells` | disagreement | `obstructed` | `synergetics-oph` | shells {{CARRIER_SHELL_SIZES}} against the lattice's {{LATTICE_SHELL_SIZES}}; intersection array {{CARRIER_INTERSECTION_ARRAY}} |
 | `subgraph-census` | isomorphism | `exact` | `synergetics-oph` | {{CARRIER_TRIANGLES}} triangles, {{CARRIER_PENTAGONS}} pentagons, {{CARRIER_PERFECT_MATCHINGS}} matchings, {{CARRIER_HAMILTONIAN_CYCLES}} Hamiltonian cycles, counted by exhaustion |
-| `angle-defect` | isomorphism | `exact` | `synergetics-oph` | a defect of $\pi/3$ at each port and $4\pi$ in total, which is $2\pi\chi$ |
+| `angle-defect` | isomorphism | `exact` | `synergetics-oph` | OPH's derived chart is the icosahedron's triangulation, so the angular-defect accounting applies unchanged: $\pi/3$ at each port, $4\pi$ in total, which is $2\pi\chi$ |
 | `twelve-around-one-families` | disagreement | `obstructed` | `synergetics-oph` | the phrase covers solids with {{CARRIER_TREE_NUMBER}} and ${{CUBOCTAHEDRON_SPANNING_TREES}} = {{CUBOCTAHEDRON_SPANNING_TREES_ROOT}}^2$ spanning trees |
 | `dual-cells` | complementarity | `exact` | `synergetics-oph` | the cell and the cuboctahedron, ${{VORONOI_VERTICES}}/{{VORONOI_FACES}}/{{VORONOI_EDGES}}$ against ${{CUBOCTAHEDRON_VERTICES}}/{{CUBOCTAHEDRON_FACES}}/{{CUBOCTAHEDRON_EDGES}}$, volumes {{PACKING_CELL_TETRAVOLUME}} and {{CUBOCTAHEDRON_TETRAVOLUME}} |
 | `conjugation-norm` | complementarity | `exact` | `three-way` | conjugation fixes the integer counts and moves the volume, whose norm is {{TETRAVOLUME_GALOIS_NORM}} |

@@ -83,7 +83,7 @@ The load-bearing results are:
 | claim | status | evidence |
 | --- | --- | --- |
 | OPH's carrier is the kissing-twelve configuration, and its port chart is derived from OPH's own oriented faces | exact | 12 ports, 30 seams, 20 faces, five-regular; the 20 triangles of the derived graph are exactly OPH's 20 oriented faces |
-| The carrier gap is the icosahedral gap | exact | `lambda_1 = 5 - sqrt(5)`; the record-discarding shell gap is `(5 - sqrt(5)) / 60` |
+| The carrier gap is the icosahedral gap | exact | `lambda_1 = 5 - sqrt(5)` in both readings, and the normalised gap `lambda_1 / (2|E|)` is exactly `(5 - sqrt(5)) / 60` |
 | The native repair law conserves load and lowers `sum(x^2)/2` by `(d^2 - (|d| mod 2)) / 4` | exact | checked on all 4680 shell transitions |
 | Patch agreement is the global-section condition of a cellular sheaf, and the sheaf Laplacian is the carrier Laplacian | exact | `carrier_sheaf(carrier).laplacian() == carrier.laplacian()` |
 | On the linear-Gaussian domain, constrained relative-entropy minimisation and predictive-coding perception are the same object | exact on that domain | the minimiser, the harmonic extension and the posterior mean coincide; the posterior `KL` vanishes |
@@ -96,9 +96,9 @@ The load-bearing results are:
 | **Finite phases are path functions** | **obstructed** | full and half-damped iteration share every answer, yet their centered contrasts after twelve steps differ by exactly `921633999 / 40000000000` |
 | Quadray geometry supplies the exact integer side of the correspondence | exact | 12 neighbour moves at squared distance 8, shells `10k^2 + 2`, rational volumes `1, 3, 4, 6, 20, 96` |
 | Equilibrium propagation supplies the parameter gradient the repair law does not define | exact | the two-settle contrast is `(theta - target) / (1 + beta)` exactly and tends to the exact gradient |
-| The carrier counts its own spanning trees | exact | the reduced Laplacian's determinant is `5184000`, matched by the product of the eleven nonzero eigenvalues to nine digits |
-| The Gaussian reading puts conditional independence exactly on the seams | exact | pairwise precision `-1` at every seam, blanket size 5 at every port, marginal variance `7/36` exactly |
-| The agreement sheaf has one global section and nineteen obstructions | exact | `dim H^0 = 1`, `dim H^1 = 19`, coboundary rank 11, Euler characteristic `12 - 30` |
+| The carrier counts its own spanning trees | exact | the reduced Laplacian's determinant is `5184000` — the number of acyclic seam sets in OPH's reading and, as the determinant of the same matrix read as a Gaussian precision, the normalisation of the FEP's linear-Gaussian interface integral — equal to the product of the eleven nonzero eigenvalues over `12` |
+| The Gaussian reading puts conditional independence exactly on the seams | exact | independence holds on the seams and nowhere else; pairwise precision `-1` at every seam, each port's Markov blanket is its five neighbours, and the exact marginal variance of a port is `7/36` |
+| The agreement sheaf has one global section and nineteen obstructions | exact | `dim H^0 = 1`, `dim H^1 = 19` — nineteen independent edge disagreements no coboundary explains — with `dim H^0 - dim H^1 = 12 - 30`, coboundary rank 11 |
 | The symmetry group closes the descent census | exact | order 120 = 60 rotations + 60 reflections, transitive on ports/seams/faces, 4 configuration orbits and 3 outcome multisets over all 120 x 78 pairs |
 | Information cost is half the synergetic metric | exact | one IVM step costs 4 nats; sites at squared norm `8k^2` cost `4k^2` |
 | **Twelve vertices is not one solid** | **obstructed** | the neighbour graph is four-regular with tetravolume 20; the carrier is five-regular with tetravolume `18.512295868219...` |

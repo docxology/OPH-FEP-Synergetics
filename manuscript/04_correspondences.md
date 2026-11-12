@@ -210,7 +210,10 @@ irrationals is a statement about the arithmetic and not about the sampling; the
 floating-point product is reported next to it because the disagreement between
 the two is the honest error bar on the spectral route.
 
-The count is not decoration. It says that the carrier's acyclic seam sets are a
+The count is not decoration. One determinant, two readings: in OPH's the
+integer counts acyclic seam sets; read as a Gaussian precision, the same
+determinant normalises the linear-Gaussian interface integral the FEP
+dictionary factorises through. Either way the carrier's acyclic seam sets are a
 finite, exactly known family, so any claim about the existence of an agreement
 configuration can be phrased as a claim about a member of a set of known size.
 [@sec:existence] is the obstruction that shows why the size of that set does not
@@ -375,7 +378,10 @@ The probe computes each defect as twice pi minus the incident faces times pi ove
 three and returns it as an exact rational multiple of pi rather than as a decimal:
 {{CARRIER_DEFECT_PER_PORT}} at each port, {{CARRIER_TOTAL_DEFECT}} in total,
 against the Euler characteristic that [@sec:census] has already reached from the
-other direction. The identity is the reason twelve five-fold vertices close into
+other direction. OPH's derived chart is the icosahedron's triangulation, so the
+angular-defect accounting Synergetics supplies for that solid applies unchanged:
+the vertex figure the accounting measures is the very five-face figure every port
+carries. The identity is the reason twelve five-fold vertices close into
 a sphere rather than a dish, and it is exact for the same reason the tree number
 is: rational quantities over a finite complex. Registered as `angle-defect`.
 

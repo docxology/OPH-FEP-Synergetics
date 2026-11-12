@@ -206,7 +206,7 @@ survives execution.
 | total load | conserved quantity of the dynamics | shell index | `native-repair-law`, `shell-counts` |
 | \{{{CARRIER_PORTS}}, {{CARRIER_SEAMS}}, {{CARRIER_FACES}}\} carrier | blanket-structured precision graph | icosahedron on the IVM | `carrier-port-chart`, `gmrf-independence`, `kissing-twelve` |
 | carrier automorphisms | symmetries of the precision | icosahedral group of order {{SYMMETRY_GROUP_ORDER}} | `icosahedral-symmetry` |
-| obstructed seam cycles | frustrated cycle space of the precision | cycle rank {{SHEAF_H1}} | `sheaf-cohomology` |
+| obstructed seam cycles | frustrated cycle space of the precision | cycle rank {{SHEAF_H1}} for the identity sheaf | `sheaf-cohomology` |
 | one shell step | one divergence step of {{KL_ONE_STEP}} nats | one move of squared distance {{KL_STEP_SQUARED_DISTANCE}} | `kl-lattice-metric`, `tetravolume-arithmetic` |
 | the carrier's twenty faces | faces of the simplicial complex | icosahedron of {{ICOSAHEDRON_TETRAVOLUME}} tetravolumes | `subgraph-census`, `icosahedron-tetravolume` |
 | the twelve-around-one cell | neighbourhood of one coordinate | rhombic dodecahedron of {{PACKING_CELL_TETRAVOLUME}} tetravolumes | `packing-density`, `dual-cells` |
