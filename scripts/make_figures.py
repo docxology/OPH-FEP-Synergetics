@@ -714,6 +714,15 @@ def cover_figure() -> Path:
     axis = figure.add_subplot(111)
     axis.set_facecolor("#0b0f14")
     axis.set_axis_off()
+    for face in OPH_ORIENTED_BASE_FACES:
+        axis.fill(
+            [flat[port, 0] for port in face],
+            [flat[port, 1] for port in face],
+            color="#1d4e56",
+            alpha=0.35,
+            linewidth=0,
+            zorder=0,
+        )
     for port in range(carrier.port_count):
         for other in carrier.neighbours(port):
             if other > port:

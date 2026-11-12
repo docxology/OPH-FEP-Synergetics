@@ -1,0 +1,45 @@
+{
+  "title": "OPH-FEP-Synergetics: executable correspondences, obstructions and complementarities across Observer Patch Holography, the Free Energy Principle, and Fuller's Synergetics",
+  "creators": [
+    {
+      "name": "Friedman, Daniel Ari",
+      "affiliation": "Active Inference Institute",
+      "orcid": "0000-0001-6232-9096"
+    }
+  ],
+  "description": "<p>An executable correspondence battery: every three-way identification across Observer Patch Holography (OPH), the Free Energy Principle (FEP), and Fuller's Synergetics is registered as a correspondence with a pairwise scope and an executable probe. Forty-two probes pass or fail, and the failing direction is reported as a result rather than hidden as a gap. The suite covers the carrier's exact spectrum and shell arithmetic, the native repair law's conservation and closed-form energy identity over all 4680 shell transitions, patch agreement as a sheaf condition whose Laplacian equals the carrier Laplacian, the linear-Gaussian free-energy dictionary with its exact-on-domain identification, fifteen obstructions exhibited as executable failures, and the quadray/IVM geometry with exact rational tetravolumes.</p>",
+  "access_right": "open",
+  "license": "mit",
+  "version": "0.1.0",
+  "keywords": [
+    "free energy principle",
+    "active inference",
+    "cellular sheaves",
+    "Synergetics",
+    "quadray coordinates",
+    "icosahedral geometry",
+    "executable research"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/FloatingPragma/observer-patch-holography",
+      "relation": "isCitedBy",
+      "resource_type": "publication-softwaredocumentation"
+    },
+    {
+      "identifier": "10.5281/zenodo.19699233",
+      "relation": "cites",
+      "resource_type": "publication"
+    },
+    {
+      "identifier": "10.5281/zenodo.16887791",
+      "relation": "cites",
+      "resource_type": "software"
+    }
+  ],
+  "communities": [
+    {
+      "identifier": "active-inference"
+    }
+  ]
+}
