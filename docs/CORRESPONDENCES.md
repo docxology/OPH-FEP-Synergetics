@@ -159,6 +159,7 @@ Probe values:
 
 - `iterations` = 51
 - `residual` = 7.393172864827226e-11
+- `start_independent` = True
 - `perceive_matches_harmonic_extension` = True
 - `posterior_mean_is_harmonic_extension` = True
 - `energy_at_minimiser` = 0.041666666666666664

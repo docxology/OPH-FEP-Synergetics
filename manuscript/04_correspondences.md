@@ -107,7 +107,8 @@ $$ {#eq:ve}
 
 The probe reports that, under [@eq:ve], the fixed-point iteration `perceive`
 reaches the harmonic extension in {{VE_ITERATIONS}} iterations with residual
-{{VE_RESIDUAL}}, that the posterior mean equals the harmonic extension, and that
+{{VE_RESIDUAL}}, that the posterior mean equals the harmonic extension, that the
+minimiser is start-independent, and that
 the free energy at the posterior exceeds the energy at the minimiser by
 {{VE_EXCESS}} to machine precision. The
 excess free energy at the posterior is exactly zero because the bound is tight

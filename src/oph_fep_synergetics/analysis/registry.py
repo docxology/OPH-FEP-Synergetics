@@ -233,9 +233,14 @@ def _probe_variational_equivalence() -> tuple[bool, dict]:
                 + observed @ blocks["L_oo"] @ observed
             )
         )
+    warm_starts = (np.full(model.interior_dim, -2.0), np.full(model.interior_dim, 3.0))
+    warm_results = [model.perceive(records, initial=start) for start in warm_starts]
     values = {
         "iterations": iterations,
         "residual": residual,
+        "start_independent": all(
+            bool(np.allclose(state, analytic, atol=1e-9)) for state, _, _ in warm_results
+        ),
         "perceive_matches_harmonic_extension": bool(np.allclose(interior, analytic, atol=1e-9)),
         "posterior_mean_is_harmonic_extension": bool(np.allclose(mean, analytic, atol=1e-9)),
         "energy_at_minimiser": energy,
@@ -246,7 +251,8 @@ def _probe_variational_equivalence() -> tuple[bool, dict]:
         "excess_free_energy_at_posterior": model.excess_free_energy(mean, covariance, records),
     }
     passed = (
-        values["perceive_matches_harmonic_extension"]
+        values["start_independent"]
+        and values["perceive_matches_harmonic_extension"]
         and values["posterior_mean_is_harmonic_extension"]
         and values["min_perturbed_energy"] > energy
         and values["stationary_gradient_norm"] < 1e-9
