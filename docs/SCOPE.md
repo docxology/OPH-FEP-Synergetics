@@ -14,19 +14,19 @@ domain.
 | OPH's native seam law | reimplemented on exact Python integers; conservation and the energy identity are checked on every one of the 4680 shell transitions |
 | PR-01 | the obstruction is reproduced exhaustively: 120 strict descents, 600 zero-descent mismatch-one moves, 3960 no-ops |
 | patch agreement as a sheaf condition | a cellular sheaf over the carrier whose Laplacian is asserted equal to the carrier Laplacian |
-| the free-energy dictionary | the linear-Gaussian corner, exactly: harmonic extension, Schur complement, the three surprises, the variational bound attained at the posterior |
+| the free-energy dictionary | the linear-Gaussian corner, exactly: harmonic extension, a separate KKT constrained minimiser, Schur complement, the three surprises, and the variational free energy computed both as surprisal plus divergence and directly as energy minus entropy, equal at the posterior and separated by the divergence away from it |
 | obstruction and dynamics controls | the D-stability family, the mediator reduction, the reduction criterion, the two-node orbits, the solenoidal family, the four-cycle trap, the replicator potential |
-| QuadMath's conventions | quadray gauge and embedding, the twelve neighbour moves, the shell sequence, exact rational tetravolumes |
+| QuadMath's conventions | quadray gauge and embedding, the twelve neighbour moves, the coordination shells against their closed-form cuboctahedral gauge, and the tetravolume table derived exactly from explicit vertex sets |
 | icosahedral subdivision | geodesic and Goldberg counts, duality, and the equality with the IVM shell sequence |
-| the carrier's counting identities | the reduced Laplacian determinant in exact rationals (the spanning-tree number), its cross-check against the spectral product, and the sheaf's two cohomology dimensions with their Euler characteristic |
-| the carrier's symmetry | the automorphism group by exhaustive search, closure under composition, the orbit decomposition of ports, seams and faces, the rotation/reflection split from OPH's oriented faces, eigenspace irreducibility, and the equivariance of the descent law over the full group |
-| the Gaussian reading of the same matrix | the precision's zeros as the conditional-independence pattern, the Markov blanket of every port, the pairwise precisions, and the exact marginal variance |
-| the information cost of a lattice step | equal-covariance Gaussian divergence against the IVM's squared distances: one step in nats, and the sequence `4k^2` |
-| the carrier's solid and the twelve-around-one cell | the icosahedron's tetravolume against its exact closed form, and the Voronoi cell's counts, derived tetravolume and packing density |
+| the carrier's counting identities | the reduced Laplacian determinant in exact rationals (the spanning-tree number), its cross-check against the spectral product, the graph sheaf's two cohomology dimensions, and the surface's Betti numbers with its Euler characteristic |
+| the carrier's symmetry | the automorphism group by exhaustive search, closure under composition, the orbit decomposition of ports, seams and faces, the rotation/reflection split from OPH's oriented faces, eigenspace irreducibility, and the equivariance of every single transition over the full group |
+| the Gaussian reading of the same matrix | the precision's zeros as the conditional-independence pattern, the Markov blanket of every port, the pairwise precisions, and the exact variance of a port's deviation from the carrier mean (the diagonal of `L^+`) |
+| the information cost of a lattice step | equal-covariance Gaussian divergence against the IVM's squared distances at unit covariance: one step in nats, the sequence `4k^2`, and the stated dependence on the unit of length |
+| the carrier's solid and the twelve-around-one cell | the icosahedron's tetravolume computed exactly in `sqrt 2 * Q(sqrt 5)` and by floating-point measurement, the two kissing arrangements compared exactly, and the Voronoi cell's counts, exact tetravolume and packing density |
 | the carrier as a network | exact effective resistances as rationals from a grounded solve, their distance-class ladder, the Kirchhoff index, the distance distribution and intersection array around a port, and the subgraph census |
 | the carrier's curvature | the angle defect at every vertex of the derived chart, summed against Gauss-Bonnet, plus the defect of the dual solid's face set |
 | the twelve-around-one families | the obstruction is exhibited rather than asserted: the cuboctahedron, the icosahedron and the cube's line graph share the twelve-around-one description and differ in counts and volumes |
-| the quadratic field of the tetravolume | the Galois conjugation of $\sqrt{5}$ as a probe: it fixes the counting invariants and moves the icosahedron's tetravolume, whose norm is exact |
+| the quadratic field of the tetravolume | the Galois conjugation of $\sqrt{5}$ (fixing $\sqrt{2}$) as a probe, in exact field arithmetic: it fixes the counting invariants and moves the icosahedron's tetravolume, whose product with its conjugate is exactly 50 |
 
 ## Cited but not implemented
 
@@ -42,8 +42,14 @@ domain.
   theorems hold for those contracts, not for the native law. This package tests
   the native law, which is the one the carrier actually runs.
 - **Equilibrium propagation as a training method.** It appears here as a
-  complementarity: it supplies the parameter gradient that the native repair law
-  does not define. No learning is implemented.
+  complementarity from energy-based learning, which the FEP reaches through
+  predictive coding: it supplies the parameter gradient that the native repair
+  law does not define. No learning is implemented, and the probe is a scalar
+  energy model.
+- **Fuller's jitterbug.** The continuous motion that carries the vector
+  equilibrium through the icosahedron is cited to explain why Synergetics
+  distinguishes the two twelve-vertex solids; the kissing slack that permits it
+  is measured, the motion itself is not simulated.
 
 ## Not reproducible from the source text
 

@@ -38,8 +38,8 @@ reports whether the live checkout still matches it.
 | Source | Repository | Licence | Recorded |
 |:-----------------|:-------------------------------------------|:-------------------------|:-----------|
 | Observer Patch Holography | `FloatingPragma/observer-patch-holography` | Apache-2.0 (software) and CC BY-NC-SA 4.0 (papers, data, ledgers) | commit, branch, seven cited identifiers |
-| FEP_Formal | `ActiveInferenceInstitute/FEP_Formal` | CC BY 4.0, DOI `10.5281/zenodo.19699233` | commit, branch, four cited identifiers |
-| QuadMath | `docxology/quadmath` | Apache-2.0, DOI `10.5281/zenodo.16887791` | commit, branch, five cited identifiers |
+| FEP_Formal | `ActiveInferenceInstitute/fep_formal` | CC BY 4.0, DOI `10.5281/zenodo.19699233` | commit, branch, four cited identifiers |
+| QuadMath | `docxology/QuadMath` | Apache-2.0, DOI `10.5281/zenodo.16887791` | commit, branch, five cited identifiers |
 
 : The three pins. The `Recorded` column is the number of identifiers the pin file
 attributes to each source; each identifier names a file, a line range and a
@@ -89,10 +89,15 @@ lives there. {#tbl:commands}
 ## Environment
 
 The package depends on `numpy` and on nothing else at run time; the test and
-figure extras add `pytest`, `pytest-cov` and `matplotlib`. The suite runs on
-`Python 3.15` with `numpy 2.5` and has no network dependency; the provenance check
-reads the local checkouts with `git rev-parse` and reports `absent` when they are
-not mounted.
+figure extras add `pytest`, `pytest-cov` and `matplotlib`. The supported
+interpreters and library versions are the lower bounds in `pyproject.toml`
+(`CPython >= 3.12`, `numpy >= 1.24`), and `scripts/build.py` prints the
+interpreter and numpy versions of the run that produced a given PDF. Every exact
+value -- the counts, the ranks, the tetravolume table, the icosahedron's volume in
+$\mathbb{Q}(\sqrt{5})$ -- is computed in Python's `fractions` arithmetic and does
+not depend on the numpy version. The suite has no network dependency; the
+provenance check reads the local checkouts with `git rev-parse` and reports
+`absent` when they are not mounted.
 
 The rendering toolchain is `Pandoc 3.13` with `pandoc-crossref` and a TeX Live
 installation. The template's own documentation records the full toolchain

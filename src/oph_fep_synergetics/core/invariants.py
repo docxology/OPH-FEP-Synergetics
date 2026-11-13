@@ -2,15 +2,17 @@
 
 Three views of one matrix, each belonging to a different programme:
 
-* the **spanning-tree number**, by the matrix-tree theorem: the number of ways the
-  seam structure can be reduced to a connected acyclic seam set.  For the
+* the **spanning-tree number**, by Kirchhoff's matrix-tree theorem: the number of
+  seam sets that connect every port without a cycle.  For the
   twelve-port carrier it is exactly ``5184000``, and the same integer is
   ``(1/n) * prod(lambda != 0)`` over the closed-form spectrum.
 * the **intrinsic Gaussian Markov random field** whose precision is the
-  Laplacian: its conditional-independence structure is exactly the carrier's
-  non-adjacency, so every port's Markov blanket is its five neighbours.
-* the **exact marginal variance** ``7/36`` of a port, obtained from the
-  reciprocal spectrum in closed form rather than from a numerical inverse.
+  Laplacian: two ports are conditionally dependent given the rest exactly when
+  they share a seam, and independent exactly when they do not, so every port's
+  Markov blanket is its five neighbours.
+* the **exact variance** ``7/36`` of a port's deviation from the carrier mean
+  (the diagonal of ``L^+``), obtained from an exact rational inverse rather
+  than from a floating-point spectrum.
 
 The reciprocal-spectrum identity is exact in the rationals: the three copies of
 ``5 - sqrt(5)`` and the three of ``5 + sqrt(5)`` contribute
@@ -112,29 +114,55 @@ def tree_number_from_spectrum(carrier: IcosahedralCarrier | None = None) -> floa
     return product / carrier.port_count
 
 
-def reciprocal_spectrum_sum(carrier: IcosahedralCarrier | None = None) -> Fraction:
-    """Return ``sum(1/lambda)`` over the nonzero spectrum, exactly.
+def _exact_inverse(matrix: Sequence[Sequence[Fraction]]) -> list[list[Fraction]]:
+    """Gauss-Jordan inverse over the rationals."""
+    size = len(matrix)
+    work = [list(row) + [Fraction(int(i == j)) for j in range(size)] for i, row in enumerate(matrix)]
+    for column in range(size):
+        pivot = next(r for r in range(column, size) if work[r][column] != 0)
+        work[column], work[pivot] = work[pivot], work[column]
+        lead = work[column][column]
+        work[column] = [value / lead for value in work[column]]
+        for r in range(size):
+            if r != column and work[r][column] != 0:
+                factor = work[r][column]
+                work[r] = [x - factor * y for x, y in zip(work[r], work[column])]
+    return [row[size:] for row in work]
 
-    The surd pairs cancel: ``1/(5 - sqrt 5) + 1/(5 + sqrt 5) = 1/2``, so three
-    copies of each pair contribute ``3/2`` and the five copies of ``6``
-    contribute ``5/6``.
+
+def reciprocal_spectrum_sum(carrier: IcosahedralCarrier | None = None) -> Fraction:
+    """Return ``sum(1/lambda)`` over the nonzero spectrum, exactly, without the spectrum.
+
+    For a connected graph ``L + J/n`` (``J`` the all-ones matrix) is invertible:
+    it has eigenvalue ``1`` on the constants and the nonzero Laplacian
+    eigenvalues elsewhere, so ``trace((L + J/n)^-1) - 1`` is the reciprocal sum.
+    The inverse is computed in exact rational arithmetic, so no eigenvalue is
+    classified from a floating-point spectrum.  For the carrier the answer is
+    ``7/3``, which the surd identity ``1/(5 - sqrt 5) + 1/(5 + sqrt 5) = 1/2``
+    (three times) plus ``5/6`` from the eigenvalue ``6`` reproduces.
     """
     carrier = carrier or icosahedral_carrier()
-    spectrum = sorted(float(value) for value in carrier.laplacian_spectrum())
-    nonzero = [value for value in spectrum if value > 1e-9]
-    surd_pairs = [value for value in nonzero if abs(value - 6.0) > 1e-9]
-    sixes = len(nonzero) - len(surd_pairs)
-    if len(surd_pairs) % 2 != 0:
-        raise AssertionError("the surd eigenvalues must come in conjugate pairs")
-    pair_reciprocal = Fraction(1, 1) / Fraction(2, 1)  # 1/(5-sqrt5) + 1/(5+sqrt5) = 1/2
-    return Fraction(len(surd_pairs) // 2, 1) * pair_reciprocal + Fraction(sixes, 6)
+    size = carrier.port_count
+    adjacency = [[int(value) for value in row] for row in carrier.adjacency_matrix()]
+    shifted = [
+        [
+            Fraction(sum(adjacency[i]) if i == j else -adjacency[i][j]) + Fraction(1, size)
+            for j in range(size)
+        ]
+        for i in range(size)
+    ]
+    inverse = _exact_inverse(shifted)
+    return sum((inverse[i][i] for i in range(size)), Fraction(0)) - 1
 
 
 def marginal_variance(carrier: IcosahedralCarrier | None = None) -> Fraction:
-    """Return the exact marginal variance of a port under the intrinsic GMRF.
+    """Return a port's variance under the intrinsic GMRF: the diagonal of ``L^+``.
 
-    The carrier is vertex-transitive, so every diagonal entry of ``L^+`` is
-    ``trace(L^+) / n = (7/3) / 12``.
+    The Laplacian precision is improper (its kernel is the constants), so the
+    variance is that of a port's deviation from the carrier mean -- the field in
+    the sum-zero gauge, whose covariance is the pseudo-inverse ``L^+``.  The
+    carrier is vertex-transitive, so every diagonal entry of ``L^+`` is
+    ``trace(L^+) / n = (7/3) / 12 = 7/36``.
     """
     carrier = carrier or icosahedral_carrier()
     return reciprocal_spectrum_sum(carrier) / carrier.port_count
@@ -149,9 +177,11 @@ def gmrf_precision(carrier: IcosahedralCarrier | None = None) -> np.ndarray:
 def proper_precision(carrier: IcosahedralCarrier | None = None) -> np.ndarray:
     """Return ``L + (1/n) I``, a positive-definite version of the precision.
 
-    Adding the smallest possible shift makes the field proper without changing
-    any off-diagonal entry, so the conditional-independence structure is
-    unaltered.
+    Any positive multiple of the identity makes the field proper without changing
+    an off-diagonal entry, so the conditional-independence structure is
+    unaltered; ``1/n`` is a convention, not a minimum, and the resulting
+    variances depend on it, which is why the reported variance is the
+    gauge-fixed ``L^+`` diagonal instead.
     """
     carrier = carrier or icosahedral_carrier()
     laplacian = gmrf_precision(carrier)

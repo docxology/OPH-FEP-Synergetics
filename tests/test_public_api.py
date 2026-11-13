@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import collections
+import json
 import re
 from pathlib import Path
 
@@ -71,15 +72,25 @@ def test_manuscript_variables_expose_the_values_surface():
 
 
 def test_provenance_hashes_are_pinned_in_one_place():
-    """A commit cited in code must also appear in the committed pin file."""
+    """No source commit is restated in code: the pin file is the only place one lives.
+
+    The check is general rather than tied to one hash: every commit pinned in
+    ``data/sources.json`` is searched for, by every prefix of seven or more hex
+    digits, across the package, so neither a full hash nor an abbreviated one can
+    be restated in a docstring or a source string and then go stale at the next
+    re-pin.  The carrier's provenance comment must instead point at the pin file.
+    """
     if not DEFAULT_SOURCES.is_file():
         pytest.skip("the pin file is not part of this checkout")
-    pinned = DEFAULT_SOURCES.read_text(encoding="utf-8")
+    pins = [source["commit"] for source in json.loads(DEFAULT_SOURCES.read_text("utf-8"))["sources"]]
+    assert pins and all(re.fullmatch(r"[0-9a-f]{40}", commit) for commit in pins)
     package_root = Path(oph_fep_synergetics.__file__).parent
-    cited = collections.Counter(
-        digest
-        for path in sorted(package_root.rglob("*.py"))
-        for digest in re.findall(r"\b[0-9a-f]{40}\b", path.read_text(encoding="utf-8"))
-    )
-    assert cited, "the OPH carrier faces should cite their source commit"
-    assert [digest for digest in cited if digest not in pinned] == []
+    restated = []
+    for path in sorted(package_root.rglob("*.py")):
+        text = path.read_text(encoding="utf-8")
+        for token in re.findall(r"\b[0-9a-f]{7,40}\b", text):
+            if any(commit.startswith(token) for commit in pins):
+                restated.append((path.name, token))
+    assert restated == []
+    carrier_source = (package_root / "core" / "carrier.py").read_text(encoding="utf-8")
+    assert "data/sources.json" in carrier_source

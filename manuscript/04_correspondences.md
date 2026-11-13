@@ -1,4 +1,4 @@
-# Agreement: the seventeen identifications each pairwise scope survives {#sec:correspondences}
+# Agreement: the identifications each pairwise scope survives {#sec:correspondences}
 
 The registry records {{REGISTRY_ISOMORPHISMS}} isomorphisms across the three
 pairwise scopes. This section states each one, gives the exact values the probe
@@ -68,10 +68,11 @@ property of the carrier alone.
 
 [@def:shell] gives the count. The probe reports
 $\lvert\Sigma_2\rvert = \binom{13}{11} = {{SHELL_TOTAL_TWO}}$ total-two configurations and
-{{SHELL_BINARY}} binary ones, and cross-checks both numbers against the repair
-module, which computes them independently. Two independent computations of the
-same integer is a weak check in general; here it is worth having, because the
-binary count is the one that the repair census below partitions.
+{{SHELL_BINARY}} binary ones, and checks the enumeration against the closed forms
+$\binom{13}{11}$ (stars and bars: two units of load over twelve ports) and
+$\binom{12}{2}$ (two occupied ports out of twelve), which share no code with it.
+The check is worth having because the enumerated set is the one that the repair
+census below partitions.
 
 ## The native repair law is reproduced, not approximated {#sec:repair-law}
 
@@ -105,14 +106,18 @@ S \;=\; L_{oo} - L_{ox} L_{xx}^{-1} L_{xo},
 $$ {#eq:ve}
 :::
 
-The probe reports that, under [@eq:ve], the fixed-point iteration `perceive`
-reaches the harmonic extension in {{VE_ITERATIONS}} iterations with residual
-{{VE_RESIDUAL}}, that the posterior mean equals the harmonic extension, that the
-minimiser is start-independent, and that
-the free energy at the posterior exceeds the energy at the minimiser by
-{{VE_EXCESS}} to machine precision. The
-excess free energy at the posterior is exactly zero because the bound is tight
-there: [@eq:vfe] is an equality when $q$ is the posterior.
+The probe computes the settled interior of [@eq:ve] three ways that share no
+linear solve.
+The harmonic extension solves the interior block. The constrained minimiser
+solves one saddle-point (KKT) system for $\min \tfrac{1}{2}z^{\top}Lz$ subject to
+$z_o = o$ over all coordinates and a multiplier per record; because the relative
+entropy of a mean shift at fixed precision $L$ is $\tfrac{1}{2}z^{\top}Lz$, this is
+OPH's premise A3, constrained relative-entropy minimisation, read in the mean.
+And the predictive-coding flow `perceive` reaches the same point in
+{{VE_ITERATIONS}} iterations with residual {{VE_RESIDUAL}}, from every start
+tried. The probe also evaluates the free energy at the posterior directly, as
+energy minus entropy, and finds it equal to the surprisal: the divergence in
+[@eq:vfe] is {{VE_EXCESS}} there because the bound is tight at the posterior.
 
 This is the paper's central positive result about the FEP, and its scope should
 be stated as carefully as the result. [@prop:ve] holds in the linear-Gaussian
@@ -194,8 +199,9 @@ carrier's Laplacian is the coboundary Laplacian of a sheaf, which is the bridge
 
 ::: {#prop:tree .proposition}
 Delete any row and the matching column of the carrier Laplacian. The determinant
-of the remaining $11 \times 11$ matrix is an integer, and that integer is the
-number of spanning trees of the seam graph:
+of the remaining $11 \times 11$ matrix is an integer, and by Kirchhoff's
+matrix-tree theorem [@kirchhoff1847auflosung] that integer is the number of
+spanning trees of the seam graph:
 
 $$
 \tau(K) \;=\; {{CARRIER_TREE_NUMBER}} \;=\; \frac{1}{12}\prod_{i=2}^{12}\lambda_i .
@@ -212,31 +218,38 @@ floating-point product is reported next to it because the disagreement between
 the two is the honest error bar on the spectral route.
 
 The count is not decoration. One determinant, two readings: in OPH's the
-integer counts acyclic seam sets; read as a Gaussian precision, the same
-determinant normalises the linear-Gaussian interface integral the FEP
-dictionary factorises through. Either way the carrier's acyclic seam sets are a
+integer counts the seam sets that connect every port without a cycle; read as a
+Gaussian precision with one port pinned (the gauge that makes it proper), the
+same determinant normalises the linear-Gaussian interface integral the FEP
+dictionary factorises through. Either way the carrier's spanning trees are a
 finite, exactly known family, so any claim about the existence of an agreement
 configuration can be phrased as a claim about a member of a set of known size.
 [@sec:existence] is the obstruction that shows why the size of that set does not
 by itself settle reachability.
 
-## The Gaussian reading puts the independence exactly on the seams {#sec:gmrf}
+## The Gaussian reading makes the seam graph the independence graph {#sec:gmrf}
 
 Read $L$ as the precision of a Gaussian field on the ports, in the canonical
 gauge where the field is centred by its mean. Then conditional independence is a
-property of the precision's zeros: two ports are independent given the rest
-exactly when their precision entry vanishes, which here happens exactly when they
-are not joined by a seam. The probe reports the independence pattern as a
+property of the precision's zeros [@dempster1972covariance; @rue2005gaussian]:
+two ports are independent given the rest exactly when their precision entry
+vanishes, which here happens exactly when they are not joined by a seam, so
+conditional dependence lives exactly on the seams. The probe reports the independence pattern as a
 ${{CARRIER_PORTS}} \times {{CARRIER_PORTS}}$ matrix over all {{GMRF_ORDERED_PAIRS}} ordered pairs of distinct ports, checks that
 it equals the adjacency pattern, and reports the three quantities that make the
 reading usable.
 
 Every seam's pairwise precision is {{GMRF_PAIRWISE_PRECISION}}, the Markov
-blanket of every port is its {{GMRF_BLANKET_SIZE}} neighbours, and the exact
-marginal variance of a port is {{GMRF_MARGINAL_VARIANCE}}, which is {{GMRF_MARGINAL_VARIANCE_EXACT}}. The
-variance is computed as the reciprocal spectrum sum
-$\sum_{i\ge 2} 1/\lambda_i$ in exact arithmetic and cross-checked against the
-pseudo-inverse of $L$, so the number is an identity rather than a fitted value.
+blanket of every port is its {{GMRF_BLANKET_SIZE}} neighbours, and the variance of
+a port's deviation from the carrier mean, the diagonal of the pseudo-inverse
+$L^{+}$, is {{GMRF_MARGINAL_VARIANCE}}, which is {{GMRF_MARGINAL_VARIANCE_EXACT}}.
+The variance is the reciprocal spectrum sum $\sum_{i\ge 2} 1/\lambda_i$ divided by
+the number of ports, computed without the spectrum as
+$\operatorname{tr}\bigl((L + J/n)^{-1}\bigr) - 1$ over the rationals, so the number
+is an identity rather than a fitted value. The sparsity half of the
+correspondence holds by construction, since the precision is the carrier's own
+Laplacian; its content is the reading, which turns OPH's seams into the FEP's
+blankets without any further assumption.
 
 Two cautions belong with this correspondence, and the paper states them here
 because the FEP literature uses the same words for weaker claims. The
@@ -248,14 +261,20 @@ second caution is the subject of [@sec:stationary].
 
 ::: {#prop:cohomology .proposition}
 Give every port the stalk $\mathbb{R}$ and every seam the identity restriction,
-and let $\delta$ be the resulting coboundary. Then the sheaf has
-$\dim H^{0} = {{SHEAF_H0}}$ up to a constant, $\dim H^{1} = {{SHEAF_H1}}$, and
-the coboundary has rank {{SHEAF_COBOUNDARY_RANK}}, so the Euler characteristic of
-the complex is {{SHEAF_EULER_CHARACTERISTIC}}.
+and let $\delta^{0}$ be the resulting coboundary on the seam graph. Then
+$\dim H^{0} = {{SHEAF_H0}}$ (the constants), $\dim H^{1} = {{SHEAF_H1}}$, and
+$\delta^{0}$ has rank {{SHEAF_COBOUNDARY_RANK}}, so the Euler characteristic of the
+graph is {{SHEAF_EULER_CHARACTERISTIC}}. Adding the twenty faces as two-cells,
+with $\delta^{1}$ the signed face-seam incidence, $\delta^{1}$ has rank
+{{SHEAF_FACE_COBOUNDARY_RANK}}: the surface has Betti numbers
+{{SHEAF_SURFACE_BETTI}} and Euler characteristic
+{{SHEAF_SURFACE_EULER_CHARACTERISTIC}}, and OPH's oriented faces sum to a
+fundamental cycle.
 :::
 
-The probe reports the coboundary's shape and rank, the two cohomology dimensions,
-the Euler characteristic, and the dimensions of the same quantities for a chain
+The probe reports both coboundaries' shapes and ranks in exact arithmetic, all
+the cohomology dimensions, both Euler characteristics, the check that
+$\delta^{1}\delta^{0} = 0$, and the dimensions of the same quantities for a chain
 sheaf used as a control.
 
 The two numbers have concrete readings, which is the reason for reporting them
@@ -265,9 +284,21 @@ every seam to agree is for every port to carry the same value: the agreement is 
 constant. The cohomology $\dim H^{1} = {{SHEAF_H1}}$ counts the seam assignments that
 cannot be written as the coboundary of any port assignment, and its value is the
 cycle rank of the seam graph, $\lvert E\rvert - \lvert V\rvert + 1 = {{CARRIER_SEAMS}} - {{CARRIER_PORTS}} + 1$.
-So the carrier's frustration space is one-dimensional in the constants and
-nineteen-dimensional in the disagreements, and both dimensions are forced by the
-graph rather than chosen [@hansen2019sheaves; @ghrist2014elementary].
+Every disagreement that a port assignment actually produces lies in the image of
+$\delta^{0}$; the {{SHEAF_H1}} dimensions are the edge data that no assignment
+realises, and both dimensions are forced by the graph rather than chosen
+[@hansen2019sheaves; @ghrist2014elementary].
+
+The second half of [@prop:cohomology] reconciles two numbers the paper uses. The
+graph's Euler characteristic is {{SHEAF_EULER_CHARACTERISTIC}}; the surface's,
+which the angle-defect count of [@prop:defect] reaches through Gauss-Bonnet, is
+{{SHEAF_SURFACE_EULER_CHARACTERISTIC}}. The difference is the faces: the
+face-seam incidence has rank {{SHEAF_FACE_COBOUNDARY_RANK}}, equal to the cycle
+rank, so every one of the graph's {{SHEAF_H1}} obstructions is the boundary of a
+face and none survives on the sphere. That the oriented faces sum to a cycle --
+every seam traversed once in each direction -- is a further check on OPH's own
+table: it says the orientation OPH declares is coherent, which the rotation and
+reflection count of [@prop:symmetry] then relies on.
 
 ## The symmetry group closes the census {#sec:symmetry}
 
@@ -295,12 +326,16 @@ Three readings follow, and they are the reason this correspondence is in the
 registry rather than in an appendix. First, the symmetry is a symmetry of the
 *object*, so any claim about the carrier that is not group-invariant is a claim
 about a labelling. Second, the eigenspaces being irreducible means the
-multiplicities {{SYMMETRY_EIGENSPACE_DIMENSIONS}} are forced: they are the dimensions of the
-icosahedral group's representations, so the spectrum's shape cannot be changed by
-perturbing the graph without breaking the symmetry. Third, and most useful for
-this paper, the descent census is equivariant: the multiset of outcomes is
-preserved by every one of the group elements, and the probe searches the whole
-product for a witness that would break it and finds none. The census numbers in
+multiplicities {{SYMMETRY_EIGENSPACE_DIMENSIONS}} are forced: they are the
+dimensions of the icosahedral group's representations, so no perturbation that
+keeps the symmetry can change the multiplicity pattern. The eigenvalues are not
+forced: the permutation representation is multiplicity-free, so every invariant
+symmetric matrix has these eigenspaces, each with its own value. Third, and most
+useful for this paper, the repair law is equivariant transition by transition:
+for every group element, configuration, oriented seam and coin, repairing the
+relabelled configuration on the relabelled seam gives the relabelled result, so
+the multiset of outcomes is preserved, and the probe finds no witness that would
+break it. The census numbers in
 [@sec:pr01] are therefore invariants, and the {{SYMMETRY_ORBITS}} orbits are the
 right unit of analysis. The registry carries this section as three entries:
 `icosahedral-symmetry`, `eigenspace-irreducibility` and `law-equivariance`.
@@ -316,8 +351,9 @@ separate {{SYMMETRY_ROTATIONS}} rotations from
 ## Information cost is the synergetic metric over two {#sec:kl-metric}
 
 ::: {#prop:kl .proposition}
-For two equal-covariance Gaussians centred at the origin and at a lattice site
-$z$, the Kullback–Leibler divergence is half the squared norm of the separation,
+For two Gaussians of equal covariance $\Sigma$ centred at the origin and at a
+lattice site $z$, the Kullback–Leibler divergence is half the squared
+Mahalanobis norm of the separation; with $\Sigma = I$ in the default embedding,
 
 $$
 D_{\mathrm{KL}}\bigl(\mathcal{N}(0, I) \,\|\, \mathcal{N}(z, I)\bigr)
@@ -326,18 +362,25 @@ $$ {#eq:kl}
 
 and the IVM's first neighbour shell sits at squared norm
 ${{KL_STEP_SQUARED_DISTANCE}}$, so one step costs
-${{KL_ONE_STEP}}$ nats and the sites at squared norm $8k^{2}$ cost $4k^{2}$.
+${{KL_ONE_STEP}}$ nats and the sites $k\,m$ along a neighbour move $m$ cost
+{{KL_NORM_SPHERE_1}}, {{KL_NORM_SPHERE_2}}, {{KL_NORM_SPHERE_3}} and
+{{KL_NORM_SPHERE_4}} nats for $k = 1,\dots,4$, that is $4k^{2}$.
 :::
 
 The probe reports the divergence for each of the twelve neighbour moves, the
-squared distance of a move, and the sequence of costs for the first four shells.
+squared distance of a move, and the costs of the sites $k\,m$ for the first four
+multiples [@kullback1951information].
 
 This is the shortest of the identifications and the one with the widest reach,
 because it is the only place in the registry where the FEP's own currency and
 Synergetics' own metric are the same function. The lattice supplies the distances;
-the divergence turns them into costs; and because the IVM's squared distances are
-integers, the costs are half-integers, which is why a table of information costs of
-lattice sites is an integer table scaled by two. It also fixes a convention that
+the divergence turns them into costs; and because every squared distance between
+lattice sites is a multiple of eight in this embedding, every cost is an integer
+number of nats, a multiple of four. The number four is a statement about the
+unit of length, not about the lattice: rescaling the covariance rescales every
+cost by the same factor, and with the covariance equal to the squared prime
+vector one step costs half a nat. What the identification fixes is the ratio of
+costs, which is the ratio of squared distances. It also fixes a convention that
 the paper uses everywhere else: a "one-step cost" is a divergence, not an energy,
 and the two differ by the factor of two that [@eq:kl] makes explicit.
 
@@ -345,10 +388,11 @@ and the two differ by the factor of two that [@eq:kl] makes explicit.
 
 ::: {#prop:subgraph-census .proposition}
 Counting the seam graph's subgraphs by exhaustion returns
-{{CARRIER_TRIANGLES}} triangles, {{CARRIER_PENTAGONS}} five-cycles,
-{{CARRIER_PERFECT_MATCHINGS}} perfect matchings and
-{{CARRIER_HAMILTONIAN_CYCLES}} labelled Hamiltonian cycles, and the first of
-those is exactly the number of faces the port chart was derived from.
+{{CARRIER_TRIANGLES}} triangles, {{CARRIER_PENTAGONS}} induced (chordless)
+five-cycles, {{CARRIER_PERFECT_MATCHINGS}} perfect matchings and
+{{CARRIER_HAMILTONIAN_CYCLES}} Hamiltonian cycles counted as undirected edge sets,
+and the first of those is exactly the number of faces the port chart was derived
+from.
 :::
 
 The probe enumerates rather than quotes: every three-vertex subset for the
@@ -360,8 +404,9 @@ alone. The triangle count is where two derivations meet. The carrier's faces wer
 produced. A count that agreed by construction would prove nothing; this one is
 computed from the adjacency and checked against the face list afterwards.
 
-The five-cycles are the dual solid's vertices, which is the first place in the
-paper where the dodecahedron appears without being named. The perfect matchings
+The induced five-cycles are the links of the twelve ports, one around each, and
+so they are the twelve pentagonal faces of the dual dodecahedron, which is the
+first place in the paper where the dodecahedron appears without being named. The perfect matchings
 and the Hamiltonian cycles have no counterpart in any of the three programmes,
 and that is the reason to report them: they are properties of the object all
 three are about, available to anyone who can read its adjacency.
@@ -372,14 +417,15 @@ three are about, available to anyone who can read its adjacency.
 Five equilateral triangles meet at every port, so each port carries an angle
 defect of {{CARRIER_DEFECT_PER_PORT}} pi and the twelve ports carry
 {{CARRIER_TOTAL_DEFECT}} pi in total, which is $2\pi\chi$ for a triangulated
-sphere: the combinatorial form of Gauss-Bonnet, read off the face list.
+sphere: Descartes' theorem on the total angular defect, the combinatorial form of
+Gauss-Bonnet, read off the face list [@federico1982descartes].
 :::
 
 The probe computes each defect as twice pi minus the incident faces times pi over
 three and returns it as an exact rational multiple of pi rather than as a decimal:
 {{CARRIER_DEFECT_PER_PORT}} at each port, {{CARRIER_TOTAL_DEFECT}} in total,
-against the Euler characteristic that [@sec:census] has already reached from the
-other direction. OPH's derived chart is the icosahedron's triangulation, so the
+against the surface Euler characteristic {{SHEAF_SURFACE_EULER_CHARACTERISTIC}}
+that the cohomology of [@prop:cohomology] reaches from the other direction. OPH's derived chart is the icosahedron's triangulation, so the
 angular-defect accounting Synergetics supplies for that solid applies unchanged:
 the vertex figure the accounting measures is the very five-face figure every port
 carries. The identity is the reason twelve five-fold vertices close into
@@ -392,9 +438,9 @@ is: rational quantities over a finite complex. Registered as `angle-defect`.
 ladder, the shells around a port, the census ([@prop:subgraph-census]), the
 defect ([@prop:defect]), and the dual pair.
 
-## What the seventeen agreements do not say
+## What the agreements do not say
 
-None of the seventeen claims identifies OPH's *dynamics* with the FEP's
+None of the identifications equates OPH's *dynamics* with the FEP's
 *functional*. Several of them are statements about counting, and most of the rest
 are statements about the carrier, its spectrum, its repair rule as an integer map,
 the Gaussian free energy on it, and the sheaf whose Laplacian it is. Every one of
@@ -406,6 +452,6 @@ reports them with the same care: a symmetry group of order
 integer, and a cohomology dimension is an exact rank. What none of them supplies
 is a claim that either programme's *learning* dynamics is the other's.
 
-The next section reports the fifteen places where the identification fails, and
-most of them fail for one reason: the authors of each programme attach a
+The next section reports the places where an identification fails, and most of
+them fail for one reason: the authors of each programme attach a
 *dynamical* claim to that shared object, and the dynamical claims do not agree.

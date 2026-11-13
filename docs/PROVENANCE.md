@@ -71,7 +71,7 @@ with the repository's `stdin` closed.
 Each `cited_identifiers` entry names where in the source a convention came from
 and what role it plays here. Three examples, one per source:
 
-- `oph` / `model/observer/native.py:45-51` / `native` — the native seam law this
+- `oph` / `model/observer/native.py:45-52` / `native` — the native seam law this
   package reimplements on exact integers.
 - `oph` / `.../self_readback_repair_closure.py:93` / `ORIENTED_BASE_FACES` — the
   twenty oriented faces from which the carrier adjacency is *derived*, with the
@@ -82,9 +82,25 @@ and what role it plays here. Three examples, one per source:
   `(2, 1, 1, 0)` and asserted to have squared distance eight.
 
 The commit actually read is deliberately **not** restated in code or prose. It
-lives in `data/sources.json`, is printed by `sources`, and a test fails if a
-40-character commit appears anywhere in the package without appearing in the pin
-file. That prevents the drift that a hand-copied hash invites.
+lives in `data/sources.json`, is printed by `sources`, and a test fails if any
+prefix of seven or more hex digits of a pinned commit appears anywhere in the
+package. That prevents the drift that a hand-copied hash, full or abbreviated,
+invites. Where a source content-addresses a file itself, as OPH does for the
+oriented faces in `evidence/native_geometric_source_20260925/spec.json`, the
+code cites that address rather than a commit.
+
+## Re-reading the pins
+
+The pins are re-read against current upstream rather than remembered. Each
+re-pin resolves the upstream `main` with `git ls-remote`, brings the local
+checkout to it, and re-reads every cited identifier at the new commit: the file,
+the line range, the symbol and the paraphrased role. A pin moves only when every
+identifier still says what the package relies on, and the line ranges move with
+it. The pins in `data/sources.json` were last re-read this way on 2026-11-13; at
+that reading every OPH file the package cites was unchanged except
+`model/PREMISES.md`, whose PR-01 row was byte-identical, and the Lean citation
+was corrected from three comment lines to the theorem itself
+(`Primitives.lean:1198`).
 
 ## What this package does not take
 
@@ -120,7 +136,7 @@ cited works keep their own terms.
 
 ## Editorial log
 
-Two provenance corrections are recorded here because they changed what the
+Three provenance corrections are recorded here because they changed what the
 package claims:
 
 1. An earlier draft of `core/carrier.py` described its adjacency table as
@@ -129,3 +145,7 @@ package claims:
    against the faces rather than against a prose claim.
 2. The geometry docstrings carried a stale QuadMath commit. The commit is now
    named in one place only, and a test enforces that.
+3. Two bibliography identifiers were wrong when checked against Crossref (the
+   DOI of Biehl, Pollock and Kanai's critique, and the DOI and year of Da Costa
+   et al.'s discrete-state synthesis); both were corrected, and every DOI in
+   `manuscript/references.bib` now resolves to the metadata the entry states.

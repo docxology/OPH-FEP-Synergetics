@@ -35,7 +35,7 @@ mistaken for a clean run.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-347 tests, no mocks, no network, no fixtures that fake a result. The suite runs
+388 tests, no mocks, no network, no fixtures that fake a result. The suite runs
 from a fresh process against the real code paths.
 
 | file | what it pins down |
@@ -52,11 +52,13 @@ from a fresh process against the real code paths.
 | `test_lattice.py` | the cube's corners and its line graph, and the isomorphism between that line graph and the cuboctahedron |
 | `test_symmetry.py` | the automorphism group by exhaustive search, closure, orbit counts, the rotation/reflection split from the face orientations, eigenspace irreducibility, and the equivariance of the descent law |
 | `test_solids.py` | oriented faces, the icosahedron's volume against its closed form and its exact squared ratio, and the rejection of an unoriented face list |
+| `test_exact.py` | arithmetic and exact signs in `Q(sqrt 5)`, exact convex hulls and their facet counts, the six-entry tetravolume table derived from vertex sets, the icosahedron's tetravolume as `sqrt 2` times an exact element with norm 50, and the two kissing arrangements compared exactly |
+| `test_independent_routes.py` | the second route to every claim that used to be checked against itself: surface cohomology beside graph cohomology, the cuboctahedral gauge beside the breadth-first shells, the exact fixed-point set of the clipped map, the KKT minimiser beside the harmonic extension, energy minus entropy beside surprisal plus divergence, transition-level equivariance, the replicator's asymmetric negative control, and the reciprocal spectrum sum from an exact inverse |
 | `test_registry.py` | the registry contract, the pairwise scopes, the selection commands, the status/kind vocabulary invariant, plus an exact-value assertion per probe |
 | `test_provenance.py` | the pin file, the licence split, identifier lookup, and `match`/`moved`/`absent`/`unavailable` against a real temporary repository |
 | `test_manuscript_variables.py` | every bound value, cross-checked against the function that produces it |
 | `test_cli.py` | every subcommand, the JSON payloads, the exit codes, and the console-script declaration |
-| `test_public_api.py` | that every exported name resolves, and that no commit hash escapes the pin file |
+| `test_public_api.py` | that every exported name resolves, and that no prefix of a pinned commit appears anywhere in the package |
 | `test_docs.py` | that the three generated documents are current, that the outline and the sections name every registered claim, and that the guides' relative links resolve |
 | `test_manuscript.py` | the eleven section files the renderer discovers, every token resolving to a bound value and every bound value being quoted, citations equal to the bibliography in both directions, a `{#sec:…}` label on every top-level heading, the manuscript's registry table against the registry, and the figure links against the accessibility registry |
 | `test_figures.py` | that every figure builder exists and is orchestrated, and that a sample renders non-trivial PNGs plus a well-formed registry (skipped without the `figures` extra) |
@@ -68,7 +70,7 @@ identity.
 ## Coverage
 
 `pyproject.toml` enforces `fail_under = 90` with branch coverage over
-`src/oph_fep_synergetics`. The current result is **96.49%**. The remaining lines
+`src/oph_fep_synergetics`. The current result is **96.58%**. The remaining lines
 are defensive or unreachable branches (an assertion that cannot fire on a
 well-formed carrier, a guard behind a guard), not untested behaviour.
 
@@ -120,12 +122,12 @@ suite rather than in LaTeX, so a defect is reported by `pytest`:
 | `test_render_contract.py` | a render whose cover, graphical-abstract panels or contents page are not on the pages the manuscript promises, a panel page that does not carry its own figure caption, a measured left text margin wider than the 0.5 in the manuscript claims, a registry key that does not reach the printed text, or a log with an overfull box, an undefined reference or an unresolved token |
 
 The rendered result was checked the way a reader checks it, on the artefact
-itself: 45 pages, the cover on page 1, the four graphical-abstract panels on
+itself: 49 pages, the cover on page 1, the four graphical-abstract panels on
 pages 2 to 5, the contents page at 6, and a 0.500 in left text margin measured
 from the PDF's own text bounding boxes. Each panel page carries its own figure
-caption, so no panel floated away from its figure. The body carries twenty-one
-numbered figures plus the cover image, fourteen numbered equations, three
-definitions, thirty-two numbered propositions and eight tables, with `0`
+caption, so no panel floated away from its figure. The body carries twenty-two
+numbered figures plus the cover image, fourteen numbered equations, five
+definitions, thirty-two numbered propositions and nine tables, with `0`
 undefined citations and `0` unresolved `??` cross-references in
 `_combined_manuscript.tex`, `0` overfull boxes in `_combined_manuscript.log`, and
 all 42 registry keys present and unbroken in the extracted text of the PDF. `scripts/check_render.py` performs
@@ -134,9 +136,10 @@ runs it against the rendered PDF when one is present.
 
 ## Tolerances and platforms
 
-The numerical contract behind the numbers is exactness by construction. Every claim the
-registry calls exact is computed in Python integers and `fractions.Fraction`, so a pass there
-is not a tolerance but an equality. The float claims are numpy float64 values reported as
+The numerical contract behind the numbers is exactness by construction. Every counting claim
+the registry calls exact is computed in Python integers and `fractions.Fraction`, and every
+volume claim in `fractions.Fraction` or in the field `Q(sqrt 5)` (`geometry.exact.Surd5`), so a
+pass there is not a tolerance but an equality. The float claims are numpy float64 values reported as
 measured, next to the closed form the source gives for the same quantity; a probe passes when
 the residual against that closed form is below `1e-12` (`1e-15` for the sandwich probes), and
 a failure means the residual is not small, not that a tolerance was widened. The suite runs on

@@ -12,47 +12,47 @@ no pair of readings captures.
 | pair | kind | status | entry | claim |
 | --- | --- | --- | --- | --- |
 | synergetics-oph | isomorphism | exact | `carrier-port-chart` | OPH's twelve-port carrier has twelve ports, thirty seams and twenty faces, is five-regular, and its port chart is the one OPH declares. |
-| oph-fep | isomorphism | exact | `spectral-gap` | One matrix carries both readings: the carrier Laplacian is 5I - A, it is OPH's repair-energy quadratic form and, unweighted, the precision the FEP reading factorises through; its first positive eigenvalue is 5 - sqrt(5) in both readings, and the normalised gap lambda_1 / (2 |E|) is exactly (5 - sqrt(5)) / 60. |
-| oph-fep | isomorphism | exact | `shell-counts` | The finite state space both oph-fep readings evaluate on is the total-two load shell: 78 configurations, of which 66 are binary; the repair module enumerates it independently and agrees, and every transition census and FEP-side comparison in this package ranges over exactly these states. |
+| oph-fep | isomorphism | exact | `spectral-gap` | One matrix carries both readings: the carrier Laplacian is 5I - A; in OPH's reading it generates the mean repair operator I - L / 60 and is the quadratic form of the seam-disagreement energy (1/2) sum over seams of (x_a - x_b)^2 (the native law's own energy, sum x^2 / 2, is a different form), and unweighted it is the precision the FEP reading factorises through; its first positive eigenvalue is 5 - sqrt(5) in both readings, and the normalised gap lambda_1 / (2 |E|) is exactly (5 - sqrt(5)) / 60. |
+| oph-fep | isomorphism | exact | `shell-counts` | The finite state space both oph-fep readings evaluate on is the total-two load shell: 78 configurations, of which 66 are binary; the enumeration agrees with the closed forms C(13, 2) = 78 (stars and bars over twelve ports) and C(12, 2) = 66, and every transition census and FEP-side comparison in this package ranges over exactly these states. |
 | oph-fep | isomorphism | exact | `native-repair-law` | The native seam law conserves total load on every transition and lowers the quadratic energy by exactly (d^2 - (|d| mod 2)) / 4. |
-| oph-fep | isomorphism | exact-on-domain | `variational-equivalence` | On the linear-Gaussian domain the interface-energy minimiser over the interior is the harmonic extension and the posterior mean, so A3-style constrained relative-entropy minimisation and predictive-coding perception are the same object. |
+| oph-fep | isomorphism | exact-on-domain | `variational-equivalence` | On the linear-Gaussian domain three computations of the settled interior coincide: the harmonic extension (an interior linear solve), the constrained minimiser of (1/2) z^T L z with the records fixed (a separate KKT saddle-point solve, which is OPH's A3 constrained relative-entropy minimisation read in the mean, because the relative entropy of a mean shift at fixed precision L is (1/2) z^T L z), and the limit of the predictive-coding gradient flow from any start; the free energy computed directly as energy minus entropy equals the surprisal there. |
 | oph-fep | isomorphism | exact-on-domain | `free-energy-dictionary` | Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, the update residual pins the Bayesian surprise between the extreme interior eigenvalues, and the interior free energy's drop from the old minimiser to the new one equals the Bayesian surprise on this domain. |
 | oph-fep | isomorphism | exact | `sheaf-agreement` | Patch agreement is the global-section condition of a cellular sheaf over the carrier complex, and the sheaf Laplacian is the carrier Laplacian. |
 | oph-fep | isomorphism | exact | `certificate-species` | The native law's sharp certificate is a spectral gap: the mean repair operator is symmetric, nonnegative and doubly stochastic by construction from the five-regular Laplacian, with second eigenvalue 1 - (5 - sqrt(5)) / 60, and its induced infinity norm is exactly one, so no sup-norm contraction certifies it. |
-| oph-fep | isomorphism | exact | `tree-number` | One determinant, two readings: the reduced carrier Laplacian's determinant is 5184000 — the number of acyclic seam sets in OPH's reading and, as the determinant of the same matrix read as a Gaussian precision, the normalisation of the FEP's linear-Gaussian interface integral — and it equals the product of the eleven nonzero eigenvalues over 12. |
-| oph-fep | isomorphism | exact | `gmrf-independence` | The seam structure OPH repairs along is exactly the conditional-independence structure of the precision read from the same matrix: independence holds on the seams and nowhere else, each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the exact marginal variance of a port is 7/36. |
-| oph-fep | isomorphism | exact | `sheaf-cohomology` | Patch agreement in OPH is the global-section condition of the carrier's scalar sheaf, and the obstruction to it is the same space the FEP's harmonic-extension residual lives in: dim H^0 = 1, dim H^1 = 19 — nineteen independent edge disagreements no coboundary explains — with dim H^0 - dim H^1 = 12 - 30. |
+| oph-fep | isomorphism | exact | `tree-number` | One determinant, two readings: the reduced carrier Laplacian's determinant is 5184000 — the number of spanning trees of the seam graph (the seam sets that connect every port without a cycle) in OPH's reading, by Kirchhoff's matrix-tree theorem, and, as the determinant of the same matrix read as a Gaussian precision grounded at one port, the normalisation of the FEP's linear-Gaussian interface integral — and it equals the product of the eleven nonzero eigenvalues over 12. |
+| oph-fep | isomorphism | exact | `gmrf-independence` | The seam graph OPH repairs along is exactly the conditional-independence graph of the precision read from the same matrix: two ports are conditionally dependent given the rest exactly when they share a seam and independent exactly when they do not, each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the variance of a port's deviation from the carrier mean (the diagonal of L^+) is exactly 7/36. The sparsity half holds by construction, since the precision is built from the adjacency; the content is the reading, not the computation. |
+| oph-fep | isomorphism | exact | `sheaf-cohomology` | Patch agreement in OPH is the global-section condition of the carrier's scalar sheaf on the seam graph, and the obstruction to it is the space the FEP's harmonic-extension residual lives in: dim H^0 = 1, dim H^1 = 19 — the graph's cycle rank, nineteen independent edge disagreements no coboundary explains — with dim H^0 - dim H^1 = 12 - 30. Adding the twenty faces as two-cells kills all nineteen: every obstruction is a face boundary, the surface's Betti numbers are (1, 0, 1), its Euler characteristic is 2, and OPH's oriented faces sum to a fundamental cycle. |
 | synergetics-oph | isomorphism | exact | `icosahedral-symmetry` | The carrier's automorphism group has order 120, is closed under composition, acts transitively on the twelve ports, the thirty seams and the twenty faces, and splits into sixty rotations and sixty reflections detected from OPH's own oriented faces. |
-| synergetics-oph | isomorphism | exact | `eigenspace-irreducibility` | The carrier Laplacian's eigenspaces of dimensions 3, 5 and 3 are the icosahedral group's non-trivial real irreducible representations acting on the carrier, so the spectrum 0, (5 - sqrt 5) three times, 6 five times and (5 + sqrt 5) three times is forced by Synergetics' group rather than computed into OPH's matrix: each eigenspace is one irreducible, and the multiplicities are the representation dimensions. |
-| synergetics-oph | isomorphism | exact | `law-equivariance` | The native repair law is equivariant: across all 120 automorphisms and all 78 total-two configurations the multiset of strict, zero and no-op outcomes is unchanged, giving four configuration orbits and three distinct outcome multisets, so the census is a group invariant and no symmetry-breaking witness exists. |
-| fep-synergetics | isomorphism | exact | `kl-lattice-metric` | Equal-covariance Gaussian KL is half the squared distance, and the IVM's first shell sits at squared distance eight, so one lattice step costs exactly four nats and the sites at squared norm 8 k^2 cost 4 k^2: the information cost is the synergetic metric over two. |
+| synergetics-oph | isomorphism | exact | `eigenspace-irreducibility` | The carrier Laplacian's eigenspaces of dimensions 3, 5 and 3 are the icosahedral group's non-trivial real irreducible representations acting on the carrier, so the multiplicities 1, 3, 5 and 3 of the spectrum 0, (5 - sqrt 5), 6 and (5 + sqrt 5) are forced by the icosahedral group rather than computed into OPH's matrix: each eigenspace is one irreducible, and the multiplicities are the representation dimensions. The values themselves are specific to 5I - A: the permutation representation is multiplicity-free, so every invariant symmetric matrix shares these eigenspaces with its own four eigenvalues. |
+| synergetics-oph | isomorphism | exact | `law-equivariance` | The native repair law is equivariant transition by transition: for all 120 automorphisms, all 78 total-two configurations, both orientations of all thirty seams and both coins, repairing the relabelled configuration on the relabelled seam gives the relabelled result, so the multiset of strict, zero and no-op outcomes is a group invariant, with four configuration orbits and three distinct outcome multisets. |
+| fep-synergetics | isomorphism | exact | `kl-lattice-metric` | Equal-covariance Gaussian KL is half the squared Mahalanobis distance, and with unit covariance in the integer quadray embedding the IVM's first shell sits at squared distance eight, so one lattice step costs exactly four nats and the sites k m at squared norm 8 k^2 cost 4 k^2: the information cost is the synergetic metric over two. The four nats are a statement about that embedding's unit of length; rescaling the covariance rescales every cost by the same factor. |
 | oph-fep | disagreement | obstructed | `pr01-obstruction` | The native repair law is not confluent and accepted repairs need not lower a measure: 600 of the 4680 shell transitions move at mismatch one with zero energy decrease, and a one-unit walk keeps energy 1/2 while changing state. |
-| oph-fep | disagreement | obstructed | `free-energy-name-collision` | The interface energy minimised over the interior and the variational free energy at the posterior are different objects that differ by a model-dependent constant, so identifying them numerically is a gauge choice rather than a theorem. |
-| oph-fep | disagreement | obstructed | `mediator-obstruction` | Eliminating an interior mediator leaves a genuinely three-way boundary term: the reduced precision is (1/3) v v^T + epsilon I with v = (1, 1, -1), and a sum of pairwise semidefinite terms reproduces it if and only if epsilon >= 1/3. |
+| oph-fep | disagreement | obstructed | `free-energy-name-collision` | The interface energy minimised over the interior and the variational free energy at the posterior are different objects that differ by a model-dependent constant, the Gaussian-integral prefactor (1/2) logdet L_xx - (d_x / 2) log 2 pi of the unnormalised density, computed both through the surprisal and directly as energy minus entropy; identifying the two numerically is a gauge choice rather than a theorem. |
+| oph-fep | disagreement | obstructed | `mediator-obstruction` | Eliminating an interior mediator leaves a genuinely three-way boundary term: the reduced precision is (1/3) v v^T + epsilon I with v = (1, 1, -1), and a sum of pairwise semidefinite terms reproduces it if and only if epsilon >= 1/3: necessity is the trace inequality (each pairwise block with off-diagonal 1/3 has diagonal sum at least 2/3, against a total trace of 1 + 3 epsilon), and sufficiency is an explicit decomposition with rank-one blocks at the threshold. |
 | oph-fep | disagreement | obstructed | `stationary-blanket` | A blanket visible in the stationary statistics need not bound the dynamics: with zero (mu, eta) precision entry the internal drift is 2q eta + (q - 1) b - 2 mu, so two states with equal blanket and internal values differ in internal motion by 2|q| |eta - eta'|. |
-| oph-fep | disagreement | obstructed | `solenoidal-freedom` | One stationary density is shared by a family of laws: the diffusion with drift -(Gamma - Q) H has stationary law N(0, H^{-1}) for every antisymmetric Q, with spectrum -1 +/- i q and entropy production 2 q^2 in the two-dimensional case. |
+| oph-fep | disagreement | obstructed | `solenoidal-freedom` | One stationary density is shared by a family of laws: the diffusion dx = -(Gamma - Q) H x dt + sqrt(2 Gamma) dW has stationary law N(0, H^{-1}) for every antisymmetric Q, and its entropy production rate is tr(Q^T Gamma^{-1} Q H); in two dimensions with Gamma = H = I and Q = q [[0, 1], [-1, 0]] the spectrum is -1 +/- i q and the entropy production is 2 q^2. |
 | oph-fep | disagreement | obstructed | `d-stability` | A linear rest admits a free-energy form exactly when it is stable, and one positive local gain removes that form without moving the rest: at k = 4 the Routh first column is (1, 6, -2, 24) and the scaled matrix has two right-half-plane roots. |
 | oph-fep | disagreement | obstructed | `schedule-path` | Agreement and dissipation are state functions while finite phases are path functions: full and half-damped iteration of the same affine rule share every answer, yet their centered contrasts after twelve steps differ by exactly 921633999 / 40000000000. |
 | oph-fep | disagreement | obstructed | `reduction-criterion` | Two histories can share the present observation and need different futures, so a summary that drops the record must err by at least half the response distance on one of them: here the worst-case error floor is exactly one. |
-| oph-fep | disagreement | obstructed | `existence-without-reachability` | An agreement can exist and be unreachable: the clipped two-node map has the origin as its only equilibrium and a source there, and the relaxation orbit stays at radius at least 0.84 with period about 7.58, while the synchronous clipped map stays at radius at least one. |
+| oph-fep | disagreement | obstructed | `existence-without-reachability` | An agreement can exist and be unreachable: the clipped two-node map has the origin as its only equilibrium and a source there, and the relaxation orbit stays at radius at least 0.84 with period about 7.58, while the synchronous clipped map, after a transient, stays at radius at least one. The fixed-point set is found by exact case analysis over the map's nine clipping regimes, so the origin is shown to be the only equilibrium rather than sampled. |
 | oph-fep | disagreement | obstructed | `directed-gradient` | A directed network's forward response need not carry its exact gradient: for J = [[-1, 2], [0, -1]] and c = (1, 0), the direct nudging response is (1, 0) while the adjoint is (1, 2). |
 | oph-fep | disagreement | obstructed | `four-cycle-local-minimum` | A local minimum of an independently defined discrepancy can be incompatible: on a four-cycle, 0011 violates two edges and every single-bit flip also violates two. |
 | synergetics-oph | disagreement | obstructed | `cuboctahedron-vs-icosahedron` | The twelve-around-one shell and the carrier are not the same solid although each has twelve vertices: the cuboctahedron is four-regular with eight triangles and six squares and tetravolume 20, while the carrier is the icosahedron, five-regular with twenty triangles and tetravolume 18.512295868219..., so a count coincidence of twelve is not an identification. |
-| fep-synergetics | disagreement | obstructed | `shell-vs-free-energy` | The IVM shell index is not a function of the free energy: shell two spans three distinct free energies and shell four spans seven, the level 36 occurs on shells three and four, and the level 52 on shells four and five, so a bounded free energy does not bound the shell. |
-| synergetics-oph | complementarity | exact | `quadray-ivm` | Quadray coordinates give the synergetic side exact integer geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and rational tetravolumes including 1, 3, 4, 6, 20 and 96. |
-| oph-fep | complementarity | exact | `equilibrium-propagation` | The two-settle contrast of equilibrium propagation supplies the parameter gradient that the native repair law does not define: the contrast equals (theta - target) / (1 + beta) exactly and tends to the exact loss gradient as the nudge vanishes. |
-| oph-fep | complementarity | exact | `replicator-potential` | Replicator selection climbs a potential, so the repair language covers it as a comparison class rather than a shared mechanism: the field equals M(x) grad F with M = diag(x) - x x^T and the potential rate is nonnegative. |
-| synergetics-oph | complementarity | exact | `kissing-twelve` | The twelve-port carrier sits on the kissing-number-twelve configuration: the IVM shell one has twelve sites at squared distance eight, and the geometric icosahedral realisation is isomorphic to OPH's labelled carrier. |
+| fep-synergetics | disagreement | obstructed | `shell-vs-free-energy` | The IVM shell index is not a function of the free energy: shell two spans three distinct free energies and shell four spans seven, the level 36 occurs on shells three and four, and the level 52 on shells four and five, so neither quantity is a function of the other, although the free energy does bound the shell from above (the minimum on shell k grows like 2k^2). The reason is exact: the shell index is the cuboctahedral gauge max(||u||_inf, ||u||_1 / 2) of the halved coordinates, a polyhedral norm, while the free energy is a Euclidean quadratic form; on shell k the free energy ranges from 2k^2 (2k^2 + 2 for odd k) up to 4k^2, and reaches 4k^2 only at the twelve vertices k m. |
+| synergetics-oph | complementarity | exact | `quadray-ivm` | Quadray coordinates give the synergetic side exact integer geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and the tetravolume table 1, 3, 4, 6, 20 and 96, every entry derived exactly from an explicit integer vertex set rather than read from the table. |
+| oph-fep | complementarity | exact | `equilibrium-propagation` | The two-settle contrast of equilibrium propagation, an energy-based learning rule that the FEP literature reaches through predictive coding, supplies the parameter gradient that the native repair law does not define: on a scalar energy model the contrast equals (theta - target) / (1 + beta) exactly and tends to the exact loss gradient as the nudge vanishes. |
+| oph-fep | complementarity | exact | `replicator-potential` | With a symmetric payoff, replicator selection climbs a potential, so the repair language covers it as a comparison class rather than a shared mechanism: the field equals M(x) grad F with M = diag(x) - x x^T (the Shahshahani gradient) at every point checked and the potential rate is nonnegative; with a non-symmetric payoff the same identity fails at every point checked, so the potential reading is a property of partnership games, not of selection in general. |
+| synergetics-oph | complementarity | exact | `kissing-twelve` | Twelve is the kissing number in three dimensions and both twelve-port arrangements attain it, in different ways: with the twelve sphere centres at distance 2r from a central sphere of radius r, the IVM's cuboctahedral shell has edge equal to circumradius, so the twelve spheres touch the centre and each other, while the icosahedral arrangement has squared edge over squared circumradius exactly 2 - 2 sqrt(5) / 5, so its spheres touch the centre and not each other; the geometric icosahedral realisation is isomorphic to OPH's labelled carrier. |
 | synergetics-oph | complementarity | exact | `icosahedron-tetravolume` | Synergetics' tetravolume accounting extends to the carrier's own solid: the regular icosahedron measures 18.512295868219... tetravolumes, equal to (5/2)(3 sqrt 2 + sqrt 10), whose square is exactly 175 + 75 sqrt 5, so the carrier's polytope has an exact algebraic volume that no integral table entry can express. |
-| synergetics-oph | complementarity | exact | `packing-density` | The IVM's Voronoi cell is the rhombic dodecahedron, fourteen vertices, twelve rhombic faces and twenty-four edges with Euler characteristic two, its tetravolume is exactly six, and the ball of radius half the prime vector gives the packing density pi / (3 sqrt 2): the carrier's coordination is the twelve-around-one of the densest lattice packing. |
-| three-way | complementarity | exact | `tetravolume-arithmetic` | The three programmes count in three currencies and only one stays integral: the FEP's equal-covariance cost for one IVM step is exactly four nats, OPH's shell gap is the rational (5 - sqrt 5) / 60, and the synergetic tetravolume table is integral (1, 3, 4, 6, 20, 96) with the cell volume six derived, while the carrier's own icosahedron enters at 18.512295868219..., whose square is 175 + 75 sqrt 5. |
+| synergetics-oph | complementarity | exact | `packing-density` | The IVM's Voronoi cell is the rhombic dodecahedron, fourteen vertices, twelve rhombic faces and twenty-four edges with Euler characteristic two, its tetravolume is exactly six (computed in rational arithmetic), and the ball of radius half the prime vector has tetravolume exactly pi sqrt 2, so the packing density is pi sqrt 2 / 6 = pi / (3 sqrt 2): the face-centred cubic density, optimal among lattice packings and among all packings in three dimensions. |
+| three-way | complementarity | exact | `tetravolume-arithmetic` | The three programmes' exact quantities live in different number systems, and no single one serves all three: the FEP's equal-covariance divergence for one IVM step is the integer four nats (in the integer embedding's unit of length), the carrier's normalised spectral gap, a relaxation rate of OPH's mean repair operator rather than a cost of a lattice step, is the quadratic surd (5 - sqrt 5) / 60, and the synergetic tetravolume table is integral (1, 3, 4, 6, 20, 96), every entry derived exactly, while the carrier's own icosahedron enters at sqrt 2 (15/2 + (5/2) sqrt 5) = 18.512295868219..., whose square is 175 + 75 sqrt 5. The three are attached to different objects; what the entry records is that no common unit converts one into another. |
 | oph-fep | complementarity | exact | `effective-resistance` | The precision carries a metric neither programme computes: the effective resistance between two ports, exact and rational, is 11/30 across a seam, 7/15 at distance two and 1/2 across the carrier, and the 66 of them sum to 28, which is twelve times the reciprocal spectrum sum 7/3 exactly. |
 | synergetics-oph | disagreement | obstructed | `vertex-shells` | The shells of ports around a port are 5, 5 and 1, not the lattice's 12, 42 and 92: the carrier is distance-regular with intersection array {5, 2, 1; 1, 2, 5} and diameter three, so reading its neighbourhoods as IVM shells fails at the first shell, 5 against 12. |
-| synergetics-oph | isomorphism | exact | `subgraph-census` | The carrier's subgraph census, computed from the derived graph alone, is asserted equal to the icosahedron's own counts: 20 triangles, exactly its twenty faces; 12 five-cycles, the vertices of its dual dodecahedron; 125 perfect matchings; and 1280 labelled Hamiltonian cycles. |
+| synergetics-oph | isomorphism | exact | `subgraph-census` | The carrier's subgraph census, computed from the derived graph alone, is asserted equal to the icosahedron's own counts: 20 triangles, exactly its twenty faces; 12 induced five-cycles, the links of its twelve vertices and hence the twelve pentagonal faces of its dual dodecahedron; 125 perfect matchings; and 1280 Hamiltonian cycles, counted as undirected edge sets. |
 | synergetics-oph | isomorphism | exact | `angle-defect` | OPH's derived chart is the icosahedron's triangulation, so Synergetics' angular-defect accounting applies unchanged: five equilateral triangles meet at every port, the defect is 1/3 pi at each of the twelve ports and 4 pi in total, which is 2 pi times the Euler characteristic 2 of the sphere both programmes triangulate. |
 | synergetics-oph | disagreement | obstructed | `twelve-around-one-families` | `Twelve around one` names a family and not an object: the icosahedron has degree 5 and 5184000 spanning trees, while the cuboctahedron has degree 4, eight triangles, 32 perfect matchings and 331776 = 576^2 spanning trees, so the counting invariant separates the two solids the phrase covers. |
 | synergetics-oph | complementarity | exact | `dual-cells` | The twelve-around-one cell and the cuboctahedron are duals edge for edge: 14 vertices against 12, 12 faces against 14, 24 edges each, Euler characteristic 2 each, and tetravolumes 6 and 20 in the ratio 10/3, with the cuboctahedron derived a second time as the cube's line graph. |
-| three-way | complementarity | exact | `conjugation-norm` | Conjugation of sqrt 5 fixes the counting invariants and moves the geometric ones: the spanning-tree number 5184000 is a rational integer and is fixed, while the icosahedron's tetravolume and its conjugate multiply to exactly 50, since (175 + 75 sqrt 5)(175 - 75 sqrt 5) = 2500. |
+| three-way | complementarity | exact | `conjugation-norm` | Conjugation of sqrt 5 (fixing sqrt 2) fixes the counting invariants and moves the geometric ones: the spanning-tree number 5184000 is a rational integer and is fixed, while the icosahedron's tetravolume sqrt 2 (15/2 + (5/2) sqrt 5) moves to sqrt 2 (15/2 - (5/2) sqrt 5), and the two multiply to exactly 50, computed in exact field arithmetic; consistently, (175 + 75 sqrt 5)(175 - 75 sqrt 5) = 2500 = 50^2. |
 
 Totals: 42/42 probes pass, 0 fail.
 
@@ -78,7 +78,7 @@ OPH's twelve-port carrier has twelve ports, thirty seams and twenty faces, is fi
 - OPH: The executable observer's twelve-port carrier.
 - FEP: No fixed carrier; the FEP leaves the graph to the model.
 - Synergetics: Icosahedron: twelve vertices, thirty edges, twenty faces.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian)
 
 Probe values:
 
@@ -93,12 +93,12 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-One matrix carries both readings: the carrier Laplacian is 5I - A, it is OPH's repair-energy quadratic form and, unweighted, the precision the FEP reading factorises through; its first positive eigenvalue is 5 - sqrt(5) in both readings, and the normalised gap lambda_1 / (2 |E|) is exactly (5 - sqrt(5)) / 60.
+One matrix carries both readings: the carrier Laplacian is 5I - A; in OPH's reading it generates the mean repair operator I - L / 60 and is the quadratic form of the seam-disagreement energy (1/2) sum over seams of (x_a - x_b)^2 (the native law's own energy, sum x^2 / 2, is a different form), and unweighted it is the precision the FEP reading factorises through; its first positive eigenvalue is 5 - sqrt(5) in both readings, and the normalised gap lambda_1 / (2 |E|) is exactly (5 - sqrt(5)) / 60.
 
-- OPH: The spectral certificate of the native repair law.
+- OPH: The generator of the mean repair operator, whose gap is the native law's spectral certificate.
 - FEP: The same matrix as a Gaussian precision, read unweighted; the FEP-side sheaf Laplacian is its weighted generalisation, so the gap is inherited from the shared object, not re-derived.
-- Synergetics: The icosahedral coordination shell of the A3 packing.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
+- Synergetics: The icosahedron's graph: a twelve-vertex kissing arrangement, but not the A3 coordination shell, which is the cuboctahedron.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian)
 
 Probe values:
 
@@ -113,11 +113,11 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-The finite state space both oph-fep readings evaluate on is the total-two load shell: 78 configurations, of which 66 are binary; the repair module enumerates it independently and agrees, and every transition census and FEP-side comparison in this package ranges over exactly these states.
+The finite state space both oph-fep readings evaluate on is the total-two load shell: 78 configurations, of which 66 are binary; the enumeration agrees with the closed forms C(13, 2) = 78 (stars and bars over twelve ports) and C(12, 2) = 66, and every transition census and FEP-side comparison in this package ranges over exactly these states.
 
 - OPH: The finite shell the executable observer runs on.
 - FEP: No independent FEP count is claimed: the entry fixes the finite domain on which the oph-fep comparisons run, and its second reading is that domain, not a number.
-- Synergetics: A finite coordination shell of the closest packing.
+- Synergetics: No counterpart: a load shell, a level set of total load, is not a coordination shell of the lattice.
 - Source: OPH model/observer/native.py (states) and the paper, Section 6.2
 
 Probe values:
@@ -126,6 +126,8 @@ Probe values:
 - `binary` = 66
 - `repair_module_total_two` = 78
 - `repair_module_binary` = 66
+- `stars_and_bars_total_two` = 78
+- `binary_closed_form` = 66
 
 ## `native-repair-law`
 
@@ -136,7 +138,7 @@ The native seam law conserves total load on every transition and lowers the quad
 - OPH: The native repair law.
 - FEP: A local update on a bounded interface.
 - Synergetics: A minimal-energy local readjustment of the honeycomb.
-- Source: OPH model/observer/native.py:45-51 and the 'Agreement and Surprise' paper, Section 6.2
+- Source: OPH model/observer/native.py:45-52 and the 'Agreement and Surprise' paper, Section 6.2
 
 Probe values:
 
@@ -148,7 +150,7 @@ Probe values:
 
 **isomorphism** / **exact-on-domain** / **oph-fep** / probe PASS
 
-On the linear-Gaussian domain the interface-energy minimiser over the interior is the harmonic extension and the posterior mean, so A3-style constrained relative-entropy minimisation and predictive-coding perception are the same object.
+On the linear-Gaussian domain three computations of the settled interior coincide: the harmonic extension (an interior linear solve), the constrained minimiser of (1/2) z^T L z with the records fixed (a separate KKT saddle-point solve, which is OPH's A3 constrained relative-entropy minimisation read in the mean, because the relative entropy of a mean shift at fixed precision L is (1/2) z^T L z), and the limit of the predictive-coding gradient flow from any start; the free energy computed directly as energy minus entropy equals the surprisal there.
 
 - OPH: A3: the least informative state relative to a reference under observer-visible constraints.
 - FEP: Perception as the descent of variational free energy in the means.
@@ -166,6 +168,10 @@ Probe values:
 - `min_perturbed_energy` = 0.04166766666661439
 - `stationary_gradient_norm` = 7.393172864827226e-11
 - `excess_free_energy_at_posterior` = np.float64(0.0)
+- `kkt_minimiser_matches_harmonic_extension` = True
+- `kkt_distance_to_harmonic_extension` = 3.1031676915590914e-17
+- `energy_minus_entropy_at_posterior` = np.float64(-1.2469042554086236)
+- `direct_free_energy_equals_surprisal` = True
 
 ## `free-energy-dictionary`
 
@@ -191,6 +197,10 @@ Probe values:
 - `variational_free_energy` = np.float64(-0.9135709220752906)
 - `numerical_surprise` = 1.118033988749895
 - `surprisal_drop_residual` = 0.0
+- `surprisal_drop_residual_nonzero_old` = 0.0
+- `energy_drop_residual_nonzero_old` = 0.0
+- `bound_gap_off_posterior` = np.float64(0.10453489189183562)
+- `bound_gap_equals_divergence` = True
 
 ## `sheaf-agreement`
 
@@ -238,12 +248,12 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-One determinant, two readings: the reduced carrier Laplacian's determinant is 5184000 — the number of acyclic seam sets in OPH's reading and, as the determinant of the same matrix read as a Gaussian precision, the normalisation of the FEP's linear-Gaussian interface integral — and it equals the product of the eleven nonzero eigenvalues over 12.
+One determinant, two readings: the reduced carrier Laplacian's determinant is 5184000 — the number of spanning trees of the seam graph (the seam sets that connect every port without a cycle) in OPH's reading, by Kirchhoff's matrix-tree theorem, and, as the determinant of the same matrix read as a Gaussian precision grounded at one port, the normalisation of the FEP's linear-Gaussian interface integral — and it equals the product of the eleven nonzero eigenvalues over 12.
 
 - OPH: The seam structure of the twelve-port carrier, whose Laplacian is the repair energy's quadratic form.
 - FEP: The same matrix as a Gaussian precision, whose determinant normalises the linear-Gaussian interface integral.
 - Synergetics: The icosahedron's own graph, counted by its seam structure.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian)
 
 Probe values:
 
@@ -258,12 +268,12 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-The seam structure OPH repairs along is exactly the conditional-independence structure of the precision read from the same matrix: independence holds on the seams and nowhere else, each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the exact marginal variance of a port is 7/36.
+The seam graph OPH repairs along is exactly the conditional-independence graph of the precision read from the same matrix: two ports are conditionally dependent given the rest exactly when they share a seam and independent exactly when they do not, each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the variance of a port's deviation from the carrier mean (the diagonal of L^+) is exactly 7/36. The sparsity half holds by construction, since the precision is built from the adjacency; the content is the reading, not the computation.
 
-- OPH: The declared seam graph is the independence graph: a repair touches one seam, which is exactly one conditional-independence edge.
+- OPH: The declared seam graph is the independence graph: a repair touches one seam, which is exactly one conditional-dependence edge.
 - FEP: A Markov blanket is the graph neighbourhood of a port, and the interface energy is the precision-quadratic form on the linear-Gaussian domain.
 - Synergetics: Every vertex of the icosahedron is five-coordinated.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Section 7.2
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Section 7.2
 
 Probe values:
 
@@ -282,11 +292,11 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-Patch agreement in OPH is the global-section condition of the carrier's scalar sheaf, and the obstruction to it is the same space the FEP's harmonic-extension residual lives in: dim H^0 = 1, dim H^1 = 19 — nineteen independent edge disagreements no coboundary explains — with dim H^0 - dim H^1 = 12 - 30.
+Patch agreement in OPH is the global-section condition of the carrier's scalar sheaf on the seam graph, and the obstruction to it is the space the FEP's harmonic-extension residual lives in: dim H^0 = 1, dim H^1 = 19 — the graph's cycle rank, nineteen independent edge disagreements no coboundary explains — with dim H^0 - dim H^1 = 12 - 30. Adding the twenty faces as two-cells kills all nineteen: every obstruction is a face boundary, the surface's Betti numbers are (1, 0, 1), its Euler characteristic is 2, and OPH's oriented faces sum to a fundamental cycle.
 
 - OPH: A public record is a global section; what prevents agreement is not counted by the seam count alone.
-- FEP: The harmonic-extension problem is well posed up to a constant, and its residual space is nineteen-dimensional.
-- Synergetics: A closed triangulated surface whose twelve vertices, thirty edges and twenty faces give the same Euler characteristic.
+- FEP: The harmonic-extension problem is well posed up to a constant; the nineteen dimensions are edge data that no node assignment can realise, the cokernel of the coboundary, while every realised disagreement lies in its eleven-dimensional image.
+- Synergetics: A closed triangulated surface: the graph's Euler characteristic is 12 - 30 = -18, the surface's is 12 - 30 + 20 = 2, and the faces account for the difference.
 - Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Proposition 4 and Section 7.2 (the cellular sheaf over the carrier complex)
 
 Probe values:
@@ -304,6 +314,12 @@ Probe values:
 - `laplacian_equals_carrier_laplacian` = True
 - `global_section_basis_columns` = 1
 - `coboundary_rank_direct` = 11
+- `surface_betti` = (1, 0, 1)
+- `surface_euler_characteristic` = 2
+- `face_coboundary_rank` = 19
+- `faces_span_graph_cycles` = True
+- `oph_faces_form_a_fundamental_cycle` = True
+- `cochain_complex` = True
 
 ## `icosahedral-symmetry`
 
@@ -314,7 +330,7 @@ The carrier's automorphism group has order 120, is closed under composition, act
 - OPH: The port chart's oriented faces decide which automorphisms preserve orientation.
 - FEP: The group is a property of the chosen interface, not of any free-energy functional.
 - Synergetics: The full icosahedral group of the icosahedron.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian)
 
 Probe values:
 
@@ -332,12 +348,12 @@ Probe values:
 
 **isomorphism** / **exact** / **synergetics-oph** / probe PASS
 
-The carrier Laplacian's eigenspaces of dimensions 3, 5 and 3 are the icosahedral group's non-trivial real irreducible representations acting on the carrier, so the spectrum 0, (5 - sqrt 5) three times, 6 five times and (5 + sqrt 5) three times is forced by Synergetics' group rather than computed into OPH's matrix: each eigenspace is one irreducible, and the multiplicities are the representation dimensions.
+The carrier Laplacian's eigenspaces of dimensions 3, 5 and 3 are the icosahedral group's non-trivial real irreducible representations acting on the carrier, so the multiplicities 1, 3, 5 and 3 of the spectrum 0, (5 - sqrt 5), 6 and (5 + sqrt 5) are forced by the icosahedral group rather than computed into OPH's matrix: each eigenspace is one irreducible, and the multiplicities are the representation dimensions. The values themselves are specific to 5I - A: the permutation representation is multiplicity-free, so every invariant symmetric matrix shares these eigenspaces with its own four eigenvalues.
 
 - OPH: The native law's spectral certificate, whose multiplicities the law does not choose.
 - FEP: A precision spectrum that no relabelling of the interface can change.
 - Synergetics: The icosahedral group's real irreducible representations of dimensions 1, 3, 3 and 5 appear as the eigenspaces.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian)
 
 Probe values:
 
@@ -352,12 +368,12 @@ Probe values:
 
 **isomorphism** / **exact** / **synergetics-oph** / probe PASS
 
-The native repair law is equivariant: across all 120 automorphisms and all 78 total-two configurations the multiset of strict, zero and no-op outcomes is unchanged, giving four configuration orbits and three distinct outcome multisets, so the census is a group invariant and no symmetry-breaking witness exists.
+The native repair law is equivariant transition by transition: for all 120 automorphisms, all 78 total-two configurations, both orientations of all thirty seams and both coins, repairing the relabelled configuration on the relabelled seam gives the relabelled result, so the multiset of strict, zero and no-op outcomes is a group invariant, with four configuration orbits and three distinct outcome multisets.
 
 - OPH: The repair law commutes with any relabelling of the carrier's ports.
 - FEP: A local update whose outcome statistics a relabelling cannot change.
 - Synergetics: The icosahedral group acting on the coordination structure.
-- Source: OPH model/observer/native.py:45-51 and the 'Agreement and Surprise' paper, Section 6.2
+- Source: OPH model/observer/native.py:45-52 and the 'Agreement and Surprise' paper, Section 6.2
 
 Probe values:
 
@@ -370,17 +386,19 @@ Probe values:
 - `sample_configuration` = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2)
 - `sample_outcomes` = strict=10, zero=0, noop=50
 - `sample_transitions` = 60
+- `transition_checks` = 1123200
+- `transitions_commute_with_every_automorphism` = True
 
 ## `kl-lattice-metric`
 
 **isomorphism** / **exact** / **fep-synergetics** / probe PASS
 
-Equal-covariance Gaussian KL is half the squared distance, and the IVM's first shell sits at squared distance eight, so one lattice step costs exactly four nats and the sites at squared norm 8 k^2 cost 4 k^2: the information cost is the synergetic metric over two.
+Equal-covariance Gaussian KL is half the squared Mahalanobis distance, and with unit covariance in the integer quadray embedding the IVM's first shell sits at squared distance eight, so one lattice step costs exactly four nats and the sites k m at squared norm 8 k^2 cost 4 k^2: the information cost is the synergetic metric over two. The four nats are a statement about that embedding's unit of length; rescaling the covariance rescales every cost by the same factor.
 
 - OPH: No counterpart; OPH's own step cost is the change of its quadratic seam energy.
 - FEP: The linear-Gaussian KL of a mean shift at fixed covariance.
 - Synergetics: The IVM's squared distance in quadray coordinates.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Theorem 7 item 5; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Theorem 7 item 5; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md
 
 Probe values:
 
@@ -400,7 +418,7 @@ The native repair law is not confluent and accepted repairs need not lower a mea
 - OPH: PR-01 'confluent terminating repair contract' is recorded as obstructed; the consensus theorems hold for the integer and transactional contracts, not the native law.
 - FEP: Active inference is a descent on a bound; the identification with this law therefore fails on the mismatch-one domain.
 - Synergetics: No counterpart.
-- Source: OPH model/PREMISES.md:95 (PR-01) and Lean/ObserverPatchHolography/Primitives.lean (demoCarrier_not_confluent)
+- Source: OPH model/PREMISES.md:95 (PR-01) and Lean/ObserverPatchHolography/Primitives.lean:1198 (demoCarrier_not_confluent)
 
 Probe values:
 
@@ -421,7 +439,7 @@ Probe values:
 
 **disagreement** / **obstructed** / **oph-fep** / probe PASS
 
-The interface energy minimised over the interior and the variational free energy at the posterior are different objects that differ by a model-dependent constant, so identifying them numerically is a gauge choice rather than a theorem.
+The interface energy minimised over the interior and the variational free energy at the posterior are different objects that differ by a model-dependent constant, the Gaussian-integral prefactor (1/2) logdet L_xx - (d_x / 2) log 2 pi of the unnormalised density, computed both through the surprisal and directly as energy minus entropy; identifying the two numerically is a gauge choice rather than a theorem.
 
 - OPH: Native thermodynamic free energy: Gibbs states and Landauer bounds on records.
 - FEP: Variational free energy: a KL bound on surprisal, not a thermodynamic potential.
@@ -435,12 +453,14 @@ Probe values:
 - `difference` = np.float64(-1.2885709220752906)
 - `expected_model_constant` = -1.2885709220752906
 - `is_positive_definite_interior` = True
+- `energy_minus_entropy_at_posterior` = np.float64(-1.2469042554086236)
+- `direct_difference` = np.float64(-1.2885709220752903)
 
 ## `mediator-obstruction`
 
 **disagreement** / **obstructed** / **oph-fep** / probe PASS
 
-Eliminating an interior mediator leaves a genuinely three-way boundary term: the reduced precision is (1/3) v v^T + epsilon I with v = (1, 1, -1), and a sum of pairwise semidefinite terms reproduces it if and only if epsilon >= 1/3.
+Eliminating an interior mediator leaves a genuinely three-way boundary term: the reduced precision is (1/3) v v^T + epsilon I with v = (1, 1, -1), and a sum of pairwise semidefinite terms reproduces it if and only if epsilon >= 1/3: necessity is the trace inequality (each pairwise block with off-diagonal 1/3 has diagonal sum at least 2/3, against a total trace of 1 + 3 epsilon), and sufficiency is an explicit decomposition with rank-one blocks at the threshold.
 
 - OPH: A local patch can be unable to repair although a consistent world exists.
 - FEP: A blanket reduction that destroys the pairwise predictive-coding description.
@@ -485,7 +505,7 @@ Probe values:
 
 **disagreement** / **obstructed** / **oph-fep** / probe PASS
 
-One stationary density is shared by a family of laws: the diffusion with drift -(Gamma - Q) H has stationary law N(0, H^{-1}) for every antisymmetric Q, with spectrum -1 +/- i q and entropy production 2 q^2 in the two-dimensional case.
+One stationary density is shared by a family of laws: the diffusion dx = -(Gamma - Q) H x dt + sqrt(2 Gamma) dW has stationary law N(0, H^{-1}) for every antisymmetric Q, and its entropy production rate is tr(Q^T Gamma^{-1} Q H); in two dimensions with Gamma = H = I and Q = q [[0, 1], [-1, 0]] the spectrum is -1 +/- i q and the entropy production is 2 q^2.
 
 - OPH: Configuration equilibrium does not determine inertia; the native counterpart shares the full reference state with distinct finite kinetics.
 - FEP: A stationary law does not fix the law that preserves it; the solenoidal part is a free parameter.
@@ -574,7 +594,7 @@ Probe values:
 
 **disagreement** / **obstructed** / **oph-fep** / probe PASS
 
-An agreement can exist and be unreachable: the clipped two-node map has the origin as its only equilibrium and a source there, and the relaxation orbit stays at radius at least 0.84 with period about 7.58, while the synchronous clipped map stays at radius at least one.
+An agreement can exist and be unreachable: the clipped two-node map has the origin as its only equilibrium and a source there, and the relaxation orbit stays at radius at least 0.84 with period about 7.58, while the synchronous clipped map, after a transient, stays at radius at least one. The fixed-point set is found by exact case analysis over the map's nine clipping regimes, so the origin is shown to be the only equilibrium rather than sampled.
 
 - OPH: Existence of a public fixed point is not reachability by the repair dynamics.
 - FEP: Existence of a fixed point is not convergence of the process theory.
@@ -590,6 +610,8 @@ Probe values:
 - `sync_map_min_radius` = 1.0
 - `source_relaxation_min_radius` = 0.84
 - `source_relaxation_period` = 7.58
+- `fixed_points` = ((0, 0))
+- `sync_transient_steps_skipped` = 60
 
 ## `directed-gradient`
 
@@ -638,7 +660,7 @@ The twelve-around-one shell and the carrier are not the same solid although each
 - OPH: The carrier is the icosahedron; its twenty faces are the faces the repair law uses.
 - FEP: No counterpart.
 - Synergetics: The vector equilibrium is the twelve-around-one cuboctahedron; the icosahedron is a different twelve-vertex solid.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md
 
 Probe values:
 
@@ -661,12 +683,12 @@ Probe values:
 
 **disagreement** / **obstructed** / **fep-synergetics** / probe PASS
 
-The IVM shell index is not a function of the free energy: shell two spans three distinct free energies and shell four spans seven, the level 36 occurs on shells three and four, and the level 52 on shells four and five, so a bounded free energy does not bound the shell.
+The IVM shell index is not a function of the free energy: shell two spans three distinct free energies and shell four spans seven, the level 36 occurs on shells three and four, and the level 52 on shells four and five, so neither quantity is a function of the other, although the free energy does bound the shell from above (the minimum on shell k grows like 2k^2). The reason is exact: the shell index is the cuboctahedral gauge max(||u||_inf, ||u||_1 / 2) of the halved coordinates, a polyhedral norm, while the free energy is a Euclidean quadratic form; on shell k the free energy ranges from 2k^2 (2k^2 + 2 for odd k) up to 4k^2, and reaches 4k^2 only at the twelve vertices k m.
 
-- OPH: OPH's shell is a graph-distance shell of configurations, not a level set of a quadratic form.
+- OPH: OPH's load shell is a level set of total load, a linear functional, unrelated to the lattice's graph-distance shells.
 - FEP: The free energy of a Gaussian mean is a quadratic form whose level sets cut across the coordination shells.
-- Synergetics: The shells are 10 k^2 + 2 sites at graph distance k from the centre.
-- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+- Synergetics: The shells are the 10 k^2 + 2 lattice points on the surface of the frequency-k vector equilibrium, at graph distance k from the centre.
+- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md
 
 Probe values:
 
@@ -677,17 +699,22 @@ Probe values:
 - `levels_shared_across_shells` = 36.0=(3, 4), 52.0=(4, 5)
 - `shell_one_is_one_sphere` = True
 - `shell_two_spans_three_spheres` = True
+- `gauge_equals_shell_index` = True
+- `gauge_checked_through_shell` = 12
+- `free_energy_range_per_shell` = 1=(4, 4), 2=(8, 16), 3=(20, 36), 4=(32, 64), 5=(52, 100)
+- `maximum_is_4k2_at_twelve_vertices` = True
+- `minimum_is_2k2_or_2k2_plus_2` = True
 
 ## `quadray-ivm`
 
 **complementarity** / **exact** / **synergetics-oph** / probe PASS
 
-Quadray coordinates give the synergetic side exact integer geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and rational tetravolumes including 1, 3, 4, 6, 20 and 96.
+Quadray coordinates give the synergetic side exact integer geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and the tetravolume table 1, 3, 4, 6, 20 and 96, every entry derived exactly from an explicit integer vertex set rather than read from the table.
 
 - OPH: The carrier needs a lattice in which twelve neighbours is the kissing configuration.
 - FEP: No fixed geometry; the FEP leaves the interface geometry to the model.
 - Synergetics: The IVM/quadray framework supplies the lattice, the shell counts and the volumes exactly.
-- Source: QuadMath src/quadmath/core/quadray.py and src/quadmath/lattice/omni_numbering.py at a8e335b
+- Source: QuadMath src/quadmath/core/quadray.py and src/quadmath/lattice/omni_numbering.py
 
 Probe values:
 
@@ -696,8 +723,11 @@ Probe values:
 - `squared_norms` = (8.0)
 - `min_pairwise_squared_distance` = 8.0
 - `shell_counts` = (1, 12, 42, 92, 162)
+- `enumerated_shell_counts` = (1, 12, 42, 92, 162)
 - `cumulative_counts` = (1, 13, 55, 147, 309)
 - `volume_ratios_present` = (1.0, 3.0, 4.0, 6.0, 20.0, 96.0)
+- `volume_ratios_derived` = cube=3, cuboctahedron=20, octahedron=4, rhombic_dodecahedron=6, tetrahedron=1, truncated_octahedron=96
+- `derived_table_equals_declared` = True
 - `max_shell` = 32
 - `neighbor_squared_distance` = 8
 
@@ -705,7 +735,7 @@ Probe values:
 
 **complementarity** / **exact** / **oph-fep** / probe PASS
 
-The two-settle contrast of equilibrium propagation supplies the parameter gradient that the native repair law does not define: the contrast equals (theta - target) / (1 + beta) exactly and tends to the exact loss gradient as the nudge vanishes.
+The two-settle contrast of equilibrium propagation, an energy-based learning rule that the FEP literature reaches through predictive coding, supplies the parameter gradient that the native repair law does not define: on a scalar energy model the contrast equals (theta - target) / (1 + beta) exactly and tends to the exact loss gradient as the nudge vanishes.
 
 - OPH: The native law repairs; it does not learn its law.
 - FEP: Learning is a descent of free energy in parameters, which needs a gradient the settling rule alone does not give.
@@ -725,7 +755,7 @@ Probe values:
 
 **complementarity** / **exact** / **oph-fep** / probe PASS
 
-Replicator selection climbs a potential, so the repair language covers it as a comparison class rather than a shared mechanism: the field equals M(x) grad F with M = diag(x) - x x^T and the potential rate is nonnegative.
+With a symmetric payoff, replicator selection climbs a potential, so the repair language covers it as a comparison class rather than a shared mechanism: the field equals M(x) grad F with M = diag(x) - x x^T (the Shahshahani gradient) at every point checked and the potential rate is nonnegative; with a non-symmetric payoff the same identity fails at every point checked, so the potential reading is a property of partnership games, not of selection in general.
 
 - OPH: A comparison class, not a realization.
 - FEP: A comparison class, not a process theory.
@@ -739,16 +769,19 @@ Probe values:
 - `potential_rate_via_mobility` = 0.1344
 - `rates_agree` = True
 - `field_norm` = 0.21196226079186833
+- `symmetric_payoff_points_checked` = 25
+- `symmetric_payoffs_are_gradients` = True
+- `asymmetric_payoff_is_not_a_gradient` = True
 
 ## `kissing-twelve`
 
 **complementarity** / **exact** / **synergetics-oph** / probe PASS
 
-The twelve-port carrier sits on the kissing-number-twelve configuration: the IVM shell one has twelve sites at squared distance eight, and the geometric icosahedral realisation is isomorphic to OPH's labelled carrier.
+Twelve is the kissing number in three dimensions and both twelve-port arrangements attain it, in different ways: with the twelve sphere centres at distance 2r from a central sphere of radius r, the IVM's cuboctahedral shell has edge equal to circumradius, so the twelve spheres touch the centre and each other, while the icosahedral arrangement has squared edge over squared circumradius exactly 2 - 2 sqrt(5) / 5, so its spheres touch the centre and not each other; the geometric icosahedral realisation is isomorphic to OPH's labelled carrier.
 
-- OPH: The twelve-port carrier with its twelve neighbours.
+- OPH: The twelve-port carrier is the icosahedral kissing arrangement, the one with slack between neighbours.
 - FEP: No fixed carrier.
-- Synergetics: Twelve-around-one, the vector equilibrium.
+- Synergetics: Twelve-around-one: the vector equilibrium is the rigid lattice arrangement, and the icosahedral one is the loose arrangement the jitterbug passes through.
 - Source: QuadMath shell_count and IVM_NEIGHBOR_MOVES; OPH carrier counts
 
 Probe values:
@@ -759,6 +792,11 @@ Probe values:
 - `ivm_moves` = 12
 - `move_squared_norm` = 8.0
 - `geometric_adjacency_isomorphic` = True
+- `cuboctahedron_edge_over_radius_squared` = 1
+- `icosahedron_edge_over_radius_squared` = 2 - 2/5 sqrt 5
+- `icosahedron_edge_over_radius_squared_float` = 1.105572809000084
+- `cuboctahedral_neighbours_touch` = True
+- `icosahedral_neighbours_have_slack` = True
 
 ## `icosahedron-tetravolume`
 
@@ -769,7 +807,7 @@ Synergetics' tetravolume accounting extends to the carrier's own solid: the regu
 - OPH: The carrier's polytope: twelve ports, thirty seams, twenty faces.
 - FEP: No counterpart; the FEP assigns no volume to an interface.
 - Synergetics: The tetravolume of the regular icosahedron, measured against the equal-edge tetrahedron.
-- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md
 
 Probe values:
 
@@ -789,17 +827,22 @@ Probe values:
 - `exact_squared_parts` = (175, 75)
 - `exact_squared_residual` = 3.410605131648481e-13
 - `integral` = False
+- `exact_volume_edge_two` = 10 + 10/3 sqrt 5
+- `exact_tetravolume_over_sqrt2` = 15/2 + 5/2 sqrt 5
+- `exact_square` = 175 + 75 sqrt 5
+- `exact_facets` = 20
+- `exact_matches_measured` = True
 
 ## `packing-density`
 
 **complementarity** / **exact** / **synergetics-oph** / probe PASS
 
-The IVM's Voronoi cell is the rhombic dodecahedron, fourteen vertices, twelve rhombic faces and twenty-four edges with Euler characteristic two, its tetravolume is exactly six, and the ball of radius half the prime vector gives the packing density pi / (3 sqrt 2): the carrier's coordination is the twelve-around-one of the densest lattice packing.
+The IVM's Voronoi cell is the rhombic dodecahedron, fourteen vertices, twelve rhombic faces and twenty-four edges with Euler characteristic two, its tetravolume is exactly six (computed in rational arithmetic), and the ball of radius half the prime vector has tetravolume exactly pi sqrt 2, so the packing density is pi sqrt 2 / 6 = pi / (3 sqrt 2): the face-centred cubic density, optimal among lattice packings and among all packings in three dimensions.
 
-- OPH: The carrier's degree-five coordination is the kissing configuration of the densest lattice packing.
+- OPH: The densest packing's kissing arrangement is the cuboctahedral one, not the carrier's icosahedral one; the carrier inherits the kissing number, not the packing.
 - FEP: No counterpart.
 - Synergetics: The rhombic dodecahedron's six tetravolumes, derived here from the cell rather than read from the table.
-- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md
 
 Probe values:
 
@@ -821,29 +864,37 @@ Probe values:
 - `closed_form` = 0.7404804896930609
 - `density_residual` = 1.1102230246251565e-16
 - `inradius_is_half_the_prime_vector` = True
+- `cell_volume_exact` = 16
+- `cell_tetravolume_exact` = 6
+- `ball_tetravolume_exact` = pi sqrt 2
+- `density_exact` = pi sqrt 2 / 6
 
 ## `tetravolume-arithmetic`
 
 **complementarity** / **exact** / **three-way** / probe PASS
 
-The three programmes count in three currencies and only one stays integral: the FEP's equal-covariance cost for one IVM step is exactly four nats, OPH's shell gap is the rational (5 - sqrt 5) / 60, and the synergetic tetravolume table is integral (1, 3, 4, 6, 20, 96) with the cell volume six derived, while the carrier's own icosahedron enters at 18.512295868219..., whose square is 175 + 75 sqrt 5.
+The three programmes' exact quantities live in different number systems, and no single one serves all three: the FEP's equal-covariance divergence for one IVM step is the integer four nats (in the integer embedding's unit of length), the carrier's normalised spectral gap, a relaxation rate of OPH's mean repair operator rather than a cost of a lattice step, is the quadratic surd (5 - sqrt 5) / 60, and the synergetic tetravolume table is integral (1, 3, 4, 6, 20, 96), every entry derived exactly, while the carrier's own icosahedron enters at sqrt 2 (15/2 + (5/2) sqrt 5) = 18.512295868219..., whose square is 175 + 75 sqrt 5. The three are attached to different objects; what the entry records is that no common unit converts one into another.
 
-- OPH: Integer loads and rational spectral data.
+- OPH: Integer loads; spectral data in the quadratic field Q(sqrt 5).
 - FEP: Real-valued information costs in nats.
 - Synergetics: Tetravolumes of the prime vector: integral on the IVM, algebraic irrational on the icosahedron.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026
 
 Probe values:
 
 - `fep_currency` = nats
 - `fep_one_step_kl` = np.float64(4.0)
 - `fep_one_step_is_integral` = True
-- `oph_currency` = integer loads and rational spectral data
+- `oph_currency` = integer loads; spectral data in Q(sqrt 5)
 - `oph_shell_gap` = 0.04606553370833684
+- `oph_shell_gap_exact` = (5 - sqrt 5) / 60
+- `oph_shell_gap_matches_exact` = True
 - `oph_shell_gap_is_smaller_than_one` = True
 - `synergetics_currency` = tetravolumes of the prime vector
 - `synergetics_table` = cube=3, cuboctahedron=20, octahedron=4, rhombic_dodecahedron=6, tetrahedron=1, truncated_octahedron=96
 - `synergetics_table_is_integral` = True
+- `synergetics_table_derived_exactly` = True
+- `synergetics_icosahedron_exact` = sqrt 2 (15/2 + 5/2 sqrt 5)
 - `synergetics_icosahedron_tetravolume` = 18.51229586821915
 - `synergetics_icosahedron_is_integral` = False
 - `synergetics_icosahedron_squared_parts` = (175, 75)
@@ -859,7 +910,7 @@ The precision carries a metric neither programme computes: the effective resista
 - OPH: A Laplacian whose generalized inverse defines a resistance distance.
 - FEP: In the Gaussian reading the same number is the variance of a port's potential difference.
 - Synergetics: A lattice metric on the same twelve sites, counted in whole steps rather than in resistances.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026
 
 Probe values:
 
@@ -881,7 +932,7 @@ The shells of ports around a port are 5, 5 and 1, not the lattice's 12, 42 and 9
 - OPH: Neighbourhood shells of the port adjacency.
 - FEP: The same shells as conditional-independence distance in the precision.
 - Synergetics: IVM shells 10k^2 + 2 around a lattice site.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md
 
 Probe values:
 
@@ -897,12 +948,12 @@ Probe values:
 
 **isomorphism** / **exact** / **synergetics-oph** / probe PASS
 
-The carrier's subgraph census, computed from the derived graph alone, is asserted equal to the icosahedron's own counts: 20 triangles, exactly its twenty faces; 12 five-cycles, the vertices of its dual dodecahedron; 125 perfect matchings; and 1280 labelled Hamiltonian cycles.
+The carrier's subgraph census, computed from the derived graph alone, is asserted equal to the icosahedron's own counts: 20 triangles, exactly its twenty faces; 12 induced five-cycles, the links of its twelve vertices and hence the twelve pentagonal faces of its dual dodecahedron; 125 perfect matchings; and 1280 Hamiltonian cycles, counted as undirected edge sets.
 
 - OPH: The 20 triangles of the derived face set.
 - FEP: A census of the precision's underlying graph; the FEP reading inherits the counts and asserts nothing about them.
-- Synergetics: The icosahedron's faces and the dodecahedron's twelve vertices.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+- Synergetics: The icosahedron's twenty faces and the dodecahedron's twelve pentagonal faces.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md
 
 Probe values:
 
@@ -922,7 +973,7 @@ OPH's derived chart is the icosahedron's triangulation, so Synergetics' angular-
 - OPH: The derived patch complex: five faces at every port, the very vertex figure the defect accounting measures.
 - FEP: Curvature of the shared complex; the FEP vocabulary adds no reading of a geometric defect, and none is claimed.
 - Synergetics: The icosahedron's five-fold vertex figures, whose angular accounting is the classical one.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md
 
 Probe values:
 
@@ -942,7 +993,7 @@ Probe values:
 - OPH: The carrier is the icosahedron, so its count is 5184000.
 - FEP: Nothing: both graphs support the same Gaussian reading, and the count is what distinguishes them.
 - Synergetics: The vector equilibrium is the cuboctahedron, and its count is 576 squared.
-- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b; OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
+- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian)
 
 Probe values:
 
@@ -961,10 +1012,10 @@ Probe values:
 
 The twelve-around-one cell and the cuboctahedron are duals edge for edge: 14 vertices against 12, 12 faces against 14, 24 edges each, Euler characteristic 2 each, and tetravolumes 6 and 20 in the ratio 10/3, with the cuboctahedron derived a second time as the cube's line graph.
 
-- OPH: The Voronoi cell of the twelve ports, derived from the carrier's sites.
+- OPH: No counterpart: the cell is the IVM's, built from the cuboctahedral neighbours; the carrier is the icosahedron, whose twelve sites would bound a different cell.
 - FEP: The cell's volume is not a free-energy quantity; the dual pair is geometry.
 - Synergetics: The rhombic dodecahedron's six and the cuboctahedron's twenty tetravolumes.
-- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b; OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c
+- Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian)
 
 Probe values:
 
@@ -985,12 +1036,12 @@ Probe values:
 
 **complementarity** / **exact** / **three-way** / probe PASS
 
-Conjugation of sqrt 5 fixes the counting invariants and moves the geometric ones: the spanning-tree number 5184000 is a rational integer and is fixed, while the icosahedron's tetravolume and its conjugate multiply to exactly 50, since (175 + 75 sqrt 5)(175 - 75 sqrt 5) = 2500.
+Conjugation of sqrt 5 (fixing sqrt 2) fixes the counting invariants and moves the geometric ones: the spanning-tree number 5184000 is a rational integer and is fixed, while the icosahedron's tetravolume sqrt 2 (15/2 + (5/2) sqrt 5) moves to sqrt 2 (15/2 - (5/2) sqrt 5), and the two multiply to exactly 50, computed in exact field arithmetic; consistently, (175 + 75 sqrt 5)(175 - 75 sqrt 5) = 2500 = 50^2.
 
 - OPH: A count over the carrier, which is an integer and therefore conjugation-invariant.
 - FEP: A determinant over the same matrix, likewise rational.
-- Synergetics: Tetravolumes in the quadratic field Q(sqrt 5), where the volume moves under conjugation.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian) at 5517b0c; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in quadmath/markdown/03_quadray_methods.md at a8e335b; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026
+- Synergetics: Tetravolumes in sqrt 2 Q(sqrt 5), whose squares lie in Q(sqrt 5); the volume moves under the conjugation, which fixes sqrt 2.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026
 
 Probe values:
 
@@ -1000,7 +1051,9 @@ Probe values:
 - `squared_norm` = 2500
 - `galois_norm_of_tetravolume` = 50
 - `conjugated_squared` = 7.294901687515761
-- `conjugate_volume` = 2.7009075673772625
-- `volume_times_conjugate` = 49.999999999999936
+- `conjugate_volume` = 2.7009075673772642
+- `volume_times_conjugate` = 49.99999999999997
+- `volume_times_conjugate_exact` = 50
+- `conjugate_over_sqrt2` = 15/2 - 5/2 sqrt 5
 - `volume_is_irrational` = True
 

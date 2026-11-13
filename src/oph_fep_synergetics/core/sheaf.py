@@ -292,17 +292,21 @@ def cohomology_dimensions(sheaf: CellularSheaf, *, tolerance: float = 1e-9) -> d
 
     ``H^0 = ker(delta^0)`` is the space of global sections -- the assignments on
     which every edge agrees -- and ``H^1 = C^1 / im(delta^0)`` is the space of
-    edge assignments modulo coboundaries.  Their difference is the graph's Euler
-    characteristic ``nodes - edges``, which for the carrier's scalar identity
-    sheaf is ``12 - 30 = -18``: one global section up to a constant, and nineteen
-    independent ways for edges to disagree without a coboundary explaining them.
+    edge assignments modulo coboundaries.  Their difference is the sheaf's Euler
+    characteristic ``dim C^0 - dim C^1`` (total stalk dimension minus total edge
+    dimension), which for scalar stalks is the graph's ``nodes - edges``: for the
+    carrier's scalar identity sheaf ``12 - 30 = -18``, one global section (the
+    constants) and nineteen independent edge-data directions that no node
+    assignment realises -- the cokernel of the coboundary, of dimension equal to
+    the cycle rank.  See :func:`surface_cohomology` for the same carrier with its
+    faces, where all nineteen are filled.
     """
     matrix = coboundary_matrix(sheaf)
     rank = int(np.linalg.matrix_rank(matrix, tol=tolerance))
     eigenvalues = np.linalg.eigvalsh(sheaf.laplacian())
     h0 = int((eigenvalues <= tolerance).sum())
     h1 = int(matrix.shape[0] - rank)
-    euler = sheaf.node_count - len(sheaf.edges)
+    euler = sheaf.total_dim - int(matrix.shape[0])
     return {
         "nodes": sheaf.node_count,
         "edges": len(sheaf.edges),
@@ -316,4 +320,102 @@ def cohomology_dimensions(sheaf: CellularSheaf, *, tolerance: float = 1e-9) -> d
         "laplacian_equals_coboundary_square": bool(
             np.allclose(matrix.T @ matrix, sheaf.laplacian())
         ),
+    }
+
+
+# ---------------------------------------------------------------------------
+# The carrier as a closed surface: cohomology of the two-complex
+# ---------------------------------------------------------------------------
+
+
+def _exact_rank(rows: Sequence[Sequence[int]]) -> int:
+    """Rank of an integer matrix by Gaussian elimination over the rationals."""
+    from fractions import Fraction
+
+    matrix = [[Fraction(value) for value in row] for row in rows]
+    if not matrix:
+        return 0
+    rank = 0
+    columns = len(matrix[0])
+    for column in range(columns):
+        pivot = next((r for r in range(rank, len(matrix)) if matrix[r][column] != 0), None)
+        if pivot is None:
+            continue
+        matrix[rank], matrix[pivot] = matrix[pivot], matrix[rank]
+        lead = matrix[rank][column]
+        for r in range(len(matrix)):
+            if r != rank and matrix[r][column] != 0:
+                factor = matrix[r][column] / lead
+                matrix[r] = [x - factor * y for x, y in zip(matrix[r], matrix[rank])]
+        rank += 1
+    return rank
+
+
+def surface_cohomology(
+    carrier: IcosahedralCarrier,
+    oriented_faces: Sequence[Sequence[int]] | None = None,
+) -> dict[str, object]:
+    """Cohomology of the constant sheaf on the carrier's two-complex.
+
+    The scalar identity sheaf of :func:`carrier_sheaf` lives on the seam graph,
+    the carrier's one-skeleton, where ``dim H^1 = 19`` is the cycle rank and the
+    Euler characteristic is ``12 - 30 = -18``.  Adding the twenty faces as
+    two-cells, with ``delta^1`` the signed face-seam incidence, gives the
+    cellular cochain complex of a triangulated sphere.  Its ranks are computed
+    here in exact arithmetic: ``delta^1`` has rank ``19``, so every one of the
+    nineteen graph obstructions is the boundary of a face, ``H^1`` of the
+    surface vanishes, ``H^2`` is one-dimensional, and the Euler characteristic
+    is ``12 - 30 + 20 = 2`` -- the same ``2`` the angle-defect count reaches by
+    Gauss-Bonnet.  The two Euler characteristics are therefore not in conflict:
+    ``-18`` belongs to the graph and ``2`` to the surface the graph triangulates.
+
+    When ``oriented_faces`` is given (OPH's own oriented base faces), the probe
+    also checks that their sum is a two-cycle -- every seam is traversed once in
+    each direction -- which is exactly the statement that OPH's orientation is
+    coherent and the oriented faces form a fundamental class.
+    """
+    seams = list(carrier.edges)
+    seam_index = {seam: index for index, seam in enumerate(seams)}
+    ports = carrier.port_count
+    faces = [tuple(face) for face in (oriented_faces if oriented_faces is not None else carrier.faces)]
+    delta0 = []
+    for a, b in seams:
+        row = [0] * ports
+        row[a] -= 1
+        row[b] += 1
+        delta0.append(row)
+    delta1 = []
+    for face in faces:
+        row = [0] * len(seams)
+        for tail, head in ((face[0], face[1]), (face[1], face[2]), (face[2], face[0])):
+            if (tail, head) in seam_index:
+                row[seam_index[(tail, head)]] += 1
+            else:
+                row[seam_index[(head, tail)]] -= 1
+        delta1.append(row)
+    composite_vanishes = all(
+        sum(delta1[f][s] * delta0[s][p] for s in range(len(seams))) == 0
+        for f in range(len(faces))
+        for p in range(ports)
+    )
+    rank0 = _exact_rank(delta0)
+    rank1 = _exact_rank(delta1)
+    h0 = ports - rank0
+    h1 = len(seams) - rank0 - rank1
+    h2 = len(faces) - rank1
+    boundary_of_sum = [sum(delta1[f][s] for f in range(len(faces))) for s in range(len(seams))]
+    return {
+        "cells": (ports, len(seams), len(faces)),
+        "delta0_rank": rank0,
+        "delta1_rank": rank1,
+        "delta1_after_delta0_vanishes": composite_vanishes,
+        "h0": h0,
+        "h1": h1,
+        "h2": h2,
+        "betti": (h0, h1, h2),
+        "euler_characteristic": h0 - h1 + h2,
+        "cell_euler_characteristic": ports - len(seams) + len(faces),
+        "graph_cycle_rank": len(seams) - rank0,
+        "faces_span_graph_cycles": rank1 == len(seams) - rank0,
+        "oriented_faces_form_a_cycle": all(value == 0 for value in boundary_of_sum),
     }

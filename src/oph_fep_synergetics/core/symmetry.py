@@ -292,3 +292,43 @@ def law_equivariance(carrier: IcosahedralCarrier | None = None) -> dict[str, obj
         "distinct_outcome_multisets": len({tuple(sorted(outcome.items())) for outcome in outcomes.values()}),
         "witness": witness,
     }
+
+
+def transition_equivariance(carrier: IcosahedralCarrier | None = None) -> dict[str, object]:
+    """Whether every single native transition commutes with every automorphism.
+
+    :func:`law_equivariance` compares outcome counts; this compares the
+    transitions themselves.  For an automorphism ``pi`` acting by
+    ``(pi . x)_i = x_{pi(i)}``, the oriented seam ``(a, b)`` of ``x`` corresponds
+    to ``(pi^-1(a), pi^-1(b))`` of ``pi . x``, and equivariance says the repair
+    of the moved configuration on the moved seam, with the same coin, is the
+    moved result.  All automorphisms, all total-two configurations, both
+    orientations of every seam and both coins are checked.
+    """
+    from .repair import native_repair
+
+    carrier = carrier or icosahedral_carrier()
+    group = carrier_automorphisms(carrier)
+    configurations = list(carrier.shell_configurations(total=2))
+    oriented = [(a, b) for a, b in carrier.edges] + [(b, a) for a, b in carrier.edges]
+    table: dict[tuple[tuple[int, ...], tuple[int, int], int], tuple[int, ...]] = {}
+    for configuration in configurations:
+        for seam in oriented:
+            for coin in (0, 1):
+                table[(configuration, seam, coin)] = tuple(native_repair(configuration, seam, coin).after)
+    checks = 0
+    for permutation in group:
+        inverse = [0] * len(permutation)
+        for index, image in enumerate(permutation):
+            inverse[image] = index
+        for configuration in configurations:
+            moved = tuple(configuration[index] for index in permutation)
+            for a, b in oriented:
+                seam = (inverse[a], inverse[b])
+                for coin in (0, 1):
+                    after = table[(configuration, (a, b), coin)]
+                    expected = tuple(after[index] for index in permutation)
+                    if table[(moved, seam, coin)] != expected:
+                        return {"equivariant": False, "checks": checks, "witness": (permutation, configuration, (a, b), coin)}
+                    checks += 1
+    return {"equivariant": True, "checks": checks, "witness": None}

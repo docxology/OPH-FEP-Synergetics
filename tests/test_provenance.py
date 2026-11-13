@@ -64,7 +64,7 @@ def test_identifier_lookup_returns_the_named_entry():
     oph = {pin.id: pin for pin in load_sources()}["oph"]
     entry = oph.identifier("native")
     assert entry.path.endswith("native.py")
-    assert entry.lines == "45-51"
+    assert entry.lines == "45-52"
     with pytest.raises(KeyError):
         oph.identifier("not-a-symbol")
 
@@ -101,7 +101,9 @@ def _point_head_at_a_commit(checkout) -> str:
     here reads or writes Git's configured author or committer identity.
     """
     subprocess.run(
-        ["git", "init", "-q", "-b", "main", str(checkout)],
+        # An empty template directory keeps the fixture independent of the host's
+        # Git templates (hook samples), which some sandboxes refuse to copy.
+        ["git", "init", "-q", "--template=", "-b", "main", str(checkout)],
         check=True,
         stdin=subprocess.DEVNULL,
     )

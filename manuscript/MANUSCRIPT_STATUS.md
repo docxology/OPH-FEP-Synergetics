@@ -38,21 +38,24 @@ overlap — is the global-section condition of a cellular sheaf on that complex.
 The sheaf Laplacian is the carrier Laplacian, so the quadratic energy of
 disagreement is the carrier's own quadratic form.
 
-The same twelve-around-one configuration is the kissing-number-twelve
-arrangement and the IVM's first shell: `ivm.neighbor_moves` sites at squared
-distance `ivm.neighbor_squared_distance`. This is a genuine identity of one
-object seen three ways, and it is the reason the three programs can be put on
-one page at all.
+Twelve around one is where the three programs touch, and it is not one object:
+the carrier is the icosahedral kissing arrangement, with slack between
+neighbours, while the IVM's first shell is the cuboctahedral one,
+`ivm.neighbor_moves` sites at squared distance `ivm.neighbor_squared_distance`,
+rigid. Both attain the kissing number; the identities of this section are about
+the carrier itself, and the twelve-around-one conflation is an obstruction in
+section 3.
 
 ## 2. Agreement as a minimisation
 
 **Entries:** `variational-equivalence`, `free-energy-dictionary`.
 
 On the linear-Gaussian corner, three descriptions of "settle to agreement"
-coincide: the minimiser of the interface energy over the interior, the harmonic
-extension of the records, and the posterior mean. The probe reports all three
-and the residual of the perception flow, and the excess free energy vanishes at
-the posterior.
+coincide: the harmonic extension of the records (an interior solve), the
+constrained relative-entropy minimiser (a separate KKT solve), and the limit of
+the perception flow. The free energy at the posterior, computed directly as
+energy minus entropy, equals the surprisal; away from the posterior it exceeds
+it by exactly the divergence.
 
 The dictionary that makes this exact: surprisal is what no repair removes,
 Bayesian surprise is what repair removes, and the update residual pins the
@@ -109,18 +112,25 @@ identification that looks natural in prose fails as stated.
 - **A forward response is not a gradient.** For a directed network the direct
   nudging response and the adjoint differ; the direct route recovers
   `directed_gradient.direct` where the gradient needs
-  `directed_gradient.adjoint`.
+  `directed_gradient.adjoint`, and only the adjoint is the gradient.
 - **A local minimum can be incompatible.** A four-cycle assignment can violate
   two edges while every single-bit flip also violates two.
+- **Stable is not D-stable.** The stable control matrix admits a Lyapunov (free
+  energy) form; one positive local gain, `k = 4`, removes it with
+  `d_stability.right_half_plane_count` right-half-plane roots.
 - **Twelve vertices is not one solid.** The neighbour graph is
   `cuboctahedron.degree`-regular with tetravolume
   `cuboctahedron.tetravolume`; the carrier is `icosahedron.degree`-regular with
-  tetravolume `icosahedron.tetravolume`. A shared vertex count is not an
+  tetravolume `icosahedron.tetravolume`. Both are kissing arrangements, the
+  cuboctahedral one rigid and the icosahedral one with slack
+  (`kissing.icosahedron_edge_ratio_squared`). A shared vertex count is not an
   identification.
-- **The shell index is not a function of the free energy.** The first five
-  shells carry `shell.free_energy_level_counts` distinct levels and
-  `shell.shared_free_energy_levels` of them are shared between shells, so a
-  bounded free energy does not bound the shell.
+- **The shell index and the free energy determine neither each other.** The
+  shell is the cuboctahedral gauge (checked through shell
+  `shell.gauge_checked_through`); the first five shells carry
+  `shell.free_energy_level_counts` distinct levels and the levels
+  `shell.shared_free_energy_levels` are each shared by two shells. The free
+  energy does bound the shell from above; what fails is the identification.
 
 ## 4. What each program supplies that the others do not
 
@@ -132,12 +142,14 @@ identification that looks natural in prose fails as stated.
 - **OPH** supplies a concrete, finite, conserving law on a fixed carrier, with
   an exact energy identity and a sharp certificate — a spectral gap, not a
   sup-norm contraction.
-- **FEP** supplies the parameter gradient the repair law does not define. The
+- **Energy-based learning**, which the FEP reaches through predictive coding,
+  supplies the parameter gradient the repair law does not define. The
   two-settle contrast is exactly `(theta - target) / (1 + beta)` and tends to
   the exact loss gradient as the nudge vanishes. This is a complementarity, not
   an equivalence: it extends the family rather than identifying a member.
-- **Synergetics** supplies exact integer geometry: rational tetravolumes
-  including `ivm.volume_ratios`, and the shell sequence
+- **Synergetics** supplies exact integer geometry: the tetravolume table
+  `ivm.volume_ratios`, every entry derived from an explicit vertex set, and the
+  coordination-shell sequence
   `ivm.shell_counts` shared with the Goldberg and geodesic counts.
 - **Synergetics also supplies the volume of the carrier's own solid**, which its
   table does not contain: `icosahedron.tetravolume` tetravolumes, whose square is

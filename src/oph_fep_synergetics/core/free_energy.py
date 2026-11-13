@@ -224,6 +224,66 @@ class GaussianSheafModel:
             mean, covariance, records
         )
 
+    def energy_minus_entropy(
+        self,
+        mean: Sequence[float],
+        covariance: np.ndarray,
+        records: Sequence[float],
+    ) -> float:
+        """Return ``E_q[E(x, o)] - H[q]`` computed directly, for ``q = N(mean, covariance)``.
+
+        This is the first form of the variational free energy, energy minus
+        entropy, evaluated without passing through the surprisal or the
+        posterior: ``E_q[E] = E(mean, o) + (1/2) tr(L_xx covariance)`` because the
+        energy is quadratic, and ``H[q] = (1/2) logdet(2 pi e covariance)``.  It
+        is an independent route to the number :meth:`variational_free_energy`
+        computes as surprisal plus divergence, so comparing the two tests the
+        identity of the free-energy decomposition rather than restating it.
+        """
+        mean = _as_vector(mean, self.interior_dim, "mean")
+        observed = self._records(records)
+        covariance = _symmetrise(np.asarray(covariance, dtype=float))
+        energy = 0.5 * float(
+            mean @ self._l_xx @ mean
+            + 2.0 * mean @ self._l_xo @ observed
+            + observed @ self._l_oo @ observed
+        )
+        if self.interior_dim == 0:
+            return energy
+        sign, logdet = np.linalg.slogdet(covariance)
+        if sign <= 0:
+            raise ValueError("the recognition covariance must be positive definite")
+        expected_energy = energy + 0.5 * float(np.trace(self._l_xx @ covariance))
+        entropy = 0.5 * (self.interior_dim * (1.0 + math.log(2.0 * math.pi)) + logdet)
+        return expected_energy - entropy
+
+    def constrained_minimiser(self, records: Sequence[float]) -> np.ndarray:
+        """Minimise ``(1/2) z^T L z`` subject to ``z_o = records`` through its KKT system.
+
+        For Gaussians of a fixed precision ``L`` the relative entropy of a mean
+        ``z`` to the reference at the origin is ``(1/2) z^T L z``, so this is the
+        constrained relative-entropy minimisation read in the mean.  It is solved
+        as one saddle-point system over all coordinates and a Lagrange
+        multiplier per record -- a different linear system from the interior
+        solve :meth:`harmonic_extension` uses -- and the interior block of its
+        solution is returned.
+        """
+        observed = self._records(records)
+        laplacian = self.sheaf.laplacian()
+        total = laplacian.shape[0]
+        selector = np.zeros((self.record_dim, total))
+        for row, index in enumerate(self._record_indices):
+            selector[row, index] = 1.0
+        kkt = np.block(
+            [
+                [laplacian, selector.T],
+                [selector, np.zeros((self.record_dim, self.record_dim))],
+            ]
+        )
+        rhs = np.concatenate([np.zeros(total), observed])
+        solution = np.linalg.solve(kkt, rhs)
+        return solution[list(self._interior_indices)]
+
     def perceive(
         self,
         records: Sequence[float],

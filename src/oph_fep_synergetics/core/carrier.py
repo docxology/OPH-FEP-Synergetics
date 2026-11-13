@@ -27,9 +27,10 @@ PHI = (1.0 + math.sqrt(5.0)) / 2.0
 
 #: OPH's twenty oriented faces of the twelve-port carrier, transcribed from
 #: ``evidence/observer_dynamics_20260925/oph-physics-sim/oph_fpe/dynamics/
-#: self_readback_repair_closure.py`` (``ORIENTED_BASE_FACES``) at commit
-#: ``5517b0c77a6b11bc141ab663647bf7ec2b2d7661``.  OPH pins that archive by
-#: SHA-256 in ``evidence/native_geometric_source_20260925/spec.json``.
+#: self_readback_repair_closure.py`` (``ORIENTED_BASE_FACES``) at the commit
+#: pinned in ``data/sources.json``.  OPH itself pins that file by SHA-256 in
+#: ``evidence/native_geometric_source_20260925/spec.json``, so the faces are
+#: content-addressed upstream and do not move when the repository does.
 #:
 #: The adjacency below is *derived* from these faces rather than transcribed, so
 #: this package uses OPH's own port chart and the derivation is checkable: the

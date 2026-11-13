@@ -1,14 +1,14 @@
 {
   "schema": 1,
   "project": "oph-fep-synergetics",
-  "note": "Provenance pins for the three source programs this package maps. Every commit was read from the live local checkout with `git rev-parse HEAD` on 2026-11-10; the pins are point-in-time, not perpetual. Line references are relative to the pinned commit. This project relicenses nothing: each source keeps its own terms and the package cites rather than copies.",
+  "note": "Provenance pins for the three source programs this package maps. Every commit is the current upstream main, read with `git ls-remote` and `git rev-parse` on 2026-11-13, and every cited identifier below was re-read at that commit; the pins are point-in-time, not perpetual. Line references are relative to the pinned commit. This project relicenses nothing: each source keeps its own terms and the package cites rather than copies.",
   "sources": [
     {
       "id": "oph",
       "name": "Observer Patch Holography",
       "url": "https://github.com/FloatingPragma/observer-patch-holography",
       "checkout": "Username/FloatingPragma/observer-patch-holography",
-      "commit": "5517b0c77a6b11bc141ab663647bf7ec2b2d7661",
+      "commit": "3c4e1e23fc32dd241e8c2bfba75de123fe5c6984",
       "branch": "main",
       "license": {
         "spdx": "Apache-2.0 AND CC-BY-NC-SA-4.0",
@@ -31,7 +31,7 @@
         {
           "kind": "python",
           "path": "model/observer/native.py",
-          "lines": "45-51",
+          "lines": "45-52",
           "symbol": "native",
           "role": "the native seam repair law: d = loads[a] - loads[b]; current = (d - (2*coin - 1)*(abs(d) % 2)) // 2"
         },
@@ -46,7 +46,7 @@
         {
           "kind": "python",
           "path": "evidence/observer_dynamics_20260925/oph-physics-sim/oph_exact/carrier.py",
-          "lines": "126-153",
+          "lines": "125-151",
           "symbol": "seams, laplacian",
           "role": "the thirty unoriented seams and L = 5*I - A"
         },
@@ -54,14 +54,15 @@
           "kind": "python",
           "path": "model/observer/native.py",
           "symbol": "states",
-          "role": "the 78 total-two load configurations and the 66 binary ones"
+          "role": "the 78 total-two load configurations and the 66 binary ones",
+          "lines": "28-42"
         },
         {
           "kind": "lean",
           "path": "Lean/ObserverPatchHolography/Primitives.lean",
-          "lines": "89, 422, 1012",
+          "lines": "1198",
           "symbol": "demoCarrier_not_confluent",
-          "role": "the demonstration carrier that is not confluent"
+          "role": "the theorem that the library's demonstration carrier is not confluent"
         },
         {
           "kind": "markdown",
@@ -82,15 +83,16 @@
     {
       "id": "fep_formal",
       "name": "FEP_Formal",
-      "url": "https://github.com/ActiveInferenceInstitute/FEP_Formal",
+      "url": "https://github.com/ActiveInferenceInstitute/fep_formal",
       "checkout": "Username/ActiveInferenceInstitute/Public/fep_formal",
-      "commit": "48206d6de664966d4a721080aee76a6c3bdf3e0a",
+      "commit": "9cf1fae7df34c367262fbb8068711e90f22e7ec8",
       "branch": "main",
       "license": {
         "spdx": "CC-BY-4.0",
         "holder": "Daniel Ari Friedman",
         "doi": "10.5281/zenodo.19699233",
-        "evidence": "LICENSE"
+        "evidence": "LICENSE",
+        "doi_kind": "concept DOI (resolves to the latest version)"
       },
       "reuse_policy": "Attribution required. Cite the DOI and the exact topic identifiers used.",
       "cited_identifiers": [
@@ -112,22 +114,24 @@
           "kind": "markdown",
           "path": "AGENTS.md",
           "symbol": "Purpose",
-          "role": "'a standalone 168-topic FEP / Active Inference / Bayesian Mechanics / Information Geometry / Thermodynamics catalog with Lean 4 source'"
+          "role": "'a standalone 168-topic FEP / Active Inference / Bayesian Mechanics / Information Geometry / Thermodynamics catalog with Lean 4 source'",
+          "lines": "3-6"
         },
         {
           "kind": "markdown",
           "path": "AGENTS.md",
           "symbol": "Source of truth",
-          "role": "'config/topics.yaml ... are byte-identical, generated catalog projections; never author either by hand.' This package therefore reads catalogue_metadata.yaml, not topics.yaml."
+          "role": "'config/topics.yaml ... are byte-identical, generated catalog projections; never author either by hand.' This package therefore reads catalogue_metadata.yaml, not topics.yaml.",
+          "lines": "51-76"
         }
       ]
     },
     {
       "id": "quadmath",
       "name": "QuadMath (Synergetics)",
-      "url": "https://github.com/docxology/quadmath",
+      "url": "https://github.com/docxology/QuadMath",
       "checkout": "Username/docxology/Public/QuadMath",
-      "commit": "a8e335bf012a89eaddf25667ce404a0a163ebd99",
+      "commit": "5d2e5e9d63a2668f0e6d7df1791ea6df4434a8a3",
       "branch": "main",
       "license": {
         "spdx": "Apache-2.0",
@@ -154,7 +158,8 @@
           "kind": "python",
           "path": "src/quadmath/core/quadray.py",
           "symbol": "integer_tetra_volume",
-          "role": "IVM tetravolume as |det|/4 through Bareiss elimination; the unit tetrahedron has determinant 4 and volume 1"
+          "role": "IVM tetravolume as |det|/4 through Bareiss elimination; the unit tetrahedron has determinant 4 and volume 1",
+          "lines": "125-147"
         },
         {
           "kind": "python",
@@ -167,7 +172,8 @@
           "kind": "markdown",
           "path": "docs/manuscript/03_quadray_methods.md",
           "symbol": "volume ratios",
-          "role": "the n (vector equilibrium) is the shell of the twelve nearest IVM neighbors; the rhombic dodecahedron has tetravolume 6"
+          "role": "the cuboctahedron (vector equilibrium) is the shell of the twelve nearest IVM neighbours, tetravolume 20; the rhombic dodecahedron has tetravolume 6",
+          "lines": "131-143"
         }
       ]
     }

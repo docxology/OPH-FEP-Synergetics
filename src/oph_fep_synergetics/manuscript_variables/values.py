@@ -266,6 +266,12 @@ _EP = _probe_values("equilibrium-propagation")
 _REPLICATOR = _probe_values("replicator-potential")
 _GMRF = _probe_values("gmrf-independence")
 _EIGEN = _probe_values("eigenspace-irreducibility")
+_EX = _probe_values("existence-without-reachability")
+_KL = _probe_values("kl-lattice-metric")
+_SHEAF_COHOMOLOGY = _probe_values("sheaf-cohomology")
+_SHELL_ENERGY = _probe_values("shell-vs-free-energy")
+_KISSING = _probe_values("kissing-twelve")
+_ICOSA = _probe_values("icosahedron-tetravolume")
 
 
 MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
@@ -366,7 +372,7 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     ),
     BoundValue(
         "two_node.sync_min_radius",
-        1.0,
+        float(_EX["sync_map_min_radius"]),
         "two_node_orbit_min_radius",
         None,
         note="the synchronous clipped map is a different object from the relaxation orbit",
@@ -444,21 +450,21 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     ),
     BoundValue(
         "two_node.relaxation_min_radius_measured",
-        0.8400707833642703,
+        float(_EX["relaxation_min_radius"]),
         "two_node_relaxation_orbit, measured in this package",
         None,
         note="the source states the bound 0.84; this is the measurement the prose reports beside it",
     ),
     BoundValue(
         "two_node.relaxation_max_radius",
-        1.0533912226419835,
+        float(_EX["relaxation_max_radius"]),
         "two_node_relaxation_orbit, measured in this package",
         None,
         note="the outer radius of the annulus that contains the relaxation orbit",
     ),
     BoundValue(
         "two_node.relaxation_period_measured",
-        7.575,
+        float(_EX["relaxation_period"]),
         "two_node_relaxation_orbit, measured in this package at dt = 1e-3",
         None,
         note="the source states 7.58; this is the measurement the prose reports beside it",
@@ -558,6 +564,52 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         _COHOMOLOGY["euler_characteristic"],
         "core/sheaf.py: twelve nodes minus thirty edges",
         "12 - 30",
+    ),
+    BoundValue(
+        "sheaf.surface_betti",
+        tuple(int(value) for value in _SHEAF_COHOMOLOGY["surface_betti"]),
+        "probe:sheaf-cohomology:surface_betti",
+        "(1, 0, 1)",
+        note="the constant sheaf on the two-complex: ports, seams and faces",
+    ),
+    BoundValue(
+        "sheaf.surface_euler_characteristic",
+        int(_SHEAF_COHOMOLOGY["surface_euler_characteristic"]),
+        "probe:sheaf-cohomology:surface_euler_characteristic",
+        "12 - 30 + 20",
+    ),
+    BoundValue(
+        "sheaf.face_coboundary_rank",
+        int(_SHEAF_COHOMOLOGY["face_coboundary_rank"]),
+        "probe:sheaf-cohomology:face_coboundary_rank",
+        None,
+        note="the rank of the face-seam incidence, equal to the graph's cycle rank",
+    ),
+    BoundValue(
+        "shell.gauge_checked_through",
+        int(_SHELL_ENERGY["gauge_checked_through_shell"]),
+        "probe:shell-vs-free-energy:gauge_checked_through_shell",
+        None,
+        note="the closed-form gauge is checked against every breadth-first shell up to this index",
+    ),
+    BoundValue(
+        "kissing.cuboctahedron_edge_ratio_squared",
+        str(_KISSING["cuboctahedron_edge_over_radius_squared"]),
+        "probe:kissing-twelve:cuboctahedron_edge_over_radius_squared",
+        "1",
+    ),
+    BoundValue(
+        "kissing.icosahedron_edge_ratio_squared",
+        float(_KISSING["icosahedron_edge_over_radius_squared_float"]),
+        "probe:kissing-twelve:icosahedron_edge_over_radius_squared_float",
+        "2 - 2 sqrt(5) / 5",
+    ),
+    BoundValue(
+        "icosahedron.tetravolume_over_sqrt2",
+        str(_ICOSA["exact_tetravolume_over_sqrt2"]),
+        "probe:icosahedron-tetravolume:exact_tetravolume_over_sqrt2",
+        "15/2 + 5/2 sqrt 5",
+        note="computed in exact Q(sqrt 5) arithmetic from the icosahedron's exact vertices",
     ),
     BoundValue(
         "symmetry.group_order",
@@ -687,15 +739,39 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     ),
     BoundValue(
         "kl.one_step",
-        0.5 * float(squared_norm(neighbor_moves()[0])),
-        "core/free_energy.py gaussian_kl at the IVM's first neighbour",
-        "half of 8",
+        float(_KL["one_step_kl"]),
+        "probe:kl-lattice-metric:one_step_kl",
+        None,
     ),
     BoundValue(
         "kl.step_squared_distance",
-        float(squared_norm(neighbor_moves()[0])),
-        "geometry.NEIGHBOR_SQUARED_DISTANCE, the IVM's squared neighbour distance",
-        "8",
+        float(_KL["one_step_squared_distance"]),
+        "probe:kl-lattice-metric:one_step_squared_distance",
+        None,
+    ),
+    BoundValue(
+        "kl.norm_sphere_1",
+        float(_KL["norm_sphere_kl"][1]),
+        "probe:kl-lattice-metric:norm_sphere_kl:1",
+        None,
+    ),
+    BoundValue(
+        "kl.norm_sphere_2",
+        float(_KL["norm_sphere_kl"][2]),
+        "probe:kl-lattice-metric:norm_sphere_kl:2",
+        None,
+    ),
+    BoundValue(
+        "kl.norm_sphere_3",
+        float(_KL["norm_sphere_kl"][3]),
+        "probe:kl-lattice-metric:norm_sphere_kl:3",
+        None,
+    ),
+    BoundValue(
+        "kl.norm_sphere_4",
+        float(_KL["norm_sphere_kl"][4]),
+        "probe:kl-lattice-metric:norm_sphere_kl:4",
+        None,
     ),
     BoundValue(
         "resistance.adjacent",
@@ -760,7 +836,7 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     BoundValue(
         "carrier.pentagons",
         _CENSUS["pentagons"],
-        "core/network.py subgraph_census: five-cycles, the dual dodecahedron's vertices",
+        "core/network.py subgraph_census: induced five-cycles, the vertex links and the dual dodecahedron's faces",
         "twelve",
     ),
     BoundValue(
@@ -792,6 +868,12 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         _CUBOCTAHEDRON["spanning_trees"],
         "core/invariants.py spanning_tree_number_of_adjacency: the cuboctahedron's own count",
         "576 squared",
+    ),
+    BoundValue(
+        "families.tree_ratio",
+        str(Fraction(invariant_module.spanning_tree_number(), int(_CUBOCTAHEDRON["spanning_trees"]))),
+        "core/invariants.py: the icosahedron's spanning-tree number over the cuboctahedron's, exactly",
+        "125/8",
     ),
     BoundValue(
         "cuboctahedron.spanning_trees_root",
@@ -1006,7 +1088,7 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     BoundValue(
         "gmrf.marginal_variance_exact",
         "7/36",
-        "core/invariants.py marginal_variance: the exact rational marginal variance of a port",
+        "core/invariants.py marginal_variance: the exact variance of a port's deviation from the carrier mean, the diagonal of L^+",
         "7/36",
     ),
     BoundValue(
@@ -1049,6 +1131,12 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         "d_stability.lyapunov_residual",
         float(_DSTAB["lyapunov_residual"]),
         "probe:d-stability:lyapunov_residual",
+        None,
+    ),
+    BoundValue(
+        "d_stability.right_half_plane_count",
+        int(_DSTAB["right_half_plane_count"]),
+        "probe:d-stability:right_half_plane_count",
         None,
     ),
     BoundValue(

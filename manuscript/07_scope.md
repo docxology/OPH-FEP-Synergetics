@@ -11,8 +11,7 @@ quoted in the prose are the values the probes report; a change in any of them
 changes the probe's output and, where the change is a failure, changes the exit
 code.
 
-Three limits of that verification should be stated, and a fourth applies to the
-newer entries specifically.
+Four limits of that verification should be stated.
 
 The first is domain. The variational equivalence [@prop:ve], the dictionary
 [@sec:dictionary] and the two FEP identities hold in the linear-Gaussian corner.
@@ -33,24 +32,26 @@ reader who disagrees with the draft can still use the measurements. The three
 software programmes are pinned to commits, and the pins are point-in-time
 readings rather than perpetual guarantees.
 
-The fourth is arithmetic. The newer identifications fall into two groups, and the
-probes treat them differently. The counting identities are exact: the
-spanning-tree number is an integer determinant computed over the rationals, the
-cohomology dimensions are ranks, the group order and its rotation/reflection
-split are integers, and the equivariance claim is a finite search over
+The fourth is arithmetic. The counting identities are exact: the spanning-tree
+number is an integer determinant computed over the rationals, the cohomology
+dimensions are exact ranks, the reciprocal spectrum sum comes from an exact
+rational inverse, the group order and its rotation/reflection split are
+integers, and the equivariance claim is a finite search over
 {{SYMMETRY_GROUP_ORDER}} group elements and {{SYMMETRY_CONFIGURATIONS}}
-configurations. The geometric claims are not of that kind: tetravolumes and the
-packing density are floating-point measurements compared against closed forms,
-and the probes report the residual rather than only a verdict. The statuses are
-`exact` in both groups because the residuals are at the level of double
-precision, and a reader who wants a stronger statement should read the residual,
-which is reported. The cleanest statement of the split is the conjugation of
-$\sqrt{5}$, which [@sec:conjugation] turns into a probe: it fixes the integer
-counts and moves the volume to {{ICOSAHEDRON_TETRAVOLUME_CONJUGATE}}, and the two
-volumes multiply to the exact norm {{TETRAVOLUME_GALOIS_NORM}}. A counting claim
-in this paper is therefore invariant under a symmetry that a geometric claim is
-not, and comparing one against the other without saying so is the error the
-section is written to prevent.
+configurations. The geometric claims are exact too wherever the geometry allows:
+the tetravolume table, the cell's volume and the icosahedron's tetravolume are
+computed in the rationals and in $\mathbb{Q}(\sqrt{5})$ from exact vertex sets,
+and the floating-point measurements are reported beside them as a second route.
+What stays floating-point is what has to: the eigenvalue locus, the relaxation
+orbit and the free-energy values of the linear-Gaussian model, whose probes
+report residuals and use tolerances stated in the code. The cleanest statement of
+the two kinds of claim is the conjugation of $\sqrt{5}$, which
+[@sec:conjugation] turns into a probe: it fixes the integer counts and moves the
+volume to {{ICOSAHEDRON_TETRAVOLUME_CONJUGATE}}, and the two volumes multiply to
+exactly {{TETRAVOLUME_GALOIS_NORM}}. A counting claim in this paper is therefore
+invariant under a symmetry that a geometric claim is not, and comparing one
+against the other without saying so is the error the section is written to
+prevent.
 
 ## What is not reproduced
 
@@ -105,10 +106,10 @@ temptation visible.
 **Distinguish numerology from prediction.** The twelve-fold and sixty-fold
 coincidences in this paper are derived, and the derivation is part of the
 probe. A numerical coincidence that is not derived is not evidence, and the
-Synergetics literature contains both kinds. The two newest obstructions are the
-sharpest examples: twelve vertices are shared by a cuboctahedron, a rhombic
-dodecahedron's neighbour graph and an icosahedron, and only one of the three is
-the carrier [@sec:cuboctahedron].
+Synergetics literature contains both kinds. The counting obstructions are the
+sharpest examples: twelve-fold features are shared by a cuboctahedron, a
+rhombic dodecahedron (twelve faces) and an icosahedron, and only one of the three
+is the carrier [@sec:cuboctahedron].
 
 **Respect scale separation.** The linear-Gaussian results are exact at finite
 size and say nothing about a continuum limit. A claim that survives at twelve
@@ -123,8 +124,11 @@ A single strict descent at $\lvert d\rvert = 1$ would disprove [@prop:census] an
 PR-01 obstruction. A pairwise representation below $\varepsilon = {{MEDIATOR_THRESHOLD}}$ would
 disprove [@prop:mediator]. A member of the solenoidal family with a different
 entropy production would disprove [@prop:solenoid]. A stable $D_kA$ at
-$k > \sqrt{10}$ would disprove [@prop:dstability]. Each of these is a computation,
-not an interpretation, and each is executable against the package as it stands.
+$k > \sqrt{10}$ would disprove [@prop:dstability]. A lattice site whose
+breadth-first shell differs from its cuboctahedral gauge would disprove
+[@def:coordination], and a transition that fails to commute with an automorphism
+would disprove [@prop:symmetry]. Each of these is a computation, not an
+interpretation, and each is executable against the package as it stands.
 
 That is the property this paper was built for: the disagreements are as checkable
 as the agreements, and either can be overturned by running a function.

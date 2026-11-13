@@ -3,14 +3,17 @@
 The isotropic vector matrix (IVM) is the FCC close packing in quadray
 coordinates.  Shell zero is the single centre site; every frequency
 ``k >= 1`` carries ``10 k^2 + 2`` sites, and the first shell is the
-twelve-around-one cuboctahedron (vector equilibrium).  The
-same quadratic form counts the vertices of a Goldberg polyhedron of frequency
-``k``, so the IVM shell sequence and the Goldberg vertex sequence are one
-sequence seen through two constructions.
+twelve-around-one cuboctahedron (vector equilibrium).  The shells are
+graph-distance (coordination) shells, not Euclidean spheres: shell ``k`` is the
+set of lattice points on the surface of the frequency-``k`` cuboctahedron, which
+:func:`cuboctahedral_gauge` states in closed form.  The same quadratic form
+counts the vertices of the frequency-``k`` geodesic icosahedron and the faces of
+its Goldberg dual, so the three sequences are one sequence seen through three
+constructions.
 
 Provenance: ``docxology/QuadMath`` (Apache-2.0),
 ``src/quadmath/lattice/omni_numbering.py`` and the polyhedra table in
-``quadmath/markdown/03_quadray_methods.md``.  The commit actually read is
+``docs/manuscript/03_quadray_methods.md``.  The commit actually read is
 pinned once in ``data/sources.json`` and reported by
 ``oph-fep-synergetics sources``; it is deliberately not restated here.
 """
@@ -144,6 +147,32 @@ def shell_index(point: Quadray | tuple[int, int, int, int]) -> int:
         if target in _shells(index)[index]:
             return index
     raise ValueError(f"point {target.as_tuple()} is outside the enumerated shells")
+
+
+def cuboctahedral_gauge(point: Quadray | tuple[int, int, int, int]) -> int:
+    """Return the shell index in closed form, without expanding any shell.
+
+    In the default embedding every IVM site has even Cartesian coordinates, and
+    halving them gives the face-centred lattice ``D3`` (integer points with even
+    coordinate sum) whose twelve nearest neighbours are the permutations of
+    ``(+-1, +-1, 0)``.  The graph distance there is
+    ``max(||u||_inf, ||u||_1 / 2)`` -- the gauge function of the cuboctahedron
+    with vertices at the twelve neighbours -- so the shell of index ``k`` is the
+    set of lattice points on the surface of the frequency-``k`` cuboctahedron.
+    That surface is a polyhedron, not a sphere, which is why the Euclidean
+    quadratic form takes several values on one shell.  The closed form is
+    checked against the breadth-first shells; it is not used to build them.
+    """
+    quadray = Quadray(*point) if not isinstance(point, Quadray) else point
+    xyz = [int(round(value)) for value in to_xyz(quadray)]
+    if any(value % 2 for value in xyz):
+        raise ValueError("an IVM site has even coordinates in the default embedding")
+    halved = [value // 2 for value in xyz]
+    if sum(halved) % 2:
+        raise ValueError("an IVM site halves to a point of D3 with even coordinate sum")
+    infinity = max(abs(value) for value in halved)
+    one = sum(abs(value) for value in halved)
+    return max(infinity, one // 2)
 
 
 # ---------------------------------------------------------------------------

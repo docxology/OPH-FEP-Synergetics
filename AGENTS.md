@@ -41,8 +41,9 @@ the sections and re-render.
    numeric change is caught.
 4. **Do not restate a source commit in code or prose.** The commit actually read
    lives in `data/sources.json` and is reported by `oph-fep-synergetics sources`.
-   A test fails when a 40-hex commit appears in the package without appearing in
-   the pin file.
+   A test fails when any prefix of seven or more hex digits of a pinned commit
+   appears in the package. Re-pin by re-reading every cited identifier at the
+   new upstream commit, not by editing the hash.
 5. **Never copy source prose, and never reuse OPH's data or ledgers.** OPH's
    software is Apache-2.0 and may be reimplemented with attribution; its papers,
    book, documentation, figures, data and ledgers are CC BY-NC-SA 4.0. Cite the
@@ -77,7 +78,21 @@ the sections and re-render.
 12. **Every top-level heading carries a `{#sec:…}` label.** The render
     annotates a heading that lacks one and writes the annotation back into the
     source, so keeping the labels explicit is what makes a render idempotent.
-13. **The front matter is placed on purpose, and the tests check the page
+13. **Exact where the geometry allows.** Counts, ranks, determinants and volumes
+    are computed in `fractions.Fraction` or in `geometry.exact.Surd5`
+    (`Q(sqrt 5)`), not in floating point; a float measurement may stand beside
+    an exact value as a second route, never in place of one. A table entry is
+    derived from an explicit vertex set, not typed.
+14. **A probe never checks a function against itself.** An identity needs two
+    routes that share no code path (an interior solve and a KKT solve; surprisal
+    plus divergence and energy minus entropy; an enumeration and a closed form).
+    A literal such as `"integral": False` is not evidence.
+15. **Say which object a word names.** "Shell" is OPH's load shell (a level set
+    of total load) or the lattice's coordination shell (a level set of the
+    cuboctahedral gauge); the carrier Laplacian is the mean-repair generator, not
+    the native repair energy; conditional dependence lives on the seams. Every
+    claim string and prose sentence uses the precise term.
+16. **The front matter is placed on purpose, and the tests check the page
     positions.** Page 1 is the cover, pages 2 to 5 are the four panels of
     `manuscript/00_00_graphical_abstract.md` (one panel per page, held in place
     by `\floatplacement{figure}{H}`), and the contents page is re-emitted by
@@ -97,7 +112,7 @@ the sections and re-render.
 .venv/bin/oph-fep-synergetics sources --vault-root /path/to/vault
 .venv/bin/python scripts/render_docs.py               # regenerate the three documents
 .venv/bin/python scripts/render_docs.py --check       # fail when stale
-.venv/bin/python scripts/make_figures.py              # the twenty-two figures and their registry
+.venv/bin/python scripts/make_figures.py              # the twenty-three figures and their registry
 .venv/bin/python scripts/build.py --deliver           # the four manuscript steps, in order
 ```
 
@@ -132,7 +147,11 @@ requires an interpreter that passes the template's bytecode audit.
 ## Do not
 
 - Do not add a dependency beyond `numpy` without a reason recorded here.
-- Do not commit `output/`, `.venv/`, coverage artefacts or `__pycache__`.
+- Do not commit `output/`, `.venv/`, coverage artefacts or `__pycache__`. The
+  one tracked artefact is the release PDF,
+  `output/pdf/OPH-FEP-Synergetics_combined.pdf`: it is re-rendered with
+  `scripts/build.py` and must pass `scripts/check_render.py` before it is
+  committed, so the published PDF is always the one the sources produce.
 - Do not weaken the coverage gate or the strictness of `verify` to make a run
   pass. Fix the claim or restate it at a weaker status.
 - Do not hand-number a definition, a proposition or an equation; the renderer

@@ -227,7 +227,7 @@ def test_figure_links_match_the_accessibility_registry():
     for path in SECTIONS:
         for match in FIGURE_LINK.finditer(path.read_text(encoding="utf-8")):
             links[match.group(2)] = match.group(1)
-    assert len(links) == 21, sorted(links)
+    assert len(links) == 22, sorted(links)
     registry = PROJECT / "output" / "figures" / "figure_registry.json"
     if not registry.is_file():  # the figures are generated artefacts
         return

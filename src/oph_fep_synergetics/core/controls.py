@@ -455,6 +455,58 @@ def two_node_map(state: Sequence[float]) -> np.ndarray:
     return _clip(np.array([2.0 * x - 2.0 * y, 2.0 * x + 2.0 * y]))
 
 
+def two_node_fixed_points() -> tuple[tuple[Fraction, Fraction], ...]:
+    """Every fixed point of the clipped two-node map, found by exact case analysis.
+
+    ``R(x, y) = clip(2x - 2y, 2x + 2y)`` is piecewise linear: each coordinate is
+    either its linear expression (when that lies in ``[-1, 1]``) or a clipped
+    ``+-1``.  The nine regimes are solved exactly over the rationals and a
+    solution is kept only when it is consistent with its own regime, so the
+    result is the complete fixed-point set rather than a sample of it.  It is
+    the origin alone, which is why existence of the agreement is settled and
+    only reachability is in question.
+    """
+    found: set[tuple[Fraction, Fraction]] = set()
+    # Rows of the linear map: first coordinate 2x - 2y, second 2x + 2y.
+    rows = ((Fraction(2), Fraction(-2)), (Fraction(2), Fraction(2)))
+    for regime in itertools.product((-1, 0, 1), repeat=2):
+        # Unknowns are the free coordinates; a clipped coordinate is fixed at its sign.
+        fixed = {index: Fraction(sign) for index, sign in enumerate(regime) if sign != 0}
+        free = [index for index, sign in enumerate(regime) if sign == 0]
+        # Equations: for a free coordinate i, v_i = row_i . v.
+        if len(free) == 2:
+            # (row - I) v = 0 with v free in both coordinates.
+            a = rows[0][0] - 1
+            b = rows[0][1]
+            c = rows[1][0]
+            d = rows[1][1] - 1
+            determinant = a * d - b * c
+            if determinant == 0:
+                raise AssertionError("the unclipped map has a line of fixed points")
+            candidate = (Fraction(0), Fraction(0))
+        elif len(free) == 1:
+            i = free[0]
+            j = 1 - i
+            coefficient = rows[i][i] - 1
+            value = -rows[i][j] * fixed[j]
+            if coefficient == 0:
+                continue
+            solution = value / coefficient
+            candidate = (solution, fixed[j]) if i == 0 else (fixed[j], solution)
+        else:
+            candidate = (fixed[0], fixed[1])
+        linear = tuple(rows[i][0] * candidate[0] + rows[i][1] * candidate[1] for i in range(2))
+        consistent = True
+        for i, sign in enumerate(regime):
+            if sign == 0:
+                consistent &= -1 <= linear[i] <= 1 and linear[i] == candidate[i]
+            else:
+                consistent &= sign * linear[i] >= 1 and candidate[i] == sign
+        if consistent:
+            found.add(candidate)
+    return tuple(sorted((int(x), int(y)) if x.denominator == y.denominator == 1 else (x, y) for x, y in found))  # type: ignore[misc]
+
+
 def two_node_sync_orbit(
     *,
     steps: int = 500,
@@ -798,6 +850,35 @@ def contraction_displacement_bounds(rate: float, disagreement: float) -> dict[st
     return {
         "lower": disagreement / (1.0 + rate),
         "upper": disagreement / (1.0 - rate),
+    }
+
+
+def replicator_asymmetric_control(points: int = 25, seed: int = 7) -> dict[str, object]:
+    """The potential reading needs a symmetric payoff, and fails without one.
+
+    For a symmetric payoff ``A`` the replicator field equals ``M(x) grad F`` with
+    ``F = (1/2) x^T A x`` at every interior point; the check runs over a fixed
+    grid of points.  For a non-symmetric payoff the field is still ``M(x) A x``,
+    but ``grad F = (1/2)(A + A^T) x`` no longer reproduces it, so the claim that
+    selection climbs a potential is a statement about symmetric (partnership)
+    games and not about selection in general.
+    """
+    rng = np.random.default_rng(seed)
+    symmetric = np.array([[0.0, 1.0, -1.0], [1.0, 0.0, 2.0], [-1.0, 2.0, 0.0]])
+    asymmetric = np.array([[0.0, 2.0, -1.0], [-1.0, 0.0, 1.0], [1.0, -2.0, 0.0]])
+    states = rng.dirichlet(np.ones(3), size=points)
+
+    def is_gradient(payoff: np.ndarray, state: np.ndarray) -> bool:
+        mean = float(state @ payoff @ state)
+        field = state * (payoff @ state - mean)
+        mobility = np.diag(state) - np.outer(state, state)
+        gradient = 0.5 * (payoff + payoff.T) @ state
+        return bool(np.allclose(field, mobility @ gradient, atol=1e-12))
+
+    return {
+        "symmetric_points": points,
+        "symmetric_all_gradient": all(is_gradient(symmetric, state) for state in states),
+        "asymmetric_not_gradient": not any(is_gradient(asymmetric, state) for state in states),
     }
 
 

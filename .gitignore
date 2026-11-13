@@ -13,5 +13,9 @@ htmlcov/
 .mypy_cache/
 .ruff_cache/
 # Generated analysis output is disposable; committed evidence lives under data/.
+# The one exception is the rendered paper, published with each release.
 output/*
 !output/.gitkeep
+!output/pdf/
+output/pdf/*
+!output/pdf/OPH-FEP-Synergetics_combined.pdf

@@ -30,9 +30,11 @@ moves out of {{SHELL_TRANSITIONS}} transitions.
 
 Counting the same object turns out to add identifications that no dynamical
 reading supplies. The seam graph has {{CARRIER_TREE_NUMBER}} spanning trees, an
-integer that survives the surds in its own spectrum; the scalar sheaf over the
-complex has {{SHEAF_H0}} global section up to a constant and {{SHEAF_H1}}
-obstructions, which are the cycle rank of the carrier; the automorphism group has
+integer that survives the surds in its own spectrum; the scalar sheaf on the seam
+graph has a {{SHEAF_H0}}-dimensional space of global sections (the constants) and
+{{SHEAF_H1}} obstructions, the cycle rank, every one of which a face of the
+carrier fills, so that the surface has Betti numbers {{SHEAF_SURFACE_BETTI}}; the
+automorphism group has
 order {{SYMMETRY_GROUP_ORDER}}, splitting into {{SYMMETRY_ROTATIONS}} rotations
 and {{SYMMETRY_REFLECTIONS}} reflections, transitive on ports, seams and faces,
 with the descent census invariant across all {{SYMMETRY_CONFIGURATIONS}}
@@ -44,27 +46,30 @@ vertices, {{CARRIER_PERFECT_MATCHINGS}} perfect matchings, and
 {{CARRIER_TOTAL_DEFECT}} pi that is Gauss-Bonnet exactly and a resistance ladder
 whose exact fractions sum to a Kirchhoff index of
 {{RESISTANCE_KIRCHHOFF_INDEX}}. The FEP's Gaussian
-reading of the same matrix puts conditional independence exactly on the seams,
-with a Markov blanket of {{GMRF_BLANKET_SIZE}} neighbours, and its divergence
-makes one lattice step cost {{KL_ONE_STEP}} nats, so the information cost of a
-lattice site is half its squared distance in Synergetics' own metric.
-Synergetics' accounting then extends to the carrier's solid, which measures
-{{ICOSAHEDRON_TETRAVOLUME}} tetravolumes against the integral table
+reading of the same matrix makes the seam graph its conditional-independence
+graph, with a Markov blanket of {{GMRF_BLANKET_SIZE}} neighbours, and its
+divergence makes one lattice step cost {{KL_ONE_STEP}} nats at unit covariance,
+so the information cost of a lattice site is half its squared distance in
+Synergetics' own metric. Synergetics' accounting, every entry of which is derived
+here exactly from an explicit vertex set, then extends to the carrier's solid,
+which measures {{ICOSAHEDRON_TETRAVOLUME}} tetravolumes, an exact element of
+$\sqrt{2}\,\mathbb{Q}(\sqrt{5})$, against the integral table
 {{TETRAVOLUME_INTEGRAL_SOLIDS}}, and to the twelve-around-one cell, whose
 {{VORONOI_VERTICES}} vertices, {{VORONOI_FACES}} faces and
 {{VORONOI_EDGES}} edges give tetravolume {{PACKING_CELL_TETRAVOLUME}} and the
-packing density {{PACKING_DENSITY}}.
+packing density {{PACKING_DENSITY}}, exactly $\pi/(3\sqrt{2})$.
 
 The load-bearing disagreements are equally structural. The zero-descent moves
 are the executable content of OPH's own obstructed premise PR-01: the native law
 is not confluent, so an accepted repair sequence is not a path to a unique normal
 form. A pairwise reduction of a boundary exists only above a mediator threshold
-`{{MEDIATOR_THRESHOLD}}`; a stationary blanket is a kinematic identity rather than
-a dynamical attractor; the solenoidal family leaves a stationary blanket's
-entropy production free; and four of the obstructions are failures of counting
-rather than of dynamics: twelve vertices do not determine a solid, a shell index
-is not a function of the free energy, a neighbourhood is not a lattice shell, and
-the phrase "twelve around one" does not determine which solid is meant.
+`{{MEDIATOR_THRESHOLD}}`; a blanket in the stationary density does not constrain
+the dynamics that preserve it; the solenoidal family leaves a stationary
+blanket's entropy production free; and four of the obstructions are failures of
+counting rather than of dynamics: twelve vertices do not determine a solid, a
+coordination shell and a free-energy level are not functions of one another, a
+neighbourhood is not a lattice shell, and the phrase "twelve around one" does not
+determine which solid is meant.
 Synergetics contributes the one geometry in which the other two can be drawn, not
 a derivation of either.
 

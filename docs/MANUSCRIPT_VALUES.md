@@ -57,6 +57,13 @@ gives one; `Note` records what is measured rather than quoted.
 | `sheaf.h0` | 1 | `one` | core/sheaf.py: the global sections of the carrier's scalar sheaf |  |
 | `sheaf.h1` | 19 |  | core/sheaf.py: edge assignments modulo coboundaries |  |
 | `sheaf.euler_characteristic` | -18 | `12 - 30` | core/sheaf.py: twelve nodes minus thirty edges |  |
+| `sheaf.surface_betti` | (1, 0, 1) | `(1, 0, 1)` | probe:sheaf-cohomology:surface_betti | the constant sheaf on the two-complex: ports, seams and faces |
+| `sheaf.surface_euler_characteristic` | 2 | `12 - 30 + 20` | probe:sheaf-cohomology:surface_euler_characteristic |  |
+| `sheaf.face_coboundary_rank` | 19 |  | probe:sheaf-cohomology:face_coboundary_rank | the rank of the face-seam incidence, equal to the graph's cycle rank |
+| `shell.gauge_checked_through` | 12 |  | probe:shell-vs-free-energy:gauge_checked_through_shell | the closed-form gauge is checked against every breadth-first shell up to this index |
+| `kissing.cuboctahedron_edge_ratio_squared` | 1 | `1` | probe:kissing-twelve:cuboctahedron_edge_over_radius_squared |  |
+| `kissing.icosahedron_edge_ratio_squared` | 1.105572809000084 | `2 - 2 sqrt(5) / 5` | probe:kissing-twelve:icosahedron_edge_over_radius_squared_float |  |
+| `icosahedron.tetravolume_over_sqrt2` | 15/2 + 5/2 sqrt 5 | `15/2 + 5/2 sqrt 5` | probe:icosahedron-tetravolume:exact_tetravolume_over_sqrt2 | computed in exact Q(sqrt 5) arithmetic from the icosahedron's exact vertices |
 | `symmetry.group_order` | 120 | `120` | core/symmetry.py carrier_automorphisms, by exhaustive backtracking |  |
 | `symmetry.rotations` | 60 | `60` | core/symmetry.py rotation_subgroup, from OPH's oriented faces |  |
 | `symmetry.reflections` | 60 | `60` | core/symmetry.py reflection_subgroup |  |
@@ -78,8 +85,12 @@ gives one; `Note` records what is measured rather than quoted.
 | `packing.ball_tetravolume` | 4.442882938158363 | `pi sqrt 2` | geometry/lattice.py: the inscribed ball's volume in the same tetrahedra |  |
 | `shell.free_energy_level_counts` | (1, 3, 4, 7, 7) |  | geometry.generate_shell: distinct values of half the squared norm per shell |  |
 | `shell.shared_free_energy_levels` | (36.0, 52.0) |  | geometry.generate_shell: free-energy levels carried by more than one shell |  |
-| `kl.one_step` | 4.0 | `half of 8` | core/free_energy.py gaussian_kl at the IVM's first neighbour |  |
-| `kl.step_squared_distance` | 8.0 | `8` | geometry.NEIGHBOR_SQUARED_DISTANCE, the IVM's squared neighbour distance |  |
+| `kl.one_step` | 4.0 |  | probe:kl-lattice-metric:one_step_kl |  |
+| `kl.step_squared_distance` | 8.0 |  | probe:kl-lattice-metric:one_step_squared_distance |  |
+| `kl.norm_sphere_1` | 4.0 |  | probe:kl-lattice-metric:norm_sphere_kl:1 |  |
+| `kl.norm_sphere_2` | 16.0 |  | probe:kl-lattice-metric:norm_sphere_kl:2 |  |
+| `kl.norm_sphere_3` | 36.0 |  | probe:kl-lattice-metric:norm_sphere_kl:3 |  |
+| `kl.norm_sphere_4` | 64.0 |  | probe:kl-lattice-metric:norm_sphere_kl:4 |  |
 | `resistance.adjacent` | 11/30 | `11/30` | core/network.py resistance_ladder: exact rational solve of L x = e_i - e_j on a seam |  |
 | `resistance.distance_two` | 7/15 | `7/15` | core/network.py resistance_ladder: ports at graph distance two |  |
 | `resistance.antipodal` | 1/2 | `1/2` | core/network.py resistance_ladder: ports at graph distance three, across the carrier |  |
@@ -90,12 +101,13 @@ gives one; `Note` records what is measured rather than quoted.
 | `carrier.diameter` | 3 | `three` | core/network.py graph_distances: the carrier's graph diameter |  |
 | `carrier.intersection_array` | (2, 1, 0; 1, 2, 5) |  | core/network.py intersection_array: neighbours outward and back, shell by shell |  |
 | `carrier.triangles` | 20 | `twenty` | core/network.py subgraph_census: three-cycles, exactly the twenty faces |  |
-| `carrier.pentagons` | 12 | `twelve` | core/network.py subgraph_census: five-cycles, the dual dodecahedron's vertices |  |
+| `carrier.pentagons` | 12 | `twelve` | core/network.py subgraph_census: induced five-cycles, the vertex links and the dual dodecahedron's faces |  |
 | `carrier.perfect_matchings` | 125 | `125` | core/network.py subgraph_census: perfect matchings of the custody graph |  |
 | `carrier.hamiltonian_cycles` | 1280 |  | core/network.py subgraph_census: labelled Hamiltonian cycles |  |
 | `carrier.defect_per_port` | 1/3 | `1/3 pi` | geometry/solids.py angle_defects: the defect at a port, in units of pi |  |
 | `carrier.total_defect` | 4 | `4 pi` | geometry/solids.py angle_defects: the total defect against 2 pi times chi |  |
 | `cuboctahedron.spanning_trees` | 331776 | `576 squared` | core/invariants.py spanning_tree_number_of_adjacency: the cuboctahedron's own count |  |
+| `families.tree_ratio` | 125/8 | `125/8` | core/invariants.py: the icosahedron's spanning-tree number over the cuboctahedron's, exactly |  |
 | `cuboctahedron.spanning_trees_root` | 576 |  | core/invariants.py: the square root of the cuboctahedron's spanning-tree count |  |
 | `cuboctahedron.triangles` | 8 | `eight` | geometry/lattice.py cuboctahedron_faces: the eight triangles |  |
 | `cuboctahedron.squares` | 6 | `six` | geometry/lattice.py cuboctahedron_faces: the six squares |  |
@@ -130,7 +142,7 @@ gives one; `Note` records what is measured rather than quoted.
 | `pr01.walk_energy` | 0.5 | `1/2` | probe:pr01-obstruction:excursion_energy |  |
 | `blanket.q` | 0.75 |  | probe:stationary-blanket:q |  |
 | `blanket.drift` | (1.5, -0.25, -2.0) |  | probe:stationary-blanket:mu_drift:row |  |
-| `gmrf.marginal_variance_exact` | 7/36 | `7/36` | core/invariants.py marginal_variance: the exact rational marginal variance of a port |  |
+| `gmrf.marginal_variance_exact` | 7/36 | `7/36` | core/invariants.py marginal_variance: the exact variance of a port's deviation from the carrier mean, the diagonal of L^+ |  |
 | `blanket.cross_drift` | 1.5 |  | probe:stationary-blanket:cross_drift_difference |  |
 | `solenoidal.q_grid` | (0.0, 0.5, 1.5) |  | probe:solenoidal-freedom:q_grid |  |
 | `solenoidal.entropy_production` | (0.0, 0.5, 4.5) |  | probe:solenoidal-freedom:entropy_production |  |
@@ -138,6 +150,7 @@ gives one; `Note` records what is measured rather than quoted.
 | `d_stability.real_unstable` | 0.144407 |  | probe:d-stability:eigenvalue_real_parts:max |  |
 | `d_stability.imag_unstable` | 1.948191 |  | probe:d-stability:eigenvalue_imag_parts:absmax |  |
 | `d_stability.lyapunov_residual` | 2.531698018113677e-15 |  | probe:d-stability:lyapunov_residual |  |
+| `d_stability.right_half_plane_count` | 2 |  | probe:d-stability:right_half_plane_count |  |
 | `d_stability.routh_k4_third` | -2.0 | `-2` | probe:d-stability:routh_first_column_at_k4:2 |  |
 | `d_stability.samples` | (0.5, 1.0, 2.0, 4.0, 7.0) |  | core/controls.py D_STABILITY_SAMPLES: the eigenvalue-locus sample grid |  |
 | `mediator.epsilon_below` | 0.2 |  | probe:mediator-obstruction:below_threshold_epsilon |  |

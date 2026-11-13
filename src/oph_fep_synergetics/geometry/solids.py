@@ -154,13 +154,15 @@ def icosahedron_volume(edge: float) -> float:
 def tetravolume_ratio_squared_exact() -> tuple[Fraction, Fraction]:
     """Return ``(175, 75)``: the squared tetravolume is exactly ``175 + 75 sqrt 5``.
 
-    Exact in the rationals and in the quadratic field: the tetravolume ratio is
-    ``5 (3 + sqrt 5) / sqrt 2``, whose square is ``(25 / 2) (14 + 6 sqrt 5)``,
-    using ``(3 + sqrt 5)^2 = 14 + 6 sqrt 5`` rather than a decimal expansion.
+    Computed, not quoted: :func:`~oph_fep_synergetics.geometry.exact.icosahedron_tetravolume_exact`
+    measures the icosahedron's volume in the field ``Q(sqrt 5)`` from its exact
+    vertices, the tetravolume is ``sqrt 2`` times an element of that field, and
+    its square is returned here as the pair of rational coefficients.
     """
-    base = (Fraction(14, 1), Fraction(6, 1))
-    factor = Fraction(25, 2)
-    return (factor * base[0], factor * base[1])
+    from .exact import icosahedron_tetravolume_exact
+
+    square = icosahedron_tetravolume_exact()["square"]
+    return square.parts()  # type: ignore[union-attr]
 
 
 def icosahedron_tetravolume() -> dict[str, object]:
@@ -201,8 +203,19 @@ def icosahedron_tetravolume() -> dict[str, object]:
         "exact_squared": exact_squared,
         "exact_squared_parts": (int(exact_parts[0]), int(exact_parts[1])),
         "exact_squared_residual": abs(ratio * ratio - exact_squared),
-        "integral": False,
+        # Decided by exact arithmetic, not asserted: the tetravolume is sqrt 2 times
+        # an element of Q(sqrt 5) whose sqrt 5 part is nonzero.
+        "integral": _exact_tetravolume_is_integral(),
     }
+
+
+def _exact_tetravolume_is_integral() -> bool:
+    from .exact import icosahedron_tetravolume_exact
+
+    coefficient = icosahedron_tetravolume_exact()["sqrt2_coefficient"]
+    # sqrt 2 * (a + b sqrt 5) is rational only if a = b = 0; it is an integer
+    # only then.  A nonzero coefficient therefore means "not integral".
+    return coefficient.a == 0 and coefficient.b == 0  # type: ignore[union-attr]
 
 
 def angle_defects(
@@ -249,16 +262,19 @@ def quadratic_norm(parts: Sequence[Fraction]) -> Fraction:
 def tetravolume_galois_norm() -> Fraction:
     """Return ``50``: the icosahedron's tetravolume times its conjugate's.
 
-    The squared tetravolume is ``175 + 75 sqrt 5``, so the norm of the square is
-    ``175^2 - 5 * 75^2 = 2500`` and the norm of the volume itself is its square
-    root, exactly ``50``. A counting invariant over the same carrier -- the
-    spanning-tree number -- is a rational integer and so is fixed by the same
-    conjugation; the volume is not, which is the arithmetic difference between
-    the two kinds of claim this package makes.
+    The tetravolume is ``T = sqrt 2 * c`` with ``c = 15/2 + (5/2) sqrt 5`` exactly,
+    and the conjugation ``sqrt 5 -> -sqrt 5`` fixing ``sqrt 2`` sends it to
+    ``sqrt 2 * c'``, so ``T T' = 2 N(c) = 2 (225/4 - 125/4) = 50``.  The value is
+    computed in exact field arithmetic and cross-checked against the square: the
+    norm of ``T^2 = 175 + 75 sqrt 5`` must be ``50^2``.  A counting invariant over
+    the same carrier -- the spanning-tree number -- is a rational integer and so
+    is fixed by the same conjugation; the volume is not, which is the arithmetic
+    difference between the two kinds of claim this package makes.
     """
-    first, second = tetravolume_ratio_squared_exact()
-    squared_norm = quadratic_norm((first, second))
-    root = math.isqrt(squared_norm.numerator // squared_norm.denominator)
-    if root * root != squared_norm:
-        raise AssertionError("the norm of the squared tetravolume must be a perfect square")
-    return Fraction(root)
+    from .exact import icosahedron_tetravolume_exact
+
+    report = icosahedron_tetravolume_exact()
+    norm = Fraction(report["norm"])  # type: ignore[arg-type]
+    if norm * norm != report["square_norm"]:
+        raise AssertionError("the norm of the squared tetravolume must be the square of the norm")
+    return norm

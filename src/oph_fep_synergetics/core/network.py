@@ -6,13 +6,14 @@ inverse. This module adds the readings that need no programme of their own but
 that both vocabularies can be checked against:
 
 * the **effective resistance** between two ports, which is the same matrix seen
-  as an electrical network and, in the Gaussian reading, the marginal variance
-  of the potential difference. It is computed exactly, over the rationals, by
+  as an electrical network and, in the Gaussian reading, the variance of the
+  potential difference. It is computed exactly, over the rationals, by
   grounding one port and solving ``L x = e_i - e_j``.
 * the **distance partition**: the shells around a port and the intersection
   array that says how a neighbour of a shell member is distributed.
-* the **subgraph census**: the triangles, the five-cycles, the perfect matchings
-  and the Hamiltonian cycles, all counted by exhaustion rather than quoted.
+* the **subgraph census**: the triangles, the induced (chordless) five-cycles,
+  the perfect matchings and the Hamiltonian cycles (as undirected edge sets), all
+  counted by exhaustion rather than quoted.
 
 Nothing here imports a geometry module: an adjacency matrix is all these
 functions need, so the same code counts the carrier, the cuboctahedron and any
@@ -189,7 +190,12 @@ def kirchhoff_index(adjacency: Adjacency) -> Fraction:
 
 
 def subgraph_census(adjacency: Adjacency) -> dict[str, int]:
-    """Count the triangles, five-cycles, perfect matchings and Hamiltonian cycles."""
+    """Count the triangles, induced five-cycles, perfect matchings and Hamiltonian cycles.
+
+    A five-cycle is counted when its five vertices induce exactly a cycle, so the
+    carrier's count is the twelve vertex links (the dual dodecahedron's faces);
+    the graph has more five-cycles with chords.
+    """
     size = len(adjacency)
     triangles = sum(
         all(adjacency[i][j] for i, j in itertools.combinations(corner, 2))

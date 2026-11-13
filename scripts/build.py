@@ -4,6 +4,8 @@
 One command that runs the four documented steps in order (README.md, "The
 manuscript"):
 
+0. the interpreter and numpy versions of this run, printed so that the build log
+   records the environment that produced the PDF;
 1. ``scripts/make_figures.py`` -- the figures and their accessibility registry;
 2. the token hydration, run by the template checkout's own interpreter, the one
    that passes the template's bytecode audit;
@@ -75,6 +77,16 @@ def main(argv: list[str] | None = None) -> int:
     template = _template_root(args.template_root)
     template_python = template / ".venv" / "bin" / "python"
     project_python = sys.executable
+
+    print("== 0. environment ==")
+    print(f"python {sys.version.split()[0]}  {project_python}")
+    try:
+        import numpy
+
+        print(f"numpy {numpy.__version__}")
+    except ImportError:  # pragma: no cover - numpy is a hard dependency
+        print("numpy unavailable")
+    print(f"template {template}")
 
     print("== 1. figures and accessibility registry ==")
     _run([project_python, str(PROJECT / "scripts" / "make_figures.py")], cwd=PROJECT)

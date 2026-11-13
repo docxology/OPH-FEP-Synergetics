@@ -2,6 +2,18 @@
 
 from __future__ import annotations
 
+from .exact import (
+    IVM_TETRA_UNIT,
+    PHI_EXACT,
+    Surd5,
+    convex_facets,
+    convex_volume,
+    derived_volume_ratios,
+    exact_icosahedron_vertices,
+    icosahedron_tetravolume_exact,
+    ivm_solid_vertices,
+    kissing_arrangements,
+)
 from .lattice import (
     MAX_SHELL,
     NEIGHBOR_SQUARED_DISTANCE,
@@ -14,6 +26,7 @@ from .lattice import (
     cuboctahedron_neighbors,
     cuboctahedron_signature,
     cuboctahedron_volume,
+    cuboctahedral_gauge,
     cumulative_count,
     generate_shell,
     geodesic_edge_count,
@@ -74,6 +87,17 @@ from .subdivision import (
 
 __all__ = [
     "EMBEDDING",
+    "IVM_TETRA_UNIT",
+    "PHI_EXACT",
+    "Surd5",
+    "convex_facets",
+    "convex_volume",
+    "cuboctahedral_gauge",
+    "derived_volume_ratios",
+    "exact_icosahedron_vertices",
+    "icosahedron_tetravolume_exact",
+    "ivm_solid_vertices",
+    "kissing_arrangements",
     "MAX_SHELL",
     "NEIGHBOR_SQUARED_DISTANCE",
     "PHI",

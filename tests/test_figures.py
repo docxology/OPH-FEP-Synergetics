@@ -36,6 +36,7 @@ EXPECTED_BUILDERS = (
     "pair_triangles_figure",
     "scope_matrix_figure",
     "network_figure",
+    "shell_gauge_figure",
 )
 
 
