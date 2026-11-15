@@ -64,6 +64,15 @@ infinity norm {{CERTIFICATE_INFINITY_NORM}}. The chain of [@eq:chain] is the nat
 mixes at the spectral gap": its mixing is governed by $\gamma$, and $\gamma$ is a
 property of the carrier alone.
 
+The chain is also what the integer rule does on average, and the probe checks
+that on the rule itself. Averaging [@eq:repair] over every seam and both coins,
+from each of the {{SHELL_TOTAL_TWO}} configurations, returns
+$x - Lx/(2\lvert E\rvert)$ in exact rationals: the mean current across a seam is
+half its mismatch for either parity. OPH states the same identity as one gradient
+step of the seam-disagreement energy under its uniform calibration [@oph], so
+[@eq:chain] is derived from the law and the Laplacian is the law's own mean
+generator.
+
 ## The shell is counted exactly {#sec:shell}
 
 [@def:shell] gives the count. The probe reports

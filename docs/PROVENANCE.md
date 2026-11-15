@@ -109,17 +109,25 @@ was corrected from three comment lines to the theorem itself
 - No vendored source files; the geometry conventions are reimplemented.
 - No claim that a source endorses any result here.
 
-## Unpublished and private sources
+## Papers and unpublished sources
 
-Besides the three pinned repositories, the manuscript cites three unpublished
-texts: the author's own working dossier and integration proposal
-(`dossier2026`, `proposal2026`), and one third-party private draft,
-*Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium*
-(Bernhard Mueller, Pragma Research, private draft, 22 October 2026). The draft
-is cited the way its source states its claims: none of its prose is quoted, it
-is not redistributed here, and the two quantities this package could not
-reproduce from its text are recorded `not-reproduced`
-([SCOPE.md](SCOPE.md)) beside the package's own measurements.
+Besides the three pinned repositories, the manuscript cites two papers of the OPH
+programme and two unpublished texts.
+
+The papers are OPH's synthesis paper, *Observers Who Read Their Universe into
+Existence* (`mueller2026observers`, PhilPapers record
+[MUEFOC](https://philpapers.org/rec/MUEFOC)), and *Agreement and Surprise: Local
+Repair, Dynamics and the Limits of Equilibrium* (Bernhard Mueller, Pragma
+Research Inc., preprint of 22 October 2026, PhilPapers record
+[MUEAAS-2](https://philpapers.org/rec/MUEAAS-2)), which is the source of the
+dynamical controls. The theorem, proposition and section numbers in the registry
+refer to the version of 22 October 2026. The preprint is cited the way it states
+its claims: none of its prose is quoted, it is not redistributed here, and the
+three quantities it states for the native law are reproduced from OPH's public
+model ([SCOPE.md](SCOPE.md)).
+
+The unpublished texts are the author's own working dossier and integration
+proposal (`dossier2026`, `proposal2026`).
 
 ## The render pipeline
 

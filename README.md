@@ -89,6 +89,7 @@ The load-bearing results are:
 | OPH's carrier is the kissing-twelve configuration, and its port chart is derived from OPH's own oriented faces | exact | 12 ports, 30 seams, 20 faces, five-regular; the 20 triangles of the derived graph are exactly OPH's 20 oriented faces |
 | The carrier gap is the icosahedral gap | exact | `lambda_1 = 5 - sqrt(5)` in both readings (the generator of OPH's mean repair operator, and the FEP's precision), and the normalised gap `lambda_1 / (2|E|)` is exactly `(5 - sqrt(5)) / 60` |
 | The native repair law conserves load and lowers `sum(x^2)/2` by `(d^2 - (|d| mod 2)) / 4` | exact | checked on all 4680 shell transitions |
+| The mean of the native law is one step of the carrier Laplacian | exact | averaging the integer rule over the 60 seam-and-coin draws gives `x - L x / 60` in exact rationals on all 78 configurations |
 | Patch agreement is the global-section condition of a cellular sheaf, and the sheaf Laplacian is the carrier Laplacian | exact | `carrier_sheaf(carrier).laplacian() == carrier.laplacian()` |
 | On the linear-Gaussian domain, constrained relative-entropy minimisation and predictive-coding perception are the same object | exact on that domain | the harmonic extension, a separate KKT constrained minimiser and the perception flow coincide; the free energy computed as energy minus entropy equals the surprisal at the posterior |
 | **PR-01**: the native law is not confluent, and accepted repairs need not lower a measure | **obstructed** | 120 strict descents, 600 zero-descent mismatch-one moves, 3960 no-ops out of 4680 transitions; a one-unit walk changes state at constant energy `1/2` |
@@ -122,10 +123,13 @@ cautions from the review are load-bearing here and are recorded in
 premise discipline; do not let numerological agreement stand in for a frozen
 prediction; and keep the scale separations explicit.
 
-Two quantities in the source paper are **not independently reproducible** from
-its text and are recorded as `not-reproduced` rather than verified: the
-`35/264` port-zero occupation and the `13/15` and `1/60` move probabilities,
-which need the record/selector protocol specification.
+Three quantities that *Agreement and Surprise* states for the native law are
+reproduced exactly from the protocols in OPH's public model. One attempt is a
+uniform seam and a fair coin: from `(1, 1, 0, ..., 0)` the configuration stays
+with probability `13/15` and reaches each of eight neighbours with probability
+`1/60` (`pr01-obstruction`). The two-event observer that chooses its second
+seam from its first record ends with a port-zero occupation of `35/264`,
+against `1/6` with the selector disconnected (`reduction-criterion`).
 
 ## Provenance and licences
 
@@ -241,7 +245,7 @@ scripts/make_figures.py              renders the twenty-three figures and their 
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (388 tests)
+tests/                               the suite (393 tests)
 ```
 
 ## Tests
@@ -250,7 +254,7 @@ tests/                               the suite (388 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-388 tests, no mocks, no network. The suite checks exact values rather than
+393 tests, no mocks, no network. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

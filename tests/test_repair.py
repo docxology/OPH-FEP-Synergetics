@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 import random
+from fractions import Fraction
 
 import pytest
 
@@ -14,6 +15,7 @@ from oph_fep_synergetics.core import (
     energy,
     icosahedral_carrier,
     is_broken,
+    mean_native_step,
     mismatch,
     native_repair,
     predict_energy_decrease,
@@ -182,3 +184,33 @@ def test_gap_helpers_agree_with_the_carrier(carrier):
     assert abs(carrier_spectral_gap(carrier) - carrier.spectral_gap()) < 1e-15
     assert abs(shell_gap() - carrier_spectral_gap() / 60.0) < 1e-15
     assert abs(relaxation_gap_from_laplacian(carrier) - shell_gap()) < 1e-15
+
+
+def test_the_mean_of_the_native_law_is_one_laplacian_step():
+    """Averaging the integer rule over all sixty draws gives x - L x / 60 exactly.
+
+    The expected value is built from neighbour sums, not from the carrier's
+    Laplacian matrix, so the two sides share no arithmetic.
+    """
+    carrier = icosahedral_carrier()
+    assert len(carrier.edges) == 30
+    for state in all_shell_configurations(carrier):
+        expected = tuple(
+            state[port]
+            - Fraction(
+                carrier.degree(port) * state[port]
+                - sum(state[other] for other in carrier.neighbours(port)),
+                60,
+            )
+            for port in range(carrier.port_count)
+        )
+        mean = mean_native_step(state, carrier.edges)
+        assert mean == expected, state
+        assert sum(mean) == 2
+
+
+def test_the_mean_step_of_a_single_seam_halves_the_mismatch():
+    assert mean_native_step((3, 0), [(0, 1)]) == (Fraction(3, 2), Fraction(3, 2))
+    assert mean_native_step((1, 0), [(0, 1)]) == (Fraction(1, 2), Fraction(1, 2))
+    with pytest.raises(ValueError):
+        mean_native_step((1, 0), [])

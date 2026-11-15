@@ -4,6 +4,16 @@
 
 Corrections (a claim was wrong):
 
+- The `13/15` and `1/60` transition probabilities and the `35/264` port-zero
+  occupation of *Agreement and Surprise* were recorded `not-reproduced`. All
+  three are determined by protocols in OPH's public model
+  (`model/common_source/NATIVE_FIELDS.md`, `model/observer/native.py`) and are
+  reproduced exactly: `pr01-obstruction` carries the two probabilities and
+  `reduction-criterion` the occupation with both selector controls.
+- *Agreement and Surprise* is a public preprint (PhilPapers record MUEAAS-2);
+  the citation, the registry source strings and the provenance notes said
+  "private draft". OPH is cited by its synthesis paper (PhilPapers record
+  MUEFOC) beside the repository.
 - The coordination shell `10k^2 + 2` is the set of lattice points at graph
   distance `k` (the surface of the frequency-`k` vector equilibrium), not the
   Euclidean sphere of squared norm `8k^2`; it now has a closed form, the
@@ -46,6 +56,12 @@ Corrections (a claim was wrong):
 
 Additions:
 
+- `certificate-species` averages the native rule itself over the sixty
+  seam-and-coin draws on all 78 configurations and finds `x - L x / 60` in exact
+  rationals, so the mean repair operator is derived from the law.
+  `core.repair.mean_native_step`, `core.controls.native_transition_probabilities`
+  and `core.controls.record_feedback_occupation` are the new functions, and five
+  OPH identifiers are added to `data/sources.json`.
 - `geometry.exact`: exact arithmetic in `Q(sqrt 5)`, exact convex hulls, the
   six-entry tetravolume table derived from explicit integer vertex sets, the
   icosahedron's tetravolume as `sqrt 2 (15/2 + (5/2) sqrt 5)`, and an exact

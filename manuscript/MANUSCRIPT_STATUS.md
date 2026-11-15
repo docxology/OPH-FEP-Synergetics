@@ -175,8 +175,8 @@ potential, so the repair language covers it without sharing its mechanism.
 - Fuller's apparatus appears only in the pieces the correspondence needs.
 - Scale separation is not addressed: OPH's patches and an FEP blanket are not
   mapped onto one another here.
-- `35/264` port-zero occupation and the `13/15` and `1/60` move probabilities
-  are `not-reproduced`, because the source text does not contain the
-  record/selector protocol they need.
+- The `35/264` port-zero occupation and the `13/15` and `1/60` transition
+  probabilities are reproduced exactly from the protocols in OPH's public model
+  (`reduction-criterion`, `pr01-obstruction`).
 
 See [docs/SCOPE.md](../docs/SCOPE.md) for the full statement.

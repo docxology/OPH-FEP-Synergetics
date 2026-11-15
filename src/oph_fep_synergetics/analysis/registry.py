@@ -401,8 +401,25 @@ def _probe_certificate_species() -> tuple[bool, dict]:
         "expected_second_eigenvalue": expected,
         "induced_infinity_norm": float(np.max(np.abs(mean).sum(axis=1))),
     }
+    # The matrix above is built from the Laplacian.  The native law itself,
+    # averaged over every seam and both coins, must give the same operator:
+    # x - L x / 60 in exact rationals on each of the 78 configurations.
+    laplacian = [[int(round(entry)) for entry in row] for row in carrier.laplacian()]
+    states = carrier.shell_configurations(total=2)
+    values["mean_native_step_configurations"] = len(states)
+    values["mean_native_step_is_generator_step"] = all(
+        repair_module.mean_native_step(state, carrier.edges)
+        == tuple(
+            state[port]
+            - Fraction(sum(laplacian[port][other] * state[other] for other in range(12)), 60)
+            for port in range(12)
+        )
+        for state in states
+    )
     passed = (
-        values["row_sums"] == [1.0]
+        values["mean_native_step_is_generator_step"]
+        and values["mean_native_step_configurations"] == 78
+        and values["row_sums"] == [1.0]
         and values["is_symmetric"]
         and values["is_nonnegative"]
         and abs(values["second_eigenvalue"] - expected) < 1e-12
@@ -657,8 +674,37 @@ def _probe_pr01() -> tuple[bool, dict]:
     values["coin_one_current"] = swaps.current
     values["coin_zero_decrease"] = waits.energy_decrease
     values["coin_one_decrease"] = swaps.energy_decrease
+    # The one-attempt law out of (1, 1, 0, ..., 0): a uniform seam and a fair coin,
+    # sixty equally likely draws.  Route one enumerates the draws; route two counts
+    # the seams that meet exactly one of the two adjacent occupied ports.
+    carrier = _carrier()
+    pair = [0] * 12
+    pair[0] = pair[1] = 1
+    pair_state = tuple(pair)
+    kernel = control_module.native_transition_probabilities(pair_state)
+    hops = {target: mass for target, mass in kernel.items() if target != pair_state}
+    draws = 2 * carrier.seam_count
+    one_unit_seams = (carrier.degree(0) - 1) + (carrier.degree(1) - 1)
+    values["pair_ports_share_a_seam"] = 1 in carrier.neighbours(0)
+    values["stay_probability"] = str(kernel[pair_state])
+    values["hop_probability"] = str(max(hops.values()))
+    values["hop_targets"] = len(hops)
+    values["stay_probability_closed_form"] = str(1 - Fraction(one_unit_seams, draws))
+    values["hops_share_one_probability"] = len(set(hops.values())) == 1
+    values["pair_draws_with_energy_decrease"] = sum(
+        1
+        for a, b in carrier.edges
+        for coin in (0, 1)
+        if repair_module.native_repair(pair_state, (a, b), coin).energy_decrease != 0.0
+    )
     passed = (
-        census["states"] == 78
+        values["pair_ports_share_a_seam"]
+        and kernel[pair_state] == Fraction(13, 15) == 1 - Fraction(one_unit_seams, draws)
+        and set(hops.values()) == {Fraction(1, 60)}
+        and len(hops) == one_unit_seams == 8
+        and sum(kernel.values()) == 1
+        and values["pair_draws_with_energy_decrease"] == 0
+        and census["states"] == 78
         and values["total_transitions"] == 4680
         and census["strict"] == 120
         and census["zero"] == 600
@@ -867,8 +913,22 @@ def _probe_reduction() -> tuple[bool, dict]:
     """Proposition 4: a summary of the present can omit what an intervention reveals."""
     values = dict(control_module.reduction_control())
     values["retaining_the_record_is_exact"] = True
+    # The same test on the native law: OPH's two-event observer chooses its second
+    # seam from the first record.  The enumeration over all paths and a case
+    # analysis that enumerates nothing must agree.
+    feedback = control_module.record_feedback_occupation()
+    values["record_feedback_paths"] = feedback["paths"]
+    values["record_feedback_occupation"] = str(feedback["occupation"])
+    values["record_feedback_case_analysis"] = str(feedback["case_analysis"])
+    values["record_feedback_second_seam_mass"] = str(feedback["second_seam_mass"])
+    values["selector_disconnected_occupation"] = str(feedback["selector_disconnected"])
+    values["selector_independent_occupation"] = str(feedback["selector_independent"])
     passed = (
-        values["same_observation"] == 1.0
+        feedback["paths"] == 264
+        and feedback["occupation"] == feedback["case_analysis"] == Fraction(35, 264)
+        and feedback["second_seam_mass"] == Fraction(5, 66)
+        and feedback["selector_disconnected"] == feedback["selector_independent"] == Fraction(1, 6)
+        and values["same_observation"] == 1.0
         and values["response_distance"] == 2.0
         and values["worst_case_error_lower_bound"] == 1.0
     )
@@ -1502,7 +1562,7 @@ def _probe_conjugation_norm() -> tuple[bool, dict]:
 
 _CARRIER_SOURCE = "OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian)"
 _LAW_SOURCE = "OPH model/observer/native.py:45-52 and the 'Agreement and Surprise' paper, Section 6.2"
-_PAPER_SOURCE = "Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026"
+_PAPER_SOURCE = "Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2)"
 _QUADRAY_SOURCE = (
     "QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and "
     "the polyhedra table in docs/manuscript/03_quadray_methods.md"

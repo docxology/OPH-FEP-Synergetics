@@ -233,6 +233,8 @@ def test_certificate_species_values():
         values["expected_second_eigenvalue"], abs=1e-12
     )
     assert values["induced_infinity_norm"] == 1.0
+    assert values["mean_native_step_is_generator_step"] is True
+    assert values["mean_native_step_configurations"] == 78
 
 
 def test_pr01_obstruction_values():
@@ -245,6 +247,12 @@ def test_pr01_obstruction_values():
     assert values["excursion_states"] == values["excursion_distinct_states"] == 7
     assert values["coin_zero_current"] != values["coin_one_current"]
     assert values["coin_zero_decrease"] == values["coin_one_decrease"] == 0.0
+    assert values["pair_ports_share_a_seam"] is True
+    assert values["stay_probability"] == values["stay_probability_closed_form"] == "13/15"
+    assert values["hop_probability"] == "1/60"
+    assert values["hop_targets"] == 8
+    assert values["hops_share_one_probability"] is True
+    assert values["pair_draws_with_energy_decrease"] == 0
 
 
 def test_free_energy_name_collision_values():
@@ -316,6 +324,12 @@ def test_reduction_criterion_values():
     assert (values["first_after"], values["second_after"]) == (1.0, -1.0)
     assert values["response_distance"] == 2.0
     assert values["worst_case_error_lower_bound"] == 1.0
+    assert values["record_feedback_paths"] == 264
+    assert values["record_feedback_occupation"] == "35/264"
+    assert values["record_feedback_case_analysis"] == "35/264"
+    assert values["record_feedback_second_seam_mass"] == "5/66"
+    assert values["selector_disconnected_occupation"] == "1/6"
+    assert values["selector_independent_occupation"] == "1/6"
 
 
 def test_existence_without_reachability_values():

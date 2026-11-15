@@ -39,6 +39,17 @@ and the other does
 nothing at all. The probe reports both currents and both energy decreases, which
 are {{PR01_COIN_ZERO_DECREASE}} and {{PR01_COIN_ONE_DECREASE}}. [@fig:descent] shows the census and an excursion.
 
+The same draws fix the two probabilities the source states for the configuration
+with one unit on each of two adjacent ports [@mueller2026agreement]. One attempt
+is a uniform seam and a fair coin. The configuration stays where it is with
+probability {{PR01_STAY_PROBABILITY}} and moves to each of {{PR01_HOP_TARGETS}}
+neighbouring configurations with probability {{PR01_HOP_PROBABILITY}}, and every
+draw leaves [@eq:energy] unchanged. Two transitions with the same energy decrease
+differ in surprisal, so no coefficient converts the path surprisal of the native
+law into its energy decrease. OPH's model states the kernel and both values
+[@oph]; the probe enumerates the draws and checks the result against a count of
+the seams that meet exactly one of the two occupied ports.
+
 ![The descent census and a mismatch-one excursion. Left: the
 {{SHELL_TRANSITIONS}} transitions of the shell, partitioned into
 {{SHELL_STRICT_DESCENT}} strict descents, {{SHELL_ZERO_DESCENT}} zero descents and
@@ -235,6 +246,18 @@ differs between the full and the half-damped schedules by exactly
 ${{SCHEDULE_AFFINE_CONTRAST}}$ in absolute value, so a claim about "the"
 schedule path has to name the schedule [@mueller2026agreement]. Registered as
 `mediator-obstruction`, with `reduction-criterion` and `schedule-path` beside it.
+
+OPH's executable observer runs the reduction test on the native law itself
+[@oph; @mueller2026agreement]. The source is uniform over the binary
+configurations. The observer repairs one seam, records the signed current, and
+chooses its second seam from that record alone. Over {{FEEDBACK_PATHS}} equally
+weighted paths the final occupation of port zero is
+{{FEEDBACK_PORT_ZERO_OCCUPATION}}. With the selector disconnected, or driven by
+an independent record with the same seam frequency, it is
+{{FEEDBACK_CONTROL_OCCUPATION}}, the occupation of the uniform binary state. The
+`reduction-criterion` probe enumerates the paths and checks the result against a
+case analysis that enumerates nothing. A summary that drops the record keeps the
+action frequencies and loses the response.
 
 ![The absolute difference between the full and the half-damped schedules'
 centered contrasts, one exact value per step count from one to twelve. The

@@ -18,6 +18,7 @@ from __future__ import annotations
 import math
 import random
 from dataclasses import dataclass
+from fractions import Fraction
 from typing import Iterable, Sequence
 
 from .carrier import IcosahedralCarrier, icosahedral_carrier
@@ -185,6 +186,31 @@ def simulate_repairs(
 def shell_gap() -> float:
     """The OPH carrier gap ``(5 - sqrt(5)) / 60``."""
     return (5.0 - math.sqrt(5.0)) / 60.0
+
+
+def mean_native_step(
+    loads: Sequence[int],
+    seams: Sequence[tuple[int, int]],
+) -> tuple[Fraction, ...]:
+    """The exact mean outcome of one native repair under the uniform schedule.
+
+    One attempt draws a seam uniformly from ``seams`` and a fair coin, so the
+    mean is the average of :func:`native_repair` over the ``2 * len(seams)``
+    equally likely draws.  The result is returned in exact rationals.  On the
+    twelve-port carrier it equals ``x - L x / 60`` for the carrier Laplacian
+    ``L``: the mean current across a seam is half its mismatch for either
+    parity, so the mean of the integer law is one gradient step of the
+    seam-disagreement energy ``(1/2) x^T L x`` with step ``1 / (2 |E|)``.
+    """
+    if not seams:
+        raise ValueError("at least one seam is needed")
+    draws = 2 * len(seams)
+    totals = [0] * len(loads)
+    for seam in seams:
+        for coin in (0, 1):
+            for port, load in enumerate(native_repair(loads, seam, coin).after):
+                totals[port] += load
+    return tuple(Fraction(total, draws) for total in totals)
 
 
 def binary_shell_configurations(
