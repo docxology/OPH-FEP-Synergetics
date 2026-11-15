@@ -35,7 +35,7 @@ mistaken for a clean run.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-388 tests, no mocks, no network, no fixtures that fake a result. The suite runs
+393 tests, no mocks, no network, no fixtures that fake a result. The suite runs
 from a fresh process against the real code paths.
 
 | file | what it pins down |
@@ -146,11 +146,13 @@ a failure means the residual is not small, not that a tolerance was widened. The
 the author's arm64 macOS with numpy 2.x; a different platform could move a last-bit float
 residual without changing any verdict.
 
-## What is deliberately not verified
+## The three source quantities
 
-The `35/264` port-zero occupation and the `13/15` and `1/60` move probabilities
-from *Agreement and Surprise* cannot be reproduced: the record and selector
-protocol that would determine the occupation, and the probability space and
-conditioning event that would determine the probabilities, are not specified by
-the paper's text. They are recorded as `not-reproduced` in
-[docs/SCOPE.md](SCOPE.md) and are not asserted anywhere in this repository.
+The `13/15` and `1/60` transition probabilities and the `35/264` port-zero
+occupation from *Agreement and Surprise* are reproduced exactly. The protocols
+are in OPH's public model: the one-attempt state kernel in
+`model/common_source/NATIVE_FIELDS.md` and the two-event observer in
+`model/observer/native.py`. `pr01-obstruction` enumerates the sixty draws out of
+`(1, 1, 0, ..., 0)` and checks them against a seam count; `reduction-criterion`
+enumerates the 264 paths and checks them against a case analysis.
+[docs/SCOPE.md](SCOPE.md) states both protocols.

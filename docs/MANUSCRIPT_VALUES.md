@@ -171,8 +171,12 @@ gives one; `Note` records what is measured rather than quoted.
 | `replicator.field_norm` | 0.21196226079186833 |  | probe:replicator-potential:field_norm |  |
 | `gmrf.ordered_pairs` | 60 |  | probe:gmrf-independence:pairwise_precision_entries |  |
 | `symmetry.eigenspace_dimensions` | (3, 3, 5) |  | probe:eigenspace-irreducibility:dimensions:sortedtail | the non-trivial eigenspace dimensions beside the trivial one |
-| `not_reproduced.port_zero_occupation` | 35/264 |  | 'Agreement and Surprise' (private draft): recorded not-reproduced; the record/selector protocol is not specified in its text | not-reproduced |
-| `not_reproduced.move_probabilities` | 13/15 and 1/60 |  | 'Agreement and Surprise' (private draft): recorded not-reproduced; the probability space and the conditioning event are not determined by the text | not-reproduced |
+| `pr01.stay_probability` | 13/15 |  | probe:pr01-obstruction:stay_probability | one attempt (uniform seam, fair coin) from (1, 1, 0, ..., 0); 'Agreement and Surprise' Section 6.2 and OPH model/common_source/NATIVE_FIELDS.md |
+| `pr01.hop_probability` | 1/60 |  | probe:pr01-obstruction:hop_probability | each neighbouring configuration, same attempt law |
+| `pr01.hop_targets` | 8 |  | probe:pr01-obstruction:hop_targets |  |
+| `feedback.port_zero_occupation` | 35/264 |  | probe:reduction-criterion:record_feedback_occupation | OPH's two-event record-controlled observer, model/observer/native.py; 'Agreement and Surprise' Section 6.2 |
+| `feedback.control_occupation` | 1/6 |  | probe:reduction-criterion:selector_disconnected_occupation | selector disconnected; the independent selector with the same seam frequency gives the same value |
+| `feedback.paths` | 264 |  | probe:reduction-criterion:record_feedback_paths |  |
 | `carrier.chart_0` | 1, 5, 7, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 0 |
 | `carrier.chart_1` | 0, 5, 7, 8, 9 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 1 |
 | `carrier.chart_2` | 3, 4, 6, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 2 |

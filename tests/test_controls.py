@@ -41,8 +41,10 @@ from oph_fep_synergetics.core import (
     mismatch_one_coin,
     mismatch_one_excursion,
     mismatch_one_moves,
+    native_transition_probabilities,
     path_multiplicity_census,
     path_multiplicity_values,
+    record_feedback_occupation,
     reduction_control,
     replicator_potential_check,
     routh_first_column,
@@ -259,6 +261,45 @@ def test_path_multiplicities_are_the_stated_values():
     assert sorted(census) == [1, 2, 50, 52]
     assert path_multiplicity_values() == (1, 2, 50, 52)
     assert sum(multiplicity * count for multiplicity, count in census.items()) == 4680
+
+
+def test_transition_probabilities_out_of_the_adjacent_pair():
+    """From (1, 1, 0, ..., 0): 13/15 to stay and 1/60 for each of eight hops."""
+    pair = (1, 1) + (0,) * 10
+    kernel = native_transition_probabilities(pair)
+    assert sum(kernel.values()) == 1
+    assert kernel[pair] == Fraction(13, 15)
+    hops = {target: mass for target, mass in kernel.items() if target != pair}
+    assert len(hops) == 8
+    assert set(hops.values()) == {Fraction(1, 60)}
+    assert all(sorted(target) == sorted(pair) for target in hops)
+
+
+def test_transition_probabilities_depend_on_the_configuration_class():
+    """Non-adjacent pairs and doubled ports both stay with probability 5/6."""
+    apart = [0] * 12
+    apart[0] = apart[2] = 1
+    kernel = native_transition_probabilities(tuple(apart))
+    hops = [mass for target, mass in kernel.items() if target != tuple(apart)]
+    assert kernel[tuple(apart)] == Fraction(5, 6)
+    assert hops == [Fraction(1, 60)] * 10
+    doubled = (2,) + (0,) * 11
+    kernel = native_transition_probabilities(doubled)
+    spread = [mass for target, mass in kernel.items() if target != doubled]
+    assert kernel[doubled] == Fraction(5, 6)
+    assert spread == [Fraction(1, 30)] * 5
+
+
+def test_record_feedback_shifts_the_port_zero_occupation():
+    """OPH's two-event observer: 35/264 with the record, 1/6 without it."""
+    values = record_feedback_occupation()
+    assert values["paths"] == 264
+    assert values["occupation"] == Fraction(35, 264)
+    assert values["case_analysis"] == values["occupation"]
+    assert values["second_seam_mass"] == Fraction(5, 66)
+    assert values["selector_disconnected"] == Fraction(1, 6)
+    assert values["selector_independent"] == Fraction(1, 6)
+    assert values["occupation"] < values["selector_disconnected"]
 
 
 def test_four_cycle_trap_is_a_local_minimum():

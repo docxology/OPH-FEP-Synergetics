@@ -2,7 +2,7 @@
 
 Three research programs describe observers in incompatible vocabularies. Observer
 Patch Holography builds spacetime from a finite complex of patches joined by seams,
-with a local repair law that moves load across those seams [@oph]. The Free Energy
+with a local repair law that moves load across those seams [@oph; @mueller2026observers]. The Free Energy
 Principle derives the behaviour of a self-maintaining system from a variational
 bound on surprisal [@friston2010; @parr2022active]. Fuller's Synergetics
 axiomatises a closest-packed, tetravolume-counted geometry in which the
@@ -73,8 +73,8 @@ determine which solid is meant.
 Synergetics contributes the one geometry in which the other two can be drawn, not
 a derivation of either.
 
-Two quantities asserted in the source literature are reported as not reproduced,
-and the scope limits are stated rather than trimmed. Every number in this
+Three quantities the source literature states for the native law are reproduced
+exactly from OPH's public model, and the scope limits are stated rather than trimmed. Every number in this
 manuscript is bound to the function that produces it, every claim is executed by
 `oph-fep-synergetics verify` (or narrowed with `--pair` and `--kind`), and the
 graphical abstract on the preceding pages states the same results as four drawn

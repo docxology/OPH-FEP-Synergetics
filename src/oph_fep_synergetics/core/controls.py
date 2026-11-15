@@ -644,6 +644,109 @@ def path_multiplicity_values() -> tuple[int, ...]:
     return tuple(path_multiplicity_census())
 
 
+def native_transition_probabilities(
+    loads: Sequence[int],
+) -> dict[tuple[int, ...], Fraction]:
+    """The one-attempt transition law out of ``loads`` under the uniform schedule.
+
+    One attempt draws one of the thirty seams uniformly and a fair coin: sixty
+    equally likely draws, so a target reached by ``m`` of them has probability
+    ``m / 60``.  The probability space is the set of draws and the only
+    conditioning is on the start configuration.  This is the state kernel of
+    OPH's ``model/common_source/NATIVE_FIELDS.md``.
+
+    From ``(1, 1, 0, ..., 0)``, whose two units share a seam, the law stays put
+    with probability ``52/60 = 13/15`` and reaches each of eight neighbouring
+    configurations with probability ``1/60``.  Every one of the sixty draws has
+    zero quadratic decrease there.
+    """
+    carrier = icosahedral_carrier()
+    draws = 2 * len(carrier.edges)
+    counts: dict[tuple[int, ...], int] = {}
+    for a, b in carrier.edges:
+        for coin in (0, 1):
+            target = native_repair(loads, (a, b), coin).after
+            counts[target] = counts.get(target, 0) + 1
+    return {target: Fraction(count, draws) for target, count in counts.items()}
+
+
+#: The two seams of OPH's two-event observer, ``E`` and ``F`` in
+#: ``model/observer/native.py``.
+FEEDBACK_FIRST_SEAM: tuple[int, int] = (0, 1)
+FEEDBACK_SECOND_SEAM: tuple[int, int] = (0, 5)
+
+
+def record_feedback_occupation() -> dict[str, object]:
+    """Port-zero occupation of OPH's two-event record-controlled observer.
+
+    The protocol is the one in OPH's ``model/observer/native.py``.  The source
+    is uniform over the 66 binary configurations.  Event one repairs the seam
+    ``(0, 1)`` with a fair coin and records the signed current.  The selector
+    reads that record and nothing else: event two repairs ``(0, 5)`` when the
+    first current is positive and ``(0, 1)`` otherwise, again with a fair coin.
+    The readout is the mean final load at port zero over the 264 equally
+    weighted paths.
+
+    Two controls keep the native records and change only the selector.  With
+    the selector disconnected, event two always repairs ``(0, 1)``.  With an
+    independent selector, event two repairs ``(0, 5)`` with the same frequency
+    ``5/66`` whatever the first record says.  Both give ``1/6``, the occupation
+    of the uniform binary state, so the shift to ``35/264`` is caused by the
+    retained record and by nothing in the action frequencies.
+
+    ``case_analysis`` is a second route that enumerates nothing.  A positive
+    first current needs the unit on port zero with port one empty and coin
+    zero, which has probability ``(10/66) / 2 = 5/66``; port five then holds
+    the other unit one time in ten and a fair coin returns it to port zero.
+    The doubled seam contributes ``1/66`` and the remaining one-unit mass
+    ``15/66`` ends on port zero half the time.
+    """
+    carrier = icosahedral_carrier()
+    first, second = FEEDBACK_FIRST_SEAM, FEEDBACK_SECOND_SEAM
+    seams = {tuple(sorted(edge)) for edge in carrier.edges}
+    if first not in seams or second not in seams:  # pragma: no cover - chart invariant
+        raise AssertionError("the observer's seams are not seams of the carrier")
+    sources = carrier.binary_shell_configurations()
+    paths = 0
+    occupation = Fraction(0)
+    second_seam_mass = Fraction(0)
+    disconnected = Fraction(0)
+    weight = Fraction(1, 4 * len(sources))
+    after_first: list[tuple[int, ...]] = []
+    for source in sources:
+        for first_coin in (0, 1):
+            step = native_repair(source, first, first_coin)
+            after_first.append(step.after)
+            chosen = second if step.current > 0 else first
+            for second_coin in (0, 1):
+                paths += 1
+                occupation += weight * native_repair(step.after, chosen, second_coin).after[0]
+                disconnected += weight * native_repair(step.after, first, second_coin).after[0]
+                if chosen == second:
+                    second_seam_mass += weight
+    independent = Fraction(0)
+    for state in after_first:
+        for seam, seam_weight in ((second, second_seam_mass), (first, 1 - second_seam_mass)):
+            for second_coin in (0, 1):
+                independent += weight * seam_weight * native_repair(state, seam, second_coin).after[0]
+    binary = len(sources)
+    one_unit_on_seam = 2 * (carrier.port_count - 2)
+    positive_current = Fraction(one_unit_on_seam // 2, binary) / 2
+    case_analysis = (
+        positive_current * Fraction(1, carrier.port_count - 2) / 2
+        + Fraction(1, binary)
+        + (Fraction(one_unit_on_seam, binary) - positive_current) / 2
+    )
+    return {
+        "paths": paths,
+        "occupation": occupation,
+        "case_analysis": case_analysis,
+        "second_seam_mass": second_seam_mass,
+        "selector_disconnected": disconnected,
+        "selector_independent": independent,
+    }
+
+
 def four_cycle_local_minimum() -> dict[str, object]:
     """A compatible state and a non-compatible local minimum of a discrepancy.
 

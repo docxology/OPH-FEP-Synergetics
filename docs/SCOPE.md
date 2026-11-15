@@ -51,19 +51,20 @@ domain.
   distinguishes the two twelve-vertex solids; the kissing slack that permits it
   is measured, the motion itself is not simulated.
 
-## Not reproducible from the source text
+## Three source quantities and their protocols
 
-Two quantities in *Agreement and Surprise* cannot be reproduced from its own
-text. They are recorded as `not-reproduced` rather than verified:
+*Agreement and Surprise* states three numbers for the native law. Each is
+determined by a protocol in OPH's public model, and each is reproduced exactly
+by a probe:
 
-| quantity | why it is not reproduced |
-| --- | --- |
-| the `35/264` port-zero occupation | the record and selector protocol that would determine the occupation is not specified in the paper's text |
-| the `13/15` and `1/60` move probabilities | the probability space and the conditioning event are not determined by the text |
+| quantity | protocol | OPH source | probe |
+| --- | --- | --- | --- |
+| `13/15` and `1/60` | one attempt, a uniform seam and a fair coin (sixty equally likely draws), from `(1, 1, 0, ..., 0)`; `13/15` is the self-transition and `1/60` is one particular hop, both at zero quadratic decrease | `model/common_source/NATIVE_FIELDS.md` | `pr01-obstruction` |
+| `35/264` | uniform over the 66 binary configurations; event one repairs `(0, 1)` and records the signed current; event two repairs `(0, 5)` when that current is positive and `(0, 1)` otherwise; the readout is the mean final load at port zero over the 264 paths; `1/6` with the selector disconnected or independent | `model/observer/native.py` | `reduction-criterion` |
 
-A future reader with
-the protocol specification can add them as probes; until then, quoting them
-without that label would overstate what this repository establishes.
+The cited lines are recorded in `data/sources.json`. The status `not-reproduced`
+stays in the vocabulary for a quantity whose protocol no source states; no entry
+carries it.
 
 ## Four cautions that shape the results
 

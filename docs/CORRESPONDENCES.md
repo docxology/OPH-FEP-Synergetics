@@ -155,7 +155,7 @@ On the linear-Gaussian domain three computations of the settled interior coincid
 - OPH: A3: the least informative state relative to a reference under observer-visible constraints.
 - FEP: Perception as the descent of variational free energy in the means.
 - Synergetics: A minimal-energy configuration of the coordination framework.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Theorem 7 items 2 and 3
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Theorem 7 items 2 and 3
 
 Probe values:
 
@@ -182,7 +182,7 @@ Surprisal is the disagreement no repair removes, Bayesian surprise is the disagr
 - OPH: Repair reduces disagreement; records survive comparison.
 - FEP: The variational bound, its gap, and Bayesian surprise.
 - Synergetics: No counterpart; the geometry supplies no probabilistic reading.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Theorem 7 item 5 and Table 7
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Theorem 7 item 5 and Table 7
 
 Probe values:
 
@@ -211,7 +211,7 @@ Patch agreement is the global-section condition of a cellular sheaf over the car
 - OPH: Public records are the states that survive every comparison.
 - FEP: Message passing across a blanket; the sheaf Laplacian is the precision-weighted interface energy.
 - Synergetics: Heterogeneous local states agreeing through interface maps.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Section 7.2 and Proposition 4
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Section 7.2 and Proposition 4
 
 Probe values:
 
@@ -233,7 +233,7 @@ The native law's sharp certificate is a spectral gap: the mean repair operator i
 - OPH: The capacity-weighted two-norm spectral certificate.
 - FEP: Precision-weighted quadratic norms for the linearised update.
 - Synergetics: No counterpart.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Section 6.2 ('which certificate a law admits')
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Section 6.2 ('which certificate a law admits')
 
 Probe values:
 
@@ -243,6 +243,8 @@ Probe values:
 - `second_eigenvalue` = 0.9539344662916631
 - `expected_second_eigenvalue` = 0.9539344662916631
 - `induced_infinity_norm` = 1.0
+- `mean_native_step_configurations` = 78
+- `mean_native_step_is_generator_step` = True
 
 ## `tree-number`
 
@@ -273,7 +275,7 @@ The seam graph OPH repairs along is exactly the conditional-independence graph o
 - OPH: The declared seam graph is the independence graph: a repair touches one seam, which is exactly one conditional-dependence edge.
 - FEP: A Markov blanket is the graph neighbourhood of a port, and the interface energy is the precision-quadratic form on the linear-Gaussian domain.
 - Synergetics: Every vertex of the icosahedron is five-coordinated.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Section 7.2
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Section 7.2
 
 Probe values:
 
@@ -297,7 +299,7 @@ Patch agreement in OPH is the global-section condition of the carrier's scalar s
 - OPH: A public record is a global section; what prevents agreement is not counted by the seam count alone.
 - FEP: The harmonic-extension problem is well posed up to a constant; the nineteen dimensions are edge data that no node assignment can realise, the cokernel of the coboundary, while every realised disagreement lies in its eleven-dimensional image.
 - Synergetics: A closed triangulated surface: the graph's Euler characteristic is 12 - 30 = -18, the surface's is 12 - 30 + 20 = 2, and the faces account for the difference.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Proposition 4 and Section 7.2 (the cellular sheaf over the carrier complex)
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Proposition 4 and Section 7.2 (the cellular sheaf over the carrier complex)
 
 Probe values:
 
@@ -398,7 +400,7 @@ Equal-covariance Gaussian KL is half the squared Mahalanobis distance, and with 
 - OPH: No counterpart; OPH's own step cost is the change of its quadratic seam energy.
 - FEP: The linear-Gaussian KL of a mean shift at fixed covariance.
 - Synergetics: The IVM's squared distance in quadray coordinates.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Theorem 7 item 5; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Theorem 7 item 5; QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md
 
 Probe values:
 
@@ -434,6 +436,13 @@ Probe values:
 - `coin_one_current` = 0
 - `coin_zero_decrease` = 0.0
 - `coin_one_decrease` = 0.0
+- `pair_ports_share_a_seam` = True
+- `stay_probability` = 13/15
+- `hop_probability` = 1/60
+- `hop_targets` = 8
+- `stay_probability_closed_form` = 13/15
+- `hops_share_one_probability` = True
+- `pair_draws_with_energy_decrease` = 0
 
 ## `free-energy-name-collision`
 
@@ -444,7 +453,7 @@ The interface energy minimised over the interior and the variational free energy
 - OPH: Native thermodynamic free energy: Gibbs states and Landauer bounds on records.
 - FEP: Variational free energy: a KL bound on surprisal, not a thermodynamic potential.
 - Synergetics: No counterpart.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Section 7.1 and Theorem 7 item 3; review caution 1 on disambiguating 'free energy'
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Section 7.1 and Theorem 7 item 3; review caution 1 on disambiguating 'free energy'
 
 Probe values:
 
@@ -465,7 +474,7 @@ Eliminating an interior mediator leaves a genuinely three-way boundary term: the
 - OPH: A local patch can be unable to repair although a consistent world exists.
 - FEP: A blanket reduction that destroys the pairwise predictive-coding description.
 - Synergetics: No counterpart.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Proposition 8; Hansen and Ghrist's sheaf Kron reduction obstruction
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Proposition 8; Hansen and Ghrist's sheaf Kron reduction obstruction
 
 Probe values:
 
@@ -489,7 +498,7 @@ A blanket visible in the stationary statistics need not bound the dynamics: with
 - OPH: Seam structure is declared before the law, so compatibility and dynamics are separated by construction.
 - FEP: A Markov blanket of the stationary density permits reciprocal internal-external influence.
 - Synergetics: No counterpart.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Proposition 11
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Proposition 11
 
 Probe values:
 
@@ -510,7 +519,7 @@ One stationary density is shared by a family of laws: the diffusion dx = -(Gamma
 - OPH: Configuration equilibrium does not determine inertia; the native counterpart shares the full reference state with distinct finite kinetics.
 - FEP: A stationary law does not fix the law that preserves it; the solenoidal part is a free parameter.
 - Synergetics: No counterpart.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Proposition 9
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Proposition 9
 
 Probe values:
 
@@ -530,7 +539,7 @@ A linear rest admits a free-energy form exactly when it is stable, and one posit
 - OPH: A spectral certificate is a property of the law's sign structure, which the compatibility set does not fix.
 - FEP: Making one part repair faster can destroy convergence while compatibility is unchanged.
 - Synergetics: No counterpart.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Proposition 10 and Section 4.1
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Proposition 10 and Section 4.1
 
 Probe values:
 
@@ -561,7 +570,7 @@ Agreement and dissipation are state functions while finite phases are path funct
 - OPH: What is read from a completed history is a state function; the solver counter is a path function.
 - FEP: A learner that reads unfinished settling is taught differently under a different schedule.
 - Synergetics: No counterpart.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Proposition 6 and Section 4.4
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Proposition 6 and Section 4.4
 
 Probe values:
 
@@ -579,7 +588,7 @@ Two histories can share the present observation and need different futures, so a
 - OPH: Records are part of the state; the observer's next action follows its retained record.
 - FEP: An observation-only state can fail the response criterion while every solve converges.
 - Synergetics: No counterpart.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Proposition 4 and Section 4.2
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Proposition 4 and Section 4.2
 
 Probe values:
 
@@ -589,6 +598,12 @@ Probe values:
 - `response_distance` = 2.0
 - `worst_case_error_lower_bound` = 1.0
 - `retaining_the_record_is_exact` = True
+- `record_feedback_paths` = 264
+- `record_feedback_occupation` = 35/264
+- `record_feedback_case_analysis` = 35/264
+- `record_feedback_second_seam_mass` = 5/66
+- `selector_disconnected_occupation` = 1/6
+- `selector_independent_occupation` = 1/6
 
 ## `existence-without-reachability`
 
@@ -599,7 +614,7 @@ An agreement can exist and be unreachable: the clipped two-node map has the orig
 - OPH: Existence of a public fixed point is not reachability by the repair dynamics.
 - FEP: Existence of a fixed point is not convergence of the process theory.
 - Synergetics: No counterpart.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Proposition 15 and Appendix A.3
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Proposition 15 and Appendix A.3
 
 Probe values:
 
@@ -622,7 +637,7 @@ A directed network's forward response need not carry its exact gradient: for J =
 - OPH: The native law is self-adjoint and nonnegative, so this boundary does not bind it.
 - FEP: Equilibrium propagation's gradient identity needs an energy; a directed wiring does not automatically supply one.
 - Synergetics: No counterpart.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Appendix B ('directed interactions')
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Appendix B ('directed interactions')
 
 Probe values:
 
@@ -640,7 +655,7 @@ A local minimum of an independently defined discrepancy can be incompatible: on 
 - OPH: An energy-descent argument needs a completeness argument before termination can imply agreement.
 - FEP: The same obligation applies to any predictive-coding energy.
 - Synergetics: No counterpart.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Section 4.1
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Section 4.1
 
 Probe values:
 
@@ -740,7 +755,7 @@ The two-settle contrast of equilibrium propagation, an energy-based learning rul
 - OPH: The native law repairs; it does not learn its law.
 - FEP: Learning is a descent of free energy in parameters, which needs a gradient the settling rule alone does not give.
 - Synergetics: No counterpart.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Theorem 21 (Scellier and Bengio)
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Theorem 21 (Scellier and Bengio)
 
 Probe values:
 
@@ -760,7 +775,7 @@ With a symmetric payoff, replicator selection climbs a potential, so the repair 
 - OPH: A comparison class, not a realization.
 - FEP: A comparison class, not a process theory.
 - Synergetics: No counterpart.
-- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026, Section 6.3
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Section 6.3
 
 Probe values:
 
@@ -878,7 +893,7 @@ The three programmes' exact quantities live in different number systems, and no 
 - OPH: Integer loads; spectral data in the quadratic field Q(sqrt 5).
 - FEP: Real-valued information costs in nats.
 - Synergetics: Tetravolumes of the prime vector: integral on the IVM, algebraic irrational on the icosahedron.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2)
 
 Probe values:
 
@@ -910,7 +925,7 @@ The precision carries a metric neither programme computes: the effective resista
 - OPH: A Laplacian whose generalized inverse defines a resistance distance.
 - FEP: In the Gaussian reading the same number is the variance of a port's potential difference.
 - Synergetics: A lattice metric on the same twelve sites, counted in whole steps rather than in resistances.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2)
 
 Probe values:
 
@@ -1041,7 +1056,7 @@ Conjugation of sqrt 5 (fixing sqrt 2) fixes the counting invariants and moves th
 - OPH: A count over the carrier, which is an integer and therefore conjugation-invariant.
 - FEP: A determinant over the same matrix, likewise rational.
 - Synergetics: Tetravolumes in sqrt 2 Q(sqrt 5), whose squares lie in Q(sqrt 5); the volume moves under the conjugation, which fixes sqrt 2.
-- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', private draft 22 October 2026
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2)
 
 Probe values:
 

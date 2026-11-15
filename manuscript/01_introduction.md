@@ -5,7 +5,7 @@
 Observer Patch Holography (OPH) is a discrete reconstruction programme: a finite
 complex of patches carries integer load, seams between patches carry a repair
 law, and geometry is what the repair statistics look like from inside
-[@oph; @dossier2026]. The Free Energy Principle (FEP) is a variational programme:
+[@oph; @mueller2026observers; @dossier2026]. The Free Energy Principle (FEP) is a variational programme:
 a system that persists must keep its sensory surprisal bounded, and the bound is
 a functional of a recognition density [@friston2010; @friston2013life;
 @parr2022active]. Synergetics is a geometric programme: spatial accounting is done
@@ -114,8 +114,8 @@ the values that function returns.
 It does not claim that OPH is a free energy principle, or that FEP is a
 holographic theory, or that Synergetics predicts either. It tests identifications
 that have been proposed [@dossier2026; @proposal2026] and reports which survive.
-It does not reproduce two quantities that the source literature states without
-specifying the protocol that would determine them [@sec:scope]. It does not
+It reproduces the three quantities the source literature states for the native
+law from the protocols in OPH's public model [@sec:scope]. It does not
 compare any of the three against laboratory data; OPH's own empirical status
 document is explicit that no retained comparison selects its record law, and this
 paper inherits that situation rather than resolving it [@oph].

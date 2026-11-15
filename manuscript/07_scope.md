@@ -25,10 +25,11 @@ to enumerate and too small to settle any question about scaling. Nothing in this
 paper claims that the identities survive a continuum limit, and the obstruction
 results in particular are statements about this carrier.
 
-The third is provenance. The source for the dynamics is a private draft
-[@mueller2026agreement], not a published paper. Its propositions are cited as the
-source states them, the package's own measurements are reported alongside, and a
-reader who disagrees with the draft can still use the measurements. The three
+The third is provenance. The source for the dynamical controls is a preprint
+[@mueller2026agreement], and OPH's own results are stated in its synthesis paper
+[@mueller2026observers]. The preprint's propositions are cited as the source
+states them, the package's own measurements are reported alongside, and a reader
+who disagrees with the preprint can still use the measurements. The three
 software programmes are pinned to commits, and the pins are point-in-time
 readings rather than perpetual guarantees.
 
@@ -53,26 +54,22 @@ invariant under a symmetry that a geometric claim is not, and comparing one
 against the other without saying so is the error the section is written to
 prevent.
 
-## What is not reproduced
+## Three source quantities and their protocols
 
-Two quantities stated in the source literature are not reproduced here, and the
-registry records them as `not-reproduced` rather than dropping them or inventing
-a protocol that would produce them.
+The source states three numbers for the native law [@mueller2026agreement]. Each
+is determined by a protocol in OPH's public model [@oph], and the registry
+reproduces all three exactly ([@tbl:reproduced]).
 
-| Quantity | Source | Why it is not reproduced |
-|:---------|:-------|:-------------------------|
-| {{NOT_REPRODUCED_PORT_ZERO_OCCUPATION}} port-zero occupation | [@mueller2026agreement] | the record and selector protocol that would determine the occupation is not specified in the paper's text |
-| {{NOT_REPRODUCED_MOVE_PROBABILITIES}} move probabilities | [@mueller2026agreement] | the probability space and the conditioning event are not determined by the text |
+| Quantity | Protocol | Probe |
+|:---------|:---------|:------|
+| {{PR01_STAY_PROBABILITY}} and {{PR01_HOP_PROBABILITY}} | one attempt, a uniform seam and a fair coin, from the configuration with one unit on each of two adjacent ports: staying put, and one particular hop | `pr01-obstruction` |
+| {{FEEDBACK_PORT_ZERO_OCCUPATION}} | uniform binary source, two repair events, the second seam chosen from the first recorded current: the mean final load at port zero | `reduction-criterion` |
 
-: Quantities recorded as not reproduced, with the reason. Recording them keeps the
-gap visible; inventing a protocol would have produced numbers that look like
-verification and are not. {#tbl:notrepro}
+: The source quantities and the protocols that determine them. [@sec:pr01] and
+[@sec:mediator] report the values with their controls. {#tbl:reproduced}
 
-Both quantities are plausibly derivable from a fuller specification of the
-record process. Neither is asserted anywhere in this paper, and neither appears
-in a probe. If a later version of the source specifies the protocol, the
-correspondence can be upgraded to `exact` by adding a probe; until then the honest
-status is `not-reproduced`.
+The status `not-reproduced` stays in the vocabulary for a quantity whose protocol
+no source states. No entry of the registry carries it.
 
 ## What is not claimed
 
