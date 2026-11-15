@@ -74,23 +74,29 @@ def distance_distribution(adjacency: Adjacency, source: int = 0) -> tuple[int, .
 
 
 def intersection_array(adjacency: Adjacency, source: int = 0) -> tuple[tuple[int, ...], tuple[int, ...]]:
-    """Return ``(b, c)``: neighbours outwards and back, shell by shell.
+    """Return the intersection array ``(b, c)`` in its standard form.
 
-    ``b[k - 1]`` counts the neighbours of a vertex in shell ``k`` that lie in
-    shell ``k + 1`` and ``c[k - 1]`` those in shell ``k - 1``. One representative
-    per shell is enough exactly when the graph is distance-regular, which the
-    caller asserts by comparing representatives.
+    For a graph of diameter ``d`` the array is ``{b_0, ..., b_(d-1); c_1, ...,
+    c_d}``: ``b[k]`` counts the neighbours of a vertex at distance ``k`` from
+    ``source`` that lie at distance ``k + 1``, and ``c[k - 1]`` counts the
+    neighbours of a vertex at distance ``k`` that lie at distance ``k - 1``.
+    ``b_0`` is the degree and ``b_d = 0`` is omitted, so the icosahedron's array
+    is ``{5, 2, 1; 1, 2, 5}``. One representative per shell is enough exactly
+    when the graph is distance-regular, which the caller asserts by comparing
+    representatives.
     """
     distances = graph_distances(adjacency)[source]
     reach = max(distances)
-    representatives = {step: distances.index(step) for step in range(1, reach + 1)}
+    representatives = {step: distances.index(step) for step in range(reach + 1)}
     back = []
     onward = []
     for step in sorted(representatives):
         port = representatives[step]
         neighbours = [other for other in range(len(adjacency)) if adjacency[port][other]]
-        back.append(sum(1 for other in neighbours if distances[other] == step - 1))
-        onward.append(sum(1 for other in neighbours if distances[other] == step + 1))
+        if step < reach:
+            onward.append(sum(1 for other in neighbours if distances[other] == step + 1))
+        if step > 0:
+            back.append(sum(1 for other in neighbours if distances[other] == step - 1))
     return tuple(onward), tuple(back)
 
 

@@ -23,7 +23,7 @@
   "related_identifiers": [
     {
       "identifier": "https://github.com/FloatingPragma/observer-patch-holography",
-      "relation": "isCitedBy",
+      "relation": "cites",
       "resource_type": "publication-softwaredocumentation"
     },
     {

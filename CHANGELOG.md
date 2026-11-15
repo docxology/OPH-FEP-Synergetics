@@ -31,6 +31,18 @@ Corrections (a claim was wrong):
   of `L^+`, the variance of a port's deviation from the carrier mean.
 - Two bibliography DOIs were wrong (Biehl et al. 2021; Da Costa et al., now
   dated 2020) and are corrected.
+- The carrier's intersection array is `{5, 2, 1; 1, 2, 5}`. The manuscript
+  token printed `(2, 1, 0; 1, 2, 5)`, the sequence `b_1, b_2, b_3` with `b_0`
+  left out, against the registry claim and the standard form.
+- The docstring of `path_multiplicity_census` assigned the self-loop
+  multiplicities to the wrong classes: 52 belongs to the 30 binary states whose
+  units share a seam, 50 to the other 36 binary states and to the 12 states
+  with both units on one port.
+- `docs/SCOPE.md` called OPH's patches "Planck-scale screen units". OPH defines
+  a patch as a bounded local system and assigns it no length scale; the caution
+  on scale separation says so and agrees with the manuscript's version.
+- `.zenodo.json` related this record to the OPH repository as `isCitedBy`; the
+  relation is `cites`.
 
 Additions:
 

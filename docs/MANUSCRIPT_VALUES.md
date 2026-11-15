@@ -99,7 +99,7 @@ gives one; `Note` records what is measured rather than quoted.
 | `carrier.shell_sizes` | (5, 5, 1) |  | core/network.py distance_distribution: shells of ports around one port |  |
 | `lattice.shell_sizes` | (12, 42, 92) |  | geometry.shell_count: the IVM's own shell sizes for the same radii |  |
 | `carrier.diameter` | 3 | `three` | core/network.py graph_distances: the carrier's graph diameter |  |
-| `carrier.intersection_array` | (2, 1, 0; 1, 2, 5) |  | core/network.py intersection_array: neighbours outward and back, shell by shell |  |
+| `carrier.intersection_array` | (5, 2, 1; 1, 2, 5) |  | core/network.py intersection_array: the standard array b_0, b_1, b_2; c_1, c_2, c_3 |  |
 | `carrier.triangles` | 20 | `twenty` | core/network.py subgraph_census: three-cycles, exactly the twenty faces |  |
 | `carrier.pentagons` | 12 | `twelve` | core/network.py subgraph_census: induced five-cycles, the vertex links and the dual dodecahedron's faces |  |
 | `carrier.perfect_matchings` | 125 | `125` | core/network.py subgraph_census: perfect matchings of the custody graph |  |

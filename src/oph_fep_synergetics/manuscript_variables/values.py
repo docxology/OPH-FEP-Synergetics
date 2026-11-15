@@ -824,7 +824,7 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     BoundValue(
         "carrier.intersection_array",
         _SHELLS["intersection"],
-        "core/network.py intersection_array: neighbours outward and back, shell by shell",
+        "core/network.py intersection_array: the standard array b_0, b_1, b_2; c_1, c_2, c_3",
         None,
     ),
     BoundValue(
