@@ -177,10 +177,9 @@ def mismatch_one_excursion(steps: int = 6) -> tuple[tuple[int, ...], ...]:
 def descent_classes_coexist() -> bool:
     """Whether the shell census holds both strict descents and zero descents.
 
-    The census is exhaustive over the 78-state shell and every coin, so both
-    classes occurring is the PR-01 obstruction in its sharpest form: the native
-    law accepts repairs that lower nothing, and it also accepts strict descents,
-    so no measure decreases along every accepted move.
+    The census covers each state on the total-load-two shell, each seam, and
+    both coins. State-changing native repairs can either lower the load energy
+    or leave it constant. The claim is about individual moves and load energy.
     """
     census = gated_descent_census()
     return census["strict"] > 0 and census["zero"] > 0

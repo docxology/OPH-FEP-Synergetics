@@ -17,15 +17,15 @@ diagnostics below `1e-9` in magnitude are reported as such.
 | --- | --- | --- | --- | --- |
 | synergetics-oph | isomorphism | exact | `carrier-port-chart` | OPH's twelve-port carrier has twelve ports, thirty seams and twenty faces, is five-regular, and its port chart is the one OPH declares. |
 | oph-fep | isomorphism | exact | `spectral-gap` | One matrix carries both readings: the carrier Laplacian is 5I - A; in OPH's reading it generates the mean repair operator I - L / 60 and is the quadratic form of the seam-disagreement energy (1/2) sum over seams of (x_a - x_b)^2 (the native law's own energy, sum x^2 / 2, is a different form), and unweighted it is the precision the FEP reading factorises through; its first positive eigenvalue is 5 - sqrt(5) in both readings, and the normalised gap lambda_1 / (2 |E|) is exactly (5 - sqrt(5)) / 60. |
-| oph-fep | isomorphism | exact | `shell-counts` | The finite state space both oph-fep readings evaluate on is the total-two load shell: 78 configurations, of which 66 are binary; the enumeration agrees with the closed forms C(13, 2) = 78 (stars and bars over twelve ports) and C(12, 2) = 66, and every transition census and FEP-side comparison in this package ranges over exactly these states. |
+| oph-fep | isomorphism | exact | `shell-counts` | The total-two load shell contains 78 configurations, of which 66 are binary. Enumeration agrees with C(13, 2) = 78 by stars and bars and C(12, 2) = 66 by choice of occupied ports. These states define the native-rule transition census and its binary conditioning subset. |
 | oph-fep | isomorphism | exact | `native-repair-law` | The native seam law conserves total load on every transition and lowers the quadratic energy by exactly (d^2 - (|d| mod 2)) / 4. |
 | oph-fep | isomorphism | exact-on-domain | `variational-equivalence` | On the carrier with a proper Gaussian record prior, harmonic extension, a separate KKT constrained solve and predictive-coding flow agree with the posterior interior mean. The variational free energy computed from the normalised joint density equals record surprisal at the posterior. With a nonquadratic asymmetric seam the energy minimiser and posterior mean separate. |
 | oph-fep | isomorphism | exact-on-domain | `free-energy-dictionary` | On the carrier with a Gaussian record prior, the update residual bounds Bayesian surprise through the extreme interior eigenvalues. The energy drop at fixed new records and the divergence between successive Gaussian posteriors both equal the residual quadratic. The normalised variation of record surprisal uses the Schur complement plus the record prior precision. |
 | oph-fep | isomorphism | exact | `sheaf-agreement` | Patch agreement is the global-section condition of a cellular sheaf over the carrier complex, and the sheaf Laplacian is the carrier Laplacian. |
 | oph-fep | isomorphism | exact | `certificate-species` | The native law's sharp certificate is a spectral gap: the mean repair operator is symmetric, nonnegative and doubly stochastic by construction from the five-regular Laplacian, with second eigenvalue 1 - (5 - sqrt(5)) / 60, and its induced infinity norm is exactly one, so no sup-norm contraction certifies it. |
 | oph-fep | isomorphism | exact | `tree-number` | One determinant, two readings: the reduced carrier Laplacian's determinant is 5184000 — the number of spanning trees of the seam graph (the seam sets that connect every port without a cycle) in OPH's reading, by Kirchhoff's matrix-tree theorem, and, as the determinant of the same matrix read as a Gaussian precision grounded at one port, the normalisation of the FEP's linear-Gaussian interface integral — and it equals the product of the eleven nonzero eigenvalues over 12. |
-| oph-fep | isomorphism | exact | `gmrf-independence` | The seam graph OPH repairs along is exactly the conditional-independence graph of the precision read from the same matrix: two ports are conditionally dependent given the rest exactly when they share a seam and independent exactly when they do not, each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the variance of a port's deviation from the carrier mean (the diagonal of L^+) is exactly 7/36. The sparsity half holds by construction, since the precision is built from the adjacency; the content is the reading, not the computation. |
-| oph-fep | isomorphism | exact | `sheaf-cohomology` | Patch agreement in OPH is the global-section condition of the carrier's scalar sheaf on the seam graph, and the obstruction to it is the space the FEP's harmonic-extension residual lives in: dim H^0 = 1, dim H^1 = 19 — the graph's cycle rank, nineteen independent edge disagreements no coboundary explains — with dim H^0 - dim H^1 = 12 - 30. Adding the twenty faces as two-cells kills all nineteen: every obstruction is a face boundary, the surface's Betti numbers are (1, 0, 1), its Euler characteristic is 2, and OPH's oriented faces sum to a fundamental cycle. |
+| oph-fep | isomorphism | exact | `gmrf-independence` | The proper Gaussian with precision L + I/n has the carrier's seam graph as its conditional-dependence graph. Each port's blanket has five neighbours and each seam's precision entry is minus one. Separately, the variance of a port's deviation from the mean in the centered intrinsic field is 7/36, the diagonal of L^+. |
+| oph-fep | isomorphism | exact | `sheaf-cohomology` | For the carrier's scalar sheaf, dim H^0 = 1 counts the constant global sections and dim H^1 = 19 gives the dimension of the space of seam assignments modulo coboundaries. The alternating sum is 12 - 30. The twenty face boundaries span the cycle space, so the triangulated surface has Betti numbers (1, 0, 1) and Euler characteristic 2. OPH's oriented faces sum to a fundamental cycle. |
 | synergetics-oph | isomorphism | exact | `icosahedral-symmetry` | The carrier's automorphism group has order 120, is closed under composition, acts transitively on the twelve ports, the thirty seams and the twenty faces, and splits into sixty rotations and sixty reflections detected from OPH's own oriented faces. |
 | synergetics-oph | isomorphism | exact | `eigenspace-irreducibility` | The carrier Laplacian's eigenspaces of dimensions 3, 5 and 3 are the icosahedral group's non-trivial real irreducible representations acting on the carrier, so the multiplicities 1, 3, 5 and 3 of the spectrum 0, (5 - sqrt 5), 6 and (5 + sqrt 5) are forced by the icosahedral group rather than computed into OPH's matrix: each eigenspace is one irreducible, and the multiplicities are the representation dimensions. The values themselves are specific to 5I - A: the permutation representation is multiplicity-free, so every invariant symmetric matrix shares these eigenspaces with its own four eigenvalues. |
 | synergetics-oph | isomorphism | exact | `law-equivariance` | The native repair law is equivariant transition by transition: for all 120 automorphisms, all 78 total-two configurations, both orientations of all thirty seams and both coins, repairing the relabelled configuration on the relabelled seam gives the relabelled result, so the multiset of strict, zero and no-op outcomes is a group invariant, with four configuration orbits and three distinct outcome multisets. |
@@ -119,7 +119,7 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-The finite state space both oph-fep readings evaluate on is the total-two load shell: 78 configurations, of which 66 are binary; the enumeration agrees with the closed forms C(13, 2) = 78 (stars and bars over twelve ports) and C(12, 2) = 66, and every transition census and FEP-side comparison in this package ranges over exactly these states.
+The total-two load shell contains 78 configurations, of which 66 are binary. Enumeration agrees with C(13, 2) = 78 by stars and bars and C(12, 2) = 66 by choice of occupied ports. These states define the native-rule transition census and its binary conditioning subset.
 
 - OPH: The finite shell the executable observer runs on.
 - FEP: No independent FEP count is claimed: the entry fixes the finite domain on which the oph-fep comparisons run, and its second reading is that domain, not a number.
@@ -271,7 +271,7 @@ Probe values:
 
 One determinant, two readings: the reduced carrier Laplacian's determinant is 5184000 — the number of spanning trees of the seam graph (the seam sets that connect every port without a cycle) in OPH's reading, by Kirchhoff's matrix-tree theorem, and, as the determinant of the same matrix read as a Gaussian precision grounded at one port, the normalisation of the FEP's linear-Gaussian interface integral — and it equals the product of the eleven nonzero eigenvalues over 12.
 
-- OPH: The seam structure of the twelve-port carrier, whose Laplacian is the repair energy's quadratic form.
+- OPH: The seam structure of the twelve-port carrier, whose Laplacian generates mean repair.
 - FEP: The same matrix as a Gaussian precision, whose determinant normalises the linear-Gaussian interface integral.
 - Synergetics: The icosahedron's own graph, counted by its seam structure.
 - Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian)
@@ -289,10 +289,10 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-The seam graph OPH repairs along is exactly the conditional-independence graph of the precision read from the same matrix: two ports are conditionally dependent given the rest exactly when they share a seam and independent exactly when they do not, each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the variance of a port's deviation from the carrier mean (the diagonal of L^+) is exactly 7/36. The sparsity half holds by construction, since the precision is built from the adjacency; the content is the reading, not the computation.
+The proper Gaussian with precision L + I/n has the carrier's seam graph as its conditional-dependence graph. Each port's blanket has five neighbours and each seam's precision entry is minus one. Separately, the variance of a port's deviation from the mean in the centered intrinsic field is 7/36, the diagonal of L^+.
 
-- OPH: The declared seam graph is the independence graph: a repair touches one seam, which is exactly one conditional-dependence edge.
-- FEP: A Markov blanket is the graph neighbourhood of a port, and the interface energy is the precision-quadratic form on the linear-Gaussian domain.
+- OPH: Each seam touched by a local repair is one conditional-dependence edge in the proper Gaussian.
+- FEP: For this proper Gaussian, a port's Markov blanket is its graph neighbourhood. Its precision comes from the scalar interface energy and the diagonal regularisation.
 - Synergetics: Every vertex of the icosahedron is five-coordinated.
 - Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Section 7.2
 
@@ -300,6 +300,8 @@ Probe values:
 
 - `laplacian_is_precision` = True
 - `proper_precision_shift` = 0.0833333333
+- `proper_precision_shift_is_diagonal` = True
+- `proper_precision_is_positive_definite` = True
 - `independence_matches_graph` = True
 - `pairwise_precision_values` = (-1)
 - `pairwise_precision_entries` = 60
@@ -313,7 +315,7 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-Patch agreement in OPH is the global-section condition of the carrier's scalar sheaf on the seam graph, and the obstruction to it is the space the FEP's harmonic-extension residual lives in: dim H^0 = 1, dim H^1 = 19 — the graph's cycle rank, nineteen independent edge disagreements no coboundary explains — with dim H^0 - dim H^1 = 12 - 30. Adding the twenty faces as two-cells kills all nineteen: every obstruction is a face boundary, the surface's Betti numbers are (1, 0, 1), its Euler characteristic is 2, and OPH's oriented faces sum to a fundamental cycle.
+For the carrier's scalar sheaf, dim H^0 = 1 counts the constant global sections and dim H^1 = 19 gives the dimension of the space of seam assignments modulo coboundaries. The alternating sum is 12 - 30. The twenty face boundaries span the cycle space, so the triangulated surface has Betti numbers (1, 0, 1) and Euler characteristic 2. OPH's oriented faces sum to a fundamental cycle.
 
 - OPH: A public record is a global section; what prevents agreement is not counted by the seam count alone.
 - FEP: The harmonic-extension problem is well posed up to a constant; the nineteen dimensions are edge data that no node assignment can realise, the cokernel of the coboundary, while every realised disagreement lies in its eleven-dimensional image.

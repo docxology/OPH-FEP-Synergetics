@@ -321,7 +321,7 @@ argue by key.
 | `{{SHEAF_EULER_CHARACTERISTIC}}` | `00_00_graphical_abstract.md`, `04_correspondences.md`, `04_correspondences.md` |
 | `{{SHEAF_FACE_COBOUNDARY_RANK}}` | `04_correspondences.md`, `04_correspondences.md` |
 | `{{SHEAF_H0}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md` |
-| `{{SHEAF_H1}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `06_complementarities.md` |
+| `{{SHEAF_H1}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `06_complementarities.md` |
 | `{{SHEAF_SURFACE_BETTI}}` | `00_abstract.md`, `01_introduction.md`, `03_method.md`, `04_correspondences.md` |
 | `{{SHEAF_SURFACE_EULER_CHARACTERISTIC}}` | `00_00_graphical_abstract.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md` |
 | `{{SHELL_BINARY}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md`, `04_correspondences.md` |

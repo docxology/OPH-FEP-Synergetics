@@ -300,33 +300,30 @@ by itself settle reachability.
 
 ## The Gaussian reading makes the seam graph the independence graph {#sec:gmrf}
 
-Read $L$ as the precision of a Gaussian field on the ports, in the canonical
-gauge where the field is centred by its mean. Then conditional independence is a
-property of the precision's zeros [@dempster1972covariance; @rue2005gaussian]:
+Use $L+I/n$ as the precision of a proper Gaussian field on the $n$ carrier
+ports. The positive diagonal shift grounds the constant mode and leaves the
+off-diagonal entries unchanged. The precision's zeros determine conditional
+independence [@dempster1972covariance; @rue2005gaussian]:
 two ports are independent given the rest exactly when their precision entry
 vanishes, which here happens exactly when they are not joined by a seam, so
 conditional dependence lives exactly on the seams. The probe reports the independence pattern as a
 ${{CARRIER_PORTS}} \times {{CARRIER_PORTS}}$ matrix over all {{GMRF_ORDERED_PAIRS}} ordered pairs of distinct ports, checks that
-it equals the adjacency pattern, and reports the three quantities that make the
-reading usable.
+it equals the adjacency pattern, and checks that the shifted precision is
+positive definite.
 
-Every seam's pairwise precision is {{GMRF_PAIRWISE_PRECISION}}, the Markov
-blanket of every port is its {{GMRF_BLANKET_SIZE}} neighbours, and the variance of
-a port's deviation from the carrier mean, the diagonal of the pseudo-inverse
-$L^{+}$, is {{GMRF_MARGINAL_VARIANCE}}, which is {{GMRF_MARGINAL_VARIANCE_EXACT}}.
-The variance is the reciprocal spectrum sum $\sum_{i\ge 2} 1/\lambda_i$ divided by
-the number of ports, computed without the spectrum as
-$\operatorname{tr}\bigl((L + J/n)^{-1}\bigr) - 1$ over the rationals, so the number
-is an identity rather than a fitted value. The sparsity half of the
-correspondence holds by construction, since the precision is the carrier's own
-Laplacian; its content is the reading, which turns OPH's seams into the FEP's
-blankets without any further assumption.
+Every seam's pairwise precision is {{GMRF_PAIRWISE_PRECISION}}. A port's Markov
+blanket consists of its {{GMRF_BLANKET_SIZE}} neighbours. For the separate
+intrinsic field centred to sum to zero, the covariance is $L^+$ and each port's
+variance is {{GMRF_MARGINAL_VARIANCE}}, exactly {{GMRF_MARGINAL_VARIANCE_EXACT}}.
+Vertex transitivity gives this value by dividing the reciprocal spectrum sum
+by $n$. The probe computes the sum over the rationals as
+$\operatorname{tr}\bigl((L + J/n)^{-1}\bigr) - 1$, where $J$ is the all-ones
+matrix.
 
-Two cautions belong with this correspondence, and the paper states them here
-because the FEP literature uses the same words for weaker claims. The
-independence is *conditional* on every other port; it is not marginal
-independence, and it is not a statement that the blanket cuts the dynamics. The
-second caution is the subject of [@sec:stationary].
+Conditioning the proper Gaussian on all other ports gives the graph result.
+For the centred intrinsic field the same conditioning fixes the sum of the
+remaining pair, including for nonseams. [@sec:stationary] separately tests
+whether a blanket in a stationary density constrains the dynamics.
 
 ## Two cohomology dimensions, one global section {#sec:cohomology}
 
@@ -352,12 +349,11 @@ The two numbers have concrete readings, which is the reason for reporting them
 separately rather than as one identity. The global sections are the assignments
 of equal values to adjacent ports, so $\dim H^{0} = {{SHEAF_H0}}$ says that the only way for
 every seam to agree is for every port to carry the same value: the agreement is a
-constant. The cohomology $\dim H^{1} = {{SHEAF_H1}}$ counts the seam assignments that
-cannot be written as the coboundary of any port assignment, and its value is the
+constant. The cohomology dimension $\dim H^{1} = {{SHEAF_H1}}$ measures seam
+assignments modulo coboundaries of port assignments. Its value is the
 cycle rank of the seam graph, $\lvert E\rvert - \lvert V\rvert + 1 = {{CARRIER_SEAMS}} - {{CARRIER_PORTS}} + 1$.
 Every disagreement that a port assignment actually produces lies in the image of
-$\delta^{0}$; the {{SHEAF_H1}} dimensions are the edge data that no assignment
-realises, and both dimensions are forced by the graph rather than chosen
+$\delta^{0}$. Both dimensions are forced by the graph
 [@hansen2019sheaves; @ghrist2014elementary].
 
 The second half of [@prop:cohomology] reconciles two numbers the paper uses. The
@@ -365,11 +361,10 @@ graph's Euler characteristic is {{SHEAF_EULER_CHARACTERISTIC}}; the surface's,
 which the angle-defect count of [@prop:defect] reaches through Gauss-Bonnet, is
 {{SHEAF_SURFACE_EULER_CHARACTERISTIC}}. The difference is the faces: the
 face-seam incidence has rank {{SHEAF_FACE_COBOUNDARY_RANK}}, equal to the cycle
-rank, so every one of the graph's {{SHEAF_H1}} obstructions is the boundary of a
-face and none survives on the sphere. That the oriented faces sum to a cycle --
-every seam traversed once in each direction -- is a further check on OPH's own
-table: it says the orientation OPH declares is coherent, which the rotation and
-reflection count of [@prop:symmetry] then relies on.
+rank, so the face boundaries span the graph's cycle space and no
+first cohomology survives on the sphere. The oriented faces sum to a cycle --
+every seam is traversed once in each direction. This checks the coherence of the
+declared orientation used by the rotation and reflection count [@prop:symmetry].
 
 ## The symmetry group closes the census {#sec:symmetry}
 

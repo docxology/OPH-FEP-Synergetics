@@ -25,10 +25,8 @@ SOURCES_ENV = "OPH_FEP_SYNERGETICS_SOURCES"
 def _default_sources() -> Path:
     """Locate the committed pin file from either a source or an installed layout.
 
-    The pins live at ``data/sources.json`` in the repository.  When the package
-    is imported from ``src/`` the file is found by walking up from this module;
-    the same walk also finds it when the package is imported from an installed
-    distribution that keeps ``data/`` beside the package.
+    Wheels bundle the repository's ``data/sources.json`` inside the package.
+    The ancestor search also supports imports directly from a source checkout.
     """
     override = os.environ.get(SOURCES_ENV)
     if override:

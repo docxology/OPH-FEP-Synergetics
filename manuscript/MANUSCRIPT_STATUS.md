@@ -78,12 +78,12 @@ non-Gaussian counterexample to equality of posterior mean and energy minimum.
 These are results, not caveats. Each is an executable demonstration that an
 identification that looks natural in prose fails as stated.
 
-- **The native law is not a descent method.** Of `shell.transitions` native
-  transitions, `shell.strict_descent` lower the quadratic energy,
-  `shell.zero_descent` move at mismatch one without lowering it, and
-  `shell.noop` do nothing. A one-unit walk keeps energy `1/2` while changing
-  state. OPH records this as its own obstructed premise, and this repository
-  reproduces it exhaustively.
+- **Native repair permits motion at constant load energy.** The
+  `shell.zero_descent` changes at mismatch one can continue indefinitely.
+  On the total-load-two shell the ungated relation is confluent with no normal
+  forms, while the broken-seam gate terminates with multiple reachable normal
+  forms from a doubled state. On the binary shell the ensemble relative
+  entropy to the uniform law is nonincreasing under the uniform schedule.
 - **Three values at fixed records.** Minimum interface energy, the raw Gaussian
   record potential and normalised surprisal have different meanings. The
   interior determinant contributes to the raw potential and cancels in the

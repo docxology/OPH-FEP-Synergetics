@@ -89,18 +89,16 @@ $$
 E(x) \;=\; \tfrac{1}{2}\sum_{v\in V} x_v^{2}
 $$ {#eq:energy}
 
-then falls by a closed-form amount. Conservation and descent are the two
-properties everything downstream depends on.
+is the load energy. It never increases under the native repair.
 
 ::: {#prop:descent .proposition}
 Under [@eq:repair] the total load is conserved and
 $\Delta E = -\bigl(d^{2} - (\lvert d\rvert \bmod 2)\bigr)/4$.
 :::
 
-At $\lvert d\rvert = 1$ the decrease is exactly zero: the parity correction absorbs the whole
-of the move. That single fact is the origin of every obstruction in
-[@sec:disagreements], and it is worth stating before the disagreements appear,
-because it is a property of the rule rather than of any interpretation of it.
+At $\lvert d\rvert = 1$ the decrease is exactly zero. The coin selects either
+a wait or a swap, and the swap changes the state at constant load energy.
+This is the pathwise obstruction tested in [@sec:pr01].
 
 ::: {#def:shell .definition}
 The **load shell** of total $q$ (OPH's shell, a level set of the total load; not

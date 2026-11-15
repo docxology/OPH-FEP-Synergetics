@@ -6,11 +6,10 @@ Three views of one matrix, each belonging to a different programme:
   seam sets that connect every port without a cycle.  For the
   twelve-port carrier it is exactly ``5184000``, and the same integer is
   ``(1/n) * prod(lambda != 0)`` over the closed-form spectrum.
-* the **intrinsic Gaussian Markov random field** whose precision is the
-  Laplacian: two ports are conditionally dependent given the rest exactly when
-  they share a seam, and independent exactly when they do not, so every port's
-  Markov blanket is its five neighbours.
-* the **exact variance** ``7/36`` of a port's deviation from the carrier mean
+* the **proper Gaussian Markov random field** with a diagonally shifted
+  Laplacian as precision: two ports are conditionally dependent given the rest
+  exactly when they share a seam, so each port's blanket is its five neighbours.
+* the **exact intrinsic variance** ``7/36`` of a port's deviation from the carrier mean
   (the diagonal of ``L^+``), obtained from an exact rational inverse rather
   than from a floating-point spectrum.
 
@@ -177,11 +176,10 @@ def gmrf_precision(carrier: IcosahedralCarrier | None = None) -> np.ndarray:
 def proper_precision(carrier: IcosahedralCarrier | None = None) -> np.ndarray:
     """Return ``L + (1/n) I``, a positive-definite version of the precision.
 
-    Any positive multiple of the identity makes the field proper without changing
-    an off-diagonal entry, so the conditional-independence structure is
-    unaltered; ``1/n`` is a convention, not a minimum, and the resulting
-    variances depend on it, which is why the reported variance is the
-    gauge-fixed ``L^+`` diagonal instead.
+    A positive diagonal shift of the Laplacian grounds the constant mode and
+    preserves the off-diagonal entries. In the resulting proper Gaussian,
+    those entries determine conditional independence. The separate variance
+    of the centered intrinsic field is given by the ``L^+`` diagonal.
     """
     carrier = carrier or icosahedral_carrier()
     laplacian = gmrf_precision(carrier)
@@ -190,9 +188,9 @@ def proper_precision(carrier: IcosahedralCarrier | None = None) -> np.ndarray:
 
 
 def independence_pattern(carrier: IcosahedralCarrier | None = None) -> tuple[tuple[bool, ...], ...]:
-    """Return the off-diagonal nonzeros of the precision as a boolean pattern."""
+    """Return the proper Gaussian's conditional-dependence pattern."""
     carrier = carrier or icosahedral_carrier()
-    precision = gmrf_precision(carrier)
+    precision = proper_precision(carrier)
     return tuple(
         tuple(i != j and abs(float(precision[i][j])) > 1e-12 for j in range(carrier.port_count))
         for i in range(carrier.port_count)

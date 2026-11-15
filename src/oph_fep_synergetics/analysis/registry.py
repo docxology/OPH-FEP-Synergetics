@@ -518,16 +518,23 @@ def _probe_tree_number() -> tuple[bool, dict]:
 
 
 def _probe_gmrf_independence() -> tuple[bool, dict]:
-    """The carrier Laplacian is the precision of a Gaussian Markov random field."""
+    """Check the proper Gaussian's graph and the centered intrinsic variance."""
     carrier = _carrier()
+    laplacian = carrier.laplacian()
+    proper = invariant_module.proper_precision(carrier)
+    shift = 1.0 / carrier.port_count
     variance = invariant_module.marginal_variance(carrier)
     pairwise = invariant_module.pairwise_precision(carrier)
-    inverse_diagonal = float(np.linalg.pinv(carrier.laplacian())[0][0])
+    inverse_diagonal = float(np.linalg.pinv(laplacian)[0][0])
     values = {
         "laplacian_is_precision": bool(
-            np.allclose(invariant_module.gmrf_precision(carrier), carrier.laplacian())
+            np.allclose(invariant_module.gmrf_precision(carrier), laplacian)
         ),
-        "proper_precision_shift": 1.0 / carrier.port_count,
+        "proper_precision_shift": shift,
+        "proper_precision_shift_is_diagonal": bool(
+            np.allclose(proper - laplacian, shift * np.eye(carrier.port_count), rtol=0.0, atol=1e-12)
+        ),
+        "proper_precision_is_positive_definite": bool(np.linalg.eigvalsh(proper)[0] > 0.0),
         "independence_matches_graph": invariant_module.independence_matches_graph(carrier),
         "pairwise_precision_values": sorted(set(pairwise.values())),
         "pairwise_precision_entries": len(pairwise),
@@ -539,6 +546,8 @@ def _probe_gmrf_independence() -> tuple[bool, dict]:
     }
     passed = (
         values["laplacian_is_precision"]
+        and values["proper_precision_shift_is_diagonal"]
+        and values["proper_precision_is_positive_definite"]
         and values["independence_matches_graph"]
         and values["pairwise_precision_values"] == [-1]
         and values["pairwise_precision_entries"] == 2 * carrier.seam_count
@@ -1810,7 +1819,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="shell-counts",
         kind=ISOMORPHISM,
         pair=OPH_FEP,
-        claim="The finite state space both oph-fep readings evaluate on is the total-two load shell: 78 configurations, of which 66 are binary; the enumeration agrees with the closed forms C(13, 2) = 78 (stars and bars over twelve ports) and C(12, 2) = 66, and every transition census and FEP-side comparison in this package ranges over exactly these states.",
+        claim="The total-two load shell contains 78 configurations, of which 66 are binary. Enumeration agrees with C(13, 2) = 78 by stars and bars and C(12, 2) = 66 by choice of occupied ports. These states define the native-rule transition census and its binary conditioning subset.",
         oph="The finite shell the executable observer runs on.",
         fep="No independent FEP count is claimed: the entry fixes the finite domain on which the oph-fep comparisons run, and its second reading is that domain, not a number.",
         synergetics="No counterpart: a load shell, a level set of total load, is not a coordination shell of the lattice.",
@@ -1883,7 +1892,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         kind=ISOMORPHISM,
         pair=OPH_FEP,
         claim="One determinant, two readings: the reduced carrier Laplacian's determinant is 5184000 — the number of spanning trees of the seam graph (the seam sets that connect every port without a cycle) in OPH's reading, by Kirchhoff's matrix-tree theorem, and, as the determinant of the same matrix read as a Gaussian precision grounded at one port, the normalisation of the FEP's linear-Gaussian interface integral — and it equals the product of the eleven nonzero eigenvalues over 12.",
-        oph="The seam structure of the twelve-port carrier, whose Laplacian is the repair energy's quadratic form.",
+        oph="The seam structure of the twelve-port carrier, whose Laplacian generates mean repair.",
         fep="The same matrix as a Gaussian precision, whose determinant normalises the linear-Gaussian interface integral.",
         synergetics="The icosahedron's own graph, counted by its seam structure.",
         status="exact",
@@ -1894,9 +1903,9 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="gmrf-independence",
         kind=ISOMORPHISM,
         pair=OPH_FEP,
-        claim="The seam graph OPH repairs along is exactly the conditional-independence graph of the precision read from the same matrix: two ports are conditionally dependent given the rest exactly when they share a seam and independent exactly when they do not, each port's Markov blanket is its five neighbours, every seam's pairwise precision is minus one, and the variance of a port's deviation from the carrier mean (the diagonal of L^+) is exactly 7/36. The sparsity half holds by construction, since the precision is built from the adjacency; the content is the reading, not the computation.",
-        oph="The declared seam graph is the independence graph: a repair touches one seam, which is exactly one conditional-dependence edge.",
-        fep="A Markov blanket is the graph neighbourhood of a port, and the interface energy is the precision-quadratic form on the linear-Gaussian domain.",
+        claim="The proper Gaussian with precision L + I/n has the carrier's seam graph as its conditional-dependence graph. Each port's blanket has five neighbours and each seam's precision entry is minus one. Separately, the variance of a port's deviation from the mean in the centered intrinsic field is 7/36, the diagonal of L^+.",
+        oph="Each seam touched by a local repair is one conditional-dependence edge in the proper Gaussian.",
+        fep="For this proper Gaussian, a port's Markov blanket is its graph neighbourhood. Its precision comes from the scalar interface energy and the diagonal regularisation.",
         synergetics="Every vertex of the icosahedron is five-coordinated.",
         status="exact",
         source=f"{_CARRIER_SOURCE}; {_PAPER_SOURCE}, Section 7.2",
@@ -1906,7 +1915,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="sheaf-cohomology",
         kind=ISOMORPHISM,
         pair=OPH_FEP,
-        claim="Patch agreement in OPH is the global-section condition of the carrier's scalar sheaf on the seam graph, and the obstruction to it is the space the FEP's harmonic-extension residual lives in: dim H^0 = 1, dim H^1 = 19 — the graph's cycle rank, nineteen independent edge disagreements no coboundary explains — with dim H^0 - dim H^1 = 12 - 30. Adding the twenty faces as two-cells kills all nineteen: every obstruction is a face boundary, the surface's Betti numbers are (1, 0, 1), its Euler characteristic is 2, and OPH's oriented faces sum to a fundamental cycle.",
+        claim="For the carrier's scalar sheaf, dim H^0 = 1 counts the constant global sections and dim H^1 = 19 gives the dimension of the space of seam assignments modulo coboundaries. The alternating sum is 12 - 30. The twenty face boundaries span the cycle space, so the triangulated surface has Betti numbers (1, 0, 1) and Euler characteristic 2. OPH's oriented faces sum to a fundamental cycle.",
         oph="A public record is a global section; what prevents agreement is not counted by the seam count alone.",
         fep="The harmonic-extension problem is well posed up to a constant; the nineteen dimensions are edge data that no node assignment can realise, the cokernel of the coboundary, while every realised disagreement lies in its eleven-dimensional image.",
         synergetics="A closed triangulated surface: the graph's Euler characteristic is 12 - 30 = -18, the surface's is 12 - 30 + 20 = 2, and the faces account for the difference.",

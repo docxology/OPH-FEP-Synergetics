@@ -35,8 +35,8 @@ Counting the same object turns out to add identifications that no dynamical
 reading supplies. The seam graph has {{CARRIER_TREE_NUMBER}} spanning trees, an
 integer that survives the surds in its own spectrum; the scalar sheaf on the seam
 graph has a {{SHEAF_H0}}-dimensional space of global sections (the constants) and
-{{SHEAF_H1}} obstructions, the cycle rank, every one of which a face of the
-carrier fills, so that the surface has Betti numbers {{SHEAF_SURFACE_BETTI}}; the
+{{SHEAF_H1}} obstructions, the cycle rank. The face boundaries span the cycle
+space, giving surface Betti numbers {{SHEAF_SURFACE_BETTI}}. The
 automorphism group has
 order {{SYMMETRY_GROUP_ORDER}}, splitting into {{SYMMETRY_ROTATIONS}} rotations
 and {{SYMMETRY_REFLECTIONS}} reflections, transitive on ports, seams and faces,
@@ -48,12 +48,12 @@ vertices, {{CARRIER_PERFECT_MATCHINGS}} perfect matchings, and
 {{CARRIER_HAMILTONIAN_CYCLES}} Hamiltonian cycles, with a curvature of
 {{CARRIER_TOTAL_DEFECT}} pi that is Gauss-Bonnet exactly and a resistance ladder
 whose exact fractions sum to a Kirchhoff index of
-{{RESISTANCE_KIRCHHOFF_INDEX}}. The FEP's Gaussian
-reading of the same matrix makes the seam graph its conditional-independence
-graph, with a Markov blanket of {{GMRF_BLANKET_SIZE}} neighbours, and its
-divergence makes one lattice step cost {{KL_ONE_STEP}} nats at unit covariance,
-so the information cost of a lattice site is half its squared distance in
-Synergetics' own metric. Synergetics' accounting, every entry of which is derived
+{{RESISTANCE_KIRCHHOFF_INDEX}}. A proper Gaussian with diagonally shifted
+Laplacian precision has the seam graph as its conditional-dependence graph,
+with a Markov blanket of {{GMRF_BLANKET_SIZE}} neighbours per port.
+Separately, equal-covariance Gaussian divergence makes one lattice step cost
+{{KL_ONE_STEP}} nats at unit covariance, half its squared distance in
+Synergetics' metric. Synergetics' accounting, every entry of which is derived
 here exactly from an explicit vertex set, then extends to the carrier's solid,
 which measures {{ICOSAHEDRON_TETRAVOLUME}} tetravolumes, an exact element of
 $\sqrt{2}\,\mathbb{Q}(\sqrt{5})$, against the integral table

@@ -156,14 +156,14 @@
           "kind": "markdown",
           "path": "AGENTS.md",
           "symbol": "Purpose",
-          "role": "'a standalone 168-topic FEP / Active Inference / Bayesian Mechanics / Information Geometry / Thermodynamics catalog with Lean 4 source'",
+          "role": "the scope of the 168-topic free-energy and active-inference catalogue, including its Lean 4 material",
           "lines": "3-6"
         },
         {
           "kind": "markdown",
           "path": "AGENTS.md",
           "symbol": "Source of truth",
-          "role": "'config/topics.yaml ... are byte-identical, generated catalog projections; never author either by hand.' This package therefore reads catalogue_metadata.yaml, not topics.yaml.",
+          "role": "catalogue metadata defines the reviewed roster; the topic-list files are generated views of that roster",
           "lines": "51-76"
         }
       ]

@@ -48,14 +48,14 @@ Every scope is read on the same object, so the paper can compare vocabularies
 without first having to reconcile subjects: twelve ports, thirty seams, twenty
 triangular faces, every port of degree {{CARRIER_DEGREE}}, spectral gap
 {{CARRIER_LAMBDA1}}. OPH supplies the repair law on the seams of that graph. The
-FEP reads the same graph as a Gaussian precision, whose conditional-independence
-graph is exactly the seam graph: two ports are dependent given the rest exactly
-when they share a seam. The panel also carries two counting identities that
+FEP reads a diagonal shift of the Laplacian as a proper Gaussian precision.
+Two ports in this model are dependent given the rest exactly when they share a
+seam. The panel also carries two counting identities that
 neither programme states but both inherit from the graph: the number of spanning
 trees, and the dimensions of the agreement sheaf ([@prop:sheaf];
 [@prop:cohomology]).
 
-![The carrier and its exact invariants. Left: the twelve ports and thirty seams of the icosahedral carrier drawn from its derived adjacency. Right: the invariants read from the same graph at draw time, the spanning-tree number of the seam graph, the dimension of the global sections and of the obstructions of the scalar sheaf with their Euler characteristic, the automorphism group order split into rotations and reflections, the number of shell configurations and the orbits the group has on them, the Markov blanket size and pairwise precision of the Gaussian reading, and the marginal variance of a port.](../output/figures/fig_ga_carrier.png){#fig:ga-carrier width=100%}
+![The carrier and its exact invariants. Left: the ports and seams drawn from their derived adjacency. Right: the spanning-tree count, sheaf dimensions, and symmetry counts, followed by centered intrinsic port variance and the proper Gaussian's blanket size and pairwise precision.](../output/figures/fig_ga_carrier.png){#fig:ga-carrier width=100%}
 
 The reduced Laplacian of the seam graph has determinant
 {{CARRIER_TREE_NUMBER}}, so the carrier has exactly that many spanning trees, and
@@ -64,33 +64,31 @@ scalar sheaf on the seam graph has a {{SHEAF_H0}}-dimensional space of global
 sections and {{SHEAF_H1}} independent obstructions, the coboundary has rank
 {{SHEAF_COBOUNDARY_RANK}}, and the graph's Euler characteristic is
 {{SHEAF_EULER_CHARACTERISTIC}}, the twelve nodes minus the thirty edges; with the
-twenty faces added every obstruction is filled, and the surface's Euler
+twenty faces added their boundaries span the cycle space, and the surface's Euler
 characteristic is {{SHEAF_SURFACE_EULER_CHARACTERISTIC}}.
 The carrier's automorphism group has order {{SYMMETRY_GROUP_ORDER}}, splits into
 {{SYMMETRY_ROTATIONS}} rotations and {{SYMMETRY_REFLECTIONS}} reflections when
 the orientation of OPH's own faces is used as the test, and acts on the
 {{SYMMETRY_CONFIGURATIONS}} total-two configurations in {{SYMMETRY_ORBITS}}
 orbits with {{SYMMETRY_OUTCOME_MULTISETS}} distinct descent-outcome multisets.
-As a Gaussian precision the same matrix puts every seam's pairwise precision at
-{{GMRF_PAIRWISE_PRECISION}}, every port's Markov blanket at
-{{GMRF_BLANKET_SIZE}} neighbours, and the variance of a port's deviation from the
-carrier mean at {{GMRF_MARGINAL_VARIANCE}}, exactly {{GMRF_MARGINAL_VARIANCE_EXACT}}.
+The proper Gaussian has seam precision {{GMRF_PAIRWISE_PRECISION}} and a
+blanket of {{GMRF_BLANKET_SIZE}} neighbours per port. The centred intrinsic
+field gives port variance {{GMRF_MARGINAL_VARIANCE}}, exactly
+{{GMRF_MARGINAL_VARIANCE_EXACT}}.
 
 \clearpage
 
-## Panel 3 — the dynamics: one consensus rule, its census, and the free energy it is not a function of {#sec:ga-descent}
+## Panel 3 — native repair and Gaussian costs on lattice shells {#sec:ga-descent}
 
-The repair law is a total function on shell configurations, and its census is
-exact: of {{SHELL_TOTAL_TWO}} states, {{SHELL_BINARY}} are binary,
-{{SHELL_TRANSITIONS}} transitions occur, {{SHELL_STRICT_DESCENT}} lower the
-quadratic energy strictly, {{SHELL_ZERO_DESCENT}} lower it not at all, and
-{{SHELL_NOOP}} change nothing. That census is a group invariant rather than a
-numerical accident, which is what the equivariance result in the previous panel
-buys. The FEP's currency is a different function of the same configuration: half
-the squared norm, whose level sets cut across the shell index instead of
-refining it.
+Native repair takes a configuration, a seam and a coin. Of the
+{{SHELL_TOTAL_TWO}} states in its census, {{SHELL_BINARY}} are binary. Over
+{{SHELL_TRANSITIONS}} attempts, {{SHELL_STRICT_DESCENT}} lower the load energy,
+{{SHELL_ZERO_DESCENT}} move with the energy unchanged, and {{SHELL_NOOP}}
+leave the state unchanged. The preceding panel's equivariance explains why
+this census is invariant under carrier symmetry. The separate lattice example
+compares equal-covariance Gaussian divergence with the IVM shell index.
 
-![The descent census and the free-energy level sets. Left: strict descents, zero descents and no-ops over every transition of the shell, annotated with the multiplicities of the equilibrium classes. Right: every distinct value of half the squared norm over the first five shells, one column per shell, so that a level carried by more than one shell appears as a repeated height.](../output/figures/fig_ga_descent.png){#fig:ga-descent width=100%}
+![The descent census and the Gaussian divergence levels. Left: strict descents, zero descents and no-ops on the native load shell, with the path multiplicities. Right: half the squared norm over the first five IVM coordination shells, one column per shell, with shared levels marked.](../output/figures/fig_ga_descent.png){#fig:ga-descent width=100%}
 
 One lattice step costs {{KL_ONE_STEP}} nats at unit covariance, because the
 Gaussian divergence between equal-covariance neighbours is half the squared norm

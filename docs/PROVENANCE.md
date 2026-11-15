@@ -69,7 +69,7 @@ with the repository's `stdin` closed.
 ## How a cited identifier is used
 
 Each `cited_identifiers` entry names where in the source a convention came from
-and what role it plays here. Three examples, one per source:
+and what role it plays here. Examples from all three sources:
 
 - `oph` / `model/observer/native.py:45-52` / `native` — the native seam law this
   package reimplements on exact integers.
@@ -77,6 +77,8 @@ and what role it plays here. Three examples, one per source:
   twenty oriented faces from which the carrier adjacency is *derived*, with the
   derivation asserted against its own consequence (the derived graph's triangles
   must be exactly those faces).
+- `fep_formal` / `config/catalogue_metadata.yaml:3-6` / `schema_version, roster`
+  — the metadata schema and topic range of the FEP reference catalogue.
 - `quadmath` / `src/quadmath/core/quadray.py:175` / `IVM_NEIGHBOR_MOVES` — the
   twelve neighbour moves, reconstructed as the sorted distinct permutations of
   `(2, 1, 1, 0)` and asserted to have squared distance eight.

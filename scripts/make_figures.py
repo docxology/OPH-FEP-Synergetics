@@ -1142,8 +1142,8 @@ def ga_carrier_figure() -> Path:
         ("  reflections", f"{len(reflections)}"),
     ]
     fep_rows = [
-        (r"port variance $(L^{+})_{ii}$", f"{marginal.numerator}/{marginal.denominator}"),
-        ("blanket size", blanket_text),
+        (r"intrinsic variance $(L^{+})_{ii}$", f"{marginal.numerator}/{marginal.denominator}"),
+        ("proper Gaussian blanket size", blanket_text),
         ("pairwise precision", f"{precision_text}".replace("-", "\u2212")),
         ("  on pairs", f"{len(precision)}"),
     ]
@@ -1170,9 +1170,9 @@ def ga_carrier_figure() -> Path:
         "spectral projection, with each port labelled by index and no two edges nearly "
         "coincident. Right: a two-part ledger of invariants, OPH-facing above and FEP-facing "
         "below, listing the spanning-tree count, the dimensions of H0 and H1, the automorphism "
-        "group order with its rotation and reflection split, the port variance (a diagonal "
-        "entry of the Laplacian pseudoinverse) as a fraction, the blanket size and the "
-        "pairwise precision.",
+        "group order with its rotation and reflection split, the intrinsic port variance "
+        "(a diagonal entry of the Laplacian pseudoinverse), and the proper Gaussian's "
+        "blanket size and pairwise precision.",
     )
 
 
@@ -1247,7 +1247,7 @@ def ga_descent_figure() -> Path:
     right.set_xticks(k_values)
     right.set_xlim(0.6, 7.6)
     right.set_xlabel("shell $k$")
-    right.set_ylabel(r"free energy $F=\frac{1}{2}\|x\|^2$")
+    right.set_ylabel(r"Gaussian KL $=\frac{1}{2}\|x\|^2$")
     right.set_title(
         f"levels {_enumerated(bound['shell.shared_free_energy_levels'])} "
         "are shared between shells"
@@ -1260,7 +1260,7 @@ def ga_descent_figure() -> Path:
         f"{int(bound['shell.strict_descent'])} strict descents, "
         f"{int(bound['shell.zero_descent'])} zero descents and {int(bound['shell.noop'])} "
         f"no-op moves, annotated with the path-multiplicity values "
-        f"{_enumerated(bound['shell.multiplicities'])}. Right: the distinct free-energy levels "
+        f"{_enumerated(bound['shell.multiplicities'])}. Right: the distinct Gaussian KL values "
         f"of the first {len(bound['ivm.shell_counts'])} IVM shells at integer shell numbers, with "
         f"levels {_enumerated(bound['shell.shared_free_energy_levels'])} marked by dotted lines "
         "where they are shared between shells, and the Gaussian KL curve annotated as four k "

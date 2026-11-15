@@ -50,7 +50,7 @@ def _template_root(explicit: str | None) -> Path:
         python = candidate / ".venv" / "bin" / "python"
         stage = candidate / "scripts" / "pipeline" / "stage_03_render.py"
         if python.is_file() and stage.is_file():
-            return candidate
+            return candidate.resolve()
     raise SystemExit(
         "no template checkout found: pass --template-root, set $TEMPLATE_ROOT, "
         "or place a template/ checkout beside this project"
@@ -75,6 +75,10 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     template = _template_root(args.template_root)
+    template_project = f"working/{PROJECT_NAME}"
+    lane = template / "projects" / template_project
+    if lane.resolve() != PROJECT:
+        parser.error(f"the template project lane {lane} must point to {PROJECT}")
     template_python = template / ".venv" / "bin" / "python"
     project_python = sys.executable
 
@@ -105,7 +109,7 @@ def main(argv: list[str] | None = None) -> int:
             str(template_python),
             "scripts/pipeline/stage_03_render.py",
             "--project",
-            f"working/{PROJECT_NAME}",
+            template_project,
             "--skip-manuscript-hydration",
         ],
         cwd=template,

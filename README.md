@@ -57,6 +57,9 @@ optional extras. `.[dev]` alone runs the suite (the figure tests skip without
 matplotlib); the `figures` extra is what `scripts/make_figures.py` and the
 manuscript pipeline need.
 
+For a regular installation, omit `-e` from the install command. The installed
+`sources` command reads the bundled source register from any working directory.
+
 ## Layers
 
 | layer | module | what it holds |
@@ -109,7 +112,7 @@ The load-bearing results are:
 | Quadray geometry supplies the exact integer side of the correspondence | exact | 12 neighbour moves at squared distance 8, shells `10k^2 + 2`, rational volumes `1, 3, 4, 6, 20, 96` | QuadMath conventions; lattice counts and volumes derived here |
 | Equilibrium propagation supplies the parameter gradient the repair law does not define | exact | the two-settle contrast is `(theta - target) / (1 + beta)` exactly and tends to the exact gradient | [Agreement and Surprise][agreement-and-surprise], Theorem 21; Scellier and Bengio |
 | The carrier counts its own spanning trees | exact | the reduced Laplacian's determinant is `5184000` — by Kirchhoff's matrix-tree theorem the number of spanning trees in OPH's reading and, as the determinant of the same matrix read as a Gaussian precision with one port pinned, the normalisation of the FEP's linear-Gaussian interface integral — equal to the product of the eleven nonzero eigenvalues over `12` | Kirchhoff’s matrix-tree theorem applied here to the carrier |
-| The Gaussian reading makes the seam graph the independence graph | exact | ports are conditionally dependent exactly across seams; pairwise precision `-1` at every seam, each port's Markov blanket is its five neighbours, and the variance of a port's deviation from the carrier mean is exactly `7/36` | Carrier Gaussian precision calculated here |
+| A proper Gaussian with precision `L + I/n` has the seam graph's conditional dependencies | exact | seam precision is `-1` and each port's blanket is its five neighbours. The centered intrinsic field separately gives port variance `7/36` | Carrier Gaussian precisions and intrinsic variance calculated here |
 | The agreement sheaf has one global section and nineteen obstructions, and the faces fill them all | exact | on the graph `dim H^0 = 1`, `dim H^1 = 19` (the cycle rank) with Euler characteristic `12 - 30`; with the twenty faces the face coboundary has rank 19, the surface's Betti numbers are `(1, 0, 1)` and its Euler characteristic is `2`, and OPH's oriented faces sum to a fundamental cycle | Cellular sheaf construction from [Agreement and Surprise][agreement-and-surprise], §7.2; carrier cohomology calculated here |
 | The symmetry group closes the descent census | exact | order 120 = 60 rotations + 60 reflections, transitive on ports/seams/faces; every one of the 1123200 transitions (group element x configuration x oriented seam x coin) commutes with the group, giving 4 configuration orbits and 3 outcome multisets | Carrier automorphisms and native transitions enumerated here |
 | Information cost is half the synergetic metric | exact | at unit covariance in the integer embedding one IVM step costs 4 nats and the sites `k m` cost `4k^2`; the four is the unit of length, the ratios are the content | Equal-covariance Gaussian divergence applied to QuadMath’s embedding |
@@ -163,15 +166,12 @@ of a pinned commit appears in the package.
 
 ### Third-party notice
 
-Reimplemented here, with attribution: OPH's twelve-port carrier and its derived
-port chart, the native seam-repair law, and the sheaf, symmetry, network and
-controls machinery built on them — OPH's Apache-2.0 *software* scope; the
-linear-Gaussian free-energy dictionary of the FEP — cited, CC BY 4.0, DOI
-`10.5281/zenodo.19699233`; and QuadMath's quadray conventions, neighbour moves,
-shell counts and tetravolume arithmetic — Apache-2.0, DOI
-`10.5281/zenodo.16887791`. No source prose, documentation, figure, data file or
-ledger is copied or redistributed, and no source endorses any result here. Each
-source keeps its own terms, recorded with commit pins in
+The carrier and native seam-repair law reimplement OPH's Apache-2.0 software.
+The linear-Gaussian dictionary follows [Agreement and Surprise][agreement-and-surprise].
+The FEP_Formal catalogue provides topic references under CC BY 4.0 (DOI
+`10.5281/zenodo.19699233`). The quadray conventions and lattice arithmetic
+follow Apache-2.0 QuadMath (DOI `10.5281/zenodo.16887791`). Each source keeps
+its own terms, recorded with commit pins in
 [data/sources.json](data/sources.json) and restated in
 [docs/PROVENANCE.md](docs/PROVENANCE.md).
 
@@ -179,9 +179,9 @@ This project is released under the MIT licence; see [LICENSE](LICENSE).
 
 ## The manuscript
 
-The paper, *Observers, Blankets, and Screens*, is a project of the
-`docxology/template` research monorepo, which owns the Pandoc and LaTeX
-pipeline. The source of truth is `manuscript/`: the render reads `config.yaml`,
+This repository contains *Observers, Blankets, and Screens*. It uses the
+Pandoc and LaTeX pipeline from `docxology/template`. The source of truth is
+`manuscript/`: the render reads `config.yaml`,
 `references.bib`, the eleven sections and `output/figures/`, and writes
 `output/pdf/OPH-FEP-Synergetics_combined.pdf`.
 
@@ -198,6 +198,7 @@ TEMPLATE_REPO_ROOT=$PWD .venv/bin/python /path/to/project/scripts/z_generate_man
     --project working/OPH-FEP-Synergetics --skip-manuscript-hydration
 
 # 4. the render contract, read back out of the artefact
+cd /path/to/project
 .venv/bin/python scripts/check_render.py
 ```
 All four steps run in order with one command:
@@ -210,9 +211,10 @@ The template checkout comes from `--template-root`, `$TEMPLATE_ROOT`, or the
 sibling `template/` directory beside this project; `--deliver` refreshes the
 byte-identical copy in `~/Downloads/` and prints both sha256 digests.
 
-`projects/working/OPH-FEP-Synergetics` is a symlink to this checkout, which the
-pipeline resolves to its real path, so the PDF lands in this project's
-`output/pdf/`. The stage's own hydration call is skipped because it expects a
+`projects/working/OPH-FEP-Synergetics` in the template checkout must point to
+the checkout you want to build. `scripts/build.py` checks the link before
+starting. The PDF lands in that checkout's `output/pdf/`.
+The stage's own hydration call is skipped because it expects a
 project interpreter that passes the template's bytecode audit; step 2 does the
 same work with the interpreter that does.
 
@@ -270,8 +272,7 @@ smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over
 shell sites, the resistance ladder's exact fractions against a from-scratch solve,
-and the exact volume ratios. The coverage report enforces a 90% gate
-enforced by `pyproject.toml`.
+and the exact volume ratios. The coverage gate is 90%, set in `pyproject.toml`.
 
 ## Regenerating the documents
 
@@ -295,4 +296,4 @@ re-rendered, never hand-edited.
 
 To cite this repository use the machine-readable
 [CITATION.cff](CITATION.cff), which GitHub renders under "Cite this
-repository"; the release history lives in [CHANGELOG.md](CHANGELOG.md).
+repository". See [CHANGELOG.md](CHANGELOG.md) for changes by edition.

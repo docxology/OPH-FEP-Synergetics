@@ -32,7 +32,10 @@ jobs:
             sudo apt-get update
             sudo apt-get install -y poppler-utils
           fi
-          python -m pip install -e '.[dev,figures]'
+          python -m pip install '.[dev,figures]'
+      - name: Check the installed source register
+        working-directory: ${{ runner.temp }}
+        run: oph-fep-synergetics sources --json
       - name: Test, verify probes and check generated docs
         run: |
           python -m pytest tests/ --cov --cov-report=term-missing

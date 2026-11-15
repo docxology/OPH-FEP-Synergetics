@@ -28,8 +28,22 @@ dev = [
 [project.scripts]
 oph-fep-synergetics = "oph_fep_synergetics.cli:main"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.setuptools]
+packages = [
+    "oph_fep_synergetics",
+    "oph_fep_synergetics.analysis",
+    "oph_fep_synergetics.core",
+    "oph_fep_synergetics.data",
+    "oph_fep_synergetics.geometry",
+    "oph_fep_synergetics.manuscript_variables",
+]
+
+[tool.setuptools.package-dir]
+"" = "src"
+"oph_fep_synergetics.data" = "data"
+
+[tool.setuptools.package-data]
+"oph_fep_synergetics.data" = ["sources.json"]
 
 [tool.pytest.ini_options]
 pythonpath = [".", "src"]

@@ -71,8 +71,24 @@ def test_proper_precision_shifts_only_the_diagonal():
     assert np.all(np.linalg.eigvalsh(precision) > 0.0)
 
 
-def test_independence_matches_the_graph():
-    assert independence_matches_graph() is True
+def test_independence_matches_the_proper_gaussian_graph():
+    carrier = icosahedral_carrier()
+    assert independence_matches_graph(carrier) is True
+    pair = (0, 3)
+    assert pair[1] not in carrier.neighbours(pair[0])
+    others = tuple(port for port in range(carrier.port_count) if port not in pair)
+
+    def conditioned_pair(covariance):
+        cross = covariance[np.ix_(pair, others)]
+        conditioned = covariance[np.ix_(others, others)]
+        return covariance[np.ix_(pair, pair)] - cross @ np.linalg.solve(conditioned, cross.T)
+
+    proper = conditioned_pair(np.linalg.inv(proper_precision(carrier)))
+    centered = conditioned_pair(np.linalg.pinv(carrier.laplacian()))
+    assert proper[0, 1] == pytest.approx(0.0, abs=1e-12)
+    # With the other ports fixed, centering fixes the sum of this pair.
+    assert centered[0, 0] > 0.0
+    assert centered[0, 1] == pytest.approx(-centered[0, 0], abs=1e-12)
 
 
 def test_independence_pattern_is_symmetric_with_sixty_seams():

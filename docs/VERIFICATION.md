@@ -124,20 +124,18 @@ suite rather than in LaTeX, so a defect is reported by `pytest`:
 | `test_the_registry_table_lists_exactly_the_registered_keys` | a manuscript registry table that drifts from `analysis/registry.py` |
 | `test_figure_links_match_the_accessibility_registry` | a figure link without a registry entry, or a missing PNG |
 | `test_figures.py` | a builder that is not orchestrated, or a registry entry without alt text |
-| `test_render_contract.py` | a render whose cover, graphical-abstract panels or contents page are not on the pages the manuscript promises, a panel page that does not carry its own figure caption, a measured left text margin wider than the 0.5 in the manuscript claims, a registry key that does not reach the printed text, or a log with an overfull box, an undefined reference or an unresolved token |
+| `test_render_contract.py` | a PDF with misplaced front matter, missing panel captions or registry keys, or a left margin over the check's 0.6 in limit. Separate tests cover LaTeX log diagnostics. |
 
-The rendered result was checked the way a reader checks it, on the artefact
-itself: 49 pages, the cover on page 1, the four graphical-abstract panels on
-pages 2 to 5, the contents page at 6, and a 0.500 in left text margin measured
-from the PDF's own text bounding boxes. Each panel page carries its own figure
-caption, so no panel floated away from its figure. The body carries twenty-two
-numbered figures plus the cover image, fourteen numbered equations, five
-definitions, thirty-two numbered propositions and nine tables, with `0`
-undefined citations and `0` unresolved `??` cross-references in
-`_combined_manuscript.tex`, `0` overfull boxes in `_combined_manuscript.log`, and
-all 42 registry keys present and unbroken in the extracted text of the PDF. `scripts/check_render.py` performs
-that reading and exits non-zero when any of it drifts; `test_render_contract.py`
-runs it against the rendered PDF when one is present.
+The [tracked PDF](../output/pdf/OPH-FEP-Synergetics_combined.pdf) places the
+cover on page 1, the four graphical-abstract panels and their captions on
+pages 2 to 5, and the contents on page 6. Its measured left text margin is
+0.500 in. The render check reports the current page and caption counts and
+looks for every live registry key in the extracted text.
+
+The suite checks the tracked PDF on a fresh checkout. To also check the
+LaTeX log for overfull boxes, undefined citations or references, and unresolved
+tokens, run `scripts/build.py`. It runs the renderer and then checks the PDF
+against the log from that build.
 
 ## Tolerances and platforms
 
@@ -145,11 +143,10 @@ The numerical contract behind the numbers is exactness by construction. Every co
 the registry calls exact is computed in Python integers and `fractions.Fraction`, and every
 volume claim in `fractions.Fraction` or in the field `Q(sqrt 5)` (`geometry.exact.Surd5`), so a
 pass there is not a tolerance but an equality. The float claims are numpy float64 values reported as
-measured, next to the closed form the source gives for the same quantity; a probe passes when
-the residual against that closed form is below `1e-12` (`1e-15` for the sandwich probes), and
-a failure means the residual is not small, not that a tolerance was widened. The suite runs on
-the author's arm64 macOS with numpy 2.x; a different platform could move a last-bit float
-residual without changing any verdict.
+measured, alongside the closed form when one is available. Each probe sets its
+own tolerance for a numerical comparison. The suite runs on arm64 macOS in
+development and on Linux in GitHub Actions. Last-bit floating-point values can
+differ across numerical libraries without changing a probe verdict.
 
 ## The three source quantities
 

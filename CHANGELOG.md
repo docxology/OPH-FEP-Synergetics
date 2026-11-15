@@ -16,6 +16,12 @@
 - Run the suite, coverage gate, probes and generated-doc freshness checks on
   GitHub Actions. Round measured values in the generated tables for portability;
   the verifier continues to return its raw values.
+- Distinguish the proper Gaussian's seam Markov blankets from the intrinsic
+  zero-sum field's covariance and its constrained conditional laws.
+- Include the pinned source register in regular installations so the
+  `sources` command works in a wheel-only environment.
+- Check the template's project lane before rendering so a manuscript build
+  targets the requested checkout.
 
 Corrections (a claim was wrong):
 
@@ -75,8 +81,8 @@ Additions:
   law and a free-energy functional: on the binary shell each native repair is
   the uniform reference conditioned on the datum the repair leaves visible, and
   that law minimises `F[q] = E_q[ln q - ln pi(s, o)]` over the fibre with
-  minimum the surprisal of the datum. The probe asserts the failure off the
-  shell. The registry holds 43 entries.
+  minimum the surprisal of the datum. The probe asserts where the identity
+  fails off the shell.
 - `certificate-species` averages the native rule itself over the sixty
   seam-and-coin draws on all 78 configurations and finds `x - L x / 60` in exact
   rationals, so the mean repair operator is derived from the law.
