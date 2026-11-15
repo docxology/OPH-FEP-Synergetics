@@ -98,6 +98,7 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `twelve-around-one-families` | disagreement | `obstructed` | `synergetics-oph` | the phrase covers solids with {{CARRIER_TREE_NUMBER}} and ${{CUBOCTAHEDRON_SPANNING_TREES}} = {{CUBOCTAHEDRON_SPANNING_TREES_ROOT}}^2$ spanning trees |
 | `dual-cells` | complementarity | `exact` | `synergetics-oph` | the cell and the cuboctahedron, ${{VORONOI_VERTICES}}/{{VORONOI_FACES}}/{{VORONOI_EDGES}}$ against ${{CUBOCTAHEDRON_VERTICES}}/{{CUBOCTAHEDRON_FACES}}/{{CUBOCTAHEDRON_EDGES}}$, volumes {{PACKING_CELL_TETRAVOLUME}} and {{CUBOCTAHEDRON_TETRAVOLUME}} |
 | `conjugation-norm` | complementarity | `exact` | `three-way` | conjugation fixes the integer counts and moves the volume, whose norm is {{TETRAVOLUME_GALOIS_NORM}} |
+| `repair-is-conditioning` | isomorphism | `exact-on-domain` | `oph-fep` | on the binary shell each native repair is the uniform reference conditioned on its visible datum and minimises a free energy over the fibre; off the shell it fails on {{CONDITIONING_OFF_SHELL_FAILURES}} seams |
 
 : The {{REGISTRY_ENTRIES}} correspondences, in registry order:
 {{REGISTRY_ISOMORPHISMS}} isomorphisms, {{REGISTRY_DISAGREEMENTS}}

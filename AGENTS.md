@@ -106,7 +106,7 @@ the sections and re-render.
 ```
 .venv/bin/python -m pytest tests/ -q                  # the suite
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
-.venv/bin/oph-fep-synergetics verify                  # the registry, all 42 probes
+.venv/bin/oph-fep-synergetics verify                  # the registry, all 43 probes
 .venv/bin/oph-fep-synergetics verify --pair oph-fep   # one pairwise ledger
 .venv/bin/oph-fep-synergetics verify --kind disagreement   # one kind of claim
 .venv/bin/oph-fep-synergetics sources --vault-root /path/to/vault

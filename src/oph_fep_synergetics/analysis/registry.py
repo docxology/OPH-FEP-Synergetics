@@ -1560,6 +1560,72 @@ def _probe_conjugation_norm() -> tuple[bool, dict]:
     return passed, values
 
 
+
+def _probe_repair_is_conditioning() -> tuple[bool, dict]:
+    """On the binary shell each native repair is exact conditioning, and a variational step.
+
+    Route one is the integer rule under its fair coin.  Route two is the uniform
+    binary reference conditioned on the datum the repair leaves visible, built
+    without the rule.  The free energy over a fibre is then evaluated at the
+    repair's law, at biased coins and at the two deterministic rules, and
+    compared with the surprisal of the datum plus the divergence from the
+    posterior, which is a separate computation.
+    """
+    census = control_module.repair_conditioning_census()
+    entropy = control_module.repair_entropy_identity()
+    reference = census["binary_states"]
+    one_unit_fibre = 2
+    surprisal_one_unit = math.log(reference) - math.log(one_unit_fibre)
+    surprisal_settled = math.log(reference)
+    at_repair = control_module.fibre_free_energy((0.5, 0.5), reference)
+    at_settled = control_module.fibre_free_energy((1.0,), reference)
+    biased_ok = True
+    for weight in (0.6, 0.75, 0.9, 1.0):
+        law = (weight, 1.0 - weight)
+        excess = control_module.fibre_free_energy(law, reference) - surprisal_one_unit
+        divergence = sum(q * math.log(q / 0.5) for q in law if q > 0.0)
+        biased_ok = biased_ok and abs(excess - divergence) < 1e-12 and excess > 0.0
+    deterministic = control_module.fibre_free_energy((1.0, 0.0), reference)
+    values = dict(census)
+    values["kernel_equals_conditional"] = census["mismatches"] == 0
+    values["one_unit_cases"] = census["fibre_sizes"].get(2, 0)
+    values["settled_cases"] = census["fibre_sizes"].get(1, 0)
+    values["repair_is_idempotent"] = census["non_idempotent"] == 0
+    values["repair_is_reversible"] = census["asymmetric"] == 0
+    values["surprisal_one_unit"] = f"log {reference // one_unit_fibre}"
+    values["surprisal_settled"] = f"log {reference}"
+    values["free_energy_at_repair_is_surprisal"] = (
+        abs(at_repair - surprisal_one_unit) < 1e-12 and abs(at_settled - surprisal_settled) < 1e-12
+    )
+    values["biased_coin_excess_is_divergence"] = biased_ok
+    values["deterministic_excess"] = f"log {one_unit_fibre}"
+    values["deterministic_rule_pays_log_two"] = (
+        abs(deterministic - surprisal_one_unit - math.log(one_unit_fibre)) < 1e-12
+    )
+    values["entropy_identity_seams"] = entropy["seams"]
+    values["entropy_identity_holds"] = entropy["max_residual"] < 1e-12
+    values["relative_entropy_never_rises"] = entropy["smallest_drop"] >= 0.0
+    passed = (
+        census["binary_states"] == 66
+        and census["cases"] == 3960
+        and values["kernel_equals_conditional"]
+        and census["fibre_sizes"] == {1: 2760, 2: 1200}
+        and values["repair_is_idempotent"]
+        and values["repair_is_reversible"]
+        and values["free_energy_at_repair_is_surprisal"]
+        and values["biased_coin_excess_is_divergence"]
+        and values["deterministic_rule_pays_log_two"]
+        and values["entropy_identity_seams"] == 30
+        and values["entropy_identity_holds"]
+        and values["relative_entropy_never_rises"]
+        and census["off_shell_cases"] == 360
+        and census["off_shell_failures"] == 60
+        and census["off_shell_binary_reference_holds"] == 60
+        and census["off_shell_null_datum"] == 300
+    )
+    return passed, values
+
+
 _CARRIER_SOURCE = "OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian)"
 _LAW_SOURCE = "OPH model/observer/native.py:45-52 and the 'Agreement and Surprise' paper, Section 6.2"
 _PAPER_SOURCE = "Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2)"
@@ -2073,6 +2139,18 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         status="exact",
         source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; {_PAPER_SOURCE}",
         probe=_probe_conjugation_norm,
+    ),
+    Correspondence(
+        key="repair-is-conditioning",
+        kind=ISOMORPHISM,
+        pair=OPH_FEP,
+        claim="On the binary shell each native repair, under its fair coin, is exact Bayesian conditioning: its law is the uniform reference conditioned on the datum the repair leaves visible (the seam's total load and every load off the seam), in all 3960 cases over the 66 configurations and both orientations of the thirty seams. That law is the unique minimiser of the variational free energy F[q] = E_q[ln q(s) - ln pi(s, o)] over the fibre of the datum, and the minimum is the surprisal -ln pi(o): log 33 on a seam that holds one unit, log 66 otherwise. A biased coin pays exactly its divergence from the fair one and a rule that always waits or always swaps pays log 2. Under a repair K the relative entropy to the reference falls by exactly D(p || pK). The identity belongs to the shell: with the uniform law on all 78 configurations as reference it fails on the sixty seams that meet a doubled port, where the repair moves one unit across with certainty.",
+        oph="On the binary shell each native repair resamples the seam within the fibre of its repaired visible datum for the uniform reference, and each seam preserves that reference (PR-07).",
+        fep="A variational step with the uniform reference as prior and the repaired datum as observation: the recognition density is the exact posterior, so the bound is tight and its value is the surprisal of the datum.",
+        synergetics="No counterpart.",
+        status="exact-on-domain",
+        source=f"{_PAPER_SOURCE}, Sections 6.2 and 7.3; OPH model/PREMISES.md:100 (PR-07) and the synthesis paper's section on entropy and thermodynamic laws from repair",
+        probe=_probe_repair_is_conditioning,
     ),
 )
 

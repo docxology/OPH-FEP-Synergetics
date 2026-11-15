@@ -19,6 +19,7 @@ from oph_fep_synergetics.core import (
     affine_path_contrast_exact,
     affine_path_contrast_float,
     blanket_dynamics_check,
+    conditioned_reference,
     contraction_displacement_bounds,
     d_stability_charpoly,
     d_stability_eigenvalues,
@@ -29,6 +30,7 @@ from oph_fep_synergetics.core import (
     descent_classes_coexist,
     directed_gradient_control,
     equilibrium_propagation_identity,
+    fibre_free_energy,
     four_cycle_local_minimum,
     gated_descent_census,
     logistic_embedding_checks,
@@ -46,6 +48,10 @@ from oph_fep_synergetics.core import (
     path_multiplicity_values,
     record_feedback_occupation,
     reduction_control,
+    repair_conditioning_census,
+    repair_datum,
+    repair_entropy_identity,
+    repair_kernel,
     replicator_potential_check,
     routh_first_column,
     solenoidal_check,
@@ -389,3 +395,71 @@ def test_replicator_field_is_a_mobility_gradient():
     assert math.isclose(
         values["potential_rate_direct"], values["potential_rate_via_mobility"], rel_tol=1e-12
     )
+
+
+def test_a_repair_keeps_its_datum_and_resamples_within_the_fibre():
+    """One unit on the seam: the fair coin places it on either side with weight 1/2."""
+    state = (1, 0, 0, 1) + (0,) * 8
+    swapped = (0, 1, 0, 1) + (0,) * 8
+    assert repair_datum(state, (0, 1)) == repair_datum(swapped, (0, 1)) == (1, (0, 1) + (0,) * 8)
+    assert repair_kernel(state, (0, 1)) == {state: Fraction(1, 2), swapped: Fraction(1, 2)}
+    assert repair_kernel(state, (1, 0)) == repair_kernel(swapped, (0, 1))
+    settled = (1, 1) + (0,) * 10
+    assert repair_kernel(settled, (0, 1)) == {settled: Fraction(1)}
+
+
+def test_conditioning_the_reference_never_calls_the_law():
+    """The conditional law is uniform on the reference states in the fibre."""
+    reference = [(1, 0, 1), (0, 1, 1), (1, 1, 0), (2, 0, 0)]
+    assert conditioned_reference(reference, (1, 0, 1), (0, 1)) == {
+        (1, 0, 1): Fraction(1, 2),
+        (0, 1, 1): Fraction(1, 2),
+    }
+    assert conditioned_reference(reference, (1, 1, 0), (0, 1)) == {
+        (1, 1, 0): Fraction(1, 2),
+        (2, 0, 0): Fraction(1, 2),
+    }
+    assert conditioned_reference(reference, (0, 0, 2), (0, 1)) == {}
+
+
+def test_every_binary_repair_is_the_conditioned_reference():
+    census = repair_conditioning_census()
+    assert census["binary_states"] == 66
+    assert census["cases"] == 3960
+    assert census["mismatches"] == 0
+    assert census["fibre_sizes"] == {1: 2760, 2: 1200}
+    assert census["non_idempotent"] == census["asymmetric"] == 0
+
+
+def test_the_conditioning_identity_stops_at_the_binary_shell():
+    census = repair_conditioning_census()
+    assert census["off_shell_cases"] == 360
+    assert census["off_shell_failures"] == 60
+    assert census["off_shell_binary_reference_holds"] == 60
+    assert census["off_shell_null_datum"] == 300
+    doubled = (2,) + (0,) * 11
+    assert repair_kernel(doubled, (0, 1)) == {(1, 1) + (0,) * 10: Fraction(1)}
+
+
+def test_the_fibre_free_energy_is_minimised_by_the_fair_coin():
+    """F at the repair's law is the surprisal; any other law on the fibre pays its divergence."""
+    surprisal = math.log(33)
+    assert fibre_free_energy((0.5, 0.5), 66) == pytest.approx(surprisal, abs=1e-12)
+    assert fibre_free_energy((1.0,), 66) == pytest.approx(math.log(66), abs=1e-12)
+    for weight in (0.0, 0.2, 0.4, 0.6, 0.8, 1.0):
+        law = (weight, 1.0 - weight)
+        divergence = sum(q * math.log(2.0 * q) for q in law if q > 0.0)
+        assert fibre_free_energy(law, 66) - surprisal == pytest.approx(divergence, abs=1e-12)
+        assert fibre_free_energy(law, 66) > surprisal
+    with pytest.raises(ValueError):
+        fibre_free_energy((0.5, 0.6), 66)
+    with pytest.raises(ValueError):
+        fibre_free_energy((1.5, -0.5), 66)
+
+
+def test_relative_entropy_to_the_reference_falls_by_the_divergence_from_the_image():
+    values = repair_entropy_identity()
+    assert values["seams"] == 30
+    assert values["max_residual"] < 1e-12
+    assert 0.0 <= values["smallest_drop"] <= values["largest_drop"]
+

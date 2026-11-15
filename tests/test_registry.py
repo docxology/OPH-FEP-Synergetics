@@ -30,8 +30,8 @@ assert KINDS == REGISTRY_KINDS, "the registry and its tests must agree on the ki
 
 
 def test_registry_entries_are_well_formed():
-    assert len(CORRESPONDENCES) == 42
-    assert len({entry.key for entry in CORRESPONDENCES}) == 42
+    assert len(CORRESPONDENCES) == 43
+    assert len({entry.key for entry in CORRESPONDENCES}) == 43
     for entry in CORRESPONDENCES:
         assert entry.kind in KINDS
         assert entry.pair in PAIRS
@@ -43,7 +43,7 @@ def test_registry_entries_are_well_formed():
 
 def test_registry_covers_all_three_relations():
     counts = {kind: sum(1 for entry in CORRESPONDENCES if entry.kind == kind) for kind in KINDS}
-    assert counts == {ISOMORPHISM: 17, DISAGREEMENT: 15, COMPLEMENTARITY: 10}
+    assert counts == {ISOMORPHISM: 18, DISAGREEMENT: 15, COMPLEMENTARITY: 10}
 
 
 def test_statuses_follow_their_kind():
@@ -66,7 +66,7 @@ def test_registry_covers_every_pairwise_scope():
     index = by_pair()
     assert set(index) == set(PAIRS)
     counts = {pair: len(entries) for pair, entries in index.items()}
-    assert counts == {OPH_FEP: 24, FEP_SYNERGETICS: 2, SYNERGETICS_OPH: 14, THREE_WAY: 2}
+    assert counts == {OPH_FEP: 25, FEP_SYNERGETICS: 2, SYNERGETICS_OPH: 14, THREE_WAY: 2}
     assert sum(counts.values()) == len(CORRESPONDENCES)
     for pair, entries in index.items():
         assert all(entry.pair == pair for entry in entries)
@@ -90,21 +90,21 @@ def test_by_key_indexes_every_entry():
 
 def test_every_probe_passes_and_reports_values():
     results = verify()
-    assert len(results) == 42
+    assert len(results) == 43
     for result in results:
         assert result.passed is True
         assert result.pair in PAIRS
         assert result.values
     report = summary(results)
-    assert report["total"] == 42
-    assert report["passed"] == 42
+    assert report["total"] == 43
+    assert report["passed"] == 43
     assert report["failed"] == 0
     assert report["failures"] == ()
-    assert report["by_kind"][ISOMORPHISM] == {"passed": 17, "failed": 0}
+    assert report["by_kind"][ISOMORPHISM] == {"passed": 18, "failed": 0}
     assert report["by_kind"][DISAGREEMENT] == {"passed": 15, "failed": 0}
     assert report["by_kind"][COMPLEMENTARITY] == {"passed": 10, "failed": 0}
     assert report["pairs"] == PAIRS
-    assert report["by_pair"][OPH_FEP] == {"passed": 24, "failed": 0}
+    assert report["by_pair"][OPH_FEP] == {"passed": 25, "failed": 0}
     assert report["by_pair"][FEP_SYNERGETICS] == {"passed": 2, "failed": 0}
     assert report["by_pair"][SYNERGETICS_OPH] == {"passed": 14, "failed": 0}
     assert report["by_pair"][THREE_WAY] == {"passed": 2, "failed": 0}
@@ -391,3 +391,30 @@ def test_kissing_twelve_values():
     assert values["ivm_moves"] == values["ivm_shell_one"] == 12
     assert values["move_squared_norm"] == 8.0
     assert values["geometric_adjacency_isomorphic"] is True
+
+
+def test_repair_is_conditioning_values():
+    entry = by_key()["repair-is-conditioning"]
+    assert (entry.kind, entry.pair, entry.status) == (ISOMORPHISM, OPH_FEP, "exact-on-domain")
+    values = entry.run().values
+    assert values["binary_states"] == 66
+    assert values["cases"] == 66 * 30 * 2 == 3960
+    assert values["mismatches"] == 0
+    assert values["kernel_equals_conditional"] is True
+    assert values["fibre_sizes"] == {1: 2760, 2: 1200}
+    assert (values["one_unit_cases"], values["settled_cases"]) == (1200, 2760)
+    assert values["repair_is_idempotent"] is True
+    assert values["repair_is_reversible"] is True
+    assert (values["surprisal_one_unit"], values["surprisal_settled"]) == ("log 33", "log 66")
+    assert values["free_energy_at_repair_is_surprisal"] is True
+    assert values["biased_coin_excess_is_divergence"] is True
+    assert values["deterministic_excess"] == "log 2"
+    assert values["deterministic_rule_pays_log_two"] is True
+    assert values["entropy_identity_seams"] == 30
+    assert values["entropy_identity_holds"] is True
+    assert values["relative_entropy_never_rises"] is True
+    assert values["off_shell_cases"] == 12 * 30 == 360
+    assert values["off_shell_failures"] == 12 * 5 == 60
+    assert values["off_shell_binary_reference_holds"] == 60
+    assert values["off_shell_null_datum"] == 300
+

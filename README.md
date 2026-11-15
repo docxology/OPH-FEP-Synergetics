@@ -24,7 +24,7 @@ bound to the function that produces it).
 ## What runs
 
 ```
-oph-fep-synergetics verify                 # all 42 correspondence probes
+oph-fep-synergetics verify                 # all 43 correspondence probes
 oph-fep-synergetics verify --json          # the same, as a machine-readable report
 oph-fep-synergetics verify --key pr01-obstruction
 oph-fep-synergetics verify --pair synergetics-oph   # one pairwise ledger
@@ -69,15 +69,15 @@ manuscript pipeline need.
 | | `geometry/lattice.py` | IVM shells, the cuboctahedral vector equilibrium, Voronoi cell and packing density, Goldberg/geodesic counts |
 | | `geometry/subdivision.py` | icosahedral subdivision and the dual count identities |
 | | `geometry/solids.py` | oriented faces, polyhedron volume, and the icosahedron's tetravolume against its closed form |
-| `analysis` | `analysis/registry.py` | the 42 registered correspondences, each with a pairwise scope and an executable probe |
+| `analysis` | `analysis/registry.py` | the 43 registered correspondences, each with a pairwise scope and an executable probe |
 | | `analysis/provenance.py` | source pins, licence terms and reuse policy |
 | `manuscript_variables` | `manuscript_variables/values.py` | every number the prose may quote, derived from the package where a derivation exists |
 
 ## The registry
 
-42 entries: **17 isomorphisms**, **15 disagreements**, **10 complementarities**,
-scoped to the pairs `oph-fep` (24), `synergetics-oph` (14), `fep-synergetics` (2)
-and `three-way` (2). All 42 probes pass. `verify --kind` narrows a run to one of
+43 entries: **18 isomorphisms**, **15 disagreements**, **10 complementarities**,
+scoped to the pairs `oph-fep` (25), `synergetics-oph` (14), `fep-synergetics` (2)
+and `three-way` (2). All 43 probes pass. `verify --kind` narrows a run to one of
 the three kinds and `--pair` to one of the four scopes. The full table, with the OPH / FEP /
 Synergetics reading of each entry and the values its probe asserts, is generated
 into [docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
@@ -89,6 +89,7 @@ The load-bearing results are:
 | OPH's carrier is the kissing-twelve configuration, and its port chart is derived from OPH's own oriented faces | exact | 12 ports, 30 seams, 20 faces, five-regular; the 20 triangles of the derived graph are exactly OPH's 20 oriented faces |
 | The carrier gap is the icosahedral gap | exact | `lambda_1 = 5 - sqrt(5)` in both readings (the generator of OPH's mean repair operator, and the FEP's precision), and the normalised gap `lambda_1 / (2|E|)` is exactly `(5 - sqrt(5)) / 60` |
 | The native repair law conserves load and lowers `sum(x^2)/2` by `(d^2 - (|d| mod 2)) / 4` | exact | checked on all 4680 shell transitions |
+| On the binary shell each native repair is exact Bayesian conditioning and a variational step | exact on that domain | in all 3960 cases the repair's law is the uniform reference conditioned on the datum the repair leaves visible; it minimises `F[q] = E_q[ln q - ln pi(s, o)]` over the fibre with minimum the surprisal `log 33` or `log 66`; off the shell the identity fails on the 60 seams that meet a doubled port |
 | The mean of the native law is one step of the carrier Laplacian | exact | averaging the integer rule over the 60 seam-and-coin draws gives `x - L x / 60` in exact rationals on all 78 configurations |
 | Patch agreement is the global-section condition of a cellular sheaf, and the sheaf Laplacian is the carrier Laplacian | exact | `carrier_sheaf(carrier).laplacian() == carrier.laplacian()` |
 | On the linear-Gaussian domain, constrained relative-entropy minimisation and predictive-coding perception are the same object | exact on that domain | the harmonic extension, a separate KKT constrained minimiser and the perception flow coincide; the free energy computed as energy minus entropy equals the surprisal at the posterior |
@@ -233,7 +234,7 @@ Three disciplines hold the manuscript together, and each one is a test:
 
 ```
 data/sources.json                    pinned sources, licences, cited identifiers
-docs/CORRESPONDENCES.md              generated: the 42 entries and their probe values
+docs/CORRESPONDENCES.md              generated: the 43 entries and their probe values
 docs/MANUSCRIPT_VALUES.md            generated: every bound value
 docs/CONCORDANCE.md                  generated: where each claim is stated and each figure appears
 docs/PROVENANCE.md                   the pins and the reuse rules
@@ -245,7 +246,7 @@ scripts/make_figures.py              renders the twenty-three figures and their 
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (393 tests)
+tests/                               the suite (400 tests)
 ```
 
 ## Tests
@@ -254,7 +255,7 @@ tests/                               the suite (393 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-393 tests, no mocks, no network. The suite checks exact values rather than
+400 tests, no mocks, no network. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

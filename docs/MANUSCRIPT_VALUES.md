@@ -41,11 +41,11 @@ gives one; `Note` records what is measured rather than quoted.
 | `two_node.relaxation_min_radius_measured` | 0.8400707833642703 |  | two_node_relaxation_orbit, measured in this package | the source states the bound 0.84; this is the measurement the prose reports beside it |
 | `two_node.relaxation_max_radius` | 1.0533912226419835 |  | two_node_relaxation_orbit, measured in this package | the outer radius of the annulus that contains the relaxation orbit |
 | `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | the source states 7.58; this is the measurement the prose reports beside it |
-| `registry.entries` | 42 | `42` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.isomorphisms` | 17 | `17` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.entries` | 43 | `43` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.isomorphisms` | 18 | `18` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.disagreements` | 15 | `15` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.complementarities` | 10 | `10` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.oph_fep` | 24 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
+| `registry.oph_fep` | 25 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
 | `registry.fep_synergetics` | 2 |  | analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics |  |
 | `registry.synergetics_oph` | 14 |  | analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph |  |
 | `registry.three_way` | 2 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
@@ -177,6 +177,13 @@ gives one; `Note` records what is measured rather than quoted.
 | `feedback.port_zero_occupation` | 35/264 |  | probe:reduction-criterion:record_feedback_occupation | OPH's two-event record-controlled observer, model/observer/native.py; 'Agreement and Surprise' Section 6.2 |
 | `feedback.control_occupation` | 1/6 |  | probe:reduction-criterion:selector_disconnected_occupation | selector disconnected; the independent selector with the same seam frequency gives the same value |
 | `feedback.paths` | 264 |  | probe:reduction-criterion:record_feedback_paths |  |
+| `conditioning.cases` | 3960 |  | probe:repair-is-conditioning:cases | 66 binary configurations, both orientations of thirty seams |
+| `conditioning.one_unit_cases` | 1200 |  | probe:repair-is-conditioning:one_unit_cases |  |
+| `conditioning.surprisal_one_unit` | log 33 |  | probe:repair-is-conditioning:surprisal_one_unit | natural logarithm; the datum has two of the 66 reference configurations in its fibre |
+| `conditioning.surprisal_settled` | log 66 |  | probe:repair-is-conditioning:surprisal_settled |  |
+| `conditioning.deterministic_excess` | log 2 |  | probe:repair-is-conditioning:deterministic_excess |  |
+| `conditioning.off_shell_cases` | 360 |  | probe:repair-is-conditioning:off_shell_cases |  |
+| `conditioning.off_shell_failures` | 60 |  | probe:repair-is-conditioning:off_shell_failures |  |
 | `carrier.chart_0` | 1, 5, 7, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 0 |
 | `carrier.chart_1` | 0, 5, 7, 8, 9 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 1 |
 | `carrier.chart_2` | 3, 4, 6, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 2 |

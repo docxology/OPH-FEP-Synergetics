@@ -53,8 +53,9 @@ argue by key.
 | `twelve-around-one-families` | disagreement | obstructed | synergetics-oph | `05_disagreements.md` | yes |
 | `dual-cells` | complementarity | exact | synergetics-oph | `02_framework.md`, `06_complementarities.md` | yes |
 | `conjugation-norm` | complementarity | exact | three-way | `00_00_graphical_abstract.md`, `06_complementarities.md` | yes |
+| `repair-is-conditioning` | isomorphism | exact-on-domain | oph-fep | `04_correspondences.md` | yes |
 
-42 of 42 claims are named by at least one section's prose.
+43 of 43 claims are named by at least one section's prose.
 
 ## Sections
 
@@ -65,7 +66,7 @@ argue by key.
 | `01_introduction.md` | `subgraph-census` |
 | `02_framework.md` | `carrier-port-chart`, `shell-counts`, `native-repair-law`, `variational-equivalence`, `gmrf-independence`, `sheaf-cohomology`, `icosahedral-symmetry`, `kl-lattice-metric`, `kissing-twelve`, `icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic`, `subgraph-census`, `dual-cells` |
 | `03_method.md` | *none* |
-| `04_correspondences.md` | `native-repair-law`, `free-energy-dictionary`, `sheaf-agreement`, `certificate-species`, `tree-number`, `icosahedral-symmetry`, `eigenspace-irreducibility`, `law-equivariance`, `subgraph-census`, `angle-defect` |
+| `04_correspondences.md` | `native-repair-law`, `free-energy-dictionary`, `sheaf-agreement`, `certificate-species`, `tree-number`, `icosahedral-symmetry`, `eigenspace-irreducibility`, `law-equivariance`, `subgraph-census`, `angle-defect`, `repair-is-conditioning` |
 | `05_disagreements.md` | `pr01-obstruction`, `free-energy-name-collision`, `mediator-obstruction`, `stationary-blanket`, `solenoidal-freedom`, `d-stability`, `schedule-path`, `reduction-criterion`, `existence-without-reachability`, `directed-gradient`, `four-cycle-local-minimum`, `cuboctahedron-vs-icosahedron`, `shell-vs-free-energy`, `vertex-shells`, `twelve-around-one-families` |
 | `06_complementarities.md` | `quadray-ivm`, `equilibrium-propagation`, `replicator-potential`, `kissing-twelve`, `effective-resistance`, `dual-cells`, `conjugation-norm` |
 | `07_scope.md` | `pr01-obstruction`, `reduction-criterion` |
@@ -113,6 +114,7 @@ argue by key.
 | `prop:descent` | prop | `02_framework.md` | `05_disagreements.md` |
 | `prop:ivm` | prop | `02_framework.md` | `01_introduction.md` |
 | `prop:ve` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `04_correspondences.md`, `07_scope.md` |
+| `prop:conditioning` | prop | `04_correspondences.md` | `04_correspondences.md`, `04_correspondences.md` |
 | `prop:sheaf` | prop | `04_correspondences.md` | `00_00_graphical_abstract.md` |
 | `prop:tree` | prop | `04_correspondences.md` | `05_disagreements.md` |
 | `prop:cohomology` | prop | `04_correspondences.md` | `00_00_graphical_abstract.md`, `04_correspondences.md`, `04_correspondences.md` |
@@ -141,8 +143,8 @@ argue by key.
 | `prop:dual-cells` | prop | `06_complementarities.md` | `06_complementarities.md` |
 | `prop:conjugation` | prop | `06_complementarities.md` | `06_complementarities.md` |
 | `eq:repair` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md` |
-| `eq:energy` | eq | `02_framework.md` | `02_framework.md`, `05_disagreements.md`, `05_disagreements.md` |
-| `eq:vfe` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md` |
+| `eq:energy` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `eq:vfe` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md` |
 | `eq:gaussian` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md` |
 | `eq:blanket` | eq | `02_framework.md` | `02_framework.md`, `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
 | `eq:quadray` | eq | `02_framework.md` | `02_framework.md` |
@@ -151,6 +153,7 @@ argue by key.
 | `eq:gamma` | eq | `04_correspondences.md` | `05_disagreements.md` |
 | `eq:chain` | eq | `04_correspondences.md` | `04_correspondences.md`, `04_correspondences.md` |
 | `eq:ve` | eq | `04_correspondences.md` | `04_correspondences.md` |
+| `eq:fibre-vfe` | eq | `04_correspondences.md` | `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md` |
 | `eq:tree` | eq | `04_correspondences.md` | `05_disagreements.md` |
 | `eq:kl` | eq | `04_correspondences.md` | `04_correspondences.md` |
 | `eq:routh` | eq | `05_disagreements.md` | `05_disagreements.md` |
@@ -192,6 +195,13 @@ argue by key.
 | `{{CARRIER_TRIANGLES}}` | `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `06_complementarities.md` |
 | `{{CERTIFICATE_INFINITY_NORM}}` | `04_correspondences.md` |
 | `{{CERTIFICATE_SECOND_EIGENVALUE}}` | `04_correspondences.md` |
+| `{{CONDITIONING_CASES}}` | `04_correspondences.md` |
+| `{{CONDITIONING_DETERMINISTIC_EXCESS}}` | `04_correspondences.md` |
+| `{{CONDITIONING_OFF_SHELL_CASES}}` | `04_correspondences.md` |
+| `{{CONDITIONING_OFF_SHELL_FAILURES}}` | `03_method.md`, `04_correspondences.md` |
+| `{{CONDITIONING_ONE_UNIT_CASES}}` | `04_correspondences.md` |
+| `{{CONDITIONING_SURPRISAL_ONE_UNIT}}` | `04_correspondences.md` |
+| `{{CONDITIONING_SURPRISAL_SETTLED}}` | `04_correspondences.md` |
 | `{{CUBOCTAHEDRON_DEGREE}}` | `05_disagreements.md`, `05_disagreements.md` |
 | `{{CUBOCTAHEDRON_EDGES}}` | `03_method.md`, `05_disagreements.md`, `06_complementarities.md` |
 | `{{CUBOCTAHEDRON_FACES}}` | `03_method.md`, `06_complementarities.md` |
@@ -306,14 +316,14 @@ argue by key.
 | `{{SHEAF_H1}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `02_framework.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `06_complementarities.md` |
 | `{{SHEAF_SURFACE_BETTI}}` | `00_abstract.md`, `01_introduction.md`, `03_method.md`, `04_correspondences.md` |
 | `{{SHEAF_SURFACE_EULER_CHARACTERISTIC}}` | `00_00_graphical_abstract.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md` |
-| `{{SHELL_BINARY}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md` |
+| `{{SHELL_BINARY}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md`, `04_correspondences.md` |
 | `{{SHELL_FREE_ENERGY_LEVEL_COUNTS}}` | `00_00_graphical_abstract.md`, `05_disagreements.md` |
 | `{{SHELL_GAUGE_CHECKED_THROUGH}}` | `02_framework.md`, `05_disagreements.md`, `05_disagreements.md` |
 | `{{SHELL_MULTIPLICITIES}}` | `05_disagreements.md` |
 | `{{SHELL_NOOP}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `05_disagreements.md`, `05_disagreements.md` |
 | `{{SHELL_SHARED_FREE_ENERGY_LEVELS}}` | `00_00_graphical_abstract.md`, `03_method.md`, `05_disagreements.md` |
 | `{{SHELL_STRICT_DESCENT}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `05_disagreements.md`, `05_disagreements.md` |
-| `{{SHELL_TOTAL_TWO}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `07_scope.md` |
+| `{{SHELL_TOTAL_TWO}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `02_framework.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `07_scope.md` |
 | `{{SHELL_TRANSITIONS}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md` |
 | `{{SHELL_ZERO_DESCENT}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `01_introduction.md`, `05_disagreements.md`, `05_disagreements.md` |
 | `{{SOLENOIDAL_ENTROPY_PRODUCTION}}` | `05_disagreements.md` |
@@ -341,7 +351,7 @@ argue by key.
 | `{{VORONOI_FACES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
 | `{{VORONOI_VERTICES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
 
-181 of the bound values are quoted by the prose. The cover is
+188 of the bound values are quoted by the prose. The cover is
 placed by `manuscript/config.yaml`; the accessibility registry that gives
 each figure its alternative text is `output/figures/figure_registry.json`,
 written by `scripts/make_figures.py`.

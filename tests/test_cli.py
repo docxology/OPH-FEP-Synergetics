@@ -28,7 +28,7 @@ def test_version_flag(capsys):
 def test_verify_reports_every_probe(capsys):
     assert main(["verify"]) == 0
     out = capsys.readouterr().out
-    assert "42/42 probes passed" in out
+    assert "43/43 probes passed" in out
     assert "[FAIL]" not in out
     assert "carrier-port-chart" in out
     assert "pr01-obstruction" in out
@@ -40,14 +40,14 @@ def test_verify_json_payload_is_complete(capsys):
     assert main(["verify", "--json"]) == 0
     payload = json.loads(capsys.readouterr().out)
     assert payload["schema_version"] == "1.2"
-    assert payload["summary"]["total"] == 42
+    assert payload["summary"]["total"] == 43
     assert payload["summary"]["failed"] == 0
     assert payload["summary"]["failures"] == []
-    assert len(payload["results"]) == 42
+    assert len(payload["results"]) == 43
     assert all(result["passed"] for result in payload["results"])
     assert all(result["values"] for result in payload["results"])
     assert all(result["pair"] in payload["summary"]["by_pair"] for result in payload["results"])
-    assert sum(entry["passed"] for entry in payload["summary"]["by_pair"].values()) == 42
+    assert sum(entry["passed"] for entry in payload["summary"]["by_pair"].values()) == 43
 
 
 def test_verify_selects_named_probes(capsys):
