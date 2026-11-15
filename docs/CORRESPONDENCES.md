@@ -53,18 +53,19 @@ no pair of readings captures.
 | synergetics-oph | disagreement | obstructed | `twelve-around-one-families` | `Twelve around one` names a family and not an object: the icosahedron has degree 5 and 5184000 spanning trees, while the cuboctahedron has degree 4, eight triangles, 32 perfect matchings and 331776 = 576^2 spanning trees, so the counting invariant separates the two solids the phrase covers. |
 | synergetics-oph | complementarity | exact | `dual-cells` | The twelve-around-one cell and the cuboctahedron are duals edge for edge: 14 vertices against 12, 12 faces against 14, 24 edges each, Euler characteristic 2 each, and tetravolumes 6 and 20 in the ratio 10/3, with the cuboctahedron derived a second time as the cube's line graph. |
 | three-way | complementarity | exact | `conjugation-norm` | Conjugation of sqrt 5 (fixing sqrt 2) fixes the counting invariants and moves the geometric ones: the spanning-tree number 5184000 is a rational integer and is fixed, while the icosahedron's tetravolume sqrt 2 (15/2 + (5/2) sqrt 5) moves to sqrt 2 (15/2 - (5/2) sqrt 5), and the two multiply to exactly 50, computed in exact field arithmetic; consistently, (175 + 75 sqrt 5)(175 - 75 sqrt 5) = 2500 = 50^2. |
+| oph-fep | isomorphism | exact-on-domain | `repair-is-conditioning` | On the binary shell each native repair, under its fair coin, is exact Bayesian conditioning: its law is the uniform reference conditioned on the datum the repair leaves visible (the seam's total load and every load off the seam), in all 3960 cases over the 66 configurations and both orientations of the thirty seams. That law is the unique minimiser of the variational free energy F[q] = E_q[ln q(s) - ln pi(s, o)] over the fibre of the datum, and the minimum is the surprisal -ln pi(o): log 33 on a seam that holds one unit, log 66 otherwise. A biased coin pays exactly its divergence from the fair one and a rule that always waits or always swaps pays log 2. Under a repair K the relative entropy to the reference falls by exactly D(p || pK). The identity belongs to the shell: with the uniform law on all 78 configurations as reference it fails on the sixty seams that meet a doubled port, where the repair moves one unit across with certainty. |
 
-Totals: 42/42 probes pass, 0 fail.
+Totals: 43/43 probes pass, 0 fail.
 
 By kind:
 
-- isomorphism: 17 passing, 0 failing
+- isomorphism: 18 passing, 0 failing
 - disagreement: 15 passing, 0 failing
 - complementarity: 10 passing, 0 failing
 
 By pairwise scope:
 
-- oph-fep: 24 passing, 0 failing
+- oph-fep: 25 passing, 0 failing
 - fep-synergetics: 2 passing, 0 failing
 - synergetics-oph: 14 passing, 0 failing
 - three-way: 2 passing, 0 failing
@@ -1071,4 +1072,42 @@ Probe values:
 - `volume_times_conjugate_exact` = 50
 - `conjugate_over_sqrt2` = 15/2 - 5/2 sqrt 5
 - `volume_is_irrational` = True
+
+## `repair-is-conditioning`
+
+**isomorphism** / **exact-on-domain** / **oph-fep** / probe PASS
+
+On the binary shell each native repair, under its fair coin, is exact Bayesian conditioning: its law is the uniform reference conditioned on the datum the repair leaves visible (the seam's total load and every load off the seam), in all 3960 cases over the 66 configurations and both orientations of the thirty seams. That law is the unique minimiser of the variational free energy F[q] = E_q[ln q(s) - ln pi(s, o)] over the fibre of the datum, and the minimum is the surprisal -ln pi(o): log 33 on a seam that holds one unit, log 66 otherwise. A biased coin pays exactly its divergence from the fair one and a rule that always waits or always swaps pays log 2. Under a repair K the relative entropy to the reference falls by exactly D(p || pK). The identity belongs to the shell: with the uniform law on all 78 configurations as reference it fails on the sixty seams that meet a doubled port, where the repair moves one unit across with certainty.
+
+- OPH: On the binary shell each native repair resamples the seam within the fibre of its repaired visible datum for the uniform reference, and each seam preserves that reference (PR-07).
+- FEP: A variational step with the uniform reference as prior and the repaired datum as observation: the recognition density is the exact posterior, so the bound is tight and its value is the surprisal of the datum.
+- Synergetics: No counterpart.
+- Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Sections 6.2 and 7.3; OPH model/PREMISES.md:100 (PR-07) and the synthesis paper's section on entropy and thermodynamic laws from repair
+
+Probe values:
+
+- `binary_states` = 66
+- `cases` = 3960
+- `mismatches` = 0
+- `fibre_sizes` = 1=2760, 2=1200
+- `non_idempotent` = 0
+- `asymmetric` = 0
+- `off_shell_cases` = 360
+- `off_shell_failures` = 60
+- `off_shell_binary_reference_holds` = 60
+- `off_shell_null_datum` = 300
+- `kernel_equals_conditional` = True
+- `one_unit_cases` = 1200
+- `settled_cases` = 2760
+- `repair_is_idempotent` = True
+- `repair_is_reversible` = True
+- `surprisal_one_unit` = log 33
+- `surprisal_settled` = log 66
+- `free_energy_at_repair_is_surprisal` = True
+- `biased_coin_excess_is_divergence` = True
+- `deterministic_excess` = log 2
+- `deterministic_rule_pays_log_two` = True
+- `entropy_identity_seams` = 30
+- `entropy_identity_holds` = True
+- `relative_entropy_never_rises` = True
 

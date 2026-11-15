@@ -136,6 +136,65 @@ non-Gaussian model has a quadratic free energy, and it does not assert that the
 iteration converges for a general graph; the residual is reported so that a
 failure of convergence would be visible as a number rather than as a hang.
 
+## Each native repair is exact conditioning {#sec:conditioning}
+
+The identifications above read one object in two vocabularies. This one relates
+the native law itself to a free-energy functional, and it is exact
+[@mueller2026agreement; @mueller2026observers].
+
+A repair of a seam conserves the load on the seam and touches no other port. The
+seam's total load together with every load off the seam is therefore the same
+before and after the repair. That pair is the datum the repair leaves visible,
+and the configurations that share it are its fibre.
+
+::: {#prop:conditioning .proposition}
+Let $u$ be the uniform law on the {{SHELL_BINARY}} binary configurations and
+$K_e$ the law of one native repair of the seam $e$ under its fair coin. For every
+binary configuration $x$ and every seam $e$, $K_e(x,\cdot)$ is $u$ conditioned on
+the datum $o$ of $x$ at $e$. With $\pi(s,o) = u(s)$ for $s$ in the fibre of $o$,
+$K_e(x,\cdot)$ is the unique minimiser of
+
+$$
+\mathcal{F}[q] \;=\; \mathbb{E}_{q}\bigl[\ln q(s) - \ln \pi(s,o)\bigr]
+$$ {#eq:fibre-vfe}
+
+over the laws $q$ on the fibre, and the minimum is the surprisal $-\ln\pi(o)$ of
+the datum.
+:::
+
+The probe compares the two sides of [@prop:conditioning] in all
+{{CONDITIONING_CASES}} cases, both orientations of every seam from every binary
+configuration, by routes that share no code: the integer rule on one side, the
+reference and the datum on the other. A seam that holds one unit has a fibre of
+two configurations and the repair resamples the unit's side with equal weights,
+which happens in {{CONDITIONING_ONE_UNIT_CASES}} cases; every other seam has a
+fibre of one. The surprisal is `{{CONDITIONING_SURPRISAL_ONE_UNIT}}` in the first
+case and `{{CONDITIONING_SURPRISAL_SETTLED}}` in the second. Evaluated on
+[@eq:fibre-vfe], a coin with any bias pays exactly its divergence from the fair
+coin above that minimum, and a rule that always waits or always swaps pays
+`{{CONDITIONING_DETERMINISTIC_EXCESS}}`.
+
+Because $K_e$ is a conditional expectation of $u$, every law $p$ on the shell
+obeys $D(p\,\|\,u) = D(p\,\|\,pK_e) + D(pK_e\,\|\,u)$. Each repair lowers the
+relative entropy to the reference by exactly $D(p\,\|\,pK_e)$, which the probe
+checks on a mixed state for every seam. OPH states both facts for the binary
+shell [@oph; @mueller2026observers].
+
+The status is `exact-on-domain`, and the probe asserts the boundary. With the
+uniform law on all {{SHELL_TOTAL_TWO}} configurations as reference the identity
+fails at the doubled configurations, on the {{CONDITIONING_OFF_SHELL_FAILURES}}
+seams that meet a doubled port out of {{CONDITIONING_OFF_SHELL_CASES}} off-shell
+cases: the repair moves one unit across with certainty, and conditioning would
+spread the weight over three configurations.
+
+In the FEP's vocabulary each native repair is a perception step whose recognition
+density is the exact posterior, with the uniform reference as prior and the
+repaired datum as observation, so the bound of [@eq:vfe] is tight at every step.
+The functional each step minimises is [@eq:fibre-vfe]. It is a different object
+from the load energy of [@eq:energy], which [@sec:pr01] shows to be constant along
+the binary shell while every step there is exact inference. Registered as
+`repair-is-conditioning`.
+
 ## The free-energy dictionary has a precise scope {#sec:dictionary}
 
 Three quantities are routinely called "surprisal", and the source literature
@@ -449,8 +508,11 @@ defect ([@prop:defect]), and the dual pair.
 
 ## What the agreements do not say
 
-None of the identifications equates OPH's *dynamics* with the FEP's
-*functional*. Several of them are statements about counting, and most of the rest
+One identification relates OPH's *dynamics* to a free-energy *functional*: on
+the binary shell each native repair minimises [@eq:fibre-vfe]
+([@prop:conditioning]). It holds step by step on that shell. It leaves the load
+energy of [@eq:energy] what it was, and it says nothing off the shell. Several of
+the other identifications are statements about counting, and most of the rest
 are statements about the carrier, its spectrum, its repair rule as an integer map,
 the Gaussian free energy on it, and the sheaf whose Laplacian it is. Every one of
 those is a statement about a finite object that both programmes can be given.

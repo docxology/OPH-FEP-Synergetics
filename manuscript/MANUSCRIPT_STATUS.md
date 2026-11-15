@@ -48,7 +48,8 @@ section 3.
 
 ## 2. Agreement as a minimisation
 
-**Entries:** `variational-equivalence`, `free-energy-dictionary`.
+**Entries:** `variational-equivalence`, `free-energy-dictionary`,
+`repair-is-conditioning`.
 
 On the linear-Gaussian corner, three descriptions of "settle to agreement"
 coincide: the harmonic extension of the records (an interior solve), the

@@ -269,6 +269,7 @@ _EIGEN = _probe_values("eigenspace-irreducibility")
 _EX = _probe_values("existence-without-reachability")
 _KL = _probe_values("kl-lattice-metric")
 _SHEAF_COHOMOLOGY = _probe_values("sheaf-cohomology")
+_CONDITIONING = _probe_values("repair-is-conditioning")
 _SHELL_ENERGY = _probe_values("shell-vs-free-energy")
 _KISSING = _probe_values("kissing-twelve")
 _ICOSA = _probe_values("icosahedron-tetravolume")
@@ -1300,6 +1301,50 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         "feedback.paths",
         int(_REDUCTION["record_feedback_paths"]),
         "probe:reduction-criterion:record_feedback_paths",
+        None,
+    ),
+    BoundValue(
+        "conditioning.cases",
+        int(_CONDITIONING["cases"]),
+        "probe:repair-is-conditioning:cases",
+        None,
+        note="66 binary configurations, both orientations of thirty seams",
+    ),
+    BoundValue(
+        "conditioning.one_unit_cases",
+        int(_CONDITIONING["one_unit_cases"]),
+        "probe:repair-is-conditioning:one_unit_cases",
+        None,
+    ),
+    BoundValue(
+        "conditioning.surprisal_one_unit",
+        str(_CONDITIONING["surprisal_one_unit"]),
+        "probe:repair-is-conditioning:surprisal_one_unit",
+        None,
+        note="natural logarithm; the datum has two of the 66 reference configurations in its fibre",
+    ),
+    BoundValue(
+        "conditioning.surprisal_settled",
+        str(_CONDITIONING["surprisal_settled"]),
+        "probe:repair-is-conditioning:surprisal_settled",
+        None,
+    ),
+    BoundValue(
+        "conditioning.deterministic_excess",
+        str(_CONDITIONING["deterministic_excess"]),
+        "probe:repair-is-conditioning:deterministic_excess",
+        None,
+    ),
+    BoundValue(
+        "conditioning.off_shell_cases",
+        int(_CONDITIONING["off_shell_cases"]),
+        "probe:repair-is-conditioning:off_shell_cases",
+        None,
+    ),
+    BoundValue(
+        "conditioning.off_shell_failures",
+        int(_CONDITIONING["off_shell_failures"]),
+        "probe:repair-is-conditioning:off_shell_failures",
         None,
     ),
     *_chart_values(),

@@ -96,12 +96,16 @@ carries it.
 
 ## Domain limits on the isomorphism claims
 
-The two `exact-on-domain` entries say so in their status:
+The three `exact-on-domain` entries say so in their status:
 
 - `variational-equivalence` holds for finite linear-Gaussian cellular sheaves
   over the carrier complex.
 - `free-energy-dictionary` holds in the same corner, where the surprisal is
   quadratic and the Bayesian surprise is the residual quadratic form.
+- `repair-is-conditioning` holds on the binary shell with the uniform reference.
+  Its probe asserts the failure off the shell: with the uniform law on all 78
+  configurations as reference, the repairs of the sixty seams that meet a
+  doubled port are no conditional law of it.
 
 Outside that corner the correspondence is an open question, not a result. The
 remaining `exact` entries are combinatorial or algebraic identities that hold

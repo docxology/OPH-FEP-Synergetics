@@ -7,7 +7,7 @@ rational arithmetic, explicit matrices) and numerically checked where the
 source statement is analytic.  They are the project's negative controls: a
 bridge that cannot survive them is not a bridge.
 
-The controls fall into eight groups:
+The controls fall into nine groups:
 
 1. **Descent versus drift** -- the native repair law strictly lowers the
    quadratic energy on broken seams, but admits zero-descent moves at
@@ -29,6 +29,9 @@ The controls fall into eight groups:
 8. **Free-energy form and its boundaries** -- the Lyapunov form of a stable
    law, the directed-gradient boundary, the two-settle identity, the surprise
    sandwich, and the contraction displacement bounds.
+9. **Repair as conditioning**: on the binary shell each native repair is the
+   uniform reference conditioned on the datum the repair leaves visible, and
+   that law minimises a variational free energy over the fibre of the datum.
 """
 
 from __future__ import annotations
@@ -1027,4 +1030,174 @@ def replicator_potential_check(
             abs(direct_rate - float(gradient @ mobility @ gradient)) < 1e-15
         ),
         "field_norm": float(np.linalg.norm(field)),
+    }
+
+
+# ---------------------------------------------------------------------------
+# 9. Repair as conditioning
+# ---------------------------------------------------------------------------
+
+
+def repair_datum(loads: Sequence[int], seam: tuple[int, int]) -> tuple[int, tuple[int, ...]]:
+    """The datum a repair of ``seam`` leaves visible.
+
+    A repair conserves the total load on its seam and touches no other port, so
+    the pair (seam total, every load off the seam) is the same before and after.
+    The configurations that share a datum form its fibre.
+    """
+    a, b = seam
+    rest = tuple(int(load) for port, load in enumerate(loads) if port not in (a, b))
+    return int(loads[a]) + int(loads[b]), rest
+
+
+def repair_kernel(
+    loads: Sequence[int],
+    seam: tuple[int, int],
+) -> dict[tuple[int, ...], Fraction]:
+    """The law of one native repair of ``seam`` under its fair coin."""
+    kernel: dict[tuple[int, ...], Fraction] = {}
+    for coin in (0, 1):
+        target = native_repair(loads, seam, coin).after
+        kernel[target] = kernel.get(target, Fraction(0)) + Fraction(1, 2)
+    return kernel
+
+
+def conditioned_reference(
+    reference: Sequence[Sequence[int]],
+    loads: Sequence[int],
+    seam: tuple[int, int],
+) -> dict[tuple[int, ...], Fraction]:
+    """The uniform law on ``reference`` conditioned on the datum of ``loads``.
+
+    The result is uniform on the reference configurations in the fibre of the
+    datum, and empty when the reference gives the datum no weight.  Nothing here
+    calls the repair law.
+    """
+    datum = repair_datum(loads, seam)
+    fibre = [tuple(state) for state in reference if repair_datum(state, seam) == datum]
+    return {state: Fraction(1, len(fibre)) for state in fibre}
+
+
+def fibre_free_energy(weights: Sequence[float], reference_size: int) -> float:
+    """``F[q] = E_q[ln q(s) - ln pi(s, o)]`` for a law ``q`` on one fibre.
+
+    The joint weight of a reference configuration and its datum is
+    ``pi(s, o) = 1 / reference_size`` on the fibre, so ``F[q]`` is the negative
+    entropy of ``q`` plus ``ln(reference_size)``.
+    """
+    total = float(sum(weights))
+    if abs(total - 1.0) > 1e-12 or any(weight < 0 for weight in weights):
+        raise ValueError("weights must be a probability vector")
+    return float(
+        sum(weight * (math.log(weight) + math.log(reference_size)) for weight in weights if weight > 0)
+    )
+
+
+def repair_conditioning_census() -> dict[str, object]:
+    """Every native repair on the binary shell against exact conditioning.
+
+    For each of the 66 binary configurations and each oriented seam, the law of
+    the repair (route one, from the integer rule) is compared with the uniform
+    binary reference conditioned on the repair's datum (route two, from the
+    reference and the datum alone).  They agree in all 3960 cases.  A seam that
+    holds one unit has a fibre of two configurations and the repair resamples
+    the unit's side with equal weights; every other seam has a fibre of one.
+
+    The identity belongs to the binary shell.  With the uniform law on all 78
+    configurations as reference it fails at each of the twelve doubled states on
+    the five seams that meet the doubled port: the repair sends ``(2, 0)`` to
+    ``(1, 1)`` with certainty, and conditioning would spread the weight over
+    ``(2, 0)``, ``(1, 1)`` and ``(0, 2)``.  With the binary reference those sixty
+    repairs are again its conditional law, and the other seams of a doubled
+    state carry a datum the binary reference gives no weight.
+    """
+    carrier = icosahedral_carrier()
+    binary = carrier.binary_shell_configurations()
+    shell = carrier.shell_configurations(total=2)
+    binary_set = set(binary)
+    doubled = [state for state in shell if state not in binary_set]
+    oriented = [seam for a, b in carrier.edges for seam in ((a, b), (b, a))]
+    cases = mismatches = non_idempotent = asymmetric = 0
+    fibre_sizes: dict[int, int] = {}
+    for state in binary:
+        for seam in oriented:
+            kernel = repair_kernel(state, seam)
+            conditional = conditioned_reference(binary, state, seam)
+            cases += 1
+            mismatches += kernel != conditional
+            fibre_sizes[len(conditional)] = fibre_sizes.get(len(conditional), 0) + 1
+            for target, weight in kernel.items():
+                again = repair_kernel(target, seam)
+                non_idempotent += again != kernel
+                asymmetric += again.get(state) != weight
+    off_cases = off_failures = off_binary_holds = off_null = 0
+    for state in doubled:
+        for seam in carrier.edges:
+            kernel = repair_kernel(state, seam)
+            off_cases += 1
+            off_failures += kernel != conditioned_reference(shell, state, seam)
+            within_binary = conditioned_reference(binary, state, seam)
+            if not within_binary:
+                off_null += 1
+            elif kernel == within_binary:
+                off_binary_holds += 1
+    return {
+        "binary_states": len(binary),
+        "cases": cases,
+        "mismatches": mismatches,
+        "fibre_sizes": dict(sorted(fibre_sizes.items())),
+        "non_idempotent": non_idempotent,
+        "asymmetric": asymmetric,
+        "off_shell_cases": off_cases,
+        "off_shell_failures": off_failures,
+        "off_shell_binary_reference_holds": off_binary_holds,
+        "off_shell_null_datum": off_null,
+    }
+
+
+def repair_entropy_identity() -> dict[str, object]:
+    """Relative entropy to the reference under one repair, for a mixed state.
+
+    A repair ``K`` is a conditional expectation of the uniform reference ``u``,
+    so for every law ``p`` on the binary shell
+    ``D(p || u) = D(p || pK) + D(pK || u)``: the relative entropy to the
+    reference falls by exactly ``D(p || pK)``.  The check uses the fixed law
+    ``p(x_i)`` proportional to ``i + 1`` over the 66 binary configurations in
+    their enumeration order and every one of the thirty seams.
+    """
+    carrier = icosahedral_carrier()
+    binary = carrier.binary_shell_configurations()
+    index = {state: position for position, state in enumerate(binary)}
+    size = len(binary)
+    norm = size * (size + 1) // 2
+    law = [Fraction(position + 1, norm) for position in range(size)]
+
+    def divergence(first: Sequence[Fraction], second: Sequence[Fraction]) -> float:
+        return float(
+            sum(
+                float(p) * (math.log(float(p)) - math.log(float(q)))
+                for p, q in zip(first, second)
+                if p > 0
+            )
+        )
+
+    uniform = [Fraction(1, size)] * size
+    worst = 0.0
+    smallest_drop = math.inf
+    largest_drop = 0.0
+    for seam in carrier.edges:
+        image = [Fraction(0)] * size
+        for state, weight in zip(binary, law):
+            for target, mass in repair_kernel(state, seam).items():
+                image[index[target]] += weight * mass
+        drop = divergence(law, image)
+        residual = divergence(law, uniform) - divergence(image, uniform) - drop
+        worst = max(worst, abs(residual))
+        smallest_drop = min(smallest_drop, drop)
+        largest_drop = max(largest_drop, drop)
+    return {
+        "seams": len(carrier.edges),
+        "max_residual": worst,
+        "smallest_drop": smallest_drop,
+        "largest_drop": largest_drop,
     }

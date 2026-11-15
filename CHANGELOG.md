@@ -56,6 +56,12 @@ Corrections (a claim was wrong):
 
 Additions:
 
+- `repair-is-conditioning`, a registered OPH-FEP identity between the native
+  law and a free-energy functional: on the binary shell each native repair is
+  the uniform reference conditioned on the datum the repair leaves visible, and
+  that law minimises `F[q] = E_q[ln q - ln pi(s, o)]` over the fibre with
+  minimum the surprisal of the datum. The probe asserts the failure off the
+  shell. The registry holds 43 entries.
 - `certificate-species` averages the native rule itself over the sixty
   seam-and-coin draws on all 78 configurations and finds `x - L x / 60` in exact
   rationals, so the mean repair operator is derived from the law.

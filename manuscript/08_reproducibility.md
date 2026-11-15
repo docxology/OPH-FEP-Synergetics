@@ -37,7 +37,7 @@ reports whether the live checkout still matches it.
 
 | Source | Repository | Licence | Recorded |
 |:-----------------|:-------------------------------------------|:-------------------------|:-----------|
-| Observer Patch Holography | `FloatingPragma/observer-patch-holography` | Apache-2.0 (software) and CC BY-NC-SA 4.0 (papers, data, ledgers) | commit, branch, twelve cited identifiers |
+| Observer Patch Holography | `FloatingPragma/observer-patch-holography` | Apache-2.0 (software) and CC BY-NC-SA 4.0 (papers, data, ledgers) | commit, branch, thirteen cited identifiers |
 | FEP_Formal | `ActiveInferenceInstitute/fep_formal` | CC BY 4.0, DOI `10.5281/zenodo.19699233` | commit, branch, four cited identifiers |
 | QuadMath | `docxology/QuadMath` | Apache-2.0, DOI `10.5281/zenodo.16887791` | commit, branch, five cited identifiers |
 

@@ -26,7 +26,9 @@ with spectral gap `{{CARRIER_LAMBDA1}}`. The native repair law conserves load
 and lowers a quadratic energy by a closed-form amount, and over the
 {{SHELL_TOTAL_TWO}}-configuration load shell it produces {{SHELL_STRICT_DESCENT}}
 strict descents, {{SHELL_ZERO_DESCENT}} zero descents and {{SHELL_NOOP}} no-op
-moves out of {{SHELL_TRANSITIONS}} transitions.
+moves out of {{SHELL_TRANSITIONS}} transitions. On the binary shell each native
+repair is exact Bayesian conditioning on the datum it leaves visible, and its law
+minimises a variational free energy whose minimum is the surprisal of that datum.
 
 Counting the same object turns out to add identifications that no dynamical
 reading supplies. The seam graph has {{CARRIER_TREE_NUMBER}} spanning trees, an
