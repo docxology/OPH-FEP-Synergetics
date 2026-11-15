@@ -40,6 +40,7 @@ from ..core import carrier as carrier_module
 from ..core import controls as control_module
 from ..core import free_energy as free_energy_module
 from ..core import invariants as invariant_module
+from ..core import native_dynamics
 from ..core import network as network_module
 from ..core import repair as repair_module
 from ..core import sheaf as sheaf_module
@@ -206,7 +207,49 @@ def _probe_native_law() -> tuple[bool, dict]:
     return True, {"transitions": transitions, "states": 78, "closed_form": "(d^2 - (|d| mod 2)) / 4"}
 
 
+_RECORD_PRIOR_PRECISION = 0.5
+
+
+def _carrier_gaussian_model() -> free_energy_module.GaussianSheafModel:
+    return free_energy_module.GaussianSheafModel(
+        sheaf_module.carrier_sheaf(_carrier()), (0, 3),
+        record_prior_precision=_RECORD_PRIOR_PRECISION,
+    )
+
+
+def _chain_gaussian_model() -> free_energy_module.GaussianSheafModel:
+    return free_energy_module.demo_chain_model(4, record_prior_precision=_RECORD_PRIOR_PRECISION)
+
+
 def _probe_variational_equivalence() -> tuple[bool, dict]:
+    passed, values = _check_variational_equivalence(_carrier_gaussian_model())
+    chain_passed, chain = _check_variational_equivalence(_chain_gaussian_model())
+    # Integrate the non-Gaussian posterior of a single oriented seam, clamped
+    # at zero, using midpoints. Each nonzero displacement has positive energy,
+    # so the unique minimiser is zero. The half-Gaussian integrals give the
+    # mean by a separate route.
+    dx = 0.001
+    midpoints = np.arange(-12.0 + dx / 2, 12.0, dx)
+    weights = np.exp(-free_energy_module.asymmetric_seam_energy(midpoints))
+    mean = float((midpoints @ weights) / weights.sum())
+    expected_mean = (0.5 - 1.0) / (math.sqrt(math.pi / 2) * (1.0 + 1.0 / math.sqrt(2)))
+    candidates = np.append(midpoints, 0.0)
+    minimiser = float(candidates[np.argmin(free_energy_module.asymmetric_seam_energy(candidates))])
+    diverges = abs(mean - expected_mean) < 1e-6 and abs(mean - minimiser) > 0.1
+    values.update({
+        "chain_control_passes": bool(chain_passed),
+        "chain_control_interior_dimension": chain["interior_dimension"],
+        "nonquadratic_energy_minimiser": minimiser,
+        "nonquadratic_posterior_mean": mean,
+        "nonquadratic_expected_posterior_mean": expected_mean,
+        "nonquadratic_mean_differs_from_minimiser": diverges,
+    })
+    return passed and chain_passed and diverges, values
+
+
+def _check_variational_equivalence(
+    model: free_energy_module.GaussianSheafModel,
+) -> tuple[bool, dict]:
     """The interface-energy minimiser is the constrained relative-entropy minimiser.
 
     On the linear-Gaussian domain the two descriptions are the same object: the
@@ -215,7 +258,6 @@ def _probe_variational_equivalence() -> tuple[bool, dict]:
     minimises the relative entropy to the reference among states matching the
     records.
     """
-    model = free_energy_module.demo_chain_model(4)
     records = (0.3, -0.2)
     interior, residual, iterations = model.perceive(records)
     analytic = model.harmonic_extension(records)
@@ -242,6 +284,8 @@ def _probe_variational_equivalence() -> tuple[bool, dict]:
     warm_starts = (np.full(model.interior_dim, -2.0), np.full(model.interior_dim, 3.0))
     warm_results = [model.perceive(records, initial=start) for start in warm_starts]
     values = {
+        "record_ports": model.record_nodes,
+        "interior_dimension": model.interior_dim,
         "iterations": iterations,
         "residual": residual,
         "start_independent": all(
@@ -254,13 +298,13 @@ def _probe_variational_equivalence() -> tuple[bool, dict]:
         "stationary_gradient_norm": float(
             np.linalg.norm(blocks["L_xx"] @ interior + blocks["L_xo"] @ observed)
         ),
-        "excess_free_energy_at_posterior": model.excess_free_energy(mean, covariance, records),
+        "excess_free_energy_at_posterior_residual": model.excess_free_energy(mean, covariance, records),
     }
     constrained = model.constrained_minimiser(records)
     values["kkt_minimiser_matches_harmonic_extension"] = bool(
         np.allclose(constrained, analytic, atol=1e-12)
     )
-    values["kkt_distance_to_harmonic_extension"] = float(np.linalg.norm(constrained - analytic))
+    values["kkt_harmonic_extension_residual"] = float(np.linalg.norm(constrained - analytic))
     direct = model.energy_minus_entropy(mean, covariance, records)
     values["energy_minus_entropy_at_posterior"] = direct
     values["direct_free_energy_equals_surprisal"] = abs(direct - model.surprisal(records)) < 1e-12
@@ -272,14 +316,29 @@ def _probe_variational_equivalence() -> tuple[bool, dict]:
         and values["posterior_mean_is_harmonic_extension"]
         and values["min_perturbed_energy"] > energy
         and values["stationary_gradient_norm"] < 1e-9
-        and values["excess_free_energy_at_posterior"] < 1e-12
+        and abs(values["excess_free_energy_at_posterior_residual"]) < 1e-12
     )
     return passed, values
 
 
 def _probe_free_energy_dictionary() -> tuple[bool, dict]:
     """Theorem 7: harmonic extension, surprisal, Bayesian surprise and the sandwich."""
-    model = free_energy_module.demo_chain_model(4)
+    passed, values = _check_free_energy_dictionary(_carrier_gaussian_model())
+    chain_passed, _ = _check_free_energy_dictionary(_chain_gaussian_model())
+    values["chain_control_passes"] = bool(chain_passed)
+    # Ground one endpoint of the asymmetric seam and read the other. A
+    # symmetric record prior and the log normaliser cancel in the difference
+    # between records of opposite sign and equal magnitude.
+    records = np.array([-1.0, 1.0])
+    energies = free_energy_module.asymmetric_seam_energy(records)
+    gap = float(energies[1] - energies[0])
+    values["nonquadratic_record_surprisal_difference"] = gap
+    return passed and chain_passed and gap == 0.5, values
+
+
+def _check_free_energy_dictionary(
+    model: free_energy_module.GaussianSheafModel,
+) -> tuple[bool, dict]:
     old_records = (0.0, 0.0)
     new_records = (1.0, -0.5)
     blocks = model.blocks
@@ -302,19 +361,24 @@ def _probe_free_energy_dictionary() -> tuple[bool, dict]:
     sandwich = control_module.surprise_sandwich(blocks["L_xx"], gradient, bayesian)
     closed_form = 0.5 * float(gradient @ np.linalg.solve(blocks["L_xx"], gradient))
     mean, covariance = model.posterior(new_records)
+    old_mean, old_covariance = model.posterior(old_records)
+    posterior_kl = free_energy_module.gaussian_kl(old_mean, old_covariance, mean, covariance)
     delta = np.asarray(new_records, dtype=float) - np.asarray(old_records, dtype=float)
-    schur = model.schur_complement()
-    predicted_drop = 0.5 * float(delta @ schur @ delta) + float(old_vector @ schur @ delta)
-    measured_drop = float(model.surprisal(new_records) - model.surprisal(old_records))
+    precision = model.schur_complement() + _RECORD_PRIOR_PRECISION * np.eye(model.record_dim)
+    predicted_drop = 0.5 * float(delta @ precision @ delta) + float(old_vector @ precision @ delta)
+    measured_drop = float(model.record_surprisal(new_records) - model.record_surprisal(old_records))
     values = {
+        "record_ports": model.record_nodes,
+        "interior_dimension": model.interior_dim,
         "energy_drop_residual": energy_drop_residual,
         "record_injectivity": model.record_injectivity(),
         "bayesian_surprise": bayesian,
         "closed_form_half_g_linv_g": closed_form,
+        "kl_between_posteriors": posterior_kl,
         "sandwich_lower": sandwich["lower_bound"],
         "sandwich_upper": sandwich["upper_bound"],
         "sandwich_inside": sandwich["inside"],
-        "surprisal": model.surprisal(new_records),
+        "surprisal": model.record_surprisal(new_records),
         "variational_free_energy": model.variational_free_energy(mean, covariance, new_records),
         "numerical_surprise": model.numerical_surprise(old_records, new_records),
         "surprisal_drop_residual": abs(measured_drop - predicted_drop),
@@ -324,10 +388,10 @@ def _probe_free_energy_dictionary() -> tuple[bool, dict]:
     shifted_old = (0.7, -0.4)
     shifted_vector = np.asarray(shifted_old, dtype=float)
     shifted_delta = new_vector - shifted_vector
-    shifted_predicted = 0.5 * float(shifted_delta @ schur @ shifted_delta) + float(
-        shifted_vector @ schur @ shifted_delta
+    shifted_predicted = 0.5 * float(shifted_delta @ precision @ shifted_delta) + float(
+        shifted_vector @ precision @ shifted_delta
     )
-    shifted_measured = float(model.surprisal(new_records) - model.surprisal(shifted_old))
+    shifted_measured = model.record_surprisal(new_records) - model.record_surprisal(shifted_old)
     shifted_bayesian = model.bayesian_surprise(shifted_old, new_records)
     shifted_drop = _interior_energy(model.harmonic_extension(shifted_old), new_vector) - _interior_energy(
         new_min, new_vector
@@ -349,6 +413,7 @@ def _probe_free_energy_dictionary() -> tuple[bool, dict]:
         and values["bound_gap_equals_divergence"]
         and values["record_injectivity"]
         and abs(bayesian - closed_form) < 1e-12
+        and abs(bayesian - posterior_kl) < 1e-12
         and values["sandwich_inside"]
         and abs(values["variational_free_energy"] - values["surprisal"]) < 1e-12
         and values["surprisal_drop_residual"] < 1e-12
@@ -659,7 +724,7 @@ def _probe_kl_lattice_metric() -> tuple[bool, dict]:
 
 
 def _probe_pr01() -> tuple[bool, dict]:
-    """OPH's PR-01: the native law admits zero-descent moves and is not confluent."""
+    """The ungated law is confluent but nonterminating; the gate changes both."""
     census = control_module.gated_descent_census()
     walk = control_module.mismatch_one_excursion(steps=6)
     loads = [0] * 12
@@ -697,6 +762,10 @@ def _probe_pr01() -> tuple[bool, dict]:
         for coin in (0, 1)
         if repair_module.native_repair(pair_state, (a, b), coin).energy_decrease != 0.0
     )
+    rewrite = native_dynamics.native_rewrite_census()
+    ensemble = native_dynamics.binary_ensemble_census()
+    values.update(rewrite)
+    values.update(ensemble)
     passed = (
         values["pair_ports_share_a_seam"]
         and kernel[pair_state] == Fraction(13, 15) == 1 - Fraction(one_unit_seams, draws)
@@ -714,48 +783,125 @@ def _probe_pr01() -> tuple[bool, dict]:
         and waits.current != swaps.current
         and waits.energy_decrease == 0.0
         and swaps.energy_decrease == 0.0
+        and rewrite["ungated_normal_forms"] == 0
+        and rewrite["ungated_has_cycle"]
+        and rewrite["binary_is_closed_connected_class"]
+        and rewrite["all_reach_binary_class"]
+        and rewrite["ungated_confluent"]
+        and rewrite["gated_strict_descent"]
+        and rewrite["gated_normal_forms"] == 66
+        and rewrite["gated_normal_forms_are_binary"]
+        and rewrite["gated_normal_forms_per_doubled_state"] == 5
+        and rewrite["gated_normal_form_count_is_uniform"]
+        and ensemble["binary_chain_states"] == 66
+        and ensemble["binary_chain_draws"] == draws
+        and ensemble["binary_chain_stationary_dimension"] == 1
+        and all(value for value in ensemble.values() if isinstance(value, bool))
     )
     return passed, values
 
 
 def _probe_energy_name_collision() -> tuple[bool, dict]:
-    """Two objects called free energy differ by a model-dependent constant, so identifying them numerically is a gauge choice.
-
-    The interface energy minimised over the interior is ``(1/2) o^T S o``, while
-    the variational free energy at the posterior is the surprisal, which carries
-    the Gaussian-integral term ``(1/2) logdet(L_xx) - (d_x / 2) log(2 pi)``.  The
-    two agree only up to that model-dependent constant.
-    """
-    model = free_energy_module.demo_chain_model(4)
+    """The raw Gaussian integral and the probability density have different offsets."""
+    model = _carrier_gaussian_model()
     records = (0.3, -0.2)
     observed = np.asarray(records)
     blocks = model.blocks
-    marginal_energy = 0.5 * float(observed @ model.schur_complement() @ observed)
+    marginal_energy = model.minimum_interface_energy(records)
+    raw_potential = model.unnormalised_record_potential(records)
+    surprisal = model.record_surprisal(records)
     mean, covariance = model.posterior(records)
     variational = model.variational_free_energy(mean, covariance, records)
     expected_gap = 0.5 * float(np.linalg.slogdet(blocks["L_xx"])[1]) - 0.5 * model.interior_dim * math.log(
         2.0 * math.pi
     )
+    direct = model.energy_minus_entropy(mean, covariance, records)
+    prior_energy = 0.5 * _RECORD_PRIOR_PRECISION * float(observed @ observed)
+
+    # Two series chains have the same two-record Schur complement, despite
+    # having different interior dimensions and determinants. Unit conductance
+    # over three seams and conductance 2/3 over two seams both give 1/3.
+    chain = _chain_gaussian_model()
+    restriction = math.sqrt(2.0 / 3.0) * np.ones((1, 1))
+    weighted_sheaf = sheaf_module.CellularSheaf(
+        stalk_dims=(1, 1, 1),
+        edges=tuple(
+            sheaf_module.EdgeRestriction(i, i + 1, restriction, restriction)
+            for i in range(2)
+        ),
+    )
+    weighted_chain = free_energy_module.GaussianSheafModel(
+        weighted_sheaf, (0, 2), record_prior_precision=_RECORD_PRIOR_PRECISION,
+    )
+    chain_schur_agrees = bool(np.allclose(
+        chain.schur_complement(), weighted_chain.schur_complement(), atol=1e-12, rtol=0.0
+    ))
+    chain_raw_difference = (
+        chain.unnormalised_record_potential(records)
+        - weighted_chain.unnormalised_record_potential(records)
+    )
+    chain_surprisal_difference = (
+        chain.record_surprisal(records) - weighted_chain.record_surprisal(records)
+    )
     values = {
+        "record_ports": model.record_nodes,
+        "interior_dimension": model.interior_dim,
         "interface_energy_minimised_over_interior": marginal_energy,
+        "unnormalised_record_potential": raw_potential,
+        "normalised_record_surprisal": surprisal,
         "variational_free_energy_at_posterior": variational,
-        "difference": variational - marginal_energy,
+        "difference": raw_potential - marginal_energy,
         "expected_model_constant": expected_gap,
+        "record_prior_precision": _RECORD_PRIOR_PRECISION,
+        "record_prior_energy": prior_energy,
+        "normalised_record_offset": surprisal - marginal_energy - prior_energy,
         "is_positive_definite_interior": bool(
             np.all(np.linalg.eigvalsh(blocks["L_xx"]) > 0.0)
         ),
+        "energy_minus_entropy_at_posterior": direct,
+        "chain_control_schur_agrees": chain_schur_agrees,
+        "chain_control_raw_potential_difference": chain_raw_difference,
+        "chain_control_normalised_surprisal_residual": chain_surprisal_difference,
     }
-    # Independent route: energy minus entropy at the posterior, computed without
-    # the surprisal function that adds the constant above.
-    direct = model.energy_minus_entropy(mean, covariance, records)
-    values["energy_minus_entropy_at_posterior"] = direct
-    values["direct_difference"] = direct - marginal_energy
     passed = (
-        abs(values["difference"] - expected_gap) < 1e-12
-        and abs(values["direct_difference"] - expected_gap) < 1e-12
+        values["is_positive_definite_interior"]
+        and abs(values["difference"] - expected_gap) < 1e-12
+        and abs(direct - surprisal) < 1e-12
+        and abs(variational - surprisal) < 1e-12
         and abs(expected_gap) > 1e-3
+        and chain_schur_agrees
+        and abs(chain_raw_difference) > 0.1
+        and abs(chain_surprisal_difference) < 1e-12
     )
     return passed, values
+
+
+def _probe_two_record_resistance() -> tuple[bool, dict]:
+    """Compare Schur marginalisation with a rational grounded-network solve."""
+    carrier = _carrier()
+    sheaf = sheaf_module.carrier_sheaf(carrier)
+    adjacency = _carrier_adjacency(carrier)
+    distances = network_module.graph_distances(adjacency)
+    difference_form = np.array([[1.0, -1.0], [-1.0, 1.0]])
+    resistance_classes = network_module.resistance_ladder(adjacency)
+    ladder = {distance: resistance for distance, resistance, _ in resistance_classes}
+    pair_counts = tuple(count for _, _, count in resistance_classes)
+    max_error = 0.0
+    matches_ladder = ladder == {1: Fraction(11, 30), 2: Fraction(7, 15), 3: Fraction(1, 2)}
+    for source in range(carrier.port_count):
+        for target in range(source + 1, carrier.port_count):
+            distance = distances[source][target]
+            model = free_energy_module.GaussianSheafModel(sheaf, (source, target))
+            expected = difference_form / float(ladder[distance])
+            error = np.max(np.abs(model.schur_complement() - expected))
+            max_error = max(max_error, float(error))
+    values = {
+        "resistances_by_distance": tuple(str(value) for value in ladder.values()),
+        "pairs_by_distance": pair_counts,
+        "max_schur_residual": max_error,
+        "exact_resistance_ladder_matches": matches_ladder,
+    }
+    return matches_ladder and pair_counts == (30, 30, 6) and max_error < 1e-12, values
 
 
 def _probe_mediator() -> tuple[bool, dict]:
@@ -1633,7 +1779,7 @@ _QUADRAY_SOURCE = (
     "QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and "
     "the polyhedra table in docs/manuscript/03_quadray_methods.md"
 )
-_SHEAF_SOURCE = f"{_PAPER_SOURCE}, Proposition 4 and Section 7.2 (the cellular sheaf over the carrier complex)"
+_SHEAF_SOURCE = f"{_PAPER_SOURCE}, Section 7.2 and Theorem 7 (the cellular sheaf over the carrier complex)"
 
 CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
@@ -1688,7 +1834,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="variational-equivalence",
         kind=ISOMORPHISM,
         pair=OPH_FEP,
-        claim="On the linear-Gaussian domain three computations of the settled interior coincide: the harmonic extension (an interior linear solve), the constrained minimiser of (1/2) z^T L z with the records fixed (a separate KKT saddle-point solve, which is OPH's A3 constrained relative-entropy minimisation read in the mean, because the relative entropy of a mean shift at fixed precision L is (1/2) z^T L z), and the limit of the predictive-coding gradient flow from any start; the free energy computed directly as energy minus entropy equals the surprisal there.",
+        claim="On the carrier with a proper Gaussian record prior, harmonic extension, a separate KKT constrained solve and predictive-coding flow agree with the posterior interior mean. The variational free energy computed from the normalised joint density equals record surprisal at the posterior. With a nonquadratic asymmetric seam the energy minimiser and posterior mean separate.",
         oph="A3: the least informative state relative to a reference under observer-visible constraints.",
         fep="Perception as the descent of variational free energy in the means.",
         synergetics="A minimal-energy configuration of the coordination framework.",
@@ -1700,7 +1846,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="free-energy-dictionary",
         kind=ISOMORPHISM,
         pair=OPH_FEP,
-        claim="Surprisal is the disagreement no repair removes, Bayesian surprise is the disagreement repair will remove, the update residual pins the Bayesian surprise between the extreme interior eigenvalues, and the interior free energy's drop from the old minimiser to the new one equals the Bayesian surprise on this domain.",
+        claim="On the carrier with a Gaussian record prior, the update residual bounds Bayesian surprise through the extreme interior eigenvalues. The energy drop at fixed new records and the divergence between successive Gaussian posteriors both equal the residual quadratic. The normalised variation of record surprisal uses the Schur complement plus the record prior precision.",
         oph="Repair reduces disagreement; records survive comparison.",
         fep="The variational bound, its gap, and Bayesian surprise.",
         synergetics="No counterpart; the geometry supplies no probabilistic reading.",
@@ -1717,7 +1863,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         fep="Message passing across a blanket; the sheaf Laplacian is the precision-weighted interface energy.",
         synergetics="Heterogeneous local states agreeing through interface maps.",
         status="exact",
-        source=f"{_PAPER_SOURCE}, Section 7.2 and Proposition 4",
+        source=_SHEAF_SOURCE,
         probe=_probe_sheaf_agreement,
     ),
     Correspondence(
@@ -1820,9 +1966,9 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="pr01-obstruction",
         kind=DISAGREEMENT,
         pair=OPH_FEP,
-        claim="The native repair law is not confluent and accepted repairs need not lower a measure: 600 of the 4680 shell transitions move at mismatch one with zero energy decrease, and a one-unit walk keeps energy 1/2 while changing state.",
-        oph="PR-01 'confluent terminating repair contract' is recorded as obstructed; the consensus theorems hold for the integer and transactional contracts, not the native law.",
-        fep="Active inference is a descent on a bound; the identification with this law therefore fails on the mismatch-one domain.",
+        claim="On the total-load-two shell the ungated native rule is confluent but does not terminate: mismatch-one moves preserve load energy. Gating at broken seams terminates but does not give unique normal forms.",
+        oph="The native law has no normal form on this shell. The terminating, nonconfluent Lean demonstration is a separate rule. OPH's consensus theorems apply to the integer and transactional contracts.",
+        fep="A load-energy plateau along a path is compatible with exact conditioning on the binary shell and with decreasing ensemble relative entropy. Under the uniform attempt schedule, the binary chain has a unique uniform stationary law and the port relaxation gap.",
         synergetics="No counterpart.",
         status="obstructed",
         source="OPH model/PREMISES.md:95 (PR-01) and Lean/ObserverPatchHolography/Primitives.lean:1198 (demoCarrier_not_confluent)",
@@ -1832,9 +1978,9 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="free-energy-name-collision",
         kind=DISAGREEMENT,
         pair=OPH_FEP,
-        claim="The interface energy minimised over the interior and the variational free energy at the posterior are different objects that differ by a model-dependent constant, the Gaussian-integral prefactor (1/2) logdet L_xx - (d_x / 2) log 2 pi of the unnormalised density, computed both through the surprisal and directly as energy minus entropy; identifying the two numerically is a gauge choice rather than a theorem.",
-        oph="Native thermodynamic free energy: Gibbs states and Landauer bounds on records.",
-        fep="Variational free energy: a KL bound on surprisal, not a thermodynamic potential.",
+        claim="Minimum interface energy, the negative log of the unnormalised interior integral, and normalised record surprisal are distinct. The second includes the interior determinant; in the third it cancels against the joint normaliser. Two chains with equal Schur complements give different unnormalised potentials and the same surprisal under the same record prior.",
+        oph="Minimum of the quadratic seam disagreement at fixed records.",
+        fep="Variational free energy bounds normalised record surprisal, with equality at the posterior.",
         synergetics="No counterpart.",
         status="obstructed",
         source=f"{_PAPER_SOURCE}, Section 7.1 and Theorem 7 item 3; review caution 1 on disambiguating 'free energy'",
@@ -1845,7 +1991,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         kind=DISAGREEMENT,
         pair=OPH_FEP,
         claim="Eliminating an interior mediator leaves a genuinely three-way boundary term: the reduced precision is (1/3) v v^T + epsilon I with v = (1, 1, -1), and a sum of pairwise semidefinite terms reproduces it if and only if epsilon >= 1/3: necessity is the trace inequality (each pairwise block with off-diagonal 1/3 has diagonal sum at least 2/3, against a total trace of 1 + 3 epsilon), and sufficiency is an explicit decomposition with rank-one blocks at the threshold.",
-        oph="A local patch can be unable to repair although a consistent world exists.",
+        oph="Eliminating a mediator can induce a boundary term that cannot be represented by pairwise seam energies.",
         fep="A blanket reduction that destroys the pairwise predictive-coding description.",
         synergetics="No counterpart.",
         status="obstructed",
@@ -1861,7 +2007,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         fep="A Markov blanket of the stationary density permits reciprocal internal-external influence.",
         synergetics="No counterpart.",
         status="obstructed",
-        source=f"{_PAPER_SOURCE}, Proposition 11",
+        source=f"{_PAPER_SOURCE}, Proposition 11; Da Costa et al., Bayesian Mechanics for Stationary Processes",
         probe=_probe_stationary_blanket,
     ),
     Correspondence(
@@ -1869,11 +2015,11 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         kind=DISAGREEMENT,
         pair=OPH_FEP,
         claim="One stationary density is shared by a family of laws: the diffusion dx = -(Gamma - Q) H x dt + sqrt(2 Gamma) dW has stationary law N(0, H^{-1}) for every antisymmetric Q, and its entropy production rate is tr(Q^T Gamma^{-1} Q H); in two dimensions with Gamma = H = I and Q = q [[0, 1], [-1, 0]] the spectrum is -1 +/- i q and the entropy production is 2 q^2.",
-        oph="Configuration equilibrium does not determine inertia; the native counterpart shares the full reference state with distinct finite kinetics.",
+        oph="The Gaussian example motivates checking whether the same reference law can support different native transition kernels.",
         fep="A stationary law does not fix the law that preserves it; the solenoidal part is a free parameter.",
         synergetics="No counterpart.",
         status="obstructed",
-        source=f"{_PAPER_SOURCE}, Proposition 9",
+        source=f"{_PAPER_SOURCE}, Proposition 9; Hwang, Hwang-Ma and Sheu (1993); Lelièvre, Nier and Pavliotis (2013)",
         probe=_probe_solenoidal,
     ),
     Correspondence(
@@ -1905,11 +2051,11 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         kind=DISAGREEMENT,
         pair=OPH_FEP,
         claim="Two histories can share the present observation and need different futures, so a summary that drops the record must err by at least half the response distance on one of them: here the worst-case error floor is exactly one.",
-        oph="Records are part of the state; the observer's next action follows its retained record.",
+        oph="In the two-event native observer, the first signed seam current selects the second seam.",
         fep="An observation-only state can fail the response criterion while every solve converges.",
         synergetics="No counterpart.",
         status="obstructed",
-        source=f"{_PAPER_SOURCE}, Proposition 4 and Section 4.2",
+        source=f"{_PAPER_SOURCE}, Proposition 4 and Section 4.2; OPH model/observer/native.py (record-controlled selector)",
         probe=_probe_reduction,
     ),
     Correspondence(
@@ -2053,7 +2199,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         fep="Real-valued information costs in nats.",
         synergetics="Tetravolumes of the prime vector: integral on the IVM, algebraic irrational on the icosahedron.",
         status="exact",
-        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; {_PAPER_SOURCE}",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; {_PAPER_SOURCE}, Section 6.2 (mean gap only); arithmetic comparison derived here",
         probe=_probe_tetravolume_arithmetic,
     ),
     Correspondence(
@@ -2065,8 +2211,20 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         fep="In the Gaussian reading the same number is the variance of a port's potential difference.",
         synergetics="A lattice metric on the same twelve sites, counted in whole steps rather than in resistances.",
         status="exact",
-        source=f"{_CARRIER_SOURCE}; {_PAPER_SOURCE}",
+        source=f"{_CARRIER_SOURCE}; resistance ladder derived here from the carrier Laplacian",
         probe=_probe_effective_resistance,
+    ),
+    Correspondence(
+        key="two-record-resistance",
+        kind=ISOMORPHISM,
+        pair=OPH_FEP,
+        claim="On every pair of carrier ports the two-record Schur complement is the difference form divided by the effective resistance. The minimum interface energy therefore equals the squared record contrast divided by twice the resistance. A proper record prior adds its own quadratic and the resulting record log normaliser.",
+        oph="The carrier seam network seen from a fixed pair of records.",
+        fep="The Schur term that sets the contrast dependence of the record marginal.",
+        synergetics="The graph distance classes select the three resistance values.",
+        status="exact",
+        source=f"{_CARRIER_SOURCE}; Schur complement of the interface precision and the grounded Laplacian definition of resistance",
+        probe=_probe_two_record_resistance,
     ),
     Correspondence(
         key="vertex-shells",
@@ -2137,7 +2295,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         fep="A determinant over the same matrix, likewise rational.",
         synergetics="Tetravolumes in sqrt 2 Q(sqrt 5), whose squares lie in Q(sqrt 5); the volume moves under the conjugation, which fixes sqrt 2.",
         status="exact",
-        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; {_PAPER_SOURCE}",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; conjugation and norm derived here",
         probe=_probe_conjugation_norm,
     ),
     Correspondence(

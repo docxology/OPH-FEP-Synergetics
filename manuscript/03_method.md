@@ -61,7 +61,7 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `shell-counts` | isomorphism | `exact` | `oph-fep` | the total-two load shell and its binary sub-shell, enumerated and checked against closed forms — the finite domain both oph-fep readings evaluate on |
 | `native-repair-law` | isomorphism | `exact` | `oph-fep` | OPH's integer rule reimplemented, with its closed-form energy drop |
 | `variational-equivalence` | isomorphism | `exact-on-domain` | `oph-fep` | harmonic extension, constrained (KKT) minimiser and perception flow coincide; free energy at the posterior equals the surprisal |
-| `free-energy-dictionary` | isomorphism | `exact-on-domain` | `oph-fep` | numerical, Bayesian and surprisal free energy coincide to curvature |
+| `free-energy-dictionary` | isomorphism | `exact-on-domain` | `oph-fep` | Gaussian carrier prior gives normalised surprisal, and the residual quadratic equals the KL between posteriors |
 | `sheaf-agreement` | isomorphism | `exact` | `oph-fep` | the cellular sheaf Laplacian is the carrier Laplacian |
 | `certificate-species` | isomorphism | `exact` | `oph-fep` | the certificate species of the shell and its spectral gap |
 | `tree-number` | isomorphism | `exact` | `oph-fep` | one determinant, two readings: {{CARRIER_TREE_NUMBER}} counts spanning trees and normalises the FEP's Gaussian interface integral |
@@ -71,7 +71,7 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `eigenspace-irreducibility` | isomorphism | `exact` | `synergetics-oph` | the eigenspaces are the group's non-trivial real irreducibles: dimensions {{SYMMETRY_EIGENSPACE_DIMENSIONS}} forced by the group and established by the commutant test |
 | `law-equivariance` | isomorphism | `exact` | `synergetics-oph` | every transition commutes with every automorphism; {{SYMMETRY_ORBITS}} orbits, {{SYMMETRY_OUTCOME_MULTISETS}} outcome multisets |
 | `kl-lattice-metric` | isomorphism | `exact` | `fep-synergetics` | one IVM step costs four nats and squared norm $8k^2$ costs $4k^2$ |
-| `pr01-obstruction` | disagreement | `obstructed` | `oph-fep` | the native law is not confluent |
+| `pr01-obstruction` | disagreement | `obstructed` | `oph-fep` | ungated repair does not terminate; the gate can give different normal forms |
 | `free-energy-name-collision` | disagreement | `obstructed` | `oph-fep` | "free energy" names inequivalent functionals |
 | `mediator-obstruction` | disagreement | `obstructed` | `oph-fep` | pairwise boundary reduction needs a threshold |
 | `stationary-blanket` | disagreement | `obstructed` | `oph-fep` | a stationary blanket is not an attractor |
@@ -92,6 +92,7 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `packing-density` | complementarity | `exact` | `synergetics-oph` | Voronoi cell ${{VORONOI_VERTICES}}/{{VORONOI_FACES}}/{{VORONOI_EDGES}}$, tetravolume six, density $\pi/(3\sqrt{2})$ |
 | `tetravolume-arithmetic` | complementarity | `exact` | `three-way` | integer nats, a surd gap, and an integral table beside a non-integral carrier |
 | `effective-resistance` | complementarity | `exact` | `oph-fep` | effective resistance {{RESISTANCE_ADJACENT}}, {{RESISTANCE_DISTANCE_TWO}}, {{RESISTANCE_ANTIPODAL}} by distance class, Kirchhoff index {{RESISTANCE_KIRCHHOFF_INDEX}} twice over |
+| `two-record-resistance` | isomorphism | `exact` | `oph-fep` | the inverse effective resistance sets the Schur energy of a pair's record contrast |
 | `vertex-shells` | disagreement | `obstructed` | `synergetics-oph` | shells {{CARRIER_SHELL_SIZES}} against the lattice's {{LATTICE_SHELL_SIZES}}; intersection array {{CARRIER_INTERSECTION_ARRAY}} |
 | `subgraph-census` | isomorphism | `exact` | `synergetics-oph` | {{CARRIER_TRIANGLES}} triangles, {{CARRIER_PENTAGONS}} pentagons, {{CARRIER_PERFECT_MATCHINGS}} matchings, {{CARRIER_HAMILTONIAN_CYCLES}} Hamiltonian cycles, counted by exhaustion |
 | `angle-defect` | isomorphism | `exact` | `synergetics-oph` | OPH's derived chart is the icosahedron's triangulation, so the angular-defect accounting applies unchanged: $\pi/3$ at each port, $4\pi$ in total, which is $2\pi\chi$ |

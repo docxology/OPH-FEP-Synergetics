@@ -128,27 +128,25 @@ and $-\mathcal{F}$ is a lower bound on the log evidence, the evidence lower boun
 [@friston2010; @friston2007synthese]. The bound is tight exactly when the
 recognition density is the posterior; the residual is the divergence.
 
-The linear-Gaussian corner is the one this paper can make exact. Take a jointly
-Gaussian model whose precision matrix is a graph Laplacian on $K$, partition the
-ports into recorded ports $o$ and free ports $x$, and eliminate $x$. The
-variational free energy at the optimum is then a quadratic form in the records
-plus a constant:
+In the linear-Gaussian construction, partition the carrier Laplacian $L$ into
+recorded ports $o$ and free ports $x$. The seam energy is
+$E(x,o)=\tfrac12 z^\top Lz$, with $z=(x,o)$. At least one record grounds the
+interior block $L_{xx}$. A record prior $\rho(o)=\tfrac12\epsilon\lVert o\rVert^2$
+with $\epsilon>0$ grounds the full precision. Integrating the resulting
+probability density over $x$ gives the record surprisal
+[@mueller2026agreement, theorem 7]:
 
 $$
-\mathcal{F}_{\mathrm{G}}(o) \;=\; \tfrac{1}{2}\,o^{\top} S\, o \;+\; \rho(o)
-\;+\; \tfrac{1}{2}\log\det L_{xx} \;-\; \tfrac{d_x}{2}\log 2\pi ,
+-\ln p(o) \;=\; \tfrac12 o^\top (S+\epsilon I)o
+       + \tfrac{d_o}{2}\ln(2\pi) - \tfrac12\ln\det(S+\epsilon I) ,
 $$ {#eq:gaussian}
 
-where $L_{xx}$ is the free-free block of the Laplacian, $S$ is the Schur
-complement of $L_{xx}$ in $L$, and $\rho$ is any prior term on the records alone
-(zero in every probe). The last two terms are the Gaussian-integral prefactor of
-the interior. The absolute level of [@eq:gaussian] is gauge-dependent, because a
-Laplacian has a kernel and the joint density is therefore unnormalised;
-differences of $\mathcal{F}_{\mathrm{G}}$ between two record configurations are
-exact, and that is how the probes use it. Every probe that reports a free energy
-computes it twice, once as surprisal plus divergence and once directly as the
-first form of [@eq:vfe], energy minus entropy, so the decomposition is tested
-rather than assumed.
+where $d_o$ is the number of record coordinates and $S$ is the Schur complement
+of $L_{xx}$ in $L$. The interior Gaussian determinant appears in the raw
+integral of $\exp(-E)$ and cancels in the probability density. With the prior
+fixed, [@eq:gaussian] gives an absolute value and determines the minimum of
+[@eq:vfe] over $q$. The probes compare this marginal route to an
+energy-minus-entropy route that uses the full joint precision.
 
 A **Markov blanket** is a partition of the state into interior $i$, blanket $b$
 and exterior $e$ such that the interior and exterior are conditionally

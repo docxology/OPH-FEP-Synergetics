@@ -8,6 +8,7 @@ import numpy as np
 import pytest
 
 from oph_fep_synergetics.core import (
+    CellularSheaf,
     GaussianSheafModel,
     SurpriseTriple,
     demo_chain_model,
@@ -110,6 +111,37 @@ def test_prior_quadratic_shifts_the_surprisal_exactly(chain_model):
         - chain_model.surprisal(records)
         - 2.5
     ) < 1e-12
+
+
+def test_proper_record_prior_normalises_the_record_density():
+    model = demo_chain_model(4, record_prior_precision=0.5)
+    records = (0.3, -0.2)
+    # Common and contrast coordinates have precision 1/2 and 7/6.
+    normaliser = math.log(2.0 * math.pi) - 0.5 * math.log(7.0 / 12.0)
+    common, contrast = [(records[0] + sign * records[1]) / math.sqrt(2) for sign in (1, -1)]
+    expected = normaliser + 0.5 * (0.5 * common**2 + (7.0 / 6.0) * contrast**2)
+    assert model.record_surprisal(records) == pytest.approx(expected, abs=1e-12)
+    mean, covariance = model.posterior(records)
+    assert model.variational_free_energy(mean, covariance, records) == pytest.approx(expected)
+    assert model.energy_minus_entropy(mean, covariance, records) == pytest.approx(expected)
+    with pytest.raises(ValueError, match="configured record prior"):
+        model.surprisal(records, prior_quadratic=1.0)
+
+
+def test_record_density_requires_a_proper_joint_precision(chain_model):
+    with pytest.raises(ValueError, match="requires a record prior"):
+        chain_model.record_surprisal((0.0, 0.0))
+    for precision in (0.0, -0.5, math.inf, math.nan):
+        with pytest.raises(ValueError, match="finite and positive"):
+            demo_chain_model(4, record_prior_precision=precision)
+    sheaf = CellularSheaf((1, 1), ())
+    with pytest.raises(ValueError, match="does not ground"):
+        GaussianSheafModel(sheaf, (0,), record_prior_precision=0.5)
+    # A fully recorded model has zero interior dimension and a proper prior.
+    model = GaussianSheafModel(sheaf, (0, 1), record_prior_precision=1.0)
+    assert model.energy_minus_entropy([], np.zeros((0, 0)), [1.0, 2.0]) == pytest.approx(
+        math.log(2.0 * math.pi) + 2.5
+    )
 
 
 def test_variational_free_energy_is_minimised_at_the_posterior(chain_model):

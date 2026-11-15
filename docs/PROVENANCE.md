@@ -111,8 +111,8 @@ was corrected from three comment lines to the theorem itself
 
 ## Papers and unpublished sources
 
-Besides the three pinned repositories, the manuscript cites two papers of the OPH
-programme and two unpublished texts.
+Besides the three pinned repositories, the manuscript cites two preprints of the
+OPH programme and two unpublished texts.
 
 The papers are OPH's synthesis paper, *Observers Who Read Their Universe into
 Existence* (`mueller2026observers`, PhilPapers record
@@ -120,11 +120,15 @@ Existence* (`mueller2026observers`, PhilPapers record
 Repair, Dynamics and the Limits of Equilibrium* (Bernhard Mueller, Pragma
 Research Inc., preprint of 22 October 2026, PhilPapers record
 [MUEAAS-2](https://philpapers.org/rec/MUEAAS-2)), which is the source of the
-dynamical controls. The theorem, proposition and section numbers in the registry
-refer to the version of 22 October 2026. The preprint is cited the way it states
-its claims: none of its prose is quoted, it is not redistributed here, and the
-three quantities it states for the native law are reproduced from OPH's public
-model ([SCOPE.md](SCOPE.md)).
+dynamical controls and the linear-Gaussian interface results. The theorem,
+proposition and section numbers refer to the version of 22 October 2026.
+The manuscript cites these results where they are stated and identifies the
+additional checks performed here. The registry source field credits Mueller's
+preprint where a probe reproduces one of its results or uses one of its
+examples. The manuscript also cites Da Costa et al. for the stationary blanket
+example and Hwang et al. and Lelièvre et al. for Gaussian diffusions with a common
+stationary law. Three quantities that Mueller reports for the native law are
+reproduced from OPH's public model ([SCOPE.md](SCOPE.md)).
 
 The unpublished texts are the author's own working dossier and integration
 proposal (`dossier2026`, `proposal2026`).

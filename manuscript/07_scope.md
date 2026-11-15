@@ -91,14 +91,14 @@ fail.
 The source dossier states four cautions, and this paper adopts them
 [@dossier2026].
 
-**Disambiguate "free energy".** At least two inequivalent functionals carry the
-name, and they differ by a model constant [@sec:collision]. A sentence that does
-not say which one it means is not yet a claim.
+**Disambiguate "free energy".** At fixed records, name the minimum interface
+energy, the unnormalised record potential, or the normalised record surprisal
+that bounds variational free energy [@sec:collision].
 
-**Respect premise discipline.** OPH records its obstructed premises, including
-PR-01, and a synthesis that assumes the premise it needs is doing the opposite of
-what the programme asks. The census in [@prop:census] exists to make that
-temptation visible.
+**Respect premise discipline.** OPH's PR-01 describes the native implementation
+and distinguishes it from the contracts with consensus theorems. The native
+and gated relations have different obstructions [@prop:native-rewrite]; a
+conclusion about one is not a certificate for the other.
 
 **Distinguish numerology from prediction.** The twelve-fold and sixty-fold
 coincidences in this paper are derived, and the derivation is part of the

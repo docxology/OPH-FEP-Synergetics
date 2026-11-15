@@ -406,11 +406,15 @@ def test_a_repair_keeps_its_datum_and_resamples_within_the_fibre():
     assert repair_kernel(state, (1, 0)) == repair_kernel(swapped, (0, 1))
     settled = (1, 1) + (0,) * 10
     assert repair_kernel(settled, (0, 1)) == {settled: Fraction(1)}
+    with pytest.raises(ValueError, match="distinct ports"):
+        repair_datum(state, (0, 0))
+    with pytest.raises(IndexError, match="outside the load vector"):
+        repair_datum(state, (-1, 0))
 
 
 def test_conditioning_the_reference_never_calls_the_law():
     """The conditional law is uniform on the reference states in the fibre."""
-    reference = [(1, 0, 1), (0, 1, 1), (1, 1, 0), (2, 0, 0)]
+    reference = [(1, 0, 1), (0, 1, 1), (1, 1, 0), (2, 0, 0), (1, 0, 1)]
     assert conditioned_reference(reference, (1, 0, 1), (0, 1)) == {
         (1, 0, 1): Fraction(1, 2),
         (0, 1, 1): Fraction(1, 2),
@@ -455,6 +459,11 @@ def test_the_fibre_free_energy_is_minimised_by_the_fair_coin():
         fibre_free_energy((0.5, 0.6), 66)
     with pytest.raises(ValueError):
         fibre_free_energy((1.5, -0.5), 66)
+    with pytest.raises(ValueError, match="probability vector"):
+        fibre_free_energy((1.0, math.nan), 66)
+    for invalid_size in (0, 1.5, math.inf):
+        with pytest.raises(ValueError, match="positive integer"):
+            fibre_free_energy((1.0,), invalid_size)
 
 
 def test_relative_entropy_to_the_reference_falls_by_the_divergence_from_the_image():

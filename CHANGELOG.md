@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+- Add a README overview with one executable example for each pair of programs.
+  Cite *Agreement and Surprise* at the results it supplies and distinguish
+  those results from derivations and examples introduced here.
+- Verify finite linear-Gaussian inference on the carrier, with a chain control
+  and a nonquadratic counterexample. A proper record prior separates interface
+  energy, unnormalised record potential and normalised surprisal. The two-record
+  Schur complement recovers the exact resistance ladder.
+- Distinguish ungated repair confluence from termination on the total-load-two
+  shell. The broken-seam gate terminates with multiple reachable normal forms.
+  The binary-chain probe separates pathwise load energy from ensemble relative
+  entropy and checks the port relaxation gap.
+- Run the suite, coverage gate, probes and generated-doc freshness checks on
+  GitHub Actions. Round measured values in the generated tables for portability;
+  the verifier continues to return its raw values.
+
 Corrections (a claim was wrong):
 
 - The `13/15` and `1/60` transition probabilities and the `35/264` port-zero

@@ -8,8 +8,9 @@ the free-energy dictionary of the accompanying review is exact:
 
 * perception with records held fixed is sheaf diffusion and converges to the
   harmonic extension ``x_hat(o) = -L_xx^{-1} L_xo o``;
-* the surprisal ``-ln p(o)`` is ``\\tfrac12 o^T S o`` plus a Gaussian
-  normaliser, where ``S = L_oo - L_ox L_xx^{-1} L_xo`` is the Schur complement;
+* the record precision is the Schur complement
+  ``S = L_oo - L_ox L_xx^{-1} L_xo`` plus the record prior precision.
+  A proper Gaussian record density gives an absolute surprisal ``-ln p(o)``;
 * the Bayesian surprise of new records is ``\\tfrac12 g^T L_xx^{-1} g`` at the
   old rest, where ``g`` is the update residual there;
 * the variational free energy is ``surprisal + KL[q || posterior]`` and is
@@ -82,9 +83,20 @@ class SurpriseTriple:
 
 
 class GaussianSheafModel:
-    """A linear-Gaussian sheaf model with record (boundary) and interior nodes."""
+    """A sheaf model with an optional isotropic Gaussian record prior."""
 
-    def __init__(self, sheaf: CellularSheaf, record_nodes: Sequence[int]) -> None:
+    def __init__(
+        self,
+        sheaf: CellularSheaf,
+        record_nodes: Sequence[int],
+        *,
+        record_prior_precision: float | None = None,
+    ) -> None:
+        if record_prior_precision is not None and (
+            not math.isfinite(record_prior_precision) or record_prior_precision <= 0.0
+        ):
+            raise ValueError("record prior precision must be finite and positive")
+        self._record_prior_precision = record_prior_precision
         self.sheaf = sheaf
         self.record_nodes = tuple(sorted(int(node) for node in record_nodes))
         if len(set(self.record_nodes)) != len(self.record_nodes):
@@ -112,6 +124,17 @@ class GaussianSheafModel:
         self._l_xx = laplacian[np.ix_(interior_indices, interior_indices)]
         self._l_xo = laplacian[np.ix_(interior_indices, record_indices)]
         self._l_ox = self._l_xo.T
+        if record_prior_precision is not None:
+            joint_precision = laplacian.copy()
+            joint_precision[record_indices, record_indices] += record_prior_precision
+            try:
+                factor = np.linalg.cholesky(joint_precision)
+            except np.linalg.LinAlgError as exc:
+                raise ValueError("the record prior does not ground the joint precision") from exc
+            self._joint_log_normaliser = (
+                0.5 * laplacian.shape[0] * math.log(2.0 * math.pi)
+                - float(np.log(np.diag(factor)).sum())
+            )
         # RHS-independent quantities derived from the fixed ``_l_xx`` are
         # computed once and cached.  ``np.linalg`` exposes no reusable LU
         # factors, so solve-based results stay on ``np.linalg.solve``.
@@ -153,7 +176,7 @@ class GaussianSheafModel:
         return np.linalg.solve(self._l_xx, -(self._l_xo @ observed))
 
     def schur_complement(self) -> np.ndarray:
-        """Return the marginal precision of the records."""
+        """Return the record Schur complement before adding the prior."""
         if self.interior_dim == 0:
             return self._l_oo.copy()
         if self._schur is None:
@@ -170,26 +193,42 @@ class GaussianSheafModel:
             self._l_xx_inv = np.linalg.inv(self._l_xx)
         return mean, _symmetrise(self._l_xx_inv)
 
-    def surprisal(self, records: Sequence[float], *, prior_quadratic: float = 0.0) -> float:
-        """Return ``-ln p(o)`` for the Gaussian sheaf model, up to a constant in ``o``.
-
-        Theorem 7 item 3 of the source gives
-        ``-ln p(o) = (1/2) o^T S o + rho(o) + const`` for
-        ``p(x, o) ∝ exp(-E(x, o) - rho(o))``, with ``S`` the Schur complement.
-        The returned value is the whole ``o``-dependent part,
-        ``(1/2) o^T S o + rho(o)``, together with the Gaussian-integral
-        prefactor ``(1/2) logdet(L_xx) - (d_x / 2) log(2 pi)``, which depends on
-        the model and not on ``o``.  The absolute level is therefore
-        gauge-dependent and may be negative.  Differences are exact surprisal
-        differences: ``surprisal(o) - surprisal(o') = -ln p(o) + ln p(o')``.
-        """
+    def minimum_interface_energy(self, records: Sequence[float]) -> float:
+        """Return the minimum sheaf energy ``o^T S o / 2`` at fixed records."""
         observed = self._records(records)
-        marginal = self.schur_complement()
-        value = 0.5 * float(observed @ marginal @ observed) + float(prior_quadratic)
+        return 0.5 * float(observed @ self.schur_complement() @ observed)
+
+    def unnormalised_record_potential(self, records: Sequence[float]) -> float:
+        """Return ``-ln integral exp(-E(x, o)) dx``, before the record prior."""
+        value = self.minimum_interface_energy(records)
         if self.interior_dim:
             _, logdet = np.linalg.slogdet(self._l_xx)
             value += 0.5 * logdet - 0.5 * self.interior_dim * math.log(2.0 * math.pi)
         return value
+
+    def record_surprisal(self, records: Sequence[float]) -> float:
+        """Return the negative log density of the proper Gaussian records."""
+        if self._record_prior_precision is None:
+            raise ValueError("record surprisal requires a record prior")
+        observed = self._records(records)
+        precision = self.schur_complement() + self._record_prior_precision * np.eye(self.record_dim)
+        sign, logdet = np.linalg.slogdet(precision)
+        if sign <= 0 or not math.isfinite(logdet):
+            raise ValueError("the marginal record precision does not define a Gaussian density")
+        normaliser = 0.5 * (self.record_dim * math.log(2.0 * math.pi) - logdet)
+        return 0.5 * float(observed @ precision @ observed) + normaliser
+
+    def surprisal(self, records: Sequence[float], *, prior_quadratic: float = 0.0) -> float:
+        """Return record surprisal with a prior, or the legacy potential otherwise.
+
+        The legacy ``prior_quadratic`` term shifts an unnormalised potential.
+        Use :meth:`record_surprisal` to explicitly require a probability density.
+        """
+        if self._record_prior_precision is not None:
+            if prior_quadratic != 0.0:
+                raise ValueError("use the configured record prior for normalised surprisal")
+            return self.record_surprisal(records)
+        return self.unnormalised_record_potential(records) + float(prior_quadratic)
 
     def excess_free_energy(
         self,
@@ -215,10 +254,10 @@ class GaussianSheafModel:
         *,
         prior_quadratic: float = 0.0,
     ) -> float:
-        """Return ``-ln p(o) + KL[q || posterior]``.
+        """Return ``-ln p(o) + KL[q || posterior]`` with a record prior.
 
-        This is the FEP bound written for the sheaf model: it is an upper bound
-        on surprisal with equality exactly at the posterior.
+        Without a prior, the legacy bound uses the unnormalised record
+        potential in place of ``-ln p(o)``. Both attain equality at the posterior.
         """
         return self.surprisal(records, prior_quadratic=prior_quadratic) + self.excess_free_energy(
             mean, covariance, records
@@ -230,7 +269,7 @@ class GaussianSheafModel:
         covariance: np.ndarray,
         records: Sequence[float],
     ) -> float:
-        """Return ``E_q[E(x, o)] - H[q]`` computed directly, for ``q = N(mean, covariance)``.
+        """Compute free energy directly for ``q = N(mean, covariance)``.
 
         This is the first form of the variational free energy, energy minus
         entropy, evaluated without passing through the surprisal or the
@@ -239,6 +278,8 @@ class GaussianSheafModel:
         is an independent route to the number :meth:`variational_free_energy`
         computes as surprisal plus divergence, so comparing the two tests the
         identity of the free-energy decomposition rather than restating it.
+        With a record prior, the energy includes that prior and the joint
+        log normaliser computed from the full precision.
         """
         mean = _as_vector(mean, self.interior_dim, "mean")
         observed = self._records(records)
@@ -248,6 +289,11 @@ class GaussianSheafModel:
             + 2.0 * mean @ self._l_xo @ observed
             + observed @ self._l_oo @ observed
         )
+        if self._record_prior_precision is not None:
+            energy += (
+                0.5 * self._record_prior_precision * float(observed @ observed)
+                + self._joint_log_normaliser
+            )
         if self.interior_dim == 0:
             return energy
         sign, logdet = np.linalg.slogdet(covariance)
@@ -352,9 +398,18 @@ def three_surprises(
     )
 
 
-def demo_chain_model(node_count: int = 4) -> GaussianSheafModel:
+def demo_chain_model(
+    node_count: int = 4, *, record_prior_precision: float | None = None
+) -> GaussianSheafModel:
     """A scalar chain with both endpoints observed; useful for examples/tests."""
     if node_count < 3:
         raise ValueError("a demo chain needs at least three nodes")
     sheaf = linear_chain_sheaf(node_count)
-    return GaussianSheafModel(sheaf, record_nodes=(0, node_count - 1))
+    return GaussianSheafModel(
+        sheaf, (0, node_count - 1), record_prior_precision=record_prior_precision
+    )
+
+
+def asymmetric_seam_energy(disagreement: np.ndarray) -> np.ndarray:
+    """An oriented spring with twice the stiffness for positive disagreement."""
+    return np.where(disagreement <= 0.0, 0.5, 1.0) * disagreement**2

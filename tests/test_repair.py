@@ -143,7 +143,7 @@ def test_gated_schedule_reaches_rest_and_lowers_energy(carrier):
 
 
 def test_ungated_schedule_moves_at_mismatch_one_without_descent(carrier):
-    """PR-01's obstruction: an accepted repair that lowers no measure at all."""
+    """A state-changing native repair can leave pathwise load energy flat."""
     history, final = simulate_repairs(
         ONE_AT_ZERO, [(0, 1)], steps=1, coins=(0,), min_mismatch=1
     )

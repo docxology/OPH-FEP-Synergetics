@@ -14,7 +14,7 @@ domain.
 | OPH's native seam law | reimplemented on exact Python integers; conservation and the energy identity are checked on every one of the 4680 shell transitions |
 | PR-01 | the obstruction is reproduced exhaustively: 120 strict descents, 600 zero-descent mismatch-one moves, 3960 no-ops |
 | patch agreement as a sheaf condition | a cellular sheaf over the carrier whose Laplacian is asserted equal to the carrier Laplacian |
-| the free-energy dictionary | the linear-Gaussian corner, exactly: harmonic extension, a separate KKT constrained minimiser, Schur complement, the three surprises, and the variational free energy computed both as surprisal plus divergence and directly as energy minus entropy, equal at the posterior and separated by the divergence away from it |
+| the free-energy dictionary | on the carrier with a Gaussian record prior, and on a chain control: harmonic extension, a separate KKT solve, Schur complement, three surprises, and two routes to variational free energy |
 | obstruction and dynamics controls | the D-stability family, the mediator reduction, the reduction criterion, the two-node orbits, the solenoidal family, the four-cycle trap, the replicator potential |
 | QuadMath's conventions | quadray gauge and embedding, the twelve neighbour moves, the coordination shells against their closed-form cuboctahedral gauge, and the tetravolume table derived exactly from explicit vertex sets |
 | icosahedral subdivision | geodesic and Goldberg counts, duality, and the equality with the IVM shell sequence |
@@ -68,16 +68,18 @@ carries it.
 
 ## Four cautions that shape the results
 
-1. **Disambiguate "free energy".** The interface energy minimised over the
-   interior and the variational free energy at the posterior are *different
-   objects*; identifying them numerically is a gauge choice. This is registered
-   as the `free-energy-name-collision` disagreement, and the probe reports both
-   values so the constant difference is visible.
-2. **Respect OPH's premise discipline.** The native law is not a descent method:
-   it accepts repairs that lower nothing, and it is not confluent. This is
-   registered as `pr01-obstruction`, and it is why the FEP-side reading of
-   "repair" is stated as a *constrained relative-entropy minimisation on a
-   domain* rather than as the native law's own guarantee.
+1. **Disambiguate "free energy".** Minimum interface energy, the unnormalised
+   record potential and normalised record surprisal have different meanings.
+   The interior Gaussian determinant contributes to the raw potential and
+   cancels in the normalised probability. The `free-energy-name-collision`
+   probe reports all three values and repeats the comparison on chains with
+   identical Schur complements.
+2. **Respect OPH's premise discipline.** On the total-load-two shell the ungated
+   native rule is confluent without termination. Gating at broken seams gives
+   termination with several normal forms reachable from each doubled state.
+   The separate Lean copy-repair example does not characterize the native
+   rule. The `pr01-obstruction` probe distinguishes constant pathwise load
+   energy from the binary ensemble's nonincreasing relative entropy.
 3. **Do not let numerology stand in for a frozen prediction.** Agreement between
    `10k^2 + 2`, the IVM shell count, the Goldberg face count and the geodesic
    vertex count is a genuine identity of one quadratic form seen four ways, and
@@ -98,10 +100,15 @@ carries it.
 
 The three `exact-on-domain` entries say so in their status:
 
-- `variational-equivalence` holds for finite linear-Gaussian cellular sheaves
-  over the carrier complex.
+- `variational-equivalence` holds on the carrier with a Gaussian record prior.
+  A clamped, nonquadratic seam gives a posterior mean different from the
+  energy minimiser.
 - `free-energy-dictionary` holds in the same corner, where the surprisal is
-  quadratic and the Bayesian surprise is the residual quadratic form.
+  quadratic and the Bayesian surprise is the residual quadratic form. The
+  grounded asymmetric seam gives different surprisals to opposite records of
+  equal magnitude, outside that centred quadratic formula. The
+  `two-record-resistance` probe verifies the Schur complement for every carrier
+  record pair against a rational network solve.
 - `repair-is-conditioning` holds on the binary shell with the uniform reference.
   Its probe asserts the failure off the shell: with the uniform law on all 78
   configurations as reference, the repairs of the sixty seams that meet a

@@ -28,7 +28,8 @@ and lowers a quadratic energy by a closed-form amount, and over the
 strict descents, {{SHELL_ZERO_DESCENT}} zero descents and {{SHELL_NOOP}} no-op
 moves out of {{SHELL_TRANSITIONS}} transitions. On the binary shell each native
 repair is exact Bayesian conditioning on the datum it leaves visible, and its law
-minimises a variational free energy whose minimum is the surprisal of that datum.
+minimises a variational free energy whose minimum is the surprisal of that datum
+[@mueller2026agreement; @mueller2026observers].
 
 Counting the same object turns out to add identifications that no dynamical
 reading supplies. The seam graph has {{CARRIER_TREE_NUMBER}} spanning trees, an
@@ -61,13 +62,14 @@ $\sqrt{2}\,\mathbb{Q}(\sqrt{5})$, against the integral table
 {{VORONOI_EDGES}} edges give tetravolume {{PACKING_CELL_TETRAVOLUME}} and the
 packing density {{PACKING_DENSITY}}, exactly $\pi/(3\sqrt{2})$.
 
-The load-bearing disagreements are equally structural. The zero-descent moves
-are the executable content of OPH's own obstructed premise PR-01: the native law
-is not confluent, so an accepted repair sequence is not a path to a unique normal
-form. A pairwise reduction of a boundary exists only above a mediator threshold
+The load-bearing disagreements are equally structural. On the tested shell the
+native law is confluent but does not terminate; the broken-seam gate terminates
+without giving unique normal forms. The binary-shell paths preserve load energy,
+while the ensemble can lose relative entropy. A pairwise reduction of a boundary
+exists only above a mediator threshold
 `{{MEDIATOR_THRESHOLD}}`; a blanket in the stationary density does not constrain
 the dynamics that preserve it; the solenoidal family leaves a stationary
-blanket's entropy production free; and four of the obstructions are failures of
+blanket's entropy production free [@mueller2026agreement]; and four of the obstructions are failures of
 counting rather than of dynamics: twelve vertices do not determine a solid, a
 coordination shell and a free-energy level are not functions of one another, a
 neighbourhood is not a lattice shell, and the phrase "twelve around one" does not

@@ -39,6 +39,7 @@ from __future__ import annotations
 import itertools
 import math
 from fractions import Fraction
+from numbers import Integral
 from typing import Sequence
 
 import numpy as np
@@ -134,8 +135,8 @@ def mismatch_one_excursion(steps: int = 6) -> tuple[tuple[int, ...], ...]:
     never stepping straight back, and preferring a port the walk has not yet
     visited.  Every visited state carries energy ``1/2``, so a schedule that
     applies the local rule without the broken-seam gate keeps moving while the
-    descent measure stays flat.  This is the executable content of OPH's PR-01
-    obstruction: accepted repairs need not lower a measure.
+    load energy stays flat. This isolates the pathwise part of OPH's PR-01
+    obstruction; ensemble relative entropy is a different quantity.
     """
     if steps < 1:
         raise ValueError("steps must be positive")
@@ -1043,9 +1044,14 @@ def repair_datum(loads: Sequence[int], seam: tuple[int, int]) -> tuple[int, tupl
 
     A repair conserves the total load on its seam and touches no other port, so
     the pair (seam total, every load off the seam) is the same before and after.
+    Loads are nonnegative integers and the seam joins two distinct ports.
     The configurations that share a datum form its fibre.
     """
     a, b = seam
+    if a == b:
+        raise ValueError("a seam joins two distinct ports")
+    if a < 0 or b < 0 or a >= len(loads) or b >= len(loads):
+        raise IndexError("seam port outside the load vector")
     rest = tuple(int(load) for port, load in enumerate(loads) if port not in (a, b))
     return int(loads[a]) + int(loads[b]), rest
 
@@ -1069,13 +1075,13 @@ def conditioned_reference(
 ) -> dict[tuple[int, ...], Fraction]:
     """The uniform law on ``reference`` conditioned on the datum of ``loads``.
 
-    The result is uniform on the reference configurations in the fibre of the
-    datum, and empty when the reference gives the datum no weight.  Nothing here
-    calls the repair law.
+    The result is uniform on the distinct reference configurations in the fibre
+    of the datum, and empty when the reference gives the datum no weight.
+    Nothing here calls the repair law.
     """
     datum = repair_datum(loads, seam)
-    fibre = [tuple(state) for state in reference if repair_datum(state, seam) == datum]
-    return {state: Fraction(1, len(fibre)) for state in fibre}
+    fibre = dict.fromkeys(tuple(state) for state in reference if repair_datum(state, seam) == datum)
+    return dict.fromkeys(fibre, Fraction(1, len(fibre))) if fibre else {}
 
 
 def fibre_free_energy(weights: Sequence[float], reference_size: int) -> float:
@@ -1083,14 +1089,15 @@ def fibre_free_energy(weights: Sequence[float], reference_size: int) -> float:
 
     The joint weight of a reference configuration and its datum is
     ``pi(s, o) = 1 / reference_size`` on the fibre, so ``F[q]`` is the negative
-    entropy of ``q`` plus ``ln(reference_size)``.
+    entropy of ``q`` plus ``ln(reference_size)``. The reference must be nonempty.
     """
     total = float(sum(weights))
-    if abs(total - 1.0) > 1e-12 or any(weight < 0 for weight in weights):
+    if not math.isclose(total, 1.0, rel_tol=0.0, abs_tol=1e-12) or any(weight < 0 for weight in weights):
         raise ValueError("weights must be a probability vector")
-    return float(
-        sum(weight * (math.log(weight) + math.log(reference_size)) for weight in weights if weight > 0)
-    )
+    if not isinstance(reference_size, Integral) or reference_size < 1:
+        raise ValueError("reference size must be a positive integer")
+    normalizer = math.log(reference_size)
+    return float(sum(weight * (math.log(weight) + normalizer) for weight in weights if weight > 0))
 
 
 def repair_conditioning_census() -> dict[str, object]:

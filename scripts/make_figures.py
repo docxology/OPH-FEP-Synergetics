@@ -2037,12 +2037,9 @@ def sandwich_figure() -> Path:
     lower = float(dictionary["sandwich_lower"])
     upper = float(dictionary["sandwich_upper"])
     bayesian = float(dictionary["bayesian_surprise"])
-    numerical = float(dictionary["numerical_surprise"])
-    surprisal = float(dictionary["surprisal"])
-    variational = float(dictionary["variational_free_energy"])
     interface = float(collision["interface_energy_minimised_over_interior"])
-    at_posterior = float(collision["variational_free_energy_at_posterior"])
-    constant = float(collision["difference"])
+    surprisal = float(collision["normalised_record_surprisal"])
+    raw_potential = float(collision["unnormalised_record_potential"])
     minus = "−"
 
     def signed(value: float) -> str:
@@ -2081,14 +2078,10 @@ def sandwich_figure() -> Path:
     left.set_xlabel("surprisal units")
     left.set_title("the sandwich brackets the Bayesian value", fontsize=10.5)
 
-    # The two bars that the model constant relates sit on adjacent top rows.
     entries = (
-        ("numerical", numerical, BLUE),
-        ("Bayesian", bayesian, BLUE),
-        ("surprisal", surprisal, GREEN),
-        ("variational", variational, GREEN),
-        ("VFE at posterior", at_posterior, VERMILLION),
-        ("interface", interface, VERMILLION),
+        ("normalised\nrecord surprisal", surprisal, GREEN),
+        ("unnormalised\nrecord potential", raw_potential, BLUE),
+        ("minimum\ninterface energy", interface, VERMILLION),
     )
     names = [name for name, _, _ in entries]
     values = [value for _, value, _ in entries]
@@ -2104,29 +2097,8 @@ def sandwich_figure() -> Path:
             xytext=(5 if value >= 0 else -5, 0),
             textcoords="offset points",
         )
-    top_row = len(entries) - 1
-    bracket_y = top_row + 0.75
-    for x_value, row in ((interface, top_row), (at_posterior, top_row - 1)):
-        right.plot([x_value, x_value], [row + 0.4, bracket_y], color=VERMILLION, linewidth=1.0,
-                   linestyle=":")
-    right.annotate(
-        "",
-        xy=(at_posterior, bracket_y),
-        xytext=(interface, bracket_y),
-        arrowprops={"arrowstyle": "<->", "color": VERMILLION, "lw": 1.3},
-    )
-    right.text(
-        (interface + at_posterior) / 2,
-        bracket_y + 0.12,
-        f"$\\Delta$ = model constant = {signed(constant)}",
-        ha="center",
-        va="bottom",
-        fontsize=9.5,
-        color=VERMILLION,
-    )
     right.set_xlim(min(values) * 1.5, max(values) * 1.3)
-    right.set_ylim(-0.6, bracket_y + 0.8)
-    right.set_title("values called free energy", fontsize=10.5)
+    right.set_title("three values at fixed records", fontsize=10.5)
     right.tick_params(axis="y", labelsize=9.5)
     figure.suptitle("what the probes report about the values called free energy", fontsize=11)
     return _save(
@@ -2134,13 +2106,9 @@ def sandwich_figure() -> Path:
         "fig_sandwich.png",
         "Two panels read from the executed probes. Left: the sandwich interval with "
         f"its lower bound {lower:.7g} and upper bound {upper:.7g}, and the Bayesian surprise "
-        f"{bayesian:.7g} marked inside it. Right: horizontal bars for the functionals the "
-        f"literature calls free energy in the same linear-Gaussian model: the numerical "
-        f"surprise {numerical:.7g}, the Bayesian surprise {bayesian:.7g}, the surprisal "
-        f"{surprisal:.7g}, the variational free energy {variational:.7g}, the variational free "
-        f"energy at the posterior {at_posterior:.7g} and the interface energy minimised over "
-        f"the interior {interface:.7g}; a bracket above the last two bars marks that the "
-        f"interior and posterior values differ by the model constant {constant:.7g}.",
+        f"{bayesian:.7g} marked inside it. Right: three values at fixed records on the carrier: "
+        f"minimum interface energy {interface:.7g}, unnormalised record potential "
+        f"{raw_potential:.7g}, and normalised record surprisal {surprisal:.7g}.",
     )
 
 

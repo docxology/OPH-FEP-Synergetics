@@ -47,6 +47,7 @@ argue by key.
 | `packing-density` | complementarity | exact | synergetics-oph | `02_framework.md` | yes |
 | `tetravolume-arithmetic` | complementarity | exact | three-way | `00_00_graphical_abstract.md`, `02_framework.md` | yes |
 | `effective-resistance` | complementarity | exact | oph-fep | `06_complementarities.md` | yes |
+| `two-record-resistance` | isomorphism | exact | oph-fep | `06_complementarities.md` | yes |
 | `vertex-shells` | disagreement | obstructed | synergetics-oph | `05_disagreements.md` | yes |
 | `subgraph-census` | isomorphism | exact | synergetics-oph | `01_introduction.md`, `02_framework.md`, `04_correspondences.md` | yes |
 | `angle-defect` | isomorphism | exact | synergetics-oph | `04_correspondences.md` | yes |
@@ -55,7 +56,7 @@ argue by key.
 | `conjugation-norm` | complementarity | exact | three-way | `00_00_graphical_abstract.md`, `06_complementarities.md` | yes |
 | `repair-is-conditioning` | isomorphism | exact-on-domain | oph-fep | `04_correspondences.md` | yes |
 
-43 of 43 claims are named by at least one section's prose.
+44 of 44 claims are named by at least one section's prose.
 
 ## Sections
 
@@ -68,7 +69,7 @@ argue by key.
 | `03_method.md` | *none* |
 | `04_correspondences.md` | `native-repair-law`, `free-energy-dictionary`, `sheaf-agreement`, `certificate-species`, `tree-number`, `icosahedral-symmetry`, `eigenspace-irreducibility`, `law-equivariance`, `subgraph-census`, `angle-defect`, `repair-is-conditioning` |
 | `05_disagreements.md` | `pr01-obstruction`, `free-energy-name-collision`, `mediator-obstruction`, `stationary-blanket`, `solenoidal-freedom`, `d-stability`, `schedule-path`, `reduction-criterion`, `existence-without-reachability`, `directed-gradient`, `four-cycle-local-minimum`, `cuboctahedron-vs-icosahedron`, `shell-vs-free-energy`, `vertex-shells`, `twelve-around-one-families` |
-| `06_complementarities.md` | `quadray-ivm`, `equilibrium-propagation`, `replicator-potential`, `kissing-twelve`, `effective-resistance`, `dual-cells`, `conjugation-norm` |
+| `06_complementarities.md` | `quadray-ivm`, `equilibrium-propagation`, `replicator-potential`, `kissing-twelve`, `effective-resistance`, `two-record-resistance`, `dual-cells`, `conjugation-norm` |
 | `07_scope.md` | `pr01-obstruction`, `reduction-criterion` |
 | `08_reproducibility.md` | *none* |
 | `99_references.md` | *none* |
@@ -110,11 +111,11 @@ argue by key.
 | `def:correspondence` | def | `03_method.md` | `01_introduction.md` |
 | `def:dstability` | def | `05_disagreements.md` | `05_disagreements.md` |
 | `prop:carrier` | prop | `02_framework.md` | `04_correspondences.md` |
-| `prop:spectrum` | prop | `02_framework.md` | `01_introduction.md`, `04_correspondences.md` |
+| `prop:spectrum` | prop | `02_framework.md` | `01_introduction.md`, `04_correspondences.md`, `05_disagreements.md` |
 | `prop:descent` | prop | `02_framework.md` | `05_disagreements.md` |
 | `prop:ivm` | prop | `02_framework.md` | `01_introduction.md` |
 | `prop:ve` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `04_correspondences.md`, `07_scope.md` |
-| `prop:conditioning` | prop | `04_correspondences.md` | `04_correspondences.md`, `04_correspondences.md` |
+| `prop:conditioning` | prop | `04_correspondences.md` | `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md` |
 | `prop:sheaf` | prop | `04_correspondences.md` | `00_00_graphical_abstract.md` |
 | `prop:tree` | prop | `04_correspondences.md` | `05_disagreements.md` |
 | `prop:cohomology` | prop | `04_correspondences.md` | `00_00_graphical_abstract.md`, `04_correspondences.md`, `04_correspondences.md` |
@@ -122,12 +123,13 @@ argue by key.
 | `prop:kl` | prop | `04_correspondences.md` | `01_introduction.md`, `05_disagreements.md` |
 | `prop:subgraph-census` | prop | `04_correspondences.md` | `04_correspondences.md` |
 | `prop:defect` | prop | `04_correspondences.md` | `04_correspondences.md`, `04_correspondences.md` |
-| `prop:census` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md`, `07_scope.md` |
+| `prop:census` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
+| `prop:native-rewrite` | prop | `05_disagreements.md` | `01_introduction.md`, `05_disagreements.md`, `07_scope.md` |
 | `prop:stationary` | prop | `05_disagreements.md` | `02_framework.md` |
 | `prop:solenoid` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
 | `prop:dstability` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
 | `prop:mediator` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
-| `prop:existence` | prop | `05_disagreements.md` | `03_method.md` |
+| `prop:existence` | prop | `05_disagreements.md` | `01_introduction.md`, `03_method.md` |
 | `prop:cuboctahedron` | prop | `05_disagreements.md` | `05_disagreements.md` |
 | `prop:shell-energy` | prop | `05_disagreements.md` | `02_framework.md`, `05_disagreements.md` |
 | `prop:vertex-shells` | prop | `05_disagreements.md` | `05_disagreements.md` |
@@ -144,8 +146,8 @@ argue by key.
 | `prop:conjugation` | prop | `06_complementarities.md` | `06_complementarities.md` |
 | `eq:repair` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md` |
 | `eq:energy` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md` |
-| `eq:vfe` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md` |
-| `eq:gaussian` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `eq:vfe` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `eq:gaussian` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `05_disagreements.md`, `06_complementarities.md` |
 | `eq:blanket` | eq | `02_framework.md` | `02_framework.md`, `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
 | `eq:quadray` | eq | `02_framework.md` | `02_framework.md` |
 | `eq:neighbours` | eq | `02_framework.md` | `02_framework.md`, `06_complementarities.md` |
@@ -235,16 +237,19 @@ argue by key.
 | `{{FEEDBACK_PATHS}}` | `05_disagreements.md` |
 | `{{FEEDBACK_PORT_ZERO_OCCUPATION}}` | `05_disagreements.md`, `07_scope.md` |
 | `{{FEP_FORMAL_TOPICS}}` | `03_method.md` |
-| `{{FE_BAYESIAN}}` | `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md` |
-| `{{FE_DIFFERENCE}}` | `04_correspondences.md`, `05_disagreements.md` |
-| `{{FE_INTERFACE}}` | `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md` |
-| `{{FE_MODEL_CONSTANT}}` | `04_correspondences.md`, `04_correspondences.md` |
-| `{{FE_NUMERICAL}}` | `04_correspondences.md`, `04_correspondences.md` |
+| `{{FE_BAYESIAN}}` | `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `{{FE_DIFFERENCE}}` | `05_disagreements.md` |
+| `{{FE_INTERFACE}}` | `04_correspondences.md`, `05_disagreements.md` |
+| `{{FE_MODEL_CONSTANT}}` | `05_disagreements.md` |
+| `{{FE_NORMALISED_RECORD_OFFSET}}` | `05_disagreements.md` |
+| `{{FE_NUMERICAL}}` | `04_correspondences.md` |
+| `{{FE_RECORD_POTENTIAL}}` | `04_correspondences.md`, `05_disagreements.md` |
+| `{{FE_RECORD_PRIOR_PRECISION}}` | `04_correspondences.md` |
 | `{{FE_SANDWICH_LOWER}}` | `04_correspondences.md`, `04_correspondences.md` |
 | `{{FE_SANDWICH_UPPER}}` | `04_correspondences.md`, `04_correspondences.md` |
-| `{{FE_SURPRISAL}}` | `04_correspondences.md`, `04_correspondences.md` |
-| `{{FE_VARIATIONAL}}` | `04_correspondences.md`, `04_correspondences.md` |
-| `{{FE_VARIATIONAL_AT_POSTERIOR}}` | `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md` |
+| `{{FE_SURPRISAL}}` | `04_correspondences.md` |
+| `{{FE_VARIATIONAL}}` | `04_correspondences.md` |
+| `{{FE_VARIATIONAL_AT_POSTERIOR}}` | `04_correspondences.md`, `05_disagreements.md` |
 | `{{FOUR_CYCLE_VIOLATIONS}}` | `05_disagreements.md` |
 | `{{GMRF_BLANKET_SIZE}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `04_correspondences.md`, `05_disagreements.md` |
 | `{{GMRF_MARGINAL_VARIANCE}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md` |
@@ -284,9 +289,12 @@ argue by key.
 | `{{PR01_COIN_ONE_DECREASE}}` | `05_disagreements.md` |
 | `{{PR01_COIN_ZERO_CURRENT}}` | `05_disagreements.md` |
 | `{{PR01_COIN_ZERO_DECREASE}}` | `05_disagreements.md` |
+| `{{PR01_GATED_NORMAL_FORMS}}` | `05_disagreements.md` |
+| `{{PR01_GATED_NORMAL_FORMS_PER_DOUBLED_STATE}}` | `05_disagreements.md` |
 | `{{PR01_HOP_PROBABILITY}}` | `05_disagreements.md`, `07_scope.md` |
 | `{{PR01_HOP_TARGETS}}` | `05_disagreements.md` |
 | `{{PR01_STAY_PROBABILITY}}` | `05_disagreements.md`, `07_scope.md` |
+| `{{PR01_UNGATED_NORMAL_FORMS}}` | `05_disagreements.md` |
 | `{{PR01_WALK_ENERGY}}` | `05_disagreements.md` |
 | `{{REDUCTION_FIRST_AFTER}}` | `05_disagreements.md` |
 | `{{REDUCTION_RESPONSE_DISTANCE}}` | `05_disagreements.md` |
@@ -344,14 +352,14 @@ argue by key.
 | `{{TWO_NODE_RELAXATION_PERIOD}}` | `05_disagreements.md` |
 | `{{TWO_NODE_RELAXATION_PERIOD_MEASURED}}` | `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
 | `{{TWO_NODE_SYNC_MIN_RADIUS}}` | `05_disagreements.md` |
-| `{{VE_EXCESS}}` | `04_correspondences.md` |
+| `{{VE_EXCESS_RESIDUAL}}` | `04_correspondences.md` |
 | `{{VE_ITERATIONS}}` | `04_correspondences.md` |
 | `{{VE_RESIDUAL}}` | `04_correspondences.md` |
 | `{{VORONOI_EDGES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md` |
 | `{{VORONOI_FACES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
 | `{{VORONOI_VERTICES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
 
-188 of the bound values are quoted by the prose. The cover is
+194 of the bound values are quoted by the prose. The cover is
 placed by `manuscript/config.yaml`; the accessibility registry that gives
 each figure its alternative text is `output/figures/figure_registry.json`,
 written by `scripts/make_figures.py`.

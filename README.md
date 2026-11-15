@@ -17,6 +17,10 @@ rather than equivalent. Every claim in this repository is a probe that either
 passes or fails, and the failing direction is reported as a result rather than
 hidden as a gap.
 
+![Three example results: OPH and FEP agree on linear-Gaussian inference, OPH and Synergetics give distinct kissing arrangements, and a lattice shell can span several free energy levels.](docs/overview.svg)
+
+Each edge shows one example from the [executable correspondence ledger](docs/CORRESPONDENCES.md).
+
 **The paper:** [*Observers, Blankets, and Screens*](output/pdf/OPH-FEP-Synergetics_combined.pdf)
 (PDF, rendered from `manuscript/` by `scripts/build.py`; every number in it is
 bound to the function that produces it).
@@ -24,7 +28,7 @@ bound to the function that produces it).
 ## What runs
 
 ```
-oph-fep-synergetics verify                 # all 43 correspondence probes
+oph-fep-synergetics verify                 # all 44 correspondence probes
 oph-fep-synergetics verify --json          # the same, as a machine-readable report
 oph-fep-synergetics verify --key pr01-obstruction
 oph-fep-synergetics verify --pair synergetics-oph   # one pairwise ledger
@@ -59,6 +63,7 @@ manuscript pipeline need.
 | --- | --- | --- |
 | `core` | `core/carrier.py` | OPH's twelve-port carrier, its port chart, Laplacian, spectrum and load shell |
 | | `core/repair.py` | the native seam-repair law, its conservation law and its exact energy decrease |
+| | `core/native_dynamics.py` | ungated and gated rewrite relations, the binary attempt kernel, and ensemble relaxation |
 | | `core/sheaf.py` | cellular sheaves, agreement energy, harmonic extension, record injectivity, cohomology dimensions |
 | | `core/free_energy.py` | the linear-Gaussian free-energy dictionary and the three named surprises |
 | | `core/controls.py` | the obstruction and dynamics controls: descent census, D-stability, mediators, orbits, free-energy forms |
@@ -69,50 +74,55 @@ manuscript pipeline need.
 | | `geometry/lattice.py` | IVM shells, the cuboctahedral vector equilibrium, Voronoi cell and packing density, Goldberg/geodesic counts |
 | | `geometry/subdivision.py` | icosahedral subdivision and the dual count identities |
 | | `geometry/solids.py` | oriented faces, polyhedron volume, and the icosahedron's tetravolume against its closed form |
-| `analysis` | `analysis/registry.py` | the 43 registered correspondences, each with a pairwise scope and an executable probe |
+| `analysis` | `analysis/registry.py` | the 44 registered correspondences, each with a pairwise scope and an executable probe |
 | | `analysis/provenance.py` | source pins, licence terms and reuse policy |
 | `manuscript_variables` | `manuscript_variables/values.py` | every number the prose may quote, derived from the package where a derivation exists |
 
 ## The registry
 
-43 entries: **18 isomorphisms**, **15 disagreements**, **10 complementarities**,
-scoped to the pairs `oph-fep` (25), `synergetics-oph` (14), `fep-synergetics` (2)
-and `three-way` (2). All 43 probes pass. `verify --kind` narrows a run to one of
+44 entries: **19 isomorphisms**, **15 disagreements**, **10 complementarities**,
+scoped to the pairs `oph-fep` (26), `synergetics-oph` (14), `fep-synergetics` (2)
+and `three-way` (2). All 44 probes pass. `verify --kind` narrows a run to one of
 the three kinds and `--pair` to one of the four scopes. The full table, with the OPH / FEP /
 Synergetics reading of each entry and the values its probe asserts, is generated
 into [docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
 
 The load-bearing results are:
 
-| claim | status | evidence |
-| --- | --- | --- |
-| OPH's carrier is the kissing-twelve configuration, and its port chart is derived from OPH's own oriented faces | exact | 12 ports, 30 seams, 20 faces, five-regular; the 20 triangles of the derived graph are exactly OPH's 20 oriented faces |
-| The carrier gap is the icosahedral gap | exact | `lambda_1 = 5 - sqrt(5)` in both readings (the generator of OPH's mean repair operator, and the FEP's precision), and the normalised gap `lambda_1 / (2|E|)` is exactly `(5 - sqrt(5)) / 60` |
-| The native repair law conserves load and lowers `sum(x^2)/2` by `(d^2 - (|d| mod 2)) / 4` | exact | checked on all 4680 shell transitions |
-| On the binary shell each native repair is exact Bayesian conditioning and a variational step | exact on that domain | in all 3960 cases the repair's law is the uniform reference conditioned on the datum the repair leaves visible; it minimises `F[q] = E_q[ln q - ln pi(s, o)]` over the fibre with minimum the surprisal `log 33` or `log 66`; off the shell the identity fails on the 60 seams that meet a doubled port |
-| The mean of the native law is one step of the carrier Laplacian | exact | averaging the integer rule over the 60 seam-and-coin draws gives `x - L x / 60` in exact rationals on all 78 configurations |
-| Patch agreement is the global-section condition of a cellular sheaf, and the sheaf Laplacian is the carrier Laplacian | exact | `carrier_sheaf(carrier).laplacian() == carrier.laplacian()` |
-| On the linear-Gaussian domain, constrained relative-entropy minimisation and predictive-coding perception are the same object | exact on that domain | the harmonic extension, a separate KKT constrained minimiser and the perception flow coincide; the free energy computed as energy minus entropy equals the surprisal at the posterior |
-| **PR-01**: the native law is not confluent, and accepted repairs need not lower a measure | **obstructed** | 120 strict descents, 600 zero-descent mismatch-one moves, 3960 no-ops out of 4680 transitions; a one-unit walk changes state at constant energy `1/2` |
-| **"Free energy" names two different objects** | **obstructed** | the interior-minimised interface energy and the variational free energy at the posterior differ by a model-dependent constant |
-| **Eliminating an interior mediator is not free** | **obstructed** | the reduced precision is `(1/3) v v^T + epsilon I`; a sum of pairwise semidefinite terms reproduces it iff `epsilon >= 1/3` |
-| **A stationary blanket need not bound the dynamics** | **obstructed** | with a zero precision entry the internal drift is `2q eta + (q - 1) b - 2 mu`, so equal blanket statistics do not fix the internal motion |
-| **Agreement can exist and be unreachable** | **obstructed** | the clipped two-node map has the origin as its only equilibrium and a source there; the relaxation orbit stays at radius `>= 0.84` with period `~7.58` |
-| **D-stability is not free** | **obstructed** | Lyapunov form `P = (1/3)[[11,4,-8],[4,5,-2],[-8,-2,9]]`, `det P = 115/27`; at `k = 4` the Routh first column is `(1, 6, -2, 24)` and the scaled matrix has two right-half-plane roots |
-| **Finite phases are path functions** | **obstructed** | full and half-damped iteration share every answer, yet their centered contrasts after twelve steps differ by exactly `921633999 / 40000000000` |
-| Quadray geometry supplies the exact integer side of the correspondence | exact | 12 neighbour moves at squared distance 8, shells `10k^2 + 2`, rational volumes `1, 3, 4, 6, 20, 96` |
-| Equilibrium propagation supplies the parameter gradient the repair law does not define | exact | the two-settle contrast is `(theta - target) / (1 + beta)` exactly and tends to the exact gradient |
-| The carrier counts its own spanning trees | exact | the reduced Laplacian's determinant is `5184000` — by Kirchhoff's matrix-tree theorem the number of spanning trees in OPH's reading and, as the determinant of the same matrix read as a Gaussian precision with one port pinned, the normalisation of the FEP's linear-Gaussian interface integral — equal to the product of the eleven nonzero eigenvalues over `12` |
-| The Gaussian reading makes the seam graph the independence graph | exact | ports are conditionally dependent exactly across seams; pairwise precision `-1` at every seam, each port's Markov blanket is its five neighbours, and the variance of a port's deviation from the carrier mean is exactly `7/36` |
-| The agreement sheaf has one global section and nineteen obstructions, and the faces fill them all | exact | on the graph `dim H^0 = 1`, `dim H^1 = 19` (the cycle rank) with Euler characteristic `12 - 30`; with the twenty faces the face coboundary has rank 19, the surface's Betti numbers are `(1, 0, 1)` and its Euler characteristic is `2`, and OPH's oriented faces sum to a fundamental cycle |
-| The symmetry group closes the descent census | exact | order 120 = 60 rotations + 60 reflections, transitive on ports/seams/faces; every one of the 1123200 transitions (group element x configuration x oriented seam x coin) commutes with the group, giving 4 configuration orbits and 3 outcome multisets |
-| Information cost is half the synergetic metric | exact | at unit covariance in the integer embedding one IVM step costs 4 nats and the sites `k m` cost `4k^2`; the four is the unit of length, the ratios are the content |
-| **Twelve vertices is not one solid** | **obstructed** | the neighbour graph is four-regular with tetravolume 20; the carrier is five-regular with tetravolume `18.512295868219...` |
-| **The shell index and the free energy determine neither each other** | **obstructed** | the coordination shell is the cuboctahedral gauge `max(|u|_inf, |u|_1 / 2)`, a polyhedral norm, checked against every breadth-first shell through 12; the free energy on shell `k` ranges from `2k^2` (`2k^2 + 2` for odd `k`) to `4k^2`, attained only at the twelve vertices, and the levels 36 and 52 are each shared by two shells |
-| Synergetics' tetravolume table is derived, not transcribed | exact | `1, 3, 4, 6, 20, 96` come out of explicit integer vertex sets by exact convex-hull volumes in the rationals |
-| The carrier's own solid has an exact algebraic volume | exact | computed in exact field arithmetic as `sqrt 2 (15/2 + (5/2) sqrt 5) = 18.512295868219...`, squared exactly `175 + 75 sqrt 5`; its conjugate is `2.7009...` and the product is exactly `50` |
-| Both twelve-around-one arrangements attain the kissing number, differently | exact | squared edge over squared circumradius is exactly `1` for the cuboctahedron (rigid) and `2 - 2 sqrt 5 / 5` for the icosahedron (slack): the carrier is the loose arrangement |
-| The twelve-around-one cell is the densest packing's cell | exact | 14 vertices, 12 rhombic faces, 24 edges, tetravolume exactly 6, ball tetravolume exactly `pi sqrt 2`, density exactly `pi / (3 sqrt 2)` — optimal among lattice packings (Gauss) and all packings (Hales) |
+| claim | status | evidence | source or derivation |
+| --- | --- | --- | --- |
+| OPH's carrier is the kissing-twelve configuration, and its port chart is derived from OPH's own oriented faces | exact | 12 ports, 30 seams, 20 faces, five-regular; the 20 triangles of the derived graph are exactly OPH's 20 oriented faces | OPH’s oriented faces, with the adjacency derived here |
+| The carrier gap is the icosahedral gap | exact | `lambda_1 = 5 - sqrt(5)` in both readings (the generator of OPH's mean repair operator, and the FEP's precision), and the normalised gap `lambda_1 / (2\|E\|)` is exactly `(5 - sqrt(5)) / 60` | [Agreement and Surprise][agreement-and-surprise], §6.2, for the mean gap |
+| The native repair law conserves load and lowers `sum(x^2)/2` by `(d^2 - (\|d\| mod 2)) / 4` | exact | checked on all 4680 shell transitions | [OPH][oph-source], native repair law |
+| On the binary shell each native repair is exact Bayesian conditioning and a variational step | exact on that domain | in all 3960 cases the repair's law is the uniform reference conditioned on the datum the repair leaves visible; it minimises `F[q] = E_q[ln q - ln pi(s, o)]` over the fibre with minimum the surprisal `log 33` or `log 66`; off the shell the identity fails on the 60 seams that meet a doubled port | [Agreement and Surprise][agreement-and-surprise], §§6.2 and 7.3; [OPH synthesis][oph-synthesis] |
+| The mean of the native law is one step of the carrier Laplacian | exact | averaging the integer rule over the 60 seam-and-coin draws gives `x - L x / 60` in exact rationals on all 78 configurations | [OPH][oph-source], native fields; exact enumeration here |
+| Patch agreement is the global-section condition of a cellular sheaf, and the sheaf Laplacian is the carrier Laplacian | exact | `carrier_sheaf(carrier).laplacian() == carrier.laplacian()` | [Agreement and Surprise][agreement-and-surprise], §7.2 |
+| On the linear-Gaussian carrier, constrained relative-entropy minimisation and predictive-coding perception give the posterior mean | exact on that domain | harmonic extension, a separate KKT solve and perception flow agree. With a proper record prior, variational free energy equals normalised surprisal at the posterior. An asymmetric seam separates its energy minimum from its posterior mean. | [Agreement and Surprise][agreement-and-surprise], Theorem 7, items 2–3; carrier, chain and asymmetric spring checks here |
+| **PR-01**: ungated repair is confluent without termination; the broken-seam gate terminates without unique normal forms | **obstructed** | 78 states, no ungated normal forms, 66 gated normal forms and 5 reachable from each doubled state. The binary attempt chain has the port gap and nonincreasing ensemble relative entropy even though individual binary paths preserve load energy. | [OPH][oph-source], PR-01; exhaustive reachability and kernel checks here |
+| **Three distinct values at fixed records** | **obstructed** | minimum interface energy, the unnormalised record potential and normalised surprisal differ. The interior determinant cancels in the normalised probability. | [Agreement and Surprise][agreement-and-surprise], Theorem 7, item 3; equal-Schur chain control here |
+| Two-record Gaussian marginals are determined by effective resistance and the record prior | exact | all 66 carrier pairs satisfy the Schur identity; seam, distance-two and antipodal resistance are 11/30, 7/15 and 1/2 | Schur elimination and an independent rational network solve |
+| **Eliminating an interior mediator is not free** | **obstructed** | the reduced precision is `(1/3) v v^T + epsilon I`; a sum of pairwise semidefinite terms reproduces it iff `epsilon >= 1/3` | [Agreement and Surprise][agreement-and-surprise], Proposition 8; rank-one construction here |
+| **A stationary blanket need not bound the dynamics** | **obstructed** | with a zero precision entry the internal drift is `2q eta + (q - 1) b - 2 mu`, so equal blanket statistics do not fix the internal motion | [Agreement and Surprise][agreement-and-surprise], Proposition 11; Da Costa et al.’s stationary blanket example |
+| **Agreement can exist and be unreachable** | **obstructed** | the clipped two-node map has the origin as its only equilibrium and a source there; the relaxation orbit stays at radius `>= 0.84` with period `~7.58` | [Agreement and Surprise][agreement-and-surprise], Proposition 15; exact fixed-point census and orbit measurement here |
+| **D-stability is not free** | **obstructed** | Lyapunov form `P = (1/3)[[11,4,-8],[4,5,-2],[-8,-2,9]]`, `det P = 115/27`; at `k = 4` the Routh first column is `(1, 6, -2, 24)` and the scaled matrix has two right-half-plane roots | [Agreement and Surprise][agreement-and-surprise], §4.1 and Proposition 10; general Routh column here |
+| **Finite phases are path functions** | **obstructed** | full and half-damped iteration share every answer, yet their centered contrasts after twelve steps differ by exactly `921633999 / 40000000000` | [Agreement and Surprise][agreement-and-surprise], Proposition 6 and §4.4; exact contrast here |
+| Quadray geometry supplies the exact integer side of the correspondence | exact | 12 neighbour moves at squared distance 8, shells `10k^2 + 2`, rational volumes `1, 3, 4, 6, 20, 96` | QuadMath conventions; lattice counts and volumes derived here |
+| Equilibrium propagation supplies the parameter gradient the repair law does not define | exact | the two-settle contrast is `(theta - target) / (1 + beta)` exactly and tends to the exact gradient | [Agreement and Surprise][agreement-and-surprise], Theorem 21; Scellier and Bengio |
+| The carrier counts its own spanning trees | exact | the reduced Laplacian's determinant is `5184000` — by Kirchhoff's matrix-tree theorem the number of spanning trees in OPH's reading and, as the determinant of the same matrix read as a Gaussian precision with one port pinned, the normalisation of the FEP's linear-Gaussian interface integral — equal to the product of the eleven nonzero eigenvalues over `12` | Kirchhoff’s matrix-tree theorem applied here to the carrier |
+| The Gaussian reading makes the seam graph the independence graph | exact | ports are conditionally dependent exactly across seams; pairwise precision `-1` at every seam, each port's Markov blanket is its five neighbours, and the variance of a port's deviation from the carrier mean is exactly `7/36` | Carrier Gaussian precision calculated here |
+| The agreement sheaf has one global section and nineteen obstructions, and the faces fill them all | exact | on the graph `dim H^0 = 1`, `dim H^1 = 19` (the cycle rank) with Euler characteristic `12 - 30`; with the twenty faces the face coboundary has rank 19, the surface's Betti numbers are `(1, 0, 1)` and its Euler characteristic is `2`, and OPH's oriented faces sum to a fundamental cycle | Cellular sheaf construction from [Agreement and Surprise][agreement-and-surprise], §7.2; carrier cohomology calculated here |
+| The symmetry group closes the descent census | exact | order 120 = 60 rotations + 60 reflections, transitive on ports/seams/faces; every one of the 1123200 transitions (group element x configuration x oriented seam x coin) commutes with the group, giving 4 configuration orbits and 3 outcome multisets | Carrier automorphisms and native transitions enumerated here |
+| Information cost is half the synergetic metric | exact | at unit covariance in the integer embedding one IVM step costs 4 nats and the sites `k m` cost `4k^2`; the four is the unit of length, the ratios are the content | Equal-covariance Gaussian divergence applied to QuadMath’s embedding |
+| **Twelve vertices is not one solid** | **obstructed** | the neighbour graph is four-regular with tetravolume 20; the carrier is five-regular with tetravolume `18.512295868219...` | [OPH][oph-source] and QuadMath geometry compared here |
+| **The shell index and the free energy determine neither each other** | **obstructed** | the coordination shell is the cuboctahedral gauge `max(\|u\|_inf, \|u\|_1 / 2)`, a polyhedral norm, checked against every breadth-first shell through 12; the free energy on shell `k` ranges from `2k^2` (`2k^2 + 2` for odd `k`) to `4k^2`, attained only at the twelve vertices, and the levels 36 and 52 are each shared by two shells | The Gaussian cost and cuboctahedral gauge compared here |
+| Synergetics' tetravolume table is derived, not transcribed | exact | `1, 3, 4, 6, 20, 96` come out of explicit integer vertex sets by exact convex-hull volumes in the rationals | QuadMath conventions; exact convex-hull volumes derived here |
+| The carrier's own solid has an exact algebraic volume | exact | computed in exact field arithmetic as `sqrt 2 (15/2 + (5/2) sqrt 5) = 18.512295868219...`, squared exactly `175 + 75 sqrt 5`; its conjugate is `2.7009...` and the product is exactly `50` | Carrier geometry; exact field computation here |
+| Both twelve-around-one arrangements attain the kissing number, differently | exact | squared edge over squared circumradius is exactly `1` for the cuboctahedron (rigid) and `2 - 2 sqrt 5 / 5` for the icosahedron (slack): the carrier is the loose arrangement | Carrier and vector equilibrium compared here |
+| The twelve-around-one cell is the densest packing's cell | exact | 14 vertices, 12 rhombic faces, 24 edges, tetravolume exactly 6, ball tetravolume exactly `pi sqrt 2`, density exactly `pi / (3 sqrt 2)` — optimal among lattice packings (Gauss) and all packings (Hales) | Exact Voronoi cell calculated here; packing optimality from Gauss and Hales |
+
+[agreement-and-surprise]: https://philpapers.org/rec/MUEAAS-2
+[oph-source]: https://github.com/FloatingPragma/observer-patch-holography
+[oph-synthesis]: https://philpapers.org/rec/MUEFOC
 
 ## Scope
 
@@ -234,7 +244,7 @@ Three disciplines hold the manuscript together, and each one is a test:
 
 ```
 data/sources.json                    pinned sources, licences, cited identifiers
-docs/CORRESPONDENCES.md              generated: the 43 entries and their probe values
+docs/CORRESPONDENCES.md              generated: the 44 entries and their probe values
 docs/MANUSCRIPT_VALUES.md            generated: every bound value
 docs/CONCORDANCE.md                  generated: where each claim is stated and each figure appears
 docs/PROVENANCE.md                   the pins and the reuse rules
@@ -246,7 +256,7 @@ scripts/make_figures.py              renders the twenty-three figures and their 
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (400 tests)
+tests/                               the suite (406 tests)
 ```
 
 ## Tests
@@ -255,12 +265,12 @@ tests/                               the suite (400 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-400 tests, no mocks, no network. The suite checks exact values rather than
+406 tests. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over
 shell sites, the resistance ladder's exact fractions against a from-scratch solve,
-and the exact volume ratios. Coverage is 96.58% with a 90% gate
+and the exact volume ratios. The coverage report enforces a 90% gate
 enforced by `pyproject.toml`.
 
 ## Regenerating the documents

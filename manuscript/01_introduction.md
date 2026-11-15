@@ -59,16 +59,20 @@ The contributions are the following.
 3. A complete census of the native repair law over the {{SHELL_TOTAL_TWO}}
    configurations of total load two: {{SHELL_STRICT_DESCENT}} strict descents,
    {{SHELL_ZERO_DESCENT}} zero descents, {{SHELL_NOOP}} no-op moves
-   [@prop:census]. The zero-descent moves are OPH's obstructed premise PR-01 made
-   executable.
-4. A variational equivalence on the linear-Gaussian domain: the harmonic
-   extension, the constrained relative-entropy minimiser and the limit of
-   predictive-coding perception are one point, computed by routes that share no
-   linear solve [@prop:ve].
-5. Exact thresholds for three dynamical questions: the D-stability onset
-   `{{D_STABILITY_ROUTH_ONSET}}` [@prop:dstability], the mediator threshold
-   `{{MEDIATOR_THRESHOLD}}` [@prop:mediator], and the solenoidal family's free
-   entropy production [@prop:solenoid].
+   [@prop:census]. The reachability probe separates the ungated law's
+   nontermination from the gated law's lack of confluence [@prop:native-rewrite].
+4. An executable reproduction of Mueller's linear-Gaussian equivalence
+   [@mueller2026agreement, theorem 7, items 2–3]. The package checks the harmonic
+   extension and the limit of predictive-coding perception against a separate KKT
+   solve on the carrier [@prop:ve].
+5. Executable reproductions of Mueller's mediator, solenoidal and stability
+   controls [@mueller2026agreement, propositions 8–10 and 15]. The package
+   derives the general Routh column and onset `{{D_STABILITY_ROUTH_ONSET}}`
+   [@prop:dstability], verifies that the decomposition at the mediator threshold
+   `{{MEDIATOR_THRESHOLD}}` uses rank-one blocks [@prop:mediator], and checks the
+   solenoidal entropy production [@prop:solenoid]. Exact enumeration of the
+   clipping regimes and an independent orbit measurement extend the two-node
+   control [@prop:existence].
 6. An exact correspondence with Synergetics' IVM: twelve neighbour moves at
    squared distance {{IVM_NEIGHBOR_SQUARED_DISTANCE}}, coordination shells of
    $10k^{2}+2$ sites identified in closed form as the lattice points on the
@@ -113,7 +117,8 @@ the values that function returns.
 
 It does not claim that OPH is a free energy principle, or that FEP is a
 holographic theory, or that Synergetics predicts either. It tests identifications
-that have been proposed [@dossier2026; @proposal2026] and reports which survive.
+from the integration proposals and runs the OPH–FEP controls developed in
+*Agreement and Surprise* [@dossier2026; @proposal2026; @mueller2026agreement].
 It reproduces the three quantities the source literature states for the native
 law from the protocols in OPH's public model [@sec:scope]. It does not
 compare any of the three against laboratory data; OPH's own empirical status

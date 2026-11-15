@@ -975,9 +975,9 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         None,
     ),
     BoundValue(
-        "ve.excess",
-        float(_VE["excess_free_energy_at_posterior"]),
-        "probe:variational-equivalence:excess_free_energy_at_posterior",
+        "ve.excess_residual",
+        float(_VE["excess_free_energy_at_posterior_residual"]),
+        "probe:variational-equivalence:excess_free_energy_at_posterior_residual",
         "0",
     ),
     BoundValue(
@@ -1026,6 +1026,24 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         "fe.variational_at_posterior",
         float(_COLLISION["variational_free_energy_at_posterior"]),
         "probe:free-energy-name-collision:variational_free_energy_at_posterior",
+        None,
+    ),
+    BoundValue(
+        "fe.record_potential",
+        float(_COLLISION["unnormalised_record_potential"]),
+        "probe:free-energy-name-collision:unnormalised_record_potential",
+        None,
+    ),
+    BoundValue(
+        "fe.record_prior_precision",
+        float(_COLLISION["record_prior_precision"]),
+        "probe:free-energy-name-collision:record_prior_precision",
+        "1/2",
+    ),
+    BoundValue(
+        "fe.normalised_record_offset",
+        float(_COLLISION["normalised_record_offset"]),
+        "probe:free-energy-name-collision:normalised_record_offset",
         None,
     ),
     BoundValue(
@@ -1276,6 +1294,24 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         "probe:pr01-obstruction:hop_probability",
         None,
         note="each neighbouring configuration, same attempt law",
+    ),
+    BoundValue(
+        "pr01.ungated_normal_forms",
+        int(_PR01["ungated_normal_forms"]),
+        "probe:pr01-obstruction:ungated_normal_forms",
+        None,
+    ),
+    BoundValue(
+        "pr01.gated_normal_forms",
+        int(_PR01["gated_normal_forms"]),
+        "probe:pr01-obstruction:gated_normal_forms",
+        None,
+    ),
+    BoundValue(
+        "pr01.gated_normal_forms_per_doubled_state",
+        int(_PR01["gated_normal_forms_per_doubled_state"]),
+        "probe:pr01-obstruction:gated_normal_forms_per_doubled_state",
+        None,
     ),
     BoundValue(
         "pr01.hop_targets",

@@ -30,8 +30,8 @@ assert KINDS == REGISTRY_KINDS, "the registry and its tests must agree on the ki
 
 
 def test_registry_entries_are_well_formed():
-    assert len(CORRESPONDENCES) == 43
-    assert len({entry.key for entry in CORRESPONDENCES}) == 43
+    assert len(CORRESPONDENCES) == 44
+    assert len({entry.key for entry in CORRESPONDENCES}) == 44
     for entry in CORRESPONDENCES:
         assert entry.kind in KINDS
         assert entry.pair in PAIRS
@@ -43,7 +43,7 @@ def test_registry_entries_are_well_formed():
 
 def test_registry_covers_all_three_relations():
     counts = {kind: sum(1 for entry in CORRESPONDENCES if entry.kind == kind) for kind in KINDS}
-    assert counts == {ISOMORPHISM: 18, DISAGREEMENT: 15, COMPLEMENTARITY: 10}
+    assert counts == {ISOMORPHISM: 19, DISAGREEMENT: 15, COMPLEMENTARITY: 10}
 
 
 def test_statuses_follow_their_kind():
@@ -66,7 +66,7 @@ def test_registry_covers_every_pairwise_scope():
     index = by_pair()
     assert set(index) == set(PAIRS)
     counts = {pair: len(entries) for pair, entries in index.items()}
-    assert counts == {OPH_FEP: 25, FEP_SYNERGETICS: 2, SYNERGETICS_OPH: 14, THREE_WAY: 2}
+    assert counts == {OPH_FEP: 26, FEP_SYNERGETICS: 2, SYNERGETICS_OPH: 14, THREE_WAY: 2}
     assert sum(counts.values()) == len(CORRESPONDENCES)
     for pair, entries in index.items():
         assert all(entry.pair == pair for entry in entries)
@@ -90,21 +90,21 @@ def test_by_key_indexes_every_entry():
 
 def test_every_probe_passes_and_reports_values():
     results = verify()
-    assert len(results) == 43
+    assert len(results) == 44
     for result in results:
         assert result.passed is True
         assert result.pair in PAIRS
         assert result.values
     report = summary(results)
-    assert report["total"] == 43
-    assert report["passed"] == 43
+    assert report["total"] == 44
+    assert report["passed"] == 44
     assert report["failed"] == 0
     assert report["failures"] == ()
-    assert report["by_kind"][ISOMORPHISM] == {"passed": 18, "failed": 0}
+    assert report["by_kind"][ISOMORPHISM] == {"passed": 19, "failed": 0}
     assert report["by_kind"][DISAGREEMENT] == {"passed": 15, "failed": 0}
     assert report["by_kind"][COMPLEMENTARITY] == {"passed": 10, "failed": 0}
     assert report["pairs"] == PAIRS
-    assert report["by_pair"][OPH_FEP] == {"passed": 25, "failed": 0}
+    assert report["by_pair"][OPH_FEP] == {"passed": 26, "failed": 0}
     assert report["by_pair"][FEP_SYNERGETICS] == {"passed": 2, "failed": 0}
     assert report["by_pair"][SYNERGETICS_OPH] == {"passed": 14, "failed": 0}
     assert report["by_pair"][THREE_WAY] == {"passed": 2, "failed": 0}
@@ -195,22 +195,30 @@ def test_native_repair_law_values():
 
 def test_variational_equivalence_values():
     values = by_key()["variational-equivalence"].run().values
+    assert values["record_ports"] == (0, 3)
+    assert values["interior_dimension"] == 10
+    assert values["chain_control_passes"] is True
+    assert values["nonquadratic_energy_minimiser"] == 0.0
+    assert values["nonquadratic_posterior_mean"] < -0.1
     assert values["perceive_matches_harmonic_extension"] is True
     assert values["posterior_mean_is_harmonic_extension"] is True
     assert values["residual"] < 1e-9
     assert values["stationary_gradient_norm"] < 1e-9
-    assert float(values["excess_free_energy_at_posterior"]) == 0.0
+    assert values["excess_free_energy_at_posterior_residual"] == pytest.approx(0.0, abs=1e-12)
     assert values["min_perturbed_energy"] > values["energy_at_minimiser"]
 
 
 def test_free_energy_dictionary_values():
     values = by_key()["free-energy-dictionary"].run().values
+    assert values["interior_dimension"] == 10
+    assert values["chain_control_passes"] is True
     assert values["record_injectivity"] is True
-    assert values["bayesian_surprise"] == values["closed_form_half_g_linv_g"]
+    assert values["bayesian_surprise"] == pytest.approx(values["kl_between_posteriors"], abs=1e-12)
     assert values["sandwich_inside"] is True
     assert values["sandwich_lower"] <= values["bayesian_surprise"] <= values["sandwich_upper"]
-    assert values["variational_free_energy"] == values["surprisal"]
+    assert values["variational_free_energy"] == pytest.approx(values["surprisal"], abs=1e-12)
     assert values["numerical_surprise"] > 0.0
+    assert values["nonquadratic_record_surprisal_difference"] == 0.5
 
 
 def test_sheaf_agreement_values():
@@ -257,12 +265,26 @@ def test_pr01_obstruction_values():
 
 def test_free_energy_name_collision_values():
     values = by_key()["free-energy-name-collision"].run().values
+    assert values["interior_dimension"] == 10
     assert values["is_positive_definite_interior"] is True
     assert values["interface_energy_minimised_over_interior"] > 0.0
     assert float(values["difference"]) == pytest.approx(
         values["expected_model_constant"], abs=1e-12
     )
-    assert float(values["variational_free_energy_at_posterior"]) != float(values["difference"])
+    assert values["normalised_record_surprisal"] == pytest.approx(
+        values["energy_minus_entropy_at_posterior"], abs=1e-12
+    )
+    assert values["chain_control_schur_agrees"] is True
+    assert abs(values["chain_control_raw_potential_difference"]) > 0.1
+    assert abs(values["chain_control_normalised_surprisal_residual"]) < 1e-12
+
+
+def test_two_record_resistance_values():
+    results = by_key()["two-record-resistance"].run()
+    assert results.passed
+    assert results.values["resistances_by_distance"] == ("11/30", "7/15", "1/2")
+    assert results.values["pairs_by_distance"] == (30, 30, 6)
+    assert results.values["max_schur_residual"] < 1e-12
 
 
 def test_mediator_obstruction_values():

@@ -127,11 +127,11 @@ def log_findings(log_text: str) -> dict[str, object]:
 
 def check(
     pdf: Path = DEFAULT_PDF,
-    log: Path = DEFAULT_LOG,
+    log: Path | None = DEFAULT_LOG,
     *,
     keys: tuple[str, ...] = tuple(entry.key for entry in CORRESPONDENCES),
 ) -> tuple[bool, list[str]]:
-    """Run every check and return (passed, report lines)."""
+    """Check a release render, or its standalone PDF when `log` is None."""
     lines: list[str] = []
     passed = True
 
@@ -198,7 +198,9 @@ def check(
         lines.append("  absent: " + ", ".join(absent))
     passed &= not absent
 
-    if log.is_file():
+    if log is None:
+        lines.append("log: not requested for the standalone PDF check")
+    elif log.is_file():
         findings = log_findings(log.read_text(encoding="utf-8", errors="replace"))
         lines.append(
             "log: {overfull} overfull hbox, undefined citations {undefined_citations}, "

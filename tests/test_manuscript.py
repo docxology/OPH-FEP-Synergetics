@@ -94,7 +94,8 @@ def test_the_published_value_set_is_used_except_where_documented():
 LITERAL_ALLOWLIST = tuple(
     re.compile(pattern)
     for pattern in (
-        r"@[\w:-]+",                          # citations and cross-references: [@sec:pr01]
+        r"\[@[^\]\n]*\]",                    # bracketed citations including source locators
+        r"@[\w:-]+",                          # inline citations and cross-references
         r"width=\d+%",                        # figure layout
         r"\\setcounter\{page\}\{\d+\}",       # page plumbing
         r"\bPR-01\b",                         # OPH's own premise label

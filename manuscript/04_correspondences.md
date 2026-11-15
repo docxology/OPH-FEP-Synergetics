@@ -101,10 +101,11 @@ a native record law [@oph].
 
 ::: {#prop:ve .proposition}
 Let $L$ be the carrier Laplacian partitioned into recorded ports $o$ and free
-ports $x$, and let
+ports $x$, equip $o$ with the prior in [@eq:gaussian], and let
 $x^{*}(o) = -L_{xx}^{-1} L_{xo}\, o$ be the harmonic extension of the records.
-Then the variational free energy of [@eq:gaussian] is minimised at
-$x^{*}(o)$, with
+The posterior has mean $x^{*}(o)$ and precision $L_{xx}$. At that posterior,
+the variational free energy takes the value $\mathcal{F}_{\mathrm G}(o)=-\ln p(o)$
+[@mueller2026agreement, theorem 7], with
 
 $$
 S \;=\; L_{oo} - L_{ox} L_{xx}^{-1} L_{xo},
@@ -115,26 +116,28 @@ S \;=\; L_{oo} - L_{ox} L_{xx}^{-1} L_{xo},
 $$ {#eq:ve}
 :::
 
-The probe computes the settled interior of [@eq:ve] three ways that share no
-linear solve.
+The probe uses two antipodal carrier records with prior precision
+{{FE_RECORD_PRIOR_PRECISION}} and repeats the checks on a four-node chain.
+It computes the settled interior of [@eq:ve] three ways that share no linear solve.
 The harmonic extension solves the interior block. The constrained minimiser
 solves one saddle-point (KKT) system for $\min \tfrac{1}{2}z^{\top}Lz$ subject to
-$z_o = o$ over all coordinates and a multiplier per record; because the relative
-entropy of a mean shift at fixed precision $L$ is $\tfrac{1}{2}z^{\top}Lz$, this is
-OPH's premise A3, constrained relative-entropy minimisation, read in the mean.
+$z_o = o$ over all coordinates and a multiplier per record. The prior contributes
+a fixed term at fixed records, so the same constrained solution minimises the
+relative entropy of a mean shift at fixed joint precision. This is the
+constrained relative-entropy reading of OPH's premise A3.
 And the predictive-coding flow `perceive` reaches the same point in
 {{VE_ITERATIONS}} iterations with residual {{VE_RESIDUAL}}, from every start
 tried. The probe also evaluates the free energy at the posterior directly, as
 energy minus entropy, and finds it equal to the surprisal: the divergence in
-[@eq:vfe] is {{VE_EXCESS}} there because the bound is tight at the posterior.
+[@eq:vfe] has numerical residual {{VE_EXCESS_RESIDUAL}} because the bound is
+tight at the posterior.
 
-This is the paper's central positive result about the FEP, and its scope should
-be stated as carefully as the result. [@prop:ve] holds in the linear-Gaussian
-corner, where the posterior is Gaussian, the free energy is a quadratic form, and
-the harmonic extension is available in closed form. It does not assert that a
-non-Gaussian model has a quadratic free energy, and it does not assert that the
-iteration converges for a general graph; the residual is reported so that a
-failure of convergence would be visible as a number rather than as a hang.
+The boundary control clamps a single record on an oriented seam with an
+asymmetric spring. The energy is piecewise quadratic, with twice the stiffness
+for positive disagreement. Its unique minimiser is at zero disagreement,
+while numerical integration and a half-Gaussian calculation give a negative
+posterior mean. The equality of minimiser and posterior mean in [@prop:ve]
+depends on the Gaussian assumption.
 
 ## Each native repair is exact conditioning {#sec:conditioning}
 
@@ -204,42 +207,42 @@ registry entry is `free-energy-dictionary`.
 
 | Quantity | Definition | Value in the probe model |
 |:---------|:-----------|:-------------------------|
-| numerical free energy | $\tfrac{1}{2} r^{\top}\Pi\, r$ at the residual $r$ | {{FE_NUMERICAL}} |
-| Bayesian surprise | $\tfrac{1}{2} g^{\top} L^{-1} g$ | {{FE_BAYESIAN}} |
-| surprisal | $-\log p(o)$ up to the model constant | {{FE_SURPRISAL}} |
-| variational free energy | [@eq:gaussian] at the posterior | {{FE_VARIATIONAL}} |
+| numerical surprise | residual norm $\lVert g\rVert$ at the old rest | {{FE_NUMERICAL}} |
+| Bayesian surprise | $\tfrac{1}{2} g^{\top} L_{xx}^{-1} g$ | {{FE_BAYESIAN}} |
+| record surprisal | $-\ln p(o)$ under the proper joint model | {{FE_SURPRISAL}} |
+| variational free energy | [@eq:vfe] at the posterior | {{FE_VARIATIONAL}} |
 
-: The three surprises in the linear-Gaussian corner, with the values the probe
-reports. The numerical and Bayesian quantities differ from the surprisal by the
-model constant; the sandwich bound brackets the Bayesian value. {#tbl:surprises}
+: Three surprises in the linear-Gaussian carrier probe. The residual norm and
+Bayesian surprise describe a change of records. Record surprisal uses the new
+records alone. The sandwich bound brackets the Bayesian value
+[@mueller2026agreement, theorem 7 and table 7]. {#tbl:surprises}
 
 The probe reports a sandwich with lower bound {{FE_SANDWICH_LOWER}} and upper
-bound {{FE_SANDWICH_UPPER}}, and the Bayesian value {{FE_BAYESIAN}} lies inside it. It reports that the
-variational free energy and the surprisal agree to machine precision, because at
-the posterior the bound is tight. And it reports that the interface energy
-minimised over the interior is {{FE_INTERFACE}} while the variational free energy
-is {{FE_VARIATIONAL_AT_POSTERIOR}}, a difference of {{FE_DIFFERENCE}} which is exactly the
-model constant {{FE_MODEL_CONSTANT}}.
+bound {{FE_SANDWICH_UPPER}}, and the Bayesian value {{FE_BAYESIAN}} lies inside
+it. The energy drop at the new records and the divergence between posteriors
+give the same value by independent routes. The variational free energy equals
+record surprisal at the posterior and exceeds it by the divergence from the
+posterior away from that optimum.
 
-The status is `exact-on-domain` rather than `exact` for that reason: the
-identification is exact as a statement about *first variation*, and the levels
-differ by a constant that the model fixes but the identification does not. A
-reader who takes "free energy" to name a single functional will draw wrong
-conclusions at the first model change; the constant is the visible trace of that
-risk.
+The asymmetric seam gives a check outside this domain. Ground one port and
+read the other with a symmetric record prior. Records of opposite sign and
+equal magnitude have different surprisals, because the prior and the
+normaliser cancel in their difference and the seam energies do not agree.
+The centred quadratic record formula cannot represent this difference.
 
 ![Two panels read from the executed probes. Left: the sandwich interval with its
 lower bound {{FE_SANDWICH_LOWER}} and upper bound {{FE_SANDWICH_UPPER}}, and the
-Bayesian surprise {{FE_BAYESIAN}} marked inside it. Right: horizontal bars for
-the functionals the literature calls free energy in the same linear-Gaussian
-model: numerical {{FE_NUMERICAL}}, Bayesian {{FE_BAYESIAN}}, interface
-{{FE_INTERFACE}}, surprisal {{FE_SURPRISAL}}, variational {{FE_VARIATIONAL}}, and
-the variational free energy at the posterior {{FE_VARIATIONAL_AT_POSTERIOR}}; the
-interior and posterior values differ by the model constant {{FE_MODEL_CONSTANT}}.
+Bayesian surprise {{FE_BAYESIAN}} marked inside it. Right: three quantities at
+the same records: minimum interface energy {{FE_INTERFACE}}, unnormalised
+record potential {{FE_RECORD_POTENTIAL}}, and normalised record surprisal
+{{FE_VARIATIONAL_AT_POSTERIOR}}.
 Generated by `scripts/make_figures.py` from `core/free_energy.py` and
 `core/controls.py`.](../output/figures/fig_sandwich.png){#fig:sandwich width=90%}
 
 ## A sheaf computes the same Laplacian {#sec:sheaf}
+
+The scalar carrier construction instantiates the cellular sheaf formulation of
+agreement [@mueller2026agreement, sec. 7.2 and theorem 7].
 
 ::: {#prop:sheaf .proposition}
 Give every port the stalk $\mathbb{R}$ and every seam the identity restriction.

@@ -1,9 +1,7 @@
 """The rendered PDF contract, checked on the pure parsing helpers and on the real render.
 
-The render itself is an artefact: it lives under `output/`, which is generated
-and never committed. The parsing helpers are therefore tested against synthetic
-page text, and the whole contract is exercised against the real PDF only when one
-has been rendered.
+The release PDF is tracked under `output/`. The parsing helpers also use
+synthetic page text; the LaTeX log is available only after a local rebuild.
 """
 
 from __future__ import annotations
@@ -15,7 +13,6 @@ import pytest
 
 PROJECT = Path(__file__).resolve().parents[1]
 PDF = PROJECT / "output" / "pdf" / "OPH-FEP-Synergetics_combined.pdf"
-LOG = PROJECT / "output" / "pdf" / "_combined_manuscript.log"
 
 
 def _load():
@@ -118,5 +115,5 @@ def test_a_clean_log_reports_nothing():
 
 @pytest.mark.skipif(not PDF.is_file(), reason="no rendered PDF in this checkout")
 def test_the_rendered_pdf_keeps_the_front_matter_contract():
-    passed, lines = check_render.check(PDF, LOG)
+    passed, lines = check_render.check(PDF, log=None)
     assert passed, "\n".join(lines)

@@ -263,12 +263,14 @@ two {{RESISTANCE_DISTANCE_TWO}}, and across the carrier
 classes, summing to a Kirchhoff index of {{RESISTANCE_KIRCHHOFF_INDEX}}.
 :::
 
-Neither programme asks for this number, which is what makes it a complement
-rather than an identification. In the Gaussian reading it is the variance of a
-port's potential difference, so it is available for free to anyone holding the
-precision, and it is invisible to both programmes' own vocabularies: OPH never
-forms it, and the FEP's free energy does not depend on it. The sum is the useful
-part. The three classes contribute {{RESISTANCE_KIRCHHOFF_INDEX}} in total, and
+In the Gaussian reading, this resistance is the variance of the intrinsic
+potential difference. The probe `two-record-resistance` eliminates all
+free ports and compares the resulting pairwise Schur complement with the
+grounded network solve for every pair. For records $o_i,o_j$, the Schur term
+in [@eq:gaussian] is $(o_i-o_j)^2/(2R_{ij})$. The proper prior then contributes
+its own energy and the record normaliser.
+
+Across the carrier, the three classes contribute {{RESISTANCE_KIRCHHOFF_INDEX}} in total, and
 the same total is twelve times the reciprocal spectrum sum
 {{GMRF_RECIPROCAL_SPECTRUM_SUM}} from [@sec:gmrf], which is a cross-check between
 a rational system solved pair by pair and a closed-form spectral identity. The

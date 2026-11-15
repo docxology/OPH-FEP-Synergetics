@@ -46,6 +46,25 @@ def format_probe_value(value: object) -> str:
     return str(value)
 
 
+def format_registry_measurement(name: str, value: object) -> str:
+    """Keep printed precision portable while leaving raw probe values intact."""
+    if isinstance(value, float):
+        diagnostic = ("residual" in name or name.endswith("_error") or name in {
+            "stationary_gradient_norm", "edge_spread", "f_zero_norm",
+        })
+        if diagnostic and abs(value) < 1e-9:
+            return "abs < 1e-9"
+        if value == 0:
+            return "0"
+        return format(value, ".9g")
+    if isinstance(value, dict):
+        return ", ".join(f"{key}={format_registry_measurement(str(key), item)}"
+                         for key, item in value.items())
+    if isinstance(value, (tuple, list)):
+        return "(" + ", ".join(format_registry_measurement(name, item) for item in value) + ")"
+    return format_probe_value(value)
+
+
 def render_registry() -> str:
     results = {result.key: result for result in verify()}
     report = summary(tuple(results.values()))
@@ -60,6 +79,10 @@ def render_registry() -> str:
         "together with the status the probe establishes and the pair of programmes the",
         "claim is made across. Most claims are pairwise; `three-way` marks the few that",
         "no pair of readings captures.",
+        "",
+        "Measured floats are shown to nine significant digits; numerical error",
+        "diagnostics below `1e-9` in magnitude are reported as such.",
+        "`verify --json` retains raw values; probe tolerances are unchanged.",
         "",
         "| pair | kind | status | entry | claim |",
         "| --- | --- | --- | --- | --- |",
@@ -104,7 +127,7 @@ def render_registry() -> str:
             "",
         ]
         for name, value in result.values.items():
-            lines.append(f"- `{name}` = {format_probe_value(value)}")
+            lines.append(f"- `{name}` = {format_registry_measurement(name, value)}")
         lines.append("")
     return "\n".join(lines) + "\n"
 
@@ -125,8 +148,9 @@ def render_values() -> str:
     for entry in MANUSCRIPT_VALUES:
         exact = f"`{entry.exact}`" if entry.exact else ""
         note = entry.note or ""
+        value = format_registry_measurement(entry.key, entry.value)
         lines.append(
-            f"| `{entry.key}` | {format_probe_value(entry.value)} | {exact} | {entry.source} | {note} |",
+            f"| `{entry.key}` | {value} | {exact} | {entry.source} | {note} |",
         )
     lines.append("")
     return "\n".join(lines)

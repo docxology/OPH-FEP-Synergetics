@@ -13,7 +13,7 @@ surfaces: the registry (`oph-fep-synergetics verify`) and the test suite.
 .venv/bin/oph-fep-synergetics verify --kind <kind>
 ```
 
-Each of the 43 entries carries an executable probe. A probe returns `(passed,
+Each of the 44 entries carries an executable probe. A probe returns `(passed,
 values)`; `values` is what the pass is made of, so a number that changes without
 changing the verdict is still visible in the report.
 
@@ -35,13 +35,14 @@ mistaken for a clean run.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-400 tests, no mocks, no network, no fixtures that fake a result. The suite runs
-from a fresh process against the real code paths.
+406 tests. The suite runs offline from a fresh process and exercises the actual
+scientific code paths.
 
 | file | what it pins down |
 | --- | --- |
 | `test_carrier.py` | 12/30/20, five-regular, the derived port chart, the exact spectrum and gap, the 78/66 shell, the isomorphism witness, and the rejection cases |
 | `test_repair.py` | conservation and the energy identity over all 4680 transitions, the odd-unit coin, the argument guards, the gated schedule reaching rest, and an ungated move that lowers nothing |
+| `test_native_dynamics.py` | ungated confluence and nontermination, the gated normal forms, and binary-chain stationarity, gap and ensemble relaxation |
 | `test_sheaf.py` | laplacians, coboundaries, global sections, harmonic extension (including the fully-clamped case), record injectivity, diffusion, and every constructor guard |
 | `test_free_energy.py` | the KL closed forms, the Schur complement, the update-residual form of Bayesian surprise, the variational bound attained at the posterior, and the interior-free model |
 | `test_controls.py` | the descent census, the Routh column in closed form, the Lyapunov pair and its determinant, the mediator threshold, the affine contrast as an exact rational, the orbits, the four-cycle trap, and the replicator potential |
@@ -70,9 +71,9 @@ identity.
 ## Coverage
 
 `pyproject.toml` enforces `fail_under = 90` with branch coverage over
-`src/oph_fep_synergetics`. The current result is **96.58%**. The remaining lines
-are defensive or unreachable branches (an assertion that cannot fire on a
-well-formed carrier, a guard behind a guard), not untested behaviour.
+`src/oph_fep_synergetics`. The command above reports the current result and any
+uncovered statements or branches. GitHub Actions runs the same gate on the
+oldest supported Python and on Python 3.14.
 
 ## Generated documents
 
@@ -86,6 +87,10 @@ are rendered from the registry, from `MANUSCRIPT_VALUES` and from the manuscript
 text itself. `test_docs.py` runs the same render and compares byte-for-byte, so
 a claim, a value or a cross-reference that changes without a re-render fails
 the suite.
+
+The registry document rounds measured values for stable rendering across
+numerical runtimes. The JSON verifier keeps the raw values and the probes keep
+their original pass/fail tolerances.
 
 ## Live source pins
 

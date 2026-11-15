@@ -90,6 +90,16 @@ def test_format_probe_value_renders_containers_and_scalars():
     assert renderer.format_probe_value("plain") == "plain"
 
 
+def test_registry_measurements_hide_only_insignificant_float_differences():
+    fmt = _load_renderer().format_registry_measurement
+    assert fmt("surprisal_drop_residual_nonzero_old", 2.78e-17) == "abs < 1e-9"
+    assert fmt("surprisal_drop_residual_nonzero_old", 0.0) == "abs < 1e-9"
+    assert fmt("pseudoinverse_diagonal", 0.19444444444444445) == "0.194444444"
+    assert fmt("pseudoinverse_diagonal", 0.1944444444444445) == "0.194444444"
+    assert fmt("residual", 2e-8) == "2e-08"
+    assert fmt("probability", 2.78e-17) == "2.78e-17"
+
+
 def test_every_relative_link_in_the_guides_resolves():
     broken = []
     for guide in (ROOT / "README.md", ROOT / "AGENTS.md"):

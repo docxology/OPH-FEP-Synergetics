@@ -49,21 +49,22 @@ section 3.
 ## 2. Agreement as a minimisation
 
 **Entries:** `variational-equivalence`, `free-energy-dictionary`,
-`repair-is-conditioning`.
+`repair-is-conditioning`, `two-record-resistance`.
 
-On the linear-Gaussian corner, three descriptions of "settle to agreement"
+In the linear-Gaussian carrier model, three descriptions of "settle to agreement"
 coincide: the harmonic extension of the records (an interior solve), the
 constrained relative-entropy minimiser (a separate KKT solve), and the limit of
 the perception flow. The free energy at the posterior, computed directly as
 energy minus entropy, equals the surprisal; away from the posterior it exceeds
 it by exactly the divergence.
 
-The dictionary that makes this exact: surprisal is what no repair removes,
-Bayesian surprise is what repair removes, and the update residual pins the
-Bayesian surprise between the extreme interior eigenvalues.
+Record surprisal uses the normalised marginal with a proper prior. Bayesian
+surprise measures the change of posterior and is bracketed by the update
+residual and the extreme interior eigenvalues. For two carrier records, the
+Schur precision governing the contrast is set by the effective resistance.
 
-**Status note.** Both entries are `exact-on-domain`. The nonlinear and
-non-Gaussian cases are outside this work; see [docs/SCOPE.md](../docs/SCOPE.md).
+The Gaussian claims are `exact-on-domain`. An asymmetric spring gives a
+non-Gaussian counterexample to equality of posterior mean and energy minimum.
 
 ## 3. Where the three programs disagree
 
@@ -83,9 +84,10 @@ identification that looks natural in prose fails as stated.
   `shell.noop` do nothing. A one-unit walk keeps energy `1/2` while changing
   state. OPH records this as its own obstructed premise, and this repository
   reproduces it exhaustively.
-- **"Free energy" names two different objects.** The interior-minimised
-  interface energy and the variational free energy at the posterior differ by a
-  model-dependent constant. Writing one for the other is a gauge choice.
+- **Three values at fixed records.** Minimum interface energy, the raw Gaussian
+  record potential and normalised surprisal have different meanings. The
+  interior determinant contributes to the raw potential and cancels in the
+  normalised probability.
 - **Eliminating an interior mediator is not free.** The reduced precision is
   `(1/3) v v^T + epsilon I`; a sum of pairwise semidefinite terms reproduces it
   if and only if `epsilon >= mediator.threshold`. Below the threshold the

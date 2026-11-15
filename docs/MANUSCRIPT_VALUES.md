@@ -12,8 +12,8 @@ gives one; `Note` records what is measured rather than quoted.
 | `carrier.seams` | 30 | `thirty` | OPH carrier (book/44-appendix-a.md:45) |  |
 | `carrier.faces` | 20 | `twenty` | OPH carrier (book/44-appendix-a.md:45) |  |
 | `carrier.degree` | 5 | `five` | OPH carrier: 'Every port meets five triangles' (book/44-appendix-a.md:45) |  |
-| `carrier.lambda1` | 2.76393202250021 | `5 - sqrt(5)` | OPH carrier Laplacian spectrum |  |
-| `carrier.shell_gap` | 0.04606553370833684 | `(5 - sqrt(5)) / 60` | 'Agreement and Surprise' Section 6.2: the spectral gap on the shell and the full carrier |  |
+| `carrier.lambda1` | 2.76393202 | `5 - sqrt(5)` | OPH carrier Laplacian spectrum |  |
+| `carrier.shell_gap` | 0.0460655337 | `(5 - sqrt(5)) / 60` | 'Agreement and Surprise' Section 6.2: the spectral gap on the shell and the full carrier |  |
 | `shell.total_two` | 78 | `C(13, 11)` | OPH model/observer/native.py (states) and the paper Section 6.2 |  |
 | `shell.binary` | 66 |  | OPH model/observer/native.py (states) |  |
 | `shell.transitions` | 4680 | `78 * 30 * 2` | 78 configurations x 30 seams x 2 coins |  |
@@ -21,36 +21,36 @@ gives one; `Note` records what is measured rather than quoted.
 | `shell.zero_descent` | 600 |  | gated_descent_census over the 78-state shell | mismatch-one moves that leave the quadratic energy unchanged; the executable content of PR-01 |
 | `shell.noop` | 3960 |  | gated_descent_census over the 78-state shell |  |
 | `shell.multiplicities` | (1, 2, 50, 52) | `{1, 2, 50, 52}` | path_multiplicity_census; the paper's 'm in {1, 2, 50, 52}' | native transition multiplicities; the conditional surprisal of a path is a sum of log(60/m) terms |
-| `schedule.affine_contrast` | 0.023040849975 | `921633999 / 40000000000` | 'Agreement and Surprise' Section 4.4 | the centered-contrast difference between full and half-damped iteration after twelve steps |
-| `d_stability.routh_k4` | (1.0, 6.0, -2.0, 24.0) | `(1, 6, -2, 24)` | 'Agreement and Surprise' Section 4.1 | the Routh first column at k = 4; two right-half-plane roots |
-| `d_stability.lyapunov_determinant` | 4.2592592592592595 | `115 / 27` | 'Agreement and Surprise' Proposition 10 |  |
+| `schedule.affine_contrast` | 0.02304085 | `921633999 / 40000000000` | 'Agreement and Surprise' Section 4.4 | the centered-contrast difference between full and half-damped iteration after twelve steps |
+| `d_stability.routh_k4` | (1, 6, -2, 24) | `(1, 6, -2, 24)` | 'Agreement and Surprise' Section 4.1 | the Routh first column at k = 4; two right-half-plane roots |
+| `d_stability.lyapunov_determinant` | 4.25925926 | `115 / 27` | 'Agreement and Surprise' Proposition 10 |  |
 | `two_node.relaxation_min_radius` | 0.84 |  | 'Agreement and Surprise' Proposition 15: 'at distance at least 0.84' | measured 0.8401 for the relaxation orbit; the source reports the bound, this package the measurement |
 | `two_node.relaxation_period` | 7.58 |  | 'Agreement and Surprise' Proposition 15: 'period 7.58 in units of the relaxation time' | measured 7.575 at dt = 1e-3 |
-| `two_node.sync_min_radius` | 1.0 |  | two_node_orbit_min_radius | the synchronous clipped map is a different object from the relaxation orbit |
+| `two_node.sync_min_radius` | 1 |  | two_node_orbit_min_radius | the synchronous clipped map is a different object from the relaxation orbit |
 | `ivm.neighbor_moves` | 12 | `the distinct permutations of (2, 1, 1, 0)` | QuadMath src/quadmath/core/quadray.py: IVM_NEIGHBOR_MOVES |  |
 | `ivm.neighbor_squared_distance` | 8 |  | QuadMath src/quadmath/lattice/omni_numbering.py | center-to-neighbor distance 2*sqrt(2) in the scale-one embedding |
 | `ivm.shell_counts` | (1, 12, 42, 92, 162) | `10k^2 + 2` | QuadMath shell_count(k) = 10k^2 + 2 |  |
 | `ivm.cumulative_counts` | (1, 13, 55, 147, 309) |  | QuadMath cumulative_count |  |
 | `ivm.volume_ratios` | tetrahedron=1, cube=3, octahedron=4, rhombic_dodecahedron=6, cuboctahedron=20, truncated_octahedron=96 |  | QuadMath docs/manuscript/03_quadray_methods.md | unit IVM tetrahedron = 1 |
-| `mediator.threshold` | 0.3333333333333333 | `1/3` | 'Agreement and Surprise' Proposition 8 | a pairwise representation of the reduced boundary exists exactly when epsilon >= 1/3 |
-| `directed_gradient.direct` | (1.0, 0.0) | `-J^{-1} c` | 'Agreement and Surprise' Appendix B |  |
-| `directed_gradient.adjoint` | (1.0, 2.0) | `-J^{-T} c` | 'Agreement and Surprise' Appendix B |  |
+| `mediator.threshold` | 0.333333333 | `1/3` | 'Agreement and Surprise' Proposition 8 | a pairwise representation of the reduced boundary exists exactly when epsilon >= 1/3 |
+| `directed_gradient.direct` | (1, 0) | `-J^{-1} c` | 'Agreement and Surprise' Appendix B |  |
+| `directed_gradient.adjoint` | (1, 2) | `-J^{-T} c` | 'Agreement and Surprise' Appendix B |  |
 | `fep_formal.topics` | 168 | `168` | FEP_Formal config/catalogue_metadata.yaml, roster fep-001 .. fep-168 |  |
 | `paper.five_surprises` | (numerical, bayesian, surprisal, critic, meaningful) |  | 'Agreement and Surprise' Table 7 | the first three coincide up to curvature in the linear Gaussian corner; the last two need a task |
-| `d_stability.routh_onset` | 3.1622776601683795 | `sqrt(10)` | 'Agreement and Surprise' Section 4.1 characteristic polynomial, derived here | the third Routh entry is 2(10 - k^2)/(k + 2), so for k > 0 stability holds exactly when k < sqrt(10) |
-| `two_node.relaxation_min_radius_measured` | 0.8400707833642703 |  | two_node_relaxation_orbit, measured in this package | the source states the bound 0.84; this is the measurement the prose reports beside it |
-| `two_node.relaxation_max_radius` | 1.0533912226419835 |  | two_node_relaxation_orbit, measured in this package | the outer radius of the annulus that contains the relaxation orbit |
+| `d_stability.routh_onset` | 3.16227766 | `sqrt(10)` | 'Agreement and Surprise' Section 4.1 characteristic polynomial, derived here | the third Routh entry is 2(10 - k^2)/(k + 2), so for k > 0 stability holds exactly when k < sqrt(10) |
+| `two_node.relaxation_min_radius_measured` | 0.840070783 |  | two_node_relaxation_orbit, measured in this package | the source states the bound 0.84; this is the measurement the prose reports beside it |
+| `two_node.relaxation_max_radius` | 1.05339122 |  | two_node_relaxation_orbit, measured in this package | the outer radius of the annulus that contains the relaxation orbit |
 | `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | the source states 7.58; this is the measurement the prose reports beside it |
-| `registry.entries` | 43 | `43` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.isomorphisms` | 18 | `18` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.entries` | 44 | `44` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.isomorphisms` | 19 | `19` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.disagreements` | 15 | `15` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.complementarities` | 10 | `10` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.oph_fep` | 25 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
+| `registry.oph_fep` | 26 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
 | `registry.fep_synergetics` | 2 |  | analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics |  |
 | `registry.synergetics_oph` | 14 |  | analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph |  |
 | `registry.three_way` | 2 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
 | `carrier.tree_number` | 5184000 | `5184000` | core/invariants.py, Kirchhoff: the exact reduced-Laplacian determinant |  |
-| `gmrf.marginal_variance` | 0.19444444444444445 | `7/36` | core/invariants.py, the reciprocal spectrum summed exactly in the rationals |  |
+| `gmrf.marginal_variance` | 0.194444444 | `7/36` | core/invariants.py, the reciprocal spectrum summed exactly in the rationals |  |
 | `gmrf.blanket_size` | 5 | `five` | core/invariants.py: the Markov blanket of a port is its neighbours |  |
 | `gmrf.pairwise_precision` | -1 | `-1` | core/invariants.py: every seam's pairwise precision entry |  |
 | `sheaf.coboundary_rank` | 11 |  | core/sheaf.py cohomology_dimensions, the rank of the coboundary |  |
@@ -62,7 +62,7 @@ gives one; `Note` records what is measured rather than quoted.
 | `sheaf.face_coboundary_rank` | 19 |  | probe:sheaf-cohomology:face_coboundary_rank | the rank of the face-seam incidence, equal to the graph's cycle rank |
 | `shell.gauge_checked_through` | 12 |  | probe:shell-vs-free-energy:gauge_checked_through_shell | the closed-form gauge is checked against every breadth-first shell up to this index |
 | `kissing.cuboctahedron_edge_ratio_squared` | 1 | `1` | probe:kissing-twelve:cuboctahedron_edge_over_radius_squared |  |
-| `kissing.icosahedron_edge_ratio_squared` | 1.105572809000084 | `2 - 2 sqrt(5) / 5` | probe:kissing-twelve:icosahedron_edge_over_radius_squared_float |  |
+| `kissing.icosahedron_edge_ratio_squared` | 1.10557281 | `2 - 2 sqrt(5) / 5` | probe:kissing-twelve:icosahedron_edge_over_radius_squared_float |  |
 | `icosahedron.tetravolume_over_sqrt2` | 15/2 + 5/2 sqrt 5 | `15/2 + 5/2 sqrt 5` | probe:icosahedron-tetravolume:exact_tetravolume_over_sqrt2 | computed in exact Q(sqrt 5) arithmetic from the icosahedron's exact vertices |
 | `symmetry.group_order` | 120 | `120` | core/symmetry.py carrier_automorphisms, by exhaustive backtracking |  |
 | `symmetry.rotations` | 60 | `60` | core/symmetry.py rotation_subgroup, from OPH's oriented faces |  |
@@ -70,27 +70,27 @@ gives one; `Note` records what is measured rather than quoted.
 | `symmetry.configurations` | 78 | `C(13, 11)` | OPH shell configurations at total load two |  |
 | `symmetry.orbits` | 4 |  | core/symmetry.py law_equivariance: orbits of configurations under the group |  |
 | `symmetry.outcome_multisets` | 3 |  | core/symmetry.py law_equivariance: distinct descent-outcome multisets |  |
-| `icosahedron.tetravolume` | 18.51229586821915 | `(5/2)(3 sqrt 2 + sqrt 10)` | geometry/solids.py icosahedron_tetravolume, measured from the oriented surface |  |
-| `icosahedron.tetravolume_squared` | 342.70509831248387 | `175 + 75 sqrt 5` | geometry/solids.py, the measured square against the exact one |  |
+| `icosahedron.tetravolume` | 18.5122959 | `(5/2)(3 sqrt 2 + sqrt 10)` | geometry/solids.py icosahedron_tetravolume, measured from the oriented surface |  |
+| `icosahedron.tetravolume_squared` | 342.705098 | `175 + 75 sqrt 5` | geometry/solids.py, the measured square against the exact one |  |
 | `icosahedron.faces_reoriented` | 10 |  | geometry/solids.py orient_faces_outward: faces enumerated without an orientation |  |
 | `icosahedron.degree` | 5 | `five` | OPH carrier: every port meets five triangles |  |
 | `cuboctahedron.degree` | 4 | `four` | geometry/lattice.py cuboctahedron_adjacency: every vertex is four-valent |  |
-| `cuboctahedron.tetravolume` | 20.0 | `20` | QuadMath polyhedra table read through geometry.VOLUME_RATIOS |  |
+| `cuboctahedron.tetravolume` | 20 | `20` | QuadMath polyhedra table read through geometry.VOLUME_RATIOS |  |
 | `tetravolume.integral_solids` | (1, 3, 4, 6, 20, 96) | `1, 3, 4, 6, 20, 96` | geometry.VOLUME_RATIOS: the tetravolumes of the IVM's integral solids |  |
 | `voronoi.vertices` | 14 |  | geometry/lattice.py voronoi_cell, the dual of the twelve neighbours |  |
 | `voronoi.faces` | 12 |  | geometry/lattice.py voronoi_cell |  |
 | `voronoi.edges` | 24 |  | geometry/lattice.py voronoi_cell |  |
-| `packing.density` | 0.7404804896930608 | `pi / (3 sqrt 2)` | geometry/lattice.py packing_density, measured from the cell and the ball |  |
-| `packing.cell_tetravolume` | 5.999999999999998 | `6` | geometry/lattice.py: the cell's volume in tetrahedra of the prime vector |  |
-| `packing.ball_tetravolume` | 4.442882938158363 | `pi sqrt 2` | geometry/lattice.py: the inscribed ball's volume in the same tetrahedra |  |
+| `packing.density` | 0.74048049 | `pi / (3 sqrt 2)` | geometry/lattice.py packing_density, measured from the cell and the ball |  |
+| `packing.cell_tetravolume` | 6 | `6` | geometry/lattice.py: the cell's volume in tetrahedra of the prime vector |  |
+| `packing.ball_tetravolume` | 4.44288294 | `pi sqrt 2` | geometry/lattice.py: the inscribed ball's volume in the same tetrahedra |  |
 | `shell.free_energy_level_counts` | (1, 3, 4, 7, 7) |  | geometry.generate_shell: distinct values of half the squared norm per shell |  |
-| `shell.shared_free_energy_levels` | (36.0, 52.0) |  | geometry.generate_shell: free-energy levels carried by more than one shell |  |
-| `kl.one_step` | 4.0 |  | probe:kl-lattice-metric:one_step_kl |  |
-| `kl.step_squared_distance` | 8.0 |  | probe:kl-lattice-metric:one_step_squared_distance |  |
-| `kl.norm_sphere_1` | 4.0 |  | probe:kl-lattice-metric:norm_sphere_kl:1 |  |
-| `kl.norm_sphere_2` | 16.0 |  | probe:kl-lattice-metric:norm_sphere_kl:2 |  |
-| `kl.norm_sphere_3` | 36.0 |  | probe:kl-lattice-metric:norm_sphere_kl:3 |  |
-| `kl.norm_sphere_4` | 64.0 |  | probe:kl-lattice-metric:norm_sphere_kl:4 |  |
+| `shell.shared_free_energy_levels` | (36, 52) |  | geometry.generate_shell: free-energy levels carried by more than one shell |  |
+| `kl.one_step` | 4 |  | probe:kl-lattice-metric:one_step_kl |  |
+| `kl.step_squared_distance` | 8 |  | probe:kl-lattice-metric:one_step_squared_distance |  |
+| `kl.norm_sphere_1` | 4 |  | probe:kl-lattice-metric:norm_sphere_kl:1 |  |
+| `kl.norm_sphere_2` | 16 |  | probe:kl-lattice-metric:norm_sphere_kl:2 |  |
+| `kl.norm_sphere_3` | 36 |  | probe:kl-lattice-metric:norm_sphere_kl:3 |  |
+| `kl.norm_sphere_4` | 64 |  | probe:kl-lattice-metric:norm_sphere_kl:4 |  |
 | `resistance.adjacent` | 11/30 | `11/30` | core/network.py resistance_ladder: exact rational solve of L x = e_i - e_j on a seam |  |
 | `resistance.distance_two` | 7/15 | `7/15` | core/network.py resistance_ladder: ports at graph distance two |  |
 | `resistance.antipodal` | 1/2 | `1/2` | core/network.py resistance_ladder: ports at graph distance three, across the carrier |  |
@@ -114,65 +114,71 @@ gives one; `Note` records what is measured rather than quoted.
 | `cuboctahedron.matchings` | 32 |  | core/network.py subgraph_census on the cuboctahedron |  |
 | `dual.volume_ratio` | 10/3 | `10/3` | geometry.VOLUME_RATIOS: the cuboctahedron's twenty against the cell's six |  |
 | `tetravolume.galois_norm` | 50 | `50` | geometry/solids.py tetravolume_galois_norm: T times its conjugate, exactly |  |
-| `icosahedron.tetravolume_conjugate` | 2.7009075673772625 |  | geometry/solids.py: the conjugate solid's tetravolume, from the conjugated square |  |
+| `icosahedron.tetravolume_conjugate` | 2.70090757 |  | geometry/solids.py: the conjugate solid's tetravolume, from the conjugated square |  |
 | `gmrf.reciprocal_spectrum_sum` | 7/3 | `7/3` | core/invariants.py reciprocal_spectrum_sum: the exact sum of reciprocal eigenvalues |  |
 | `cuboctahedron.vertices` | 12 | `twelve` | geometry/lattice.py cuboctahedron_adjacency: the twelve neighbouring sites |  |
 | `cuboctahedron.edges` | 24 | `twenty-four` | geometry/lattice.py cuboctahedron_edges: the cube's line graph's edges |  |
 | `cuboctahedron.faces` | 14 | `fourteen` | geometry/lattice.py cuboctahedron_faces: eight triangles and six squares |  |
-| `spectral.lambda_max` | 7.236067977 | `5 + sqrt(5)` | probe:spectral-gap:spectrum:max |  |
-| `certificate.second_eigenvalue` | 0.9539344662916631 | `1 - (5 - sqrt(5)) / 60` | probe:certificate-species:second_eigenvalue |  |
-| `certificate.infinity_norm` | 1.0 | `1` | probe:certificate-species:induced_infinity_norm |  |
-| `ve.iterations` | 51 |  | probe:variational-equivalence:iterations | the perceive fixed-point iteration's steps to the harmonic extension |
-| `ve.residual` | 7.393172864827226e-11 |  | probe:variational-equivalence:residual |  |
-| `ve.excess` | 0.0 | `0` | probe:variational-equivalence:excess_free_energy_at_posterior |  |
-| `fe.numerical` | 1.118033988749895 |  | probe:free-energy-dictionary:numerical_surprise |  |
-| `fe.bayesian` | 0.25 |  | probe:free-energy-dictionary:bayesian_surprise |  |
-| `fe.surprisal` | -0.9135709220752906 |  | probe:free-energy-dictionary:surprisal |  |
-| `fe.variational` | -0.9135709220752906 |  | probe:free-energy-dictionary:variational_free_energy |  |
-| `fe.sandwich_lower` | 0.20833333333333334 |  | probe:free-energy-dictionary:sandwich_lower |  |
-| `fe.sandwich_upper` | 0.625 |  | probe:free-energy-dictionary:sandwich_upper |  |
-| `fe.interface` | 0.04166666666666667 |  | probe:free-energy-name-collision:interface_energy_minimised_over_interior |  |
-| `fe.variational_at_posterior` | -1.2469042554086238 |  | probe:free-energy-name-collision:variational_free_energy_at_posterior |  |
-| `fe.difference` | -1.2885709220752906 |  | probe:free-energy-name-collision:difference |  |
-| `fe.model_constant` | -1.2885709220752906 |  | probe:free-energy-name-collision:expected_model_constant |  |
-| `pr01.coin_zero_current` | 1.0 |  | probe:pr01-obstruction:coin_zero_current |  |
-| `pr01.coin_one_current` | 0.0 |  | probe:pr01-obstruction:coin_one_current |  |
-| `pr01.coin_zero_decrease` | 0.0 | `0` | probe:pr01-obstruction:coin_zero_decrease |  |
-| `pr01.coin_one_decrease` | 0.0 | `0` | probe:pr01-obstruction:coin_one_decrease |  |
+| `spectral.lambda_max` | 7.23606798 | `5 + sqrt(5)` | probe:spectral-gap:spectrum:max |  |
+| `certificate.second_eigenvalue` | 0.953934466 | `1 - (5 - sqrt(5)) / 60` | probe:certificate-species:second_eigenvalue |  |
+| `certificate.infinity_norm` | 1 | `1` | probe:certificate-species:induced_infinity_norm |  |
+| `ve.iterations` | 143 |  | probe:variational-equivalence:iterations | the perceive fixed-point iteration's steps to the harmonic extension |
+| `ve.residual` | abs < 1e-9 |  | probe:variational-equivalence:residual |  |
+| `ve.excess_residual` | abs < 1e-9 | `0` | probe:variational-equivalence:excess_free_energy_at_posterior_residual |  |
+| `fe.numerical` | 2.5 |  | probe:free-energy-dictionary:numerical_surprise |  |
+| `fe.bayesian` | 0.875 |  | probe:free-energy-dictionary:bayesian_surprise |  |
+| `fe.surprisal` | 3.99491196 |  | probe:free-energy-dictionary:surprisal |  |
+| `fe.variational` | 3.99491196 |  | probe:free-energy-dictionary:variational_free_energy |  |
+| `fe.sandwich_lower` | 0.431864379 |  | probe:free-energy-dictionary:sandwich_lower |  |
+| `fe.sandwich_upper` | 3.125 |  | probe:free-energy-dictionary:sandwich_upper |  |
+| `fe.interface` | 0.25 |  | probe:free-energy-name-collision:interface_energy_minimised_over_interior |  |
+| `fe.variational_at_posterior` | 1.71491196 |  | probe:free-energy-name-collision:variational_free_energy_at_posterior |  |
+| `fe.record_potential` | -1.55541516 |  | probe:free-energy-name-collision:unnormalised_record_potential |  |
+| `fe.record_prior_precision` | 0.5 | `1/2` | probe:free-energy-name-collision:record_prior_precision |  |
+| `fe.normalised_record_offset` | 1.43241196 |  | probe:free-energy-name-collision:normalised_record_offset |  |
+| `fe.difference` | -1.80541516 |  | probe:free-energy-name-collision:difference |  |
+| `fe.model_constant` | -1.80541516 |  | probe:free-energy-name-collision:expected_model_constant |  |
+| `pr01.coin_zero_current` | 1 |  | probe:pr01-obstruction:coin_zero_current |  |
+| `pr01.coin_one_current` | 0 |  | probe:pr01-obstruction:coin_one_current |  |
+| `pr01.coin_zero_decrease` | 0 | `0` | probe:pr01-obstruction:coin_zero_decrease |  |
+| `pr01.coin_one_decrease` | 0 | `0` | probe:pr01-obstruction:coin_one_decrease |  |
 | `pr01.walk_energy` | 0.5 | `1/2` | probe:pr01-obstruction:excursion_energy |  |
 | `blanket.q` | 0.75 |  | probe:stationary-blanket:q |  |
-| `blanket.drift` | (1.5, -0.25, -2.0) |  | probe:stationary-blanket:mu_drift:row |  |
+| `blanket.drift` | (1.5, -0.25, -2) |  | probe:stationary-blanket:mu_drift:row |  |
 | `gmrf.marginal_variance_exact` | 7/36 | `7/36` | core/invariants.py marginal_variance: the exact variance of a port's deviation from the carrier mean, the diagonal of L^+ |  |
 | `blanket.cross_drift` | 1.5 |  | probe:stationary-blanket:cross_drift_difference |  |
-| `solenoidal.q_grid` | (0.0, 0.5, 1.5) |  | probe:solenoidal-freedom:q_grid |  |
-| `solenoidal.entropy_production` | (0.0, 0.5, 4.5) |  | probe:solenoidal-freedom:entropy_production |  |
+| `solenoidal.q_grid` | (0, 0.5, 1.5) |  | probe:solenoidal-freedom:q_grid |  |
+| `solenoidal.entropy_production` | (0, 0.5, 4.5) |  | probe:solenoidal-freedom:entropy_production |  |
 | `d_stability.real_stable` | -6.288814 |  | probe:d-stability:eigenvalue_real_parts:min |  |
 | `d_stability.real_unstable` | 0.144407 |  | probe:d-stability:eigenvalue_real_parts:max |  |
 | `d_stability.imag_unstable` | 1.948191 |  | probe:d-stability:eigenvalue_imag_parts:absmax |  |
-| `d_stability.lyapunov_residual` | 2.531698018113677e-15 |  | probe:d-stability:lyapunov_residual |  |
+| `d_stability.lyapunov_residual` | abs < 1e-9 |  | probe:d-stability:lyapunov_residual |  |
 | `d_stability.right_half_plane_count` | 2 |  | probe:d-stability:right_half_plane_count |  |
-| `d_stability.routh_k4_third` | -2.0 | `-2` | probe:d-stability:routh_first_column_at_k4:2 |  |
-| `d_stability.samples` | (0.5, 1.0, 2.0, 4.0, 7.0) |  | core/controls.py D_STABILITY_SAMPLES: the eigenvalue-locus sample grid |  |
+| `d_stability.routh_k4_third` | -2 | `-2` | probe:d-stability:routh_first_column_at_k4:2 |  |
+| `d_stability.samples` | (0.5, 1, 2, 4, 7) |  | core/controls.py D_STABILITY_SAMPLES: the eigenvalue-locus sample grid |  |
 | `mediator.epsilon_below` | 0.2 |  | probe:mediator-obstruction:below_threshold_epsilon |  |
-| `mediator.margin_below` | -0.3999999999999999 |  | probe:mediator-obstruction:margin_below_threshold |  |
-| `mediator.margin_at` | 0.0 | `0` | probe:mediator-obstruction:margin_at_threshold |  |
-| `reduction.same_observation` | 1.0 | `1` | probe:reduction-criterion:same_observation |  |
-| `reduction.first_after` | 1.0 |  | probe:reduction-criterion:first_after |  |
-| `reduction.second_after` | -1.0 |  | probe:reduction-criterion:second_after |  |
-| `reduction.response_distance` | 2.0 | `2` | probe:reduction-criterion:response_distance |  |
-| `reduction.worst_case` | 1.0 | `1` | probe:reduction-criterion:worst_case_error_lower_bound |  |
+| `mediator.margin_below` | -0.4 |  | probe:mediator-obstruction:margin_below_threshold |  |
+| `mediator.margin_at` | 0 | `0` | probe:mediator-obstruction:margin_at_threshold |  |
+| `reduction.same_observation` | 1 | `1` | probe:reduction-criterion:same_observation |  |
+| `reduction.first_after` | 1 |  | probe:reduction-criterion:first_after |  |
+| `reduction.second_after` | -1 |  | probe:reduction-criterion:second_after |  |
+| `reduction.response_distance` | 2 | `2` | probe:reduction-criterion:response_distance |  |
+| `reduction.worst_case` | 1 | `1` | probe:reduction-criterion:worst_case_error_lower_bound |  |
 | `four_cycle.violations` | 2 | `2` | probe:four-cycle-local-minimum:trap_violations |  |
 | `ep.closed_form` | -1.2499987500012502 |  | probe:equilibrium-propagation:closed_form_contrast | kept at full printed precision: the closed-form and relaxed contrasts differ in the eighth digit |
 | `ep.relaxed` | -1.24999874998033 |  | probe:equilibrium-propagation:relaxed_contrast | kept at full printed precision for the same reason |
 | `ep.exact_gradient` | -1.25 | `-1.25` | probe:equilibrium-propagation:exact_gradient |  |
-| `ep.closed_form_error` | 2.092015449761675e-11 |  | probe:equilibrium-propagation:closed_form_error |  |
-| `ep.gradient_distance` | 1.2499987498415521e-06 |  | probe:equilibrium-propagation:distance_to_gradient |  |
-| `replicator.rate` | 0.13440000000000002 |  | probe:replicator-potential:potential_rate_direct |  |
-| `replicator.field_norm` | 0.21196226079186833 |  | probe:replicator-potential:field_norm |  |
+| `ep.closed_form_error` | abs < 1e-9 |  | probe:equilibrium-propagation:closed_form_error |  |
+| `ep.gradient_distance` | 1.24999875e-06 |  | probe:equilibrium-propagation:distance_to_gradient |  |
+| `replicator.rate` | 0.1344 |  | probe:replicator-potential:potential_rate_direct |  |
+| `replicator.field_norm` | 0.211962261 |  | probe:replicator-potential:field_norm |  |
 | `gmrf.ordered_pairs` | 60 |  | probe:gmrf-independence:pairwise_precision_entries |  |
 | `symmetry.eigenspace_dimensions` | (3, 3, 5) |  | probe:eigenspace-irreducibility:dimensions:sortedtail | the non-trivial eigenspace dimensions beside the trivial one |
 | `pr01.stay_probability` | 13/15 |  | probe:pr01-obstruction:stay_probability | one attempt (uniform seam, fair coin) from (1, 1, 0, ..., 0); 'Agreement and Surprise' Section 6.2 and OPH model/common_source/NATIVE_FIELDS.md |
 | `pr01.hop_probability` | 1/60 |  | probe:pr01-obstruction:hop_probability | each neighbouring configuration, same attempt law |
+| `pr01.ungated_normal_forms` | 0 |  | probe:pr01-obstruction:ungated_normal_forms |  |
+| `pr01.gated_normal_forms` | 66 |  | probe:pr01-obstruction:gated_normal_forms |  |
+| `pr01.gated_normal_forms_per_doubled_state` | 5 |  | probe:pr01-obstruction:gated_normal_forms_per_doubled_state |  |
 | `pr01.hop_targets` | 8 |  | probe:pr01-obstruction:hop_targets |  |
 | `feedback.port_zero_occupation` | 35/264 |  | probe:reduction-criterion:record_feedback_occupation | OPH's two-event record-controlled observer, model/observer/native.py; 'Agreement and Surprise' Section 6.2 |
 | `feedback.control_occupation` | 1/6 |  | probe:reduction-criterion:selector_disconnected_occupation | selector disconnected; the independent selector with the same seam frequency gives the same value |
