@@ -617,12 +617,20 @@ def path_multiplicity_census() -> dict[int, int]:
     Thirty seams and two coins give sixty transitions out of every
     configuration, so the uniform schedule reaches a target with probability
     ``m / 60`` where ``m`` is that target's multiplicity.  Over the whole shell
-    the multiplicities are exactly ``{1, 2, 50, 52}``: ``1`` for the eight
-    neighbour moves out of a binary state, ``2`` for the ten moves out of a
-    singly-loaded state (both coins place the unit on the same seam), ``52`` for
-    the no-op self-loop of a binary state and ``50`` for that of a singly-loaded
-    state.  The conditional surprisal of a path is therefore a sum of
-    ``log(60 / m)`` terms drawn from this set.
+    the multiplicities are exactly ``{1, 2, 50, 52}``, and they sort the
+    seventy-eight states into three classes:
+
+    * the 30 binary states whose two units share a seam have eight hops of
+      multiplicity ``1`` and a self-loop of multiplicity ``52``;
+    * the 36 binary states whose two units share no seam have ten hops of
+      multiplicity ``1`` and a self-loop of multiplicity ``50``;
+    * the 12 states with both units on one port have five targets of
+      multiplicity ``2`` (both coins move one unit across the same seam) and a
+      self-loop of multiplicity ``50``.
+
+    The census therefore holds 600 entries of multiplicity ``1``, 60 of ``2``,
+    48 of ``50`` and 30 of ``52``.  The conditional surprisal of a path is a sum
+    of ``log(60 / m)`` terms drawn from this set.
     """
     carrier = icosahedral_carrier()
     census: dict[tuple[tuple[int, ...], tuple[int, ...]], int] = {}

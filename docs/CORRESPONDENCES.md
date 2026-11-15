@@ -939,7 +939,7 @@ Probe values:
 - `shell_sizes` = (1, 5, 5, 1)
 - `outer_shell_sizes` = (5, 5, 1)
 - `lattice_shell_sizes` = (12, 42, 92)
-- `onward` = (2, 1, 0)
+- `onward` = (5, 2, 1)
 - `back` = (1, 2, 5)
 - `diameter` = 3
 - `ports` = 12

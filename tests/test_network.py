@@ -59,8 +59,8 @@ def test_distance_distribution_is_one_five_five_one():
     assert distance_distribution(_adjacency()) == (1, 5, 5, 1)
 
 
-def test_intersection_array_is_two_one_zero_by_one_two_five():
-    assert intersection_array(_adjacency()) == ((2, 1, 0), (1, 2, 5))
+def test_intersection_array_is_five_two_one_by_one_two_five():
+    assert intersection_array(_adjacency()) == ((5, 2, 1), (1, 2, 5))
 
 
 def test_effective_resistance_is_symmetric_and_zero_on_the_diagonal():

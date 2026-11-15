@@ -1342,7 +1342,7 @@ def _probe_vertex_shells() -> tuple[bool, dict]:
         shells == (1, 5, 5, 1)
         and outer == (5, 5, 1)
         and lattice == (12, 42, 92)
-        and onward == (2, 1, 0)
+        and onward == (5, 2, 1)
         and back == (1, 2, 5)
         and outer != lattice
     )

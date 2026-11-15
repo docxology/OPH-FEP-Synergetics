@@ -30,8 +30,8 @@ domain.
 
 ## Cited but not implemented
 
-- **OPH's quantum event algebra and its continuum limit.** The cited identifiers
-  are recorded in `data/sources.json`; nothing here evaluates them.
+- **OPH's quantum event algebra and its continuum limit.** Nothing here
+  evaluates them, and `data/sources.json` records no identifier for either.
 - **FEP beyond the linear-Gaussian corner.** Nonlinear generative models,
   non-Gaussian densities, multi-modal posteriors, and the path-integral and
   stochastic-thermodynamic formulations are outside this package.
@@ -83,9 +83,15 @@ without that label would overstate what this repository establishes.
    it is tested as such. It is not evidence that any two of the three programs
    describe the same physics. The `quadray-ivm` entry is registered as a
    *complementarity*, not an isomorphism of the theories.
-4. **Keep scale separations explicit.** OPH's patches are Planck-scale
-   screen units; an FEP blanket is an agent-scale statistical boundary. Nothing
-   in this repository maps one scale to the other, and no probe claims to.
+4. **Keep scale separations explicit.** In OPH a patch is a bounded local
+   system with a specified state, access boundary, records and operations. Its
+   documents assign a patch no length scale, and a graph vertex is a model
+   representation of one (`docs/INTERPRETATION_AND_TERMS.md` in the OPH
+   repository). The twelve ports of this package are the boundary ports of one
+   local carrier. An FEP blanket is a statistical boundary of whatever system
+   the model describes. Nothing in this repository maps one to the other, and
+   no probe claims to. The linear-Gaussian results are exact at finite size and
+   say nothing about a continuum limit.
 
 ## Domain limits on the isomorphism claims
 
