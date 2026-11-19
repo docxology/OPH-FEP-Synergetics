@@ -184,17 +184,39 @@ from the load energy of [@eq:energy], which [@sec:pr01] shows to be constant alo
 the binary shell while every step there is exact inference. Registered as
 `repair-is-conditioning`.
 
+::: {#prop:binary-conditional-variance .proposition}
+Let $u$ be uniform on the binary load shell, $Y_e$ the datum preserved by seam
+$e$, and $P$ the native attempt operator with uniform seam selection and a fair
+coin. For every real observable $f$ on the shell,
+$$
+\langle f,(I-P)f\rangle_u
+= \frac{1}{\lvert E\rvert}\sum_{e\in E}\mathbb E_u[\operatorname{Var}_u(f\mid Y_e)].
+$$
+:::
+
+By [@prop:conditioning], the single-seam operator is the Gibbs projection
+$K_e f=\mathbb E_u[f\mid Y_e]$ [@chlebicka2025solidarity]. Its squared
+projection error is the expected conditional variance. Averaging over seams
+gives [@prop:binary-conditional-variance]. The executable comparison enumerates
+native attempts and independently builds the variance coefficients from
+{{REPAIR_VARIANCE_FIBRES}} two-state fibres. For the indicator of one adjacent
+occupied pair it gives energy {{REPAIR_VARIANCE_INDICATOR}}. Registered as
+`binary-conditional-variance`.
+
 ## The free-energy dictionary has a precise scope {#sec:dictionary}
 
-Three quantities are routinely called "surprisal", and the source literature
-distinguishes five: {{PAPER_FIVE_SURPRISES}} [@mueller2026agreement]. In the linear-Gaussian model this
-package computes three of them, and [@tbl:surprises] reports what happens. The
-registry entry is `free-energy-dictionary`.
+Mueller distinguishes five kinds of surprise {{PAPER_FIVE_SURPRISES}}
+[@mueller2026agreement]. The linear-Gaussian probe reports three of them
+in [@tbl:surprises]. Its record-change Bayesian surprise compares
+two posteriors with the same covariance, each conditioned on a different
+record. Bayesian surprise for a single update in the sense of Itti and Baldi
+compares the posterior to the prior for that update
+[@itti2009bayesian, equation 4]. The registry entry is `free-energy-dictionary`.
 
 | Quantity | Definition | Value in the probe model |
 |:---------|:-----------|:-------------------------|
 | numerical surprise | residual norm $\lVert g\rVert$ at the old rest | {{FE_NUMERICAL}} |
-| Bayesian surprise | $\tfrac{1}{2} g^{\top} L_{xx}^{-1} g$ | {{FE_BAYESIAN}} |
+| Record-change Bayesian surprise | $\tfrac{1}{2} g^{\top} L_{xx}^{-1} g$ | {{FE_BAYESIAN}} |
 | record surprisal | $-\ln p(o)$ under the proper joint model | {{FE_SURPRISAL}} |
 | variational free energy | [@eq:vfe] at the posterior | {{FE_VARIATIONAL}} |
 
@@ -463,6 +485,35 @@ the given spherical triangulation. Registered as `angle-defect`.
 
 [@fig:network] links the resistance ladder, the shells around a port, the
 census ([@prop:subgraph-census]) and the dual pair ([@prop:dual-cells]).
+
+## Euclidean chords come from the lowest Gaussian modes {#sec:spectral-chords}
+
+::: {#prop:carrier-spectral-chords .proposition}
+Use the edge-length-two regular icosahedral realisation of the carrier and
+the centred intrinsic Gaussian with unit seam precision. For vertices $i,j$,
+write $d_{ij}=e_i-e_j$, and let $P_-$ project onto the lowest positive
+Laplacian eigenspace of eigenvalue $\lambda_-$. The squared Euclidean chord is
+$$
+\|x_i-x_j\|^2 = {{CHORD_VARIANCE_FACTOR}}\,
+      d_{ij}^{T} P_- d_{ij}/\lambda_- .
+$$
+The full Gaussian contrast variance $d_{ij}^{T}L^+d_{ij}$ has a
+squared-distance embedding of rank {{CHORD_FULL_RANK}}. The icosahedral
+chords have rank {{CHORD_EMBEDDING_RANK}}, so no uniform scaling identifies
+the full contrast variance with squared chord length.
+:::
+
+Centred regular polyhedra realise their coordinates in the first positive
+Laplacian eigenspace [@osting2023extremal]. Here the exact coordinate matrix $X$
+satisfies $LX=(5-\sqrt{5})X$ and $X^{T}X=2(5+\sqrt{5})I$. Substituting
+$P_-=XX^{T}/[2(5+\sqrt{5})]$ gives the scale in
+[@prop:carrier-spectral-chords]. The full covariance gives the effective
+resistance [@klein1993resistance]. Choosing a reference port makes its
+contrast covariance the inverse of a grounded Laplacian, which has full rank
+on the remaining ports. The probe compares exact chords and resistances
+across every pair and finds different ratios as graph distance increases.
+The same lowest modes give the slowest nonconstant decay of the OPH mean-load
+operator. Registered as `carrier-spectral-chords`.
 
 ## What the agreements do not say
 

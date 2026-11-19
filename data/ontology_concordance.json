@@ -108,7 +108,7 @@
           },
           "relation": "conditional-identity",
           "limit": "The conditioning reading uses a fair coin and uniform binary reference. A doubled load supplies a counterexample for the uniform full shell.",
-          "probes": ["native-repair-law", "repair-is-conditioning"],
+          "probes": ["native-repair-law", "repair-is-conditioning", "binary-conditional-variance"],
           "citations": ["oph", "mueller2026agreement"],
           "pinned_sources": [{"id": "oph", "symbol": "native"}, {"id": "oph", "symbol": "PR-07"}]
         },
@@ -228,7 +228,7 @@
             "synergetics": "Coordinates with a common-offset redundancy. Specified neighbour moves generate the IVM sublattice."
           },
           "relation": "geometric-comparison",
-          "limit": "The neighbour lengths and Gaussian displacement comparison use the stated integer embedding.",
+          "limit": "The integer embedding identifies FCC sites and tetrahedral and octahedral holes by quadray residue. Gaussian displacement costs use its specified scale.",
           "probes": ["quadray-ivm", "kl-lattice-metric"],
           "citations": ["quadmath", "fuller1975synergetics"],
           "pinned_sources": [{"id": "quadmath", "symbol": "IVM_NEIGHBOR_MOVES"}, {"id": "quadmath", "symbol": "DEFAULT_EMBEDDING"}]
@@ -242,7 +242,7 @@
           },
           "relation": "geometric-comparison",
           "limit": "Equal kissing counts allow different outer contacts and graph degrees. Geometric incidence distinguishes the solids.",
-          "probes": ["kissing-twelve", "cuboctahedron-vs-icosahedron"],
+          "probes": ["kissing-twelve", "cuboctahedron-vs-icosahedron", "carrier-spectral-chords"],
           "citations": ["oph", "quadmath", "schutte1953dreizehn"],
           "pinned_sources": [{"id": "oph", "symbol": "ORIENTED_BASE_FACES"}, {"id": "quadmath", "symbol": "volume ratios"}]
         },

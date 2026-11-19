@@ -36,17 +36,17 @@ gives one; `Note` records what is measured rather than quoted.
 | `directed_gradient.direct` | (1, 0) | `-J^{-1} c` | 'Agreement and Surprise' Appendix B |  |
 | `directed_gradient.adjoint` | (1, 2) | `-J^{-T} c` | 'Agreement and Surprise' Appendix B |  |
 | `fep_formal.topics` | 168 | `168` | FEP_Formal config/catalogue_metadata.yaml, roster fep-001 .. fep-168 |  |
-| `paper.five_surprises` | (numerical, bayesian, surprisal, critic, meaningful) |  | 'Agreement and Surprise' Table 7 | the first three coincide up to curvature in the linear Gaussian corner; the last two need a task |
+| `paper.five_surprises` | (numerical, bayesian, surprisal, critic, meaningful) |  | 'Agreement and Surprise' Table 7 | the probe evaluates a residual norm, divergence between clamped posteriors, and absolute record surprisal |
 | `d_stability.routh_onset` | 3.16227766 | `sqrt(10)` | 'Agreement and Surprise' Section 4.1 characteristic polynomial, derived here | the third Routh entry is 2(10 - k^2)/(k + 2), so for k > 0 stability holds exactly when k < sqrt(10) |
 | `two_node.relaxation_min_radius_measured` | 0.840070783 |  | two_node_relaxation_orbit, measured in this package | minimum over the finite post-transient relaxation sample |
 | `two_node.relaxation_max_radius` | 1.05339122 |  | two_node_relaxation_orbit, measured in this package | maximum over the finite post-transient relaxation sample |
 | `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | estimated time to return near the anchor point of the sampled trajectory |
-| `registry.entries` | 44 | `44` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.isomorphisms` | 19 | `19` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.entries` | 46 | `46` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.isomorphisms` | 21 | `21` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.disagreements` | 15 | `15` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.complementarities` | 10 | `10` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.oph_fep` | 26 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
-| `registry.fep_synergetics` | 2 |  | analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics |  |
+| `registry.oph_fep` | 27 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
+| `registry.fep_synergetics` | 3 |  | analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics |  |
 | `registry.synergetics_oph` | 14 |  | analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph |  |
 | `registry.three_way` | 2 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
 | `carrier.tree_number` | 5184000 | `5184000` | core/invariants.py, Kirchhoff: the exact reduced-Laplacian determinant |  |
@@ -138,6 +138,8 @@ gives one; `Note` records what is measured rather than quoted.
 | `fe.normalised_record_offset` | 1.43241196 |  | probe:free-energy-name-collision:normalised_record_offset |  |
 | `fe.difference` | -1.80541516 |  | probe:free-energy-name-collision:difference |  |
 | `fe.model_constant` | -1.80541516 |  | probe:free-energy-name-collision:expected_model_constant |  |
+| `fe.chain_contrast_records` | (1, -1) |  | probe:free-energy-name-collision:chain_control_contrast_records |  |
+| `fe.chain_record_change_divergences` | (1/3, 0) |  | probe:free-energy-name-collision:chain_control_exact_record_change_divergences |  |
 | `pr01.coin_zero_current` | 1 |  | probe:pr01-obstruction:coin_zero_current |  |
 | `pr01.coin_one_current` | 0 |  | probe:pr01-obstruction:coin_one_current |  |
 | `pr01.coin_zero_decrease` | 0 | `0` | probe:pr01-obstruction:coin_zero_decrease |  |
@@ -190,6 +192,13 @@ gives one; `Note` records what is measured rather than quoted.
 | `conditioning.deterministic_excess` | log 2 |  | probe:repair-is-conditioning:deterministic_excess |  |
 | `conditioning.off_shell_cases` | 360 |  | probe:repair-is-conditioning:off_shell_cases |  |
 | `conditioning.off_shell_failures` | 60 |  | probe:repair-is-conditioning:off_shell_failures |  |
+| `repair.variance_fibres` | 300 |  | probe:binary-conditional-variance:two_state_fibres |  |
+| `repair.variance_indicator` | 1/495 |  | probe:binary-conditional-variance:adjacent_indicator_energy |  |
+| `chord.variance_factor` | 40 |  | probe:carrier-spectral-chords:chord_to_lowest_variance_factor |  |
+| `chord.full_rank` | 11 |  | probe:carrier-spectral-chords:ranks |  |
+| `chord.embedding_rank` | 3 |  | probe:carrier-spectral-chords:ranks |  |
+| `ivm.coset_nearest_counts` | (1, 4, 6, 4) |  | probe:quadray-ivm:quadray_cosets |  |
+| `ivm.coset_squared_distances` | (0, 3, 4, 3) |  | probe:quadray-ivm:quadray_cosets |  |
 | `carrier.chart_0` | 1, 5, 7, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 0 |
 | `carrier.chart_1` | 0, 5, 7, 8, 9 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 1 |
 | `carrier.chart_2` | 3, 4, 6, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 2 |

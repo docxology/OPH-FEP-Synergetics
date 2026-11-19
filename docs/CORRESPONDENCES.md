@@ -31,7 +31,7 @@ diagnostics below `1e-9` in magnitude are reported as such.
 | synergetics-oph | isomorphism | exact | `law-equivariance` | The native repair law is equivariant transition by transition: for all 120 automorphisms, all 78 total-two configurations, both orientations of all thirty seams and both coins, repairing the relabelled configuration on the relabelled seam gives the relabelled result, so the multiset of strict, zero and no-op outcomes is a group invariant, with four configuration orbits and three distinct outcome multisets. |
 | fep-synergetics | isomorphism | exact | `kl-lattice-metric` | Equal-covariance Gaussian KL is half the squared Mahalanobis distance. At unit covariance in the integer quadray embedding, the IVM's first shell is at squared distance eight, giving four nats of divergence. Displacements k m along a neighbour direction have squared norm 8 k^2 and divergence 4 k^2. The calculation compares endpoints under the chosen covariance. |
 | oph-fep | disagreement | obstructed | `pr01-obstruction` | On the total-load-two shell the ungated native rule is confluent but does not terminate: mismatch-one moves preserve load energy. Gating at broken seams terminates but does not give unique normal forms. |
-| oph-fep | disagreement | obstructed | `free-energy-name-collision` | Minimum interface energy, the negative log of the unnormalised interior integral, and normalised record surprisal are distinct. The second includes the interior determinant; in the third it cancels against the joint normaliser. Two chains with equal Schur complements give different unnormalised potentials and the same surprisal under the same record prior. |
+| oph-fep | disagreement | obstructed | `free-energy-name-collision` | Minimum interface energy, the negative log of the unnormalised interior integral, and normalised record surprisal are distinct. The second includes the interior determinant; in the third it cancels against the joint normaliser. Two chains with equal Schur complements and the same record prior have the same normalised record density, yet their interior posterior divergences differ under the same contrast change. |
 | oph-fep | disagreement | obstructed | `mediator-obstruction` | Eliminating an interior mediator leaves a genuinely three-way boundary term: the reduced precision is (1/3) v v^T + epsilon I with v = (1, 1, -1), and a sum of pairwise semidefinite terms reproduces it if and only if epsilon >= 1/3: necessity is the trace inequality (each pairwise block with off-diagonal 1/3 has diagonal sum at least 2/3, against a total trace of 1 + 3 epsilon), and sufficiency is an explicit decomposition with rank-one blocks at the threshold. |
 | oph-fep | disagreement | obstructed | `stationary-blanket` | A blanket visible in the stationary statistics need not bound the dynamics: with zero (mu, eta) precision entry the internal drift is 2q eta + (q - 1) b - 2 mu, so two states with equal blanket and internal values differ in internal motion by 2|q| |eta - eta'|. |
 | oph-fep | disagreement | obstructed | `solenoidal-freedom` | One stationary density is shared by a family of laws: the diffusion dx = -(Gamma - Q) H x dt + sqrt(2 Gamma) dW has stationary law N(0, H^{-1}) for every antisymmetric Q, and its entropy production rate is tr(Q^T Gamma^{-1} Q H); in two dimensions with Gamma = H = I and Q = q [[0, 1], [-1, 0]] the spectrum is -1 +/- i q and the entropy production is 2 q^2. |
@@ -43,7 +43,7 @@ diagnostics below `1e-9` in magnitude are reported as such.
 | oph-fep | disagreement | obstructed | `four-cycle-local-minimum` | A local minimum of an independently defined discrepancy can be incompatible: on a four-cycle, 0011 violates two edges and every single-bit flip also violates two. |
 | synergetics-oph | disagreement | obstructed | `cuboctahedron-vs-icosahedron` | The twelve-around-one shell and the carrier are not the same solid although each has twelve vertices: the cuboctahedron is four-regular with eight triangles and six squares and tetravolume 20, while the carrier is the icosahedron, five-regular with twenty triangles and tetravolume 18.512295868219..., so a count coincidence of twelve is not an identification. |
 | fep-synergetics | disagreement | obstructed | `shell-vs-free-energy` | The IVM shell index is not a function of the free energy: shell two spans three distinct free energies and shell four spans seven, the level 36 occurs on shells three and four, and the level 52 on shells four and five, so neither quantity is a function of the other, although the free energy does bound the shell from above (the minimum on shell k grows like 2k^2). The reason is exact: the shell index is the cuboctahedral gauge max(||u||_inf, ||u||_1 / 2) of the halved coordinates, a polyhedral norm, while the free energy is a Euclidean quadratic form; on shell k the free energy ranges from 2k^2 (2k^2 + 2 for odd k) up to 4k^2, and reaches 4k^2 only at the twelve vertices k m. |
-| synergetics-oph | complementarity | exact | `quadray-ivm` | Quadray coordinates give the synergetic side exact integer geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and the tetravolume table 1, 3, 4, 6, 20 and 96, every entry derived exactly from an explicit integer vertex set rather than read from the table. |
+| synergetics-oph | complementarity | exact | `quadray-ivm` | Quadray coordinates give exact IVM geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and the tetravolume table 1, 3, 4, 6, 20 and 96 from explicit vertex sets. The coordinate sum modulo four distinguishes the FCC sites from the two tetrahedral hole classes and the octahedral hole class. |
 | oph-fep | complementarity | exact | `equilibrium-propagation` | For the scalar energy in the probe, the contrast between parameter derivatives at the free and nudged equilibria equals (theta - target) / (1 + beta). It converges to the loss gradient as the nudge vanishes. The contrast illustrates how an energy-based learning method can obtain a parameter gradient from equilibria. |
 | oph-fep | complementarity | exact | `replicator-potential` | For a symmetric payoff A, the replicator field is the Shahshahani gradient of F(x) = x^T A x / 2, with mobility M = diag(x) - x x^T. The probe checks the identity and the nonnegative potential rate. The tested asymmetric payoff breaks this quadratic-potential identity at every sampled point. |
 | synergetics-oph | complementarity | exact | `kissing-twelve` | Twelve is the kissing number in three dimensions and both arrangements attain it. With the twelve sphere centres at distance 2r from a central sphere of radius r, the IVM's cuboctahedral shell has edge equal to circumradius, so each outer sphere touches the centre and four other outer spheres. The icosahedral arrangement has squared edge over squared circumradius exactly 2 - 2 sqrt(5) / 5, so its outer spheres touch only the centre. The geometric icosahedral realisation is isomorphic to OPH's labelled carrier. |
@@ -59,19 +59,21 @@ diagnostics below `1e-9` in magnitude are reported as such.
 | synergetics-oph | complementarity | exact | `dual-cells` | The twelve-around-one cell and the cuboctahedron are duals edge for edge: 14 vertices against 12, 12 faces against 14, 24 edges each, Euler characteristic 2 each, and tetravolumes 6 and 20 in the ratio 10/3, with the cuboctahedron derived a second time as the cube's line graph. |
 | three-way | complementarity | exact | `conjugation-norm` | Conjugation of sqrt 5 (fixing sqrt 2) fixes the counting invariants and moves the geometric ones: the spanning-tree number 5184000 is a rational integer and is fixed, while the icosahedron's tetravolume sqrt 2 (15/2 + (5/2) sqrt 5) moves to sqrt 2 (15/2 - (5/2) sqrt 5), and the two multiply to exactly 50, computed in exact field arithmetic; consistently, (175 + 75 sqrt 5)(175 - 75 sqrt 5) = 2500 = 50^2. |
 | oph-fep | isomorphism | exact-on-domain | `repair-is-conditioning` | On the binary shell each native repair, under its fair coin, is exact Bayesian conditioning: its law is the uniform reference conditioned on the datum the repair leaves visible (the seam's total load and every load off the seam), in all 3960 cases over the 66 configurations and both orientations of the thirty seams. That law is the unique minimiser of the variational free energy F[q] = E_q[ln q(s) - ln pi(s, o)] over the fibre of the datum, and the minimum is the surprisal -ln pi(o): log 33 on a seam that holds one unit, log 66 otherwise. A biased coin pays exactly its divergence from the fair one and a rule that always waits or always swaps pays log 2. Under a repair K the relative entropy to the reference falls by exactly D(p || pK). The identity belongs to the shell: with the uniform law on all 78 configurations as reference it fails on the sixty seams that meet a doubled port, where the repair moves one unit across with certainty. |
+| oph-fep | isomorphism | exact-on-domain | `binary-conditional-variance` | For uniform seam choice and fair repair on the binary shell, the Dirichlet form of native repair is exactly the mean conditional variance over seam records. The two quadratic forms have identical coefficients on all 66 states. |
+| fep-synergetics | isomorphism | exact | `carrier-spectral-chords` | On the edge-length-two regular icosahedron, each squared chord equals 40 times the contribution of the first positive Laplacian eigenspace to the intrinsic unit-precision Gaussian's port contrast variance. The full variance is effective resistance and is not proportional to squared chord length. The squared-distance embedding ranks are 11 and 3, respectively. |
 
-Totals: 44/44 probes pass, 0 fail.
+Totals: 46/46 probes pass, 0 fail.
 
 By kind:
 
-- isomorphism: 19 passing, 0 failing
+- isomorphism: 21 passing, 0 failing
 - disagreement: 15 passing, 0 failing
 - complementarity: 10 passing, 0 failing
 
 By pairwise scope:
 
-- oph-fep: 26 passing, 0 failing
-- fep-synergetics: 2 passing, 0 failing
+- oph-fep: 27 passing, 0 failing
+- fep-synergetics: 3 passing, 0 failing
 - synergetics-oph: 14 passing, 0 failing
 - three-way: 2 passing, 0 failing
 
@@ -492,7 +494,7 @@ Probe values:
 
 **disagreement** / **obstructed** / **oph-fep** / probe PASS
 
-Minimum interface energy, the negative log of the unnormalised interior integral, and normalised record surprisal are distinct. The second includes the interior determinant; in the third it cancels against the joint normaliser. Two chains with equal Schur complements give different unnormalised potentials and the same surprisal under the same record prior.
+Minimum interface energy, the negative log of the unnormalised interior integral, and normalised record surprisal are distinct. The second includes the interior determinant; in the third it cancels against the joint normaliser. Two chains with equal Schur complements and the same record prior have the same normalised record density, yet their interior posterior divergences differ under the same contrast change.
 
 - OPH: Minimum of the quadratic seam disagreement at fixed records.
 - FEP: Variational free energy bounds normalised record surprisal, with equality at the posterior.
@@ -517,6 +519,10 @@ Probe values:
 - `chain_control_schur_agrees` = True
 - `chain_control_raw_potential_difference` = -0.513473425
 - `chain_control_normalised_surprisal_residual` = abs < 1e-9
+- `chain_control_contrast_records` = (1, -1)
+- `chain_control_record_change_divergences` = (0.333333333, 0)
+- `chain_control_posterior_divergences` = (0.333333333, 0)
+- `chain_control_exact_record_change_divergences` = (1/3, 0)
 
 ## `mediator-obstruction`
 
@@ -778,7 +784,7 @@ Probe values:
 
 **complementarity** / **exact** / **synergetics-oph** / probe PASS
 
-Quadray coordinates give the synergetic side exact integer geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and the tetravolume table 1, 3, 4, 6, 20 and 96, every entry derived exactly from an explicit integer vertex set rather than read from the table.
+Quadray coordinates give exact IVM geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and the tetravolume table 1, 3, 4, 6, 20 and 96 from explicit vertex sets. The coordinate sum modulo four distinguishes the FCC sites from the two tetrahedral hole classes and the octahedral hole class.
 
 - OPH: The carrier needs a lattice in which twelve neighbours is the kissing configuration.
 - FEP: No fixed geometry; the FEP leaves the interface geometry to the model.
@@ -799,6 +805,7 @@ Probe values:
 - `derived_table_equals_declared` = True
 - `max_shell` = 32
 - `neighbor_squared_distance` = 8
+- `quadray_cosets` = minimum_squared_distances=(0, 3, 4, 3), nearest_counts=(1, 4, 6, 4), nearest_pair_squared_distance_counts=((), ((8, 6)), ((8, 12), (16, 3)), ((8, 6)))
 
 ## `equilibrium-propagation`
 
@@ -1183,4 +1190,45 @@ Probe values:
 - `entropy_identity_seams` = 30
 - `entropy_identity_holds` = True
 - `relative_entropy_never_rises` = True
+
+## `binary-conditional-variance`
+
+**isomorphism** / **exact-on-domain** / **oph-fep** / probe PASS
+
+For uniform seam choice and fair repair on the binary shell, the Dirichlet form of native repair is exactly the mean conditional variance over seam records. The two quadratic forms have identical coefficients on all 66 states.
+
+- OPH: The random-seam native repair kernel on the shell of two occupied ports.
+- FEP: The mean residual variance after conditioning the uniform reference on a seam record.
+- Synergetics: The carrier's icosahedral seams index the resampling steps.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Chlebicka, Łatuszyński and Miasojedow (2025), §2.2, for Gibbs projections; finite-shell comparison derived here
+
+Probe values:
+
+- `binary_states` = 66
+- `seams_checked` = 30
+- `two_state_fibres` = 300
+- `coefficient_matrices_agree` = True
+- `adjacent_indicator_energy` = 1/495
+
+## `carrier-spectral-chords`
+
+**isomorphism** / **exact** / **fep-synergetics** / probe PASS
+
+On the edge-length-two regular icosahedron, each squared chord equals 40 times the contribution of the first positive Laplacian eigenspace to the intrinsic unit-precision Gaussian's port contrast variance. The full variance is effective resistance and is not proportional to squared chord length. The squared-distance embedding ranks are 11 and 3, respectively.
+
+- OPH: The labelled carrier graph supplies the seam Laplacian and its slowest nonconstant mean-load modes.
+- FEP: Projection of the intrinsic Gaussian onto the first positive Laplacian eigenspace.
+- Synergetics: Euclidean chords of the regular icosahedron at the stated edge scale.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Osting (2023) for the regular-polyhedron eigenspace; Klein and Randić (1993) for resistance; exact comparison derived here
+
+Probe values:
+
+- `shells` = ((1, 11/30, 4, 30), (2, 7/15, 6 + 2 sqrt 5, 30), (3, 1/2, 10 + 2 sqrt 5, 6))
+- `ranks` = (11, 3)
+- `lowest_eigenvalue` = 5 - 1 sqrt 5
+- `lowest_multiplicity` = 3
+- `coordinate_norm_squared` = 10 + 2 sqrt 5
+- `chord_to_lowest_variance_factor` = 40
+- `lowest_mode_variances` = (1/10, 3/20 + 1/20 sqrt 5, 1/4 + 1/20 sqrt 5)
+- `full_variance_proportional` = False
 

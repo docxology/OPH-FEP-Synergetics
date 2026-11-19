@@ -68,7 +68,7 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `law-equivariance` | isomorphism | `exact` | `synergetics-oph` | every transition commutes with every automorphism; {{SYMMETRY_ORBITS}} orbits, {{SYMMETRY_OUTCOME_MULTISETS}} outcome multisets |
 | `kl-lattice-metric` | isomorphism | `exact` | `fep-synergetics` | at unit covariance, the divergence of a neighbour displacement is four nats and a displacement of squared norm $8k^2$ gives $4k^2$ |
 | `pr01-obstruction` | disagreement | `obstructed` | `oph-fep` | ungated repair does not terminate; the gate can give different normal forms |
-| `free-energy-name-collision` | disagreement | `obstructed` | `oph-fep` | "free energy" names inequivalent functionals |
+| `free-energy-name-collision` | disagreement | `obstructed` | `oph-fep` | equal record marginals can carry different interior posterior responses |
 | `mediator-obstruction` | disagreement | `obstructed` | `oph-fep` | pairwise boundary reduction needs a threshold |
 | `stationary-blanket` | disagreement | `obstructed` | `oph-fep` | a stationary blanket can coexist with direct exterior-to-interior drift |
 | `solenoidal-freedom` | disagreement | `obstructed` | `oph-fep` | stationary blankets leave entropy production free |
@@ -80,7 +80,7 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `four-cycle-local-minimum` | disagreement | `obstructed` | `oph-fep` | the four-cycle has spurious local minima |
 | `cuboctahedron-vs-icosahedron` | disagreement | `obstructed` | `synergetics-oph` | twelve vertices is not one solid: tetravolume {{CUBOCTAHEDRON_TETRAVOLUME}} against ${{ICOSAHEDRON_TETRAVOLUME}}\ldots$ |
 | `shell-vs-free-energy` | disagreement | `obstructed` | `fep-synergetics` | the coordination shell (a polyhedral norm) and the divergence (a Euclidean one) determine neither each other; levels {{SHELL_SHARED_FREE_ENERGY_LEVELS}} are shared |
-| `quadray-ivm` | complementarity | `exact` | `synergetics-oph` | IVM coordinates supply exact geometry; the tetravolume table is derived from vertex sets |
+| `quadray-ivm` | complementarity | `exact` | `synergetics-oph` | exact tetravolumes from vertex sets and tetrahedral and octahedral FCC hole classes from quadray residues |
 | `equilibrium-propagation` | complementarity | `exact` | `oph-fep` | the energy-based learning identity holds exactly |
 | `replicator-potential` | complementarity | `exact` | `oph-fep` | symmetric payoffs give a Shahshahani gradient of half the mean payoff; the tested asymmetric payoff breaks that identity |
 | `kissing-twelve` | complementarity | `exact` | `synergetics-oph` | both twelve-around-one arrangements attain the kissing number, with outer contacts in the cuboctahedron and gaps in the icosahedron |
@@ -96,6 +96,8 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `dual-cells` | complementarity | `exact` | `synergetics-oph` | the cell and the cuboctahedron, ${{VORONOI_VERTICES}}/{{VORONOI_FACES}}/{{VORONOI_EDGES}}$ against ${{CUBOCTAHEDRON_VERTICES}}/{{CUBOCTAHEDRON_FACES}}/{{CUBOCTAHEDRON_EDGES}}$, volumes {{PACKING_CELL_TETRAVOLUME}} and {{CUBOCTAHEDRON_TETRAVOLUME}} |
 | `conjugation-norm` | complementarity | `exact` | `three-way` | conjugation fixes the integer counts and moves the volume, whose norm is {{TETRAVOLUME_GALOIS_NORM}} |
 | `repair-is-conditioning` | isomorphism | `exact-on-domain` | `oph-fep` | on the binary shell each native repair is the uniform reference conditioned on its visible datum and minimises a free energy over the fibre; off the shell it fails on {{CONDITIONING_OFF_SHELL_FAILURES}} seams |
+| `binary-conditional-variance` | isomorphism | `exact-on-domain` | `oph-fep` | the binary repair Dirichlet form equals mean conditional variance over seam records |
+| `carrier-spectral-chords` | isomorphism | `exact` | `fep-synergetics` | squared chords equal {{CHORD_VARIANCE_FACTOR}} times the lowest-mode contrast variance, with different embedding ranks for the full variance and the chords |
 
 : The {{REGISTRY_ENTRIES}} correspondences, in registry order:
 {{REGISTRY_ISOMORPHISMS}} isomorphisms, {{REGISTRY_DISAGREEMENTS}}

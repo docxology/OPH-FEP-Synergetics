@@ -9,6 +9,7 @@ import pytest
 
 from oph_fep_synergetics.core.native_dynamics import (
     binary_attempt_counts,
+    binary_dirichlet_census,
     binary_ensemble_census,
     native_rewrite_census,
 )
@@ -44,3 +45,13 @@ def test_binary_attempt_kernel_keeps_waits_and_preserves_uniform_law():
     assert result["binary_chain_mean_operator_intertwines"]
     assert result["binary_chain_sample_kl_monotone"]
     assert result["binary_chain_sample_chi_squared_bound"]
+
+
+def test_binary_dirichlet_form_equals_mean_conditional_variance():
+    assert binary_dirichlet_census() == {
+        "binary_states": 66,
+        "seams_checked": 30,
+        "two_state_fibres": 300,
+        "coefficient_matrices_agree": True,
+        "adjacent_indicator_energy": "1/495",
+    }

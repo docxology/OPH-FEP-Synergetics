@@ -899,74 +899,128 @@ def subdivision_figure() -> Path:
     )
 
 
-def cover_figure() -> Path:
-    """Draw the carrier as a shaded solid with its full seam graph visible."""
-    carrier, view = _carrier_view()
+def _cover_solid(
+    axis: plt.Axes,
+    view: np.ndarray,
+    faces: tuple[tuple[int, ...], ...],
+    edges: tuple[tuple[int, int], ...],
+    center: tuple[float, float],
+    face_color: str,
+    line_color: str,
+    *,
+    numbered: bool = False,
+) -> None:
+    """Shade convex faces and distinguish foreground and rear edges."""
+    view = view + np.array([*center, 0.0])
     flat = view[:, :2]
-    background = "#0B1823"
-    near_fill = np.array(matplotlib.colors.to_rgb("#153348"))
-    lit_fill = np.array(matplotlib.colors.to_rgb("#326A7D"))
-    light = np.array([-0.35, 0.45, 0.82])
-    light /= np.linalg.norm(light)
-    figure, axis = plt.subplots(figsize=(7.0, 7.0))
-    axis.set_axis_off()
-
+    rgb = np.array(matplotlib.colors.to_rgb(face_color))
+    light = np.array([-0.47, 0.56, 0.68])
     foreground_edges = set()
     foreground_ports = set()
-    for face in carrier.faces:
-        a, b, c = view[list(face)]
-        normal = np.cross(b - a, c - a)
+    for face in faces:
+        polygon = view[list(face)]
+        normal = np.cross(polygon[1] - polygon[0], polygon[2] - polygon[0])
         normal /= np.linalg.norm(normal)
-        # The origin is inside the solid. Point the normal away from it.
-        if normal @ (a + b + c) < 0:
+        if normal @ (polygon.mean(axis=0) - np.array([*center, 0.0])) < 0:
             normal = -normal
         if normal[2] <= 0:
             continue
-        brightness = max(0.0, float(normal @ light))
+        brightness = 0.32 + 0.62 * max(0.0, float(normal @ light))
         axis.fill(
-            flat[list(face), 0],
-            flat[list(face), 1],
-            color=near_fill + brightness * (lit_fill - near_fill),
-            linewidth=0,
-            zorder=1,
+            polygon[:, 0], polygon[:, 1],
+            color=rgb * brightness, linewidth=0, zorder=2,
         )
-        foreground_edges.update(((face[0], face[1]), (face[0], face[2]), (face[1], face[2])))
+        foreground_edges.update(
+            tuple(sorted((port, face[index - 1]))) for index, port in enumerate(face)
+        )
         foreground_ports.update(face)
 
-    for edge in carrier.edges:
-        foreground = edge in foreground_edges
+    for edge in edges:
+        if edge in foreground_edges:
+            continue
+        start, end = flat[list(edge)].T
+        axis.plot(start, end, color=line_color, alpha=0.40, linewidth=1.05,
+                  linestyle=(0, (2, 3)), zorder=3)
+    for edge in sorted(foreground_edges):
+        start, end = flat[list(edge)].T
         axis.plot(
-            flat[list(edge), 0],
-            flat[list(edge), 1],
-            color="#A1DCE1" if foreground else "#86A0B4",
-            linewidth=2.3 if foreground else 1.2,
-            linestyle="-" if foreground else (0, (3, 3)),
-            solid_capstyle="round",
-            zorder=3 if foreground else 2,
+            start, end, color=line_color, alpha=0.20, linewidth=5.4,
+            solid_capstyle="round", zorder=4,
         )
+        axis.plot(start, end, color=line_color, linewidth=1.55,
+                  solid_capstyle="round", zorder=5)
     for port, (x, y) in enumerate(flat):
         foreground = port in foreground_ports
-        rim = "#FFD58B" if foreground else "#9DB6C7"
         axis.scatter(
-            x, y, s=310 if foreground else 250, color=background,
-            edgecolor=rim, linewidth=1.7 if foreground else 1.2, zorder=4,
+            x, y, s=160 if numbered else 34, color="#0D202C",
+            edgecolor=line_color if foreground else "#A8B8BF", linewidth=1.25, zorder=6,
         )
-        axis.text(
-            x, y, str(port), ha="center", va="center", fontsize=11,
-            color="#FFF2D5" if foreground else "#E5EFF6", fontweight="bold", zorder=5,
-        )
-    axis.set_aspect("equal")
-    half_span = 0.60 * float(max(np.ptp(flat, axis=0)))
-    axis.set_xlim(-half_span, half_span)
-    axis.set_ylim(-half_span, half_span)
-    return _save(
-        figure,
-        "fig_cover.png",
-        f"The finite OPH carrier on a dark field. Its {carrier.port_count} numbered ports "
-        f"and {carrier.seam_count} seams form an icosahedron. Shading shows the foreground "
-        "faces. Solid lines show foreground seams, and dashed lines trace rear seams.",
-        facecolor=background,
+        if numbered:
+            axis.text(x, y, str(port), ha="center", va="center", fontsize=9,
+                      color="#F3FBFA", fontweight="bold", zorder=7)
+
+
+def cover_figure() -> Path:
+    """Set the carrier and the FCC coordination shell on a single plate."""
+    carrier, view = _carrier_view()
+    sites = lattice.cuboctahedron_neighbors()
+    shell_edges = lattice.cuboctahedron_edges()
+    shell_faces = lattice.cuboctahedron_faces()
+    shell = _clearest_view(np.array([geometry.to_xyz(site) for site in sites]),
+                          np.array(shell_edges))
+    carrier_center = (3.20, 3.48)
+    shell_center = (8.78, 3.48)
+    width, height = 12.0, 6.35
+    figure, axis = plt.subplots(figsize=(width, height))
+    figure.subplots_adjust(left=0, right=1, top=1, bottom=0)
+    axis.set_axis_off()
+    axis.set(xlim=(0, width), ylim=(0, height), aspect="equal")
+
+    # Soft illumination behind the two solids. All strokes on the solids trace
+    # actual edges of the carrier or of the close-packed coordination shell.
+    x, y = np.meshgrid(np.linspace(0, width, 800), np.linspace(0, height, 424))
+    field = np.broadcast_to(np.array([7, 16, 28]), (*x.shape, 3)).astype(float).copy()
+    for (cx, cy), spread, color in (
+        (carrier_center, 5.8, (10, 48, 58)),
+        (shell_center, 4.0, (51, 26, 20)),
+    ):
+        glow = np.exp(-((x - cx) ** 2 + (y - cy) ** 2) / spread)
+        field += glow[..., None] * color
+    axis.imshow(field.astype(np.uint8), origin="lower", extent=(0, width, 0, height),
+                interpolation="bilinear", zorder=0)
+    axis.plot([6.15, 6.15], [0.62, 5.60], color="#8399A8", alpha=0.43, linewidth=0.7)
+    axis.plot([0.55, 11.45], [1.15, 1.15], color="#8399A8", alpha=0.43, linewidth=0.7)
+
+    teal, amber = "#A6F5EB", "#FFD2A1"
+    _cover_solid(axis, view * (2.15 / np.linalg.norm(view[0])), carrier.faces, carrier.edges,
+                 carrier_center, "#286D7D", teal, numbered=True)
+    _cover_solid(axis, shell * (1.87 / np.linalg.norm(shell[0])),
+                 shell_faces["triangles"] + shell_faces["squares"], shell_edges,
+                 shell_center, "#A75D39", amber)
+
+    for (cx, _), color, heading, detail in (
+        (carrier_center, teal, "Icosahedral carrier",
+         f"OPH and FEP   ·   {carrier.port_count} ports, {carrier.seam_count} seams"),
+        (shell_center, amber, "Cuboctahedral shell",
+         f"Synergetics   ·   {len(sites)} FCC sites, {len(shell_edges)} edges"),
+    ):
+        axis.text(cx, 0.82, heading, ha="center", va="center", color="#F5F7F7",
+                  fontsize=20, fontweight="bold")
+        axis.text(cx, 0.45, detail, ha="center", va="center", color=color, fontsize=11.5)
+
+    filename = "fig_cover.png"
+    FIGURES.mkdir(parents=True, exist_ok=True)
+    target = FIGURES / filename
+    figure.savefig(target, dpi=220, facecolor="#07101C")
+    plt.close(figure)
+    ALT_TEXT[filename] = (
+        f"The icosahedral OPH carrier with {carrier.port_count} numbered ports and "
+        f"{carrier.seam_count} seams shares a plate with the cuboctahedral FCC shell, "
+        f"which has {len(sites)} sites and {len(shell_edges)} edges. Solid and dashed lines "
+        "show foreground and rear edges. The carrier has triangular faces; the shell has "
+        "triangular and square faces."
     )
+    return target
 
 
 def _kind_phrases(counts: Counter) -> list[str]:

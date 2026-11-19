@@ -23,7 +23,7 @@ results are bound to computations or cited sources in the manuscript build.
 ## What runs
 
 ```
-oph-fep-synergetics verify                 # all 44 correspondence probes
+oph-fep-synergetics verify                 # all 46 correspondence probes
 oph-fep-synergetics verify --json          # the same, as a machine-readable report
 oph-fep-synergetics verify --key pr01-obstruction
 oph-fep-synergetics verify --pair synergetics-oph   # one pairwise ledger
@@ -76,15 +76,15 @@ python3 -m venv .venv
 | | `geometry/lattice.py` | IVM shells, the cuboctahedral vector equilibrium, Voronoi cell and packing density, Goldberg/geodesic counts |
 | | `geometry/subdivision.py` | icosahedral subdivision and the dual count identities |
 | | `geometry/solids.py` | oriented faces, polyhedron volume, and the icosahedron's tetravolume against its closed form |
-| `analysis` | `analysis/registry.py` | the 44 registered correspondences, each with a pairwise scope and an executable probe |
+| `analysis` | `analysis/registry.py` | the 46 registered correspondences, each with a pairwise scope and an executable probe |
 | | `analysis/provenance.py` | source pins, licence terms and reuse policy |
 | `manuscript_variables` | `manuscript_variables/values.py` | every number the prose may quote, derived from the package where a derivation exists |
 
 ## The registry
 
-44 entries: **19 isomorphisms**, **15 disagreements**, **10 complementarities**,
-scoped to the pairs `oph-fep` (26), `synergetics-oph` (14), `fep-synergetics` (2)
-and `three-way` (2). All 44 probes pass. `verify --kind` narrows a run to one of
+46 entries: **21 isomorphisms**, **15 disagreements**, **10 complementarities**,
+scoped to the pairs `oph-fep` (27), `synergetics-oph` (14), `fep-synergetics` (3)
+and `three-way` (2). All 46 probes pass. `verify --kind` narrows a run to one of
 the three kinds and `--pair` to one of the four scopes. The full table, with the OPH / FEP /
 Synergetics reading of each entry and the values its probe asserts, is generated
 into [docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
@@ -201,8 +201,8 @@ the checkout you want to build. The script checks that link, uses the
 template interpreter to resolve the manuscript bindings, and writes the PDF
 in this project's `output/pdf/`.
 
-The rendered edition has a deliberate front matter. Page 1 is the cover, drawn
-from `output/figures/fig_cover.png`; pages 2 to 5 are the four panels of the
+The rendered edition has a deliberate front matter. Page 1 compares the icosahedral carrier and the FCC lattice’s
+cuboctahedral shell using `output/figures/fig_cover.png`; pages 2 to 5 are the four panels of the
 graphical abstract, one panel per page, placed with `\floatplacement{figure}{H}`
 so that a panel cannot float away from its caption; the contents page follows the
 panels, which is why `preamble.md` keeps the renderer's automatic
@@ -227,7 +227,7 @@ Three disciplines hold the manuscript together, and each one is a test:
 
 ```
 data/sources.json                    pinned sources, licences, cited identifiers
-docs/CORRESPONDENCES.md              generated: the 44 entries and their probe values
+docs/CORRESPONDENCES.md              generated: the 46 entries and their probe values
 docs/MANUSCRIPT_VALUES.md            generated: every bound value
 docs/CONCORDANCE.md                  generated: where each claim is stated and each figure appears
 docs/PROVENANCE.md                   the pins and the reuse rules
@@ -240,7 +240,7 @@ scripts/make_figures.py              renders the twenty-three figures and their 
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (422 tests)
+tests/                               the suite (425 tests)
 ```
 
 ## Tests
@@ -249,7 +249,7 @@ tests/                               the suite (422 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-422 tests. The suite checks exact values rather than
+425 tests. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

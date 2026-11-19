@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
-from collections import Counter
+from collections import Counter, defaultdict
+from fractions import Fraction
 from functools import lru_cache
 
 import numpy as np
 
 from .carrier import icosahedral_carrier
+from .controls import repair_datum
 from .repair import energy, is_broken, native_repair, shell_gap
 
 State = tuple[int, ...]
@@ -85,6 +87,46 @@ def binary_attempt_counts() -> tuple[tuple[State, ...], np.ndarray]:
         for target, multiplicity in targets.items():
             counts[i, indices[target]] = multiplicity
     return states, counts
+
+
+def binary_dirichlet_census() -> dict[str, int | bool | str]:
+    """Compare exact coefficients of the native Dirichlet and fibre variance forms.
+
+    Under the uniform binary-shell law, a two-state fibre contributes
+    ``(f(x) - f(y))**2 / (2 * len(states))`` to its seam's expected
+    conditional variance. A singleton contributes zero. Averaging over seams
+    gives both forms the common denominator ``2 * seams * len(states)``.
+    """
+    states, counts = binary_attempt_counts()
+    carrier = icosahedral_carrier()
+    draws = 2 * carrier.seam_count
+    dirichlet = draws * np.eye(len(states), dtype=np.int64) - counts
+    variance = np.zeros_like(dirichlet)
+    two_state_fibres = 0
+    for seam in carrier.edges:
+        fibres: dict[tuple[int, State], list[int]] = defaultdict(list)
+        for i, state in enumerate(states):
+            fibres[repair_datum(state, seam)].append(i)
+        for fibre in fibres.values():
+            if len(fibre) == 1:
+                continue
+            left, right = fibre
+            two_state_fibres += 1
+            variance[left, left] += 1
+            variance[right, right] += 1
+            variance[left, right] -= 1
+            variance[right, left] -= 1
+
+    adjacent = carrier.edges[0]
+    indicator = states.index(tuple(int(i in adjacent) for i in range(carrier.port_count)))
+    indicator_energy = Fraction(int(dirichlet[indicator, indicator]), draws * len(states))
+    return {
+        "binary_states": len(states),
+        "seams_checked": carrier.seam_count,
+        "two_state_fibres": two_state_fibres,
+        "coefficient_matrices_agree": bool(np.array_equal(dirichlet, variance)),
+        "adjacent_indicator_energy": str(indicator_energy),
+    }
 
 
 @lru_cache(maxsize=1)

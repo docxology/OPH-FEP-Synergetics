@@ -270,6 +270,9 @@ _EX = _probe_values("existence-without-reachability")
 _KL = _probe_values("kl-lattice-metric")
 _SHEAF_COHOMOLOGY = _probe_values("sheaf-cohomology")
 _CONDITIONING = _probe_values("repair-is-conditioning")
+_REPAIR_VARIANCE = _probe_values("binary-conditional-variance")
+_CHORDS = _probe_values("carrier-spectral-chords")
+_IVM_COSETS = _probe_values("quadray-ivm")["quadray_cosets"]
 _SHELL_ENERGY = _probe_values("shell-vs-free-energy")
 _KISSING = _probe_values("kissing-twelve")
 _ICOSA = _probe_values("icosahedron-tetravolume")
@@ -440,7 +443,7 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         ("numerical", "bayesian", "surprisal", "critic", "meaningful"),
         "'Agreement and Surprise' Table 7",
         None,
-        note="the first three coincide up to curvature in the linear Gaussian corner; the last two need a task",
+        note="the probe evaluates a residual norm, divergence between clamped posteriors, and absolute record surprisal",
     ),
     BoundValue(
         "d_stability.routh_onset",
@@ -1059,6 +1062,16 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         None,
     ),
     BoundValue(
+        "fe.chain_contrast_records",
+        _COLLISION["chain_control_contrast_records"],
+        "probe:free-energy-name-collision:chain_control_contrast_records",
+    ),
+    BoundValue(
+        "fe.chain_record_change_divergences",
+        _COLLISION["chain_control_exact_record_change_divergences"],
+        "probe:free-energy-name-collision:chain_control_exact_record_change_divergences",
+    ),
+    BoundValue(
         "pr01.coin_zero_current",
         float(_PR01["coin_zero_current"]),
         "probe:pr01-obstruction:coin_zero_current",
@@ -1382,6 +1395,41 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         int(_CONDITIONING["off_shell_failures"]),
         "probe:repair-is-conditioning:off_shell_failures",
         None,
+    ),
+    BoundValue(
+        "repair.variance_fibres",
+        _REPAIR_VARIANCE["two_state_fibres"],
+        "probe:binary-conditional-variance:two_state_fibres",
+    ),
+    BoundValue(
+        "repair.variance_indicator",
+        _REPAIR_VARIANCE["adjacent_indicator_energy"],
+        "probe:binary-conditional-variance:adjacent_indicator_energy",
+    ),
+    BoundValue(
+        "chord.variance_factor",
+        _CHORDS["chord_to_lowest_variance_factor"],
+        "probe:carrier-spectral-chords:chord_to_lowest_variance_factor",
+    ),
+    BoundValue(
+        "chord.full_rank",
+        _CHORDS["ranks"][0],
+        "probe:carrier-spectral-chords:ranks",
+    ),
+    BoundValue(
+        "chord.embedding_rank",
+        _CHORDS["ranks"][1],
+        "probe:carrier-spectral-chords:ranks",
+    ),
+    BoundValue(
+        "ivm.coset_nearest_counts",
+        _IVM_COSETS["nearest_counts"],
+        "probe:quadray-ivm:quadray_cosets",
+    ),
+    BoundValue(
+        "ivm.coset_squared_distances",
+        _IVM_COSETS["minimum_squared_distances"],
+        "probe:quadray-ivm:quadray_cosets",
     ),
     *_chart_values(),
 )

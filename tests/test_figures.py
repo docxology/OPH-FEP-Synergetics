@@ -82,6 +82,9 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
     assert f"{carrier.port_count} numbered ports" in cover["alt_text"]
     assert f"{carrier.seam_count} seams" in cover["alt_text"]
     assert "dashed lines" in cover["alt_text"]
+    assert "cuboctahedral FCC shell" in cover["alt_text"]
+    height, width, _ = make_figures.plt.imread(written[-1]).shape
+    assert width > height
 
 
 def test_the_same_builder_is_byte_deterministic(tmp_path, monkeypatch):

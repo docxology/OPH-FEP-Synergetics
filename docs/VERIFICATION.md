@@ -13,7 +13,7 @@ surfaces: the registry (`oph-fep-synergetics verify`) and the test suite.
 .venv/bin/oph-fep-synergetics verify --kind <kind>
 ```
 
-Each of the 44 entries carries an executable probe. A probe returns `(passed,
+Each of the 46 entries carries an executable probe. A probe returns `(passed,
 values)`; `values` is what the pass is made of, so a number that changes without
 changing the verdict is still visible in the report.
 
@@ -34,7 +34,7 @@ When combining filters, the probes must match every specified filter.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-422 tests. The suite runs offline from a fresh process and exercises the actual
+425 tests. The suite runs offline from a fresh process and exercises the actual
 scientific code paths.
 
 | file | what it pins down |

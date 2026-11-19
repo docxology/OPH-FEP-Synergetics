@@ -4,8 +4,12 @@ from __future__ import annotations
 
 from fractions import Fraction
 
+import numpy as np
+
 from oph_fep_synergetics.core import icosahedral_carrier, reciprocal_spectrum_sum
+from oph_fep_synergetics.core.carrier import geometric_carrier
 from oph_fep_synergetics.core.network import (
+    carrier_resistance_geometry,
     distance_distribution,
     effective_resistance,
     graph_distances,
@@ -16,7 +20,7 @@ from oph_fep_synergetics.core.network import (
     resistance_ladder,
     subgraph_census,
 )
-from oph_fep_synergetics.geometry import cuboctahedron_adjacency
+from oph_fep_synergetics.geometry import Surd5, cuboctahedron_adjacency
 
 
 def _adjacency() -> list[list[int]]:
@@ -94,6 +98,56 @@ def test_resistance_ladder_is_one_shell_at_a_time():
     )
     # The three shells partition all unordered pairs exactly once.
     assert sum(count for _, _, count in ladder) == 12 * 11 // 2
+
+
+def test_carrier_chords_recover_only_the_lowest_mode_contrast_variance():
+    comparison = carrier_resistance_geometry()
+    assert comparison["shells"] == (
+        (1, Fraction(11, 30), Surd5(4), 30),
+        (2, Fraction(7, 15), Surd5(6, 2), 30),
+        (3, Fraction(1, 2), Surd5(10, 2), 6),
+    )
+    assert comparison["lowest_eigenvalue"] == Surd5(5, -1)
+    assert comparison["lowest_multiplicity"] == 3
+    assert comparison["coordinate_norm_squared"] == Surd5(10, 2)
+    assert comparison["chord_to_lowest_variance_factor"] == 40
+    assert comparison["lowest_mode_variances"] == (
+        Fraction(1, 10),
+        Surd5(Fraction(3, 20), Fraction(1, 20)),
+        Surd5(Fraction(1, 4), Fraction(1, 20)),
+    )
+    assert comparison["full_variance_proportional"] is False
+
+    # Independently build the covariance projector by numerical eigensolve
+    # and the chords from the regular carrier on the unit sphere.
+    carrier = geometric_carrier()
+    laplacian = carrier.laplacian()
+    eigenvalues, eigenvectors = np.linalg.eigh(laplacian)
+    lowest = np.isclose(eigenvalues, eigenvalues[1])
+    basis = eigenvectors[:, lowest]
+    lowest_covariance = basis @ basis.T / eigenvalues[1]
+    full_covariance = np.linalg.pinv(laplacian)
+
+    points = np.asarray(carrier.vertices)
+    a, b = carrier.edges[0]
+    points *= 2 / np.linalg.norm(points[a] - points[b])
+    differences = points[:, None, :] - points[None, :, :]
+    chord_squared = (differences * differences).sum(axis=2)
+    lowest_diagonal = lowest_covariance.diagonal()
+    lowest_variances = lowest_diagonal[:, None] + lowest_diagonal[None, :] - 2 * lowest_covariance
+    full_diagonal = full_covariance.diagonal()
+    full_variances = full_diagonal[:, None] + full_diagonal[None, :] - 2 * full_covariance
+    np.testing.assert_allclose(chord_squared, 40 * lowest_variances, atol=1e-12)
+    assert not np.allclose(chord_squared, full_variances * (4 / full_variances[a, b]))
+
+    center = np.eye(carrier.port_count) - 1 / carrier.port_count
+    chord_gram = -0.5 * center @ chord_squared @ center
+    inferred_full_gram = -0.5 * center @ full_variances @ center
+    np.testing.assert_allclose(inferred_full_gram, full_covariance, atol=1e-12)
+    assert comparison["ranks"] == (
+        np.linalg.matrix_rank(inferred_full_gram),
+        np.linalg.matrix_rank(chord_gram),
+    ) == (11, 3)
 
 
 def test_kirchhoff_index_is_twenty_eight_and_matches_the_spectrum():

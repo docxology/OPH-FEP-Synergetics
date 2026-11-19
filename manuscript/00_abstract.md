@@ -16,11 +16,16 @@ model. With a proper record prior, the harmonic extension and posterior mean
 coincide, and minimised variational free energy equals record surprisal
 [@mueller2026agreement]. On the binary load shell with a uniform reference,
 the law of one native repair is the reference conditioned on the information
-the repair preserves. The total-load-two census also separates two rewrite
+the repair preserves. The resulting random-seam Dirichlet form is the mean
+conditional variance over those seam records. The total-load-two census
+also separates two rewrite
 relations. Ungated repair is confluent and can cycle. Restricting repair to
 broken seams gives termination with multiple reachable normal forms.
 
 The geometry yields exact counts, effective resistances, and volumes.
+On the carrier, squared Euclidean chords recover the contribution of the
+lowest positive Laplacian modes to Gaussian contrast variance up to scale.
+The full variance has a higher-dimensional embedding.
 Cuboctahedral and icosahedral configurations attain the same kissing number
 with different contacts among the outer spheres. The cuboctahedral gauge
 determines lattice coordination shells, and equal-covariance Gaussian

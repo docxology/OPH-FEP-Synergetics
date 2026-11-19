@@ -243,7 +243,7 @@ that make the comparison possible.
 
 | Object | Relation tested | Registry probes |
 |:-------|:----------------|:----------------|
-| Carrier ports and seams | Port coordinates index Gaussian variables on the carrier. In the diagonally shifted proper Gaussian, seams are conditional dependencies. | `carrier-port-chart`, `gmrf-independence` |
+| Carrier ports and seams | Port coordinates index Gaussian variables on the carrier. In the diagonally shifted proper Gaussian, the seams are the edges of the conditional-dependence graph. | `carrier-port-chart`, `gmrf-independence` |
 | Carrier Laplacian | It determines the mean load update on ports and the precision blocks of a grounded Gaussian model. | `spectral-gap`, `variational-equivalence` |
 | Repair of a fixed seam | With the uniform binary-shell reference, the native transition law is the reference conditioned on the preserved record. | `repair-is-conditioning` |
 | Carrier scalar sheaf | Its agreement Laplacian is the graph Laplacian, and its first cohomology records seam assignments modulo coboundaries. | `sheaf-agreement`, `sheaf-cohomology` |

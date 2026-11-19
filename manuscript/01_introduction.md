@@ -7,11 +7,12 @@ patches. We use its finite carrier and seam repair rule on integer loads
 [@oph; @mueller2026observers; @dossier2026]. The Free Energy Principle (FEP)
 motivates a variational description of inference and a statistical account of
 boundaries. We use a recognition density to bound record surprisal in a specified
-generative model [@friston2010; @friston2013life; @parr2022active]. Fuller's
-Synergetics supplies quadray coordinates, a close-packed lattice, and a
-tetrahedral unit of volume. These give an exact account of the lattice shells
-and provide a common volume unit for comparisons with the carrier
-[@fuller1975synergetics; @quadmath].
+generative model [@friston2010; @friston2013life; @parr2022active]. From
+Fuller's Synergetics we use the close-packed isotropic vector matrix and
+its tetrahedral unit of volume [@fuller1975synergetics]. We work with the
+quadray notation documented by Urner and implemented in QuadMath to
+count lattice shells and compare solid volumes in this unit
+[@urner1997quadrays; @quadmath].
 
 Where two or three programmes refer to comparable finite objects, we state
 their readings in mathematical terms and compute the quantities each predicts.
@@ -42,8 +43,11 @@ arithmetic from numerical corroboration at a stated tolerance.
    equivalence from *Agreement and Surprise* by comparing harmonic extension
    and the limit of predictive-coding perception with a constrained KKT solve
    [@mueller2026agreement, theorem 7, items 2–3]. The comparison is stated in
-   [@prop:ve]. A separate probe identifies native repair with Bayesian
-   conditioning on the uniform binary-shell reference [@prop:conditioning].
+   [@prop:ve]. Two Gaussian chains share the record density and have
+   different interior responses to the same record change [@sec:collision].
+   Native repair is Bayesian conditioning on the uniform binary-shell
+   reference. Its random-seam Dirichlet form is the mean conditional
+   variance [@prop:conditioning; @prop:binary-conditional-variance].
 3. **Dynamical obstructions.** We check the mediator threshold, the solenoidal
    entropy production, and the stability onset in the stated families
    [@mueller2026agreement, propositions 8–10 and 15]. We report those checks
@@ -51,10 +55,13 @@ arithmetic from numerical corroboration at a stated tolerance.
    the clipping regimes and measure the orbit in the two-node control
    [@prop:existence].
 4. **Lattice and volume.** We derive the cuboctahedral coordination-shell
-   gauge and tetravolume table from explicit constructions. We compare
-   equal-covariance Gaussian divergence with the lattice metric and compute
-   exact volumes for the icosahedral carrier and the close-packing Voronoi
-   cell [@prop:ivm; @prop:kl; @prop:ico-volume; @prop:packing].
+   gauge [@prop:ivm], tetrahedral and octahedral hole classes, and
+   tetravolume table.
+   We compare equal-covariance Gaussian divergence with lattice distance
+   and relate the carrier's Euclidean chords to its lowest Gaussian
+   modes [@prop:quadray-ivm; @prop:kl; @prop:carrier-spectral-chords].
+   We also compute exact volumes for the carrier and the close-packing
+   Voronoi cell [@prop:ico-volume; @prop:packing].
 5. **Executable provenance.** The registry links each comparison to its
    probe. The source register records software commits and the identifiers
    used in each reimplementation [@sec:reproducibility].
@@ -92,10 +99,14 @@ Synergetics has a small technical literature that states its conventions
 carefully [@edmondson1987fuller], and the geodesic subdivision it motivates is the
 Goldberg construction [@goldberg1937multisymmetric] on the regular icosahedron
 [@coxeter1973regular], the same construction that classifies icosahedral virus
-shells [@caspar1962physical]. The lattice that results is the root lattice A3 in
-the closest-packing literature [@conway1999sphere], whose kissing number twelve
-was established by Schütte and van der Waerden [@schutte1953dreizehn] and whose
-coordination sequence is $10k^{2}+2$ [@conway1997lowdim].
+shells [@caspar1962physical].
+
+The isotropic vector matrix used here is the face-centred cubic lattice,
+which is isometric up to scale to the root lattice $A_3$
+[@conway1999sphere]. Its lattice kissing arrangement attains the
+three-dimensional kissing number established by Schütte and van der Waerden
+[@schutte1953dreizehn]. Its coordination sequence is $10k^{2}+2$
+[@conway1997lowdim].
 
 The tools this paper uses have long pedigrees, and it claims none of them: the
 algebraic connectivity of a graph [@fiedler1973connectivity], the Routh–Hurwitz

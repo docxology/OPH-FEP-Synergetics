@@ -14,10 +14,12 @@ that both vocabularies can be checked against:
 * the **subgraph census**: the triangles, the induced (chordless) five-cycles,
   the perfect matchings and the Hamiltonian cycles (as undirected edge sets), all
   counted by exhaustion rather than quoted.
+* the **spectral chord comparison**: the carrier's regular icosahedral
+  coordinates give the contribution of the first positive Laplacian eigenspace
+  to each pair variance, up to a common scale.
 
-Nothing here imports a geometry module: an adjacency matrix is all these
-functions need, so the same code counts the carrier, the cuboctahedron and any
-line graph put beside them.
+The network calculations take only an adjacency matrix. The chord comparison
+also uses the exact coordinates of the regular icosahedron.
 """
 
 from __future__ import annotations
@@ -26,7 +28,10 @@ import itertools
 from fractions import Fraction
 from typing import Callable, Iterator, Mapping, Sequence
 
+import numpy as np
+
 __all__ = [
+    "carrier_resistance_geometry",
     "distance_distribution",
     "effective_resistance",
     "graph_distances",
@@ -193,6 +198,81 @@ def kirchhoff_index(adjacency: Adjacency) -> Fraction:
     for _, _, resistance in _pair_resistances(adjacency, inverse):
         total += resistance
     return total
+
+
+def carrier_resistance_geometry() -> dict[str, object]:
+    """Compare edge-two icosahedral chords with intrinsic Gaussian variances.
+
+    The chord configuration spans the first positive eigenspace of the unit
+    carrier Laplacian. Verify this in Q(sqrt(5)) and derive the scale from
+    the squared norm of its coordinate columns. The full Gaussian covariance
+    embeds the square root of resistance in dimension n-1 because the
+    grounded inverse is the positive definite Gram matrix relative to port 0.
+    """
+    from ..geometry.exact import Surd5, exact_icosahedron_vertices
+    from .carrier import icosahedral_carrier
+
+    vertices = exact_icosahedron_vertices()
+    chords = [
+        [sum(delta * delta for delta in (a - b for a, b in zip(left, right))) for right in vertices]
+        for left in vertices
+    ]
+    adjacency = [[int(chord == 4) for chord in row] for row in chords]
+    oph_adjacency = icosahedral_carrier().adjacency_matrix().astype(int).tolist()
+    if not graphs_are_isomorphic(adjacency, oph_adjacency):
+        raise AssertionError("the exact chord adjacency must realize the OPH carrier")
+
+    inverse = _grounded_inverse(adjacency)
+    distances = graph_distances(adjacency)
+    classes: dict[int, list[tuple[Fraction, Surd5]]] = {}
+    for source, target, resistance in _pair_resistances(adjacency, inverse):
+        step = distances[source][target]
+        classes.setdefault(step, []).append((resistance, Surd5.of(chords[source][target])))
+    shells = []
+    for step, pairs in sorted(classes.items()):
+        (resistance, chord), = set(pairs)
+        shells.append((step, resistance, chord, len(pairs)))
+
+    laplacian = np.asarray(laplacian_matrix(adjacency), dtype=np.int64)
+    identity = np.eye(len(vertices), dtype=np.int64)
+    shifted = laplacian - 5 * identity
+    annihilator = laplacian @ (laplacian - 6 * identity) @ (shifted @ shifted - 5 * identity)
+    if np.any(annihilator):
+        raise AssertionError("the carrier Laplacian must satisfy its spectral polynomial")
+    # An integer trace forces the two irrational roots to have equal
+    # multiplicity. Invertibility after grounding leaves one zero eigenvalue.
+    positive_rank = len(inverse)
+    lowest_multiplicity = (6 * positive_rank - int(np.trace(laplacian))) // 2
+
+    coordinates = np.asarray(vertices, dtype=object)
+    lowest_eigenvalue = Surd5(5, -1)
+    if not np.array_equal(laplacian @ coordinates, coordinates * lowest_eigenvalue):
+        raise AssertionError("the exact coordinate columns must be lowest positive eigenvectors")
+    column_gram = coordinates.T @ coordinates
+    chord_rank = coordinates.shape[1]
+    coordinate_norm_squared = column_gram[0, 0]
+    if (
+        coordinate_norm_squared == 0
+        or not np.array_equal(column_gram, np.eye(chord_rank, dtype=object) * coordinate_norm_squared)
+        or chord_rank != lowest_multiplicity
+    ):
+        raise AssertionError("the scaled coordinate columns must be a basis of the eigenspace")
+
+    factor = coordinate_norm_squared * lowest_eigenvalue
+    _, edge_resistance, edge_chord, _ = shells[0]
+    return {
+        "shells": tuple(shells),
+        "ranks": (positive_rank, chord_rank),
+        "lowest_eigenvalue": lowest_eigenvalue,
+        "lowest_multiplicity": lowest_multiplicity,
+        "coordinate_norm_squared": coordinate_norm_squared,
+        "chord_to_lowest_variance_factor": factor,
+        "lowest_mode_variances": tuple(chord / factor for _, _, chord, _ in shells),
+        "full_variance_proportional": all(
+            chord * edge_resistance == edge_chord * resistance
+            for _, resistance, chord, _ in shells
+        ),
+    }
 
 
 def subgraph_census(adjacency: Adjacency) -> dict[str, int]:

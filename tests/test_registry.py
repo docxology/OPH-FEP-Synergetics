@@ -30,8 +30,8 @@ assert KINDS == REGISTRY_KINDS, "the registry and its tests must agree on the ki
 
 
 def test_registry_entries_are_well_formed():
-    assert len(CORRESPONDENCES) == 44
-    assert len({entry.key for entry in CORRESPONDENCES}) == 44
+    assert len(CORRESPONDENCES) == 46
+    assert len({entry.key for entry in CORRESPONDENCES}) == 46
     for entry in CORRESPONDENCES:
         assert entry.kind in KINDS
         assert entry.pair in PAIRS
@@ -43,7 +43,7 @@ def test_registry_entries_are_well_formed():
 
 def test_registry_covers_all_three_relations():
     counts = {kind: sum(1 for entry in CORRESPONDENCES if entry.kind == kind) for kind in KINDS}
-    assert counts == {ISOMORPHISM: 19, DISAGREEMENT: 15, COMPLEMENTARITY: 10}
+    assert counts == {ISOMORPHISM: 21, DISAGREEMENT: 15, COMPLEMENTARITY: 10}
 
 
 def test_statuses_follow_their_kind():
@@ -66,7 +66,7 @@ def test_registry_covers_every_pairwise_scope():
     index = by_pair()
     assert set(index) == set(PAIRS)
     counts = {pair: len(entries) for pair, entries in index.items()}
-    assert counts == {OPH_FEP: 26, FEP_SYNERGETICS: 2, SYNERGETICS_OPH: 14, THREE_WAY: 2}
+    assert counts == {OPH_FEP: 27, FEP_SYNERGETICS: 3, SYNERGETICS_OPH: 14, THREE_WAY: 2}
     assert sum(counts.values()) == len(CORRESPONDENCES)
     for pair, entries in index.items():
         assert all(entry.pair == pair for entry in entries)
@@ -90,22 +90,22 @@ def test_by_key_indexes_every_entry():
 
 def test_every_probe_passes_and_reports_values():
     results = verify()
-    assert len(results) == 44
+    assert len(results) == 46
     for result in results:
         assert result.passed is True
         assert result.pair in PAIRS
         assert result.values
     report = summary(results)
-    assert report["total"] == 44
-    assert report["passed"] == 44
+    assert report["total"] == 46
+    assert report["passed"] == 46
     assert report["failed"] == 0
     assert report["failures"] == ()
-    assert report["by_kind"][ISOMORPHISM] == {"passed": 19, "failed": 0}
+    assert report["by_kind"][ISOMORPHISM] == {"passed": 21, "failed": 0}
     assert report["by_kind"][DISAGREEMENT] == {"passed": 15, "failed": 0}
     assert report["by_kind"][COMPLEMENTARITY] == {"passed": 10, "failed": 0}
     assert report["pairs"] == PAIRS
-    assert report["by_pair"][OPH_FEP] == {"passed": 26, "failed": 0}
-    assert report["by_pair"][FEP_SYNERGETICS] == {"passed": 2, "failed": 0}
+    assert report["by_pair"][OPH_FEP] == {"passed": 27, "failed": 0}
+    assert report["by_pair"][FEP_SYNERGETICS] == {"passed": 3, "failed": 0}
     assert report["by_pair"][SYNERGETICS_OPH] == {"passed": 14, "failed": 0}
     assert report["by_pair"][THREE_WAY] == {"passed": 2, "failed": 0}
 
@@ -277,6 +277,14 @@ def test_free_energy_name_collision_values():
     assert values["chain_control_schur_agrees"] is True
     assert abs(values["chain_control_raw_potential_difference"]) > 0.1
     assert abs(values["chain_control_normalised_surprisal_residual"]) < 1e-12
+    assert values["chain_control_contrast_records"] == (1, -1)
+    assert values["chain_control_exact_record_change_divergences"] == ("1/3", "0")
+    assert values["chain_control_record_change_divergences"] == pytest.approx(
+        (1 / 3, 0), abs=1e-12
+    )
+    assert values["chain_control_posterior_divergences"] == pytest.approx(
+        values["chain_control_record_change_divergences"], abs=1e-12
+    )
 
 
 def test_two_record_resistance_values():

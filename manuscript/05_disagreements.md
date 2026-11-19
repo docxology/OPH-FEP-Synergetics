@@ -67,16 +67,18 @@ normal forms, so the gated relation is not confluent.
 
 The state graph in [@prop:native-rewrite] concerns individual paths. Under a
 uniform seam and fair coin, the binary-shell attempt kernel includes the waits.
-Its transition-count matrix is symmetric with all row and column totals equal
-to the number of draws. The uniform law is stationary, connectivity gives its
-uniqueness, and the computed spectral gap equals the port gap in
-[@prop:spectrum]. Each single-seam kernel is a conditional expectation
-([@prop:conditioning]); the mixture also preserves the uniform law. Data
-processing makes relative entropy to that law nonincreasing for every initial
-binary-shell distribution. The probe separately checks a trajectory from a
-point mass and the spectral bound on chi-square divergence. This bound does not
-assign a universal decay rate to relative entropy. Thus a path can keep its
-load energy constant while the ensemble loses relative entropy.
+Its transition-count matrix is symmetric with equal row and column totals.
+The kernel has the uniform law as its unique stationary distribution by
+connectivity. A seam with one occupied endpoint exchanges the occupations
+with probability one half when selected. Thus $P-I$ is the unit-rate
+two-particle symmetric exclusion generator divided by $2\lvert E\rvert$. The exclusion
+gap theorem [@caputo2010proof] gives the exact port gap of [@prop:spectrum]
+for this normalisation, and the probe checks it numerically. By data processing,
+relative entropy to the uniform law is nonincreasing for every initial
+binary-shell distribution. The probe checks a trajectory from a point mass
+and the separate spectral bound on chi-square divergence. An individual
+path can therefore retain its load energy while an ensemble loses relative
+entropy.
 
 ## Three distinct values at fixed records {#sec:collision}
 
@@ -91,9 +93,19 @@ For the normalised model, record surprisal and variational free energy at the
 posterior both equal {{FE_VARIATIONAL_AT_POSTERIOR}}. This value includes the
 record prior energy and the record normalisation term {{FE_NORMALISED_RECORD_OFFSET}}
 from [@eq:gaussian]. The interior term cancels against the corresponding term
-in the joint normaliser [@mueller2026agreement, theorem 7]. Two chain controls
-with identical Schur complements and the same prior give identical surprises
-despite different interior determinants and unnormalised potentials.
+in the joint normaliser [@mueller2026agreement, theorem 7].
+
+The shorter chain's seam weights are scaled to match the effective conductance
+of the longer chain. The two chains then have the same Schur complement and
+record prior, so their normalised record densities coincide. Their interior
+determinants and unnormalised potentials differ. For a change from zero to
+{{FE_CHAIN_CONTRAST_RECORDS}}, the longer, unit-weight chain shifts its
+interior means in opposite directions. In the shorter, weighted chain, the
+endpoint shifts cancel at its middle port. The divergence from the new
+posterior to the old posterior is {{FE_CHAIN_RECORD_CHANGE_DIVERGENCES}}
+for the two chains in that order. The probe computes it from the residual at
+the old optimum and directly from the posterior means and covariances.
+Thus the shared record density leaves the interior response undetermined.
 Registered as `free-energy-name-collision`.
 
 ## A stationary blanket can coexist with cross-boundary drift {#sec:stationary}
@@ -398,7 +410,7 @@ and whose graph has six four-valent and eight three-valent vertices. Three
 distinct solids in this geometry have twelve-fold features, and only one of them
 is the carrier. Registered as `cuboctahedron-vs-icosahedron`.
 
-## The shell index and the free energy determine neither each other {#sec:shell-energy}
+## Neither the shell index nor the Gaussian divergence determines the other {#sec:shell-energy}
 
 ::: {#prop:shell-energy .proposition}
 Let $F(z) = \tfrac{1}{2}\lVert z\rVert^{2}$ be the equal-covariance divergence of
@@ -422,10 +434,9 @@ The reason is exact and easy to state once the shell has its closed form. The
 shell index is the gauge $g(u) = \max(\lVert u\rVert_{\infty},
 \tfrac{1}{2}\lVert u\rVert_{1})$ of [@eq:shell], a polyhedral norm whose unit ball
 is the vector equilibrium, while $F$ is a Euclidean quadratic form whose level
-sets are spheres. A sphere and a cuboctahedron touch only along the
-cuboctahedron's twelve vertex directions, which is why $F$ attains its
-shell maximum only at $k\,m$ and why the face points of shell $k$ sit closer to the
-centre than its vertices, by up to a factor of $\sqrt{2}$ in distance.
+sets are spheres. The cuboctahedron meets its circumsphere only at its
+vertices, so $F$ attains its shell maximum only at $k\,m$. Points on the
+faces can lie closer to the centre by up to a factor of $\sqrt{2}$.
 
 [@fig:shell-gauge] draws both halves of the statement.
 

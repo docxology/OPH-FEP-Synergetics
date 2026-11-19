@@ -46,6 +46,7 @@ from ..core import network as network_module
 from ..core import repair as repair_module
 from ..core import sheaf as sheaf_module
 from ..core import symmetry as symmetry_module
+from ..geometry.lattice import ivm_quadray_cosets
 
 ISOMORPHISM = "isomorphism"
 DISAGREEMENT = "disagreement"
@@ -881,6 +882,23 @@ def _probe_energy_name_collision() -> tuple[bool, dict]:
     chain_surprisal_difference = (
         chain.record_surprisal(records) - weighted_chain.record_surprisal(records)
     )
+    old_records = (0, 0)
+    contrast_records = (1, -1)
+    controls = (chain, weighted_chain)
+    record_change_divergences = tuple(
+        control.bayesian_surprise(old_records, contrast_records) for control in controls
+    )
+    posterior_divergences = tuple(
+        free_energy_module.gaussian_kl(
+            *control.posterior(contrast_records), *control.posterior(old_records)
+        )
+        for control in controls
+    )
+    # Linear interpolation on the unit-weight path gives the two opposed
+    # interior shifts. With zero boundary shifts the squared edge differences
+    # are in the ratio 1:4:1. The midpoint of the weighted path stays fixed.
+    first_interior_shift = Fraction(contrast_records[0], len(chain.interior_nodes) + 1)
+    exact_record_change_divergences = (3 * first_interior_shift**2, Fraction(0))
     values = {
         "record_ports": model.record_nodes,
         "interior_dimension": model.interior_dim,
@@ -900,6 +918,12 @@ def _probe_energy_name_collision() -> tuple[bool, dict]:
         "chain_control_schur_agrees": chain_schur_agrees,
         "chain_control_raw_potential_difference": chain_raw_difference,
         "chain_control_normalised_surprisal_residual": chain_surprisal_difference,
+        "chain_control_contrast_records": contrast_records,
+        "chain_control_record_change_divergences": record_change_divergences,
+        "chain_control_posterior_divergences": posterior_divergences,
+        "chain_control_exact_record_change_divergences": tuple(
+            str(value) for value in exact_record_change_divergences
+        ),
     }
     passed = (
         values["is_positive_definite_interior"]
@@ -910,6 +934,15 @@ def _probe_energy_name_collision() -> tuple[bool, dict]:
         and chain_schur_agrees
         and abs(chain_raw_difference) > 0.1
         and abs(chain_surprisal_difference) < 1e-12
+        and np.allclose(
+            record_change_divergences, posterior_divergences, atol=1e-12, rtol=0.0
+        )
+        and np.allclose(
+            record_change_divergences,
+            [float(value) for value in exact_record_change_divergences],
+            atol=1e-12,
+            rtol=0.0,
+        )
     )
     return passed, values
 
@@ -1314,6 +1347,7 @@ def _probe_quadray_ivm() -> tuple[bool, dict]:
         "derived_table_equals_declared": derived_volumes == geometry.VOLUME_RATIOS,
         "max_shell": geometry.MAX_SHELL,
         "neighbor_squared_distance": geometry.NEIGHBOR_SQUARED_DISTANCE,
+        "quadray_cosets": ivm_quadray_cosets(),
     }
     passed = (
         values["neighbor_moves"] == 12
@@ -1326,6 +1360,13 @@ def _probe_quadray_ivm() -> tuple[bool, dict]:
         and values["derived_table_equals_declared"] is True
         and values["max_shell"] == 32
         and values["neighbor_squared_distance"] == 8
+        and values["quadray_cosets"] == {
+            "minimum_squared_distances": (0, 3, 4, 3),
+            "nearest_counts": (1, 4, 6, 4),
+            "nearest_pair_squared_distance_counts": (
+                (), ((8, 6),), ((8, 12), (16, 3)), ((8, 6),),
+            ),
+        }
     )
     return passed, values
 
@@ -1837,6 +1878,53 @@ _QUADRAY_SOURCE = (
 )
 _SHEAF_SOURCE = f"{_PAPER_SOURCE}, Section 7.2 and Theorem 7 (the cellular sheaf over the carrier complex)"
 
+def _probe_binary_conditional_variance() -> tuple[bool, dict]:
+    """Compare exact Dirichlet and conditional-variance matrix coefficients."""
+    values = native_dynamics.binary_dirichlet_census()
+    return values == {
+        "binary_states": 66,
+        "seams_checked": 30,
+        "two_state_fibres": 300,
+        "coefficient_matrices_agree": True,
+        "adjacent_indicator_energy": "1/495",
+    }, values
+
+
+def _probe_carrier_spectral_chords() -> tuple[bool, dict]:
+    """Compare exact chord shells with full and projected Gaussian variance."""
+    result = network_module.carrier_resistance_geometry()
+    values = {
+        **result,
+        "shells": tuple(
+            (step, str(resistance), str(chord), count)
+            for step, resistance, chord, count in result["shells"]
+        ),
+        "lowest_eigenvalue": str(result["lowest_eigenvalue"]),
+        "coordinate_norm_squared": str(result["coordinate_norm_squared"]),
+        "chord_to_lowest_variance_factor": str(result["chord_to_lowest_variance_factor"]),
+        "lowest_mode_variances": tuple(str(value) for value in result["lowest_mode_variances"]),
+    }
+    passed = (
+        result["shells"] == (
+            (1, Fraction(11, 30), 4, 30),
+            (2, Fraction(7, 15), geometry.Surd5(6, 2), 30),
+            (3, Fraction(1, 2), geometry.Surd5(10, 2), 6),
+        )
+        and values["ranks"] == (11, 3)
+        and result["lowest_eigenvalue"] == geometry.Surd5(5, -1)
+        and values["lowest_multiplicity"] == 3
+        and result["coordinate_norm_squared"] == geometry.Surd5(10, 2)
+        and result["chord_to_lowest_variance_factor"] == 40
+        and result["lowest_mode_variances"] == (
+            Fraction(1, 10),
+            geometry.Surd5(Fraction(3, 20), Fraction(1, 20)),
+            geometry.Surd5(Fraction(1, 4), Fraction(1, 20)),
+        )
+        and values["full_variance_proportional"] is False
+    )
+    return passed, values
+
+
 CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="carrier-port-chart",
@@ -2034,7 +2122,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="free-energy-name-collision",
         kind=DISAGREEMENT,
         pair=OPH_FEP,
-        claim="Minimum interface energy, the negative log of the unnormalised interior integral, and normalised record surprisal are distinct. The second includes the interior determinant; in the third it cancels against the joint normaliser. Two chains with equal Schur complements give different unnormalised potentials and the same surprisal under the same record prior.",
+        claim="Minimum interface energy, the negative log of the unnormalised interior integral, and normalised record surprisal are distinct. The second includes the interior determinant; in the third it cancels against the joint normaliser. Two chains with equal Schur complements and the same record prior have the same normalised record density, yet their interior posterior divergences differ under the same contrast change.",
         oph="Minimum of the quadratic seam disagreement at fixed records.",
         fep="Variational free energy bounds normalised record surprisal, with equality at the posterior.",
         synergetics="No counterpart.",
@@ -2178,7 +2266,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="quadray-ivm",
         kind=COMPLEMENTARITY,
         pair=SYNERGETICS_OPH,
-        claim="Quadray coordinates give the synergetic side exact integer geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and the tetravolume table 1, 3, 4, 6, 20 and 96, every entry derived exactly from an explicit integer vertex set rather than read from the table.",
+        claim="Quadray coordinates give exact IVM geometry: twelve neighbour moves at squared distance eight, shell counts 10k^2 + 2, and the tetravolume table 1, 3, 4, 6, 20 and 96 from explicit vertex sets. The coordinate sum modulo four distinguishes the FCC sites from the two tetrahedral hole classes and the octahedral hole class.",
         oph="The carrier needs a lattice in which twelve neighbours is the kissing configuration.",
         fep="No fixed geometry; the FEP leaves the interface geometry to the model.",
         synergetics="The IVM/quadray framework supplies the lattice, the shell counts and the volumes exactly.",
@@ -2365,6 +2453,30 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         status="exact-on-domain",
         source=f"{_PAPER_SOURCE}, Sections 6.2 and 7.3; OPH model/PREMISES.md:100 (PR-07) and the synthesis paper's section on entropy and thermodynamic laws from repair",
         probe=_probe_repair_is_conditioning,
+    ),
+    Correspondence(
+        key="binary-conditional-variance",
+        kind=ISOMORPHISM,
+        pair=OPH_FEP,
+        claim="For uniform seam choice and fair repair on the binary shell, the Dirichlet form of native repair is exactly the mean conditional variance over seam records. The two quadratic forms have identical coefficients on all 66 states.",
+        oph="The random-seam native repair kernel on the shell of two occupied ports.",
+        fep="The mean residual variance after conditioning the uniform reference on a seam record.",
+        synergetics="The carrier's icosahedral seams index the resampling steps.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; Chlebicka, Łatuszyński and Miasojedow (2025), §2.2, for Gibbs projections; finite-shell comparison derived here",
+        probe=_probe_binary_conditional_variance,
+    ),
+    Correspondence(
+        key="carrier-spectral-chords",
+        kind=ISOMORPHISM,
+        pair=FEP_SYNERGETICS,
+        claim="On the edge-length-two regular icosahedron, each squared chord equals 40 times the contribution of the first positive Laplacian eigenspace to the intrinsic unit-precision Gaussian's port contrast variance. The full variance is effective resistance and is not proportional to squared chord length. The squared-distance embedding ranks are 11 and 3, respectively.",
+        oph="The labelled carrier graph supplies the seam Laplacian and its slowest nonconstant mean-load modes.",
+        fep="Projection of the intrinsic Gaussian onto the first positive Laplacian eigenspace.",
+        synergetics="Euclidean chords of the regular icosahedron at the stated edge scale.",
+        status="exact",
+        source=f"{_CARRIER_SOURCE}; Osting (2023) for the regular-polyhedron eigenspace; Klein and Randić (1993) for resistance; exact comparison derived here",
+        probe=_probe_carrier_spectral_chords,
     ),
 )
 

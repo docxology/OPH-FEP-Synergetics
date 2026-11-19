@@ -49,7 +49,8 @@ twelve-around-one conflation is an obstruction in section 3.
 ## 2. Agreement as a minimisation
 
 **Entries:** `variational-equivalence`, `free-energy-dictionary`,
-`repair-is-conditioning`, `two-record-resistance`.
+`repair-is-conditioning`, `two-record-resistance`,
+`binary-conditional-variance`, `carrier-spectral-chords`.
 
 In the linear-Gaussian carrier model, three descriptions of "settle to agreement"
 coincide: the harmonic extension of the records (an interior solve), the
