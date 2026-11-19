@@ -73,6 +73,9 @@ EXPECTED_KEYS = {
     "carrier.triangles",
     "certificate.infinity_norm",
     "certificate.second_eigenvalue",
+    "chord.embedding_rank",
+    "chord.full_rank",
+    "chord.variance_factor",
     "conditioning.cases",
     "conditioning.deterministic_excess",
     "conditioning.off_shell_cases",
@@ -110,6 +113,8 @@ EXPECTED_KEYS = {
     "ep.relaxed",
     "families.tree_ratio",
     "fe.bayesian",
+    "fe.chain_contrast_records",
+    "fe.chain_record_change_divergences",
     "fe.difference",
     "fe.interface",
     "fe.model_constant",
@@ -139,6 +144,8 @@ EXPECTED_KEYS = {
     "icosahedron.tetravolume_conjugate",
     "icosahedron.tetravolume_over_sqrt2",
     "icosahedron.tetravolume_squared",
+    "ivm.coset_nearest_counts",
+    "ivm.coset_squared_distances",
     "ivm.cumulative_counts",
     "ivm.neighbor_moves",
     "ivm.neighbor_squared_distance",
@@ -187,6 +194,8 @@ EXPECTED_KEYS = {
     "registry.three_way",
     "replicator.field_norm",
     "replicator.rate",
+    "repair.variance_fibres",
+    "repair.variance_indicator",
     "resistance.adjacent",
     "resistance.antipodal",
     "resistance.distance_two",
@@ -243,6 +252,12 @@ def test_probe_derived_values_match_the_executed_probes():
 
     derived = [entry for entry in MANUSCRIPT_VALUES if entry.source.startswith("probe:")]
     assert len(derived) >= 40
+    components = {
+        "chord.full_rank": 0,
+        "chord.embedding_rank": 1,
+        "ivm.coset_nearest_counts": "nearest_counts",
+        "ivm.coset_squared_distances": "minimum_squared_distances",
+    }
     for entry in derived:
         _, probe_key, name = entry.source.split(":", 2)
         result = by_key()[probe_key].run()
@@ -264,6 +279,8 @@ def test_probe_derived_values_match_the_executed_probes():
             expected = values[stem][int(index)]
         elif name.endswith(":sortedtail"):
             expected = tuple(sorted(values[name[: -11]]))[1:]
+        elif entry.key in components:
+            expected = values[name][components[entry.key]]
         else:
             expected = values[name]
         if isinstance(entry.value, str) and isinstance(expected, str):
