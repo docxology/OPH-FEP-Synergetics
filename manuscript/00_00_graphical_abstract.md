@@ -2,134 +2,113 @@
 
 \setcounter{page}{2}
 
-Every claim in this paper is one **correspondence**: a statement about a single
-object, put in two or three vocabularies at once, executed by a probe that
-returns values rather than a verdict. The registry holds
-{{REGISTRY_ENTRIES}} such claims: {{REGISTRY_ISOMORPHISMS}} identifications,
+The registry compares executable models of Observer Patch Holography (OPH),
+the Free Energy Principle (FEP) and Fuller's Synergetics. It holds
+{{REGISTRY_ENTRIES}} claims, each paired with a probe that reports values
+and a verdict. The claims include {{REGISTRY_ISOMORPHISMS}} identifications,
 {{REGISTRY_DISAGREEMENTS}} obstructions and {{REGISTRY_COMPLEMENTARITIES}}
-complementarities, scoped to the pairs `oph-fep` ({{REGISTRY_OPH_FEP}}),
+complementarities across `oph-fep` ({{REGISTRY_OPH_FEP}}),
 `synergetics-oph` ({{REGISTRY_SYNERGETICS_OPH}}), `fep-synergetics`
 ({{REGISTRY_FEP_SYNERGETICS}}) and `three-way` ({{REGISTRY_THREE_WAY}}).
 
-The four panels are the paper in pictures, one page each: the ledger of the
-three pairwise scopes; the carrier every scope is about; the dynamics that
-separates the readings; and the accounting, where the programmes disagree about
-currencies rather than facts.
+The panels map the claims, show the carrier and its Gaussian reading,
+compare native repair attempts with Gaussian costs on lattice shells, and
+explain how tetravolumes are measured.
 
-## Panel 1 — the pairwise ledger: what each pair of programmes agrees on, obstructs, and supplies {#sec:ga-triangle}
+## Panel 1 — scope of the executable claims {#sec:ga-triangle}
 
-Each edge carries one pair's ledger in the form the command line executes it:
-`oph-fep-synergetics verify --pair oph-fep`, `--pair synergetics-oph`, `--pair
-fep-synergetics`. The centre carries the one claim that needs all three
-vocabularies at once. Most OPH–FEP work is obstruction: {{REGISTRY_OPH_FEP}}
-claims, most of them failures of an identification proposed in good faith. Most
-Synergetics–OPH work is identification:
-{{REGISTRY_SYNERGETICS_OPH}} claims about symmetry, volume and counting. The
-FEP–Synergetics edge is short by {{REGISTRY_FEP_SYNERGETICS}} claims and holds
-two exact results about information, in one of which the programmes disagree
-about the meaning of a number.
+Each edge shows the balance of claim kinds for one pair. Run
+`oph-fep-synergetics verify --pair` with the scope name to check its entries.
+The centre lists the claims that connect all three programmes.
 
-![The pairwise ledger triangle. Vertices are the three programmes, Observer Patch Holography, the Free Energy Principle and Fuller's Synergetics. Each edge is annotated with the counts of identifications, obstructions and complementarities for that pair, and the three load-bearing identifications are named on the edge where they sit. The centre carries the three-way ledger: the two claims that need all three vocabularies at once, `tetravolume-arithmetic` -- three exact quantities in three number systems -- and `conjugation-norm`. Every count is read from the executed registry at draw time rather than transcribed.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
+![Counts by claim kind for each pair, with one named identification per edge. The centre lists `tetravolume-arithmetic` and `conjugation-norm`. Counts and keys come from the executable registry.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
 
-The scope of a claim is part of the claim: `carrier-port-chart` is a statement
-about OPH's chart and the icosahedron's vertex set, `spectral-gap` is a
-statement about one matrix read two ways — the generator of OPH's mean repair
-operator and the FEP's precision — with the gap inherited from the shared object,
-and
-`kl-lattice-metric` is a statement about the FEP's divergence and Synergetics'
-lattice metric. [@sec:correspondences] reports the three ledgers separately, and
-[@tbl:registry] carries the scope of every row.
+`carrier-port-chart` links OPH's port chart to the icosahedron's vertex set.
+`spectral-gap` links the mean repair operator to a Gaussian precision built
+from the same Laplacian. `kl-lattice-metric` expresses equal-covariance
+Gaussian divergence as a lattice cost. [@tbl:registry] gives the scope of
+each claim, and [@sec:correspondences] explains the identifications in detail.
 
 \clearpage
 
-## Panel 2 — the carrier: one graph, its symmetry, its counting identities, and its Gaussian reading {#sec:ga-carrier}
+## Panel 2 — the carrier graph and its Gaussian reading {#sec:ga-carrier}
 
-Every scope is read on the same object, so the paper can compare vocabularies
-without first having to reconcile subjects: twelve ports, thirty seams, twenty
-triangular faces, every port of degree {{CARRIER_DEGREE}}, spectral gap
-{{CARRIER_LAMBDA1}}. OPH supplies the repair law on the seams of that graph. The
-FEP reads a diagonal shift of the Laplacian as a proper Gaussian precision.
-Two ports in this model are dependent given the rest exactly when they share a
-seam. The panel also carries two counting identities that
-neither programme states but both inherit from the graph: the number of spanning
-trees, and the dimensions of the agreement sheaf ([@prop:sheaf];
-[@prop:cohomology]).
+The icosahedral carrier has degree {{CARRIER_DEGREE}} and Laplacian spectral
+gap {{CARRIER_LAMBDA1}}. The OPH model repairs the graph's seams, and a diagonal
+shift of the Laplacian gives a proper Gaussian precision. In that Gaussian,
+two ports are conditionally dependent given the rest exactly when they share a
+seam. The graph also determines the spanning-tree count and the agreement
+sheaf's cohomology dimensions ([@prop:sheaf]; [@prop:cohomology]).
 
-![The carrier and its exact invariants. Left: the ports and seams drawn from their derived adjacency. Right: the spanning-tree count, sheaf dimensions, and symmetry counts, followed by centered intrinsic port variance and the proper Gaussian's blanket size and pairwise precision.](../output/figures/fig_ga_carrier.png){#fig:ga-carrier width=100%}
+![Left: the carrier's ports and seams from their derived adjacency. Right: the spanning-tree count, sheaf dimensions, and symmetry counts, followed by centred intrinsic port variance and the proper Gaussian's blanket size and seam precision.](../output/figures/fig_ga_carrier.png){#fig:ga-carrier width=100%}
 
-The reduced Laplacian of the seam graph has determinant
-{{CARRIER_TREE_NUMBER}}, so the carrier has exactly that many spanning trees, and
-the same number is recovered from the spectrum as a product of eigenvalues. The
-scalar sheaf on the seam graph has a {{SHEAF_H0}}-dimensional space of global
-sections and {{SHEAF_H1}} independent obstructions, the coboundary has rank
-{{SHEAF_COBOUNDARY_RANK}}, and the graph's Euler characteristic is
-{{SHEAF_EULER_CHARACTERISTIC}}, the twelve nodes minus the thirty edges; with the
-twenty faces added their boundaries span the cycle space, and the surface's Euler
-characteristic is {{SHEAF_SURFACE_EULER_CHARACTERISTIC}}.
-The carrier's automorphism group has order {{SYMMETRY_GROUP_ORDER}}, splits into
-{{SYMMETRY_ROTATIONS}} rotations and {{SYMMETRY_REFLECTIONS}} reflections when
-the orientation of OPH's own faces is used as the test, and acts on the
-{{SYMMETRY_CONFIGURATIONS}} total-two configurations in {{SYMMETRY_ORBITS}}
-orbits with {{SYMMETRY_OUTCOME_MULTISETS}} distinct descent-outcome multisets.
-The proper Gaussian has seam precision {{GMRF_PAIRWISE_PRECISION}} and a
-blanket of {{GMRF_BLANKET_SIZE}} neighbours per port. The centred intrinsic
-field gives port variance {{GMRF_MARGINAL_VARIANCE}}, exactly
-{{GMRF_MARGINAL_VARIANCE_EXACT}}.
+The reduced Laplacian has determinant {{CARRIER_TREE_NUMBER}}. By the
+matrix-tree theorem, it equals the carrier's spanning-tree count. The count
+also equals the product of the nonzero Laplacian eigenvalues divided by the
+number of ports. The scalar agreement sheaf has a {{SHEAF_H0}}-dimensional
+space of global sections and {{SHEAF_H1}} independent cycle classes.
+The coboundary has rank {{SHEAF_COBOUNDARY_RANK}} and the graph's Euler
+characteristic is {{SHEAF_EULER_CHARACTERISTIC}}. Adding the oriented faces
+fills the cycle space and gives the surface Euler characteristic
+{{SHEAF_SURFACE_EULER_CHARACTERISTIC}}.
+
+The carrier's automorphism group has order {{SYMMETRY_GROUP_ORDER}}, with
+{{SYMMETRY_ROTATIONS}} rotations and {{SYMMETRY_REFLECTIONS}} orientation-reversing
+symmetries. It acts on the {{SYMMETRY_CONFIGURATIONS}} total-two configurations
+in {{SYMMETRY_ORBITS}} orbits, with {{SYMMETRY_OUTCOME_MULTISETS}} distinct
+descent-outcome multisets. The proper Gaussian has seam precision
+{{GMRF_PAIRWISE_PRECISION}} and a blanket of {{GMRF_BLANKET_SIZE}} neighbours
+per port. The centred intrinsic field gives port variance
+{{GMRF_MARGINAL_VARIANCE}}, exactly {{GMRF_MARGINAL_VARIANCE_EXACT}}.
 
 \clearpage
 
 ## Panel 3 — native repair and Gaussian costs on lattice shells {#sec:ga-descent}
 
-Native repair takes a configuration, a seam and a coin. Of the
-{{SHELL_TOTAL_TWO}} states in its census, {{SHELL_BINARY}} are binary. Over
+Native repair acts on a configuration, a seam and a coin outcome. Of the
+{{SHELL_TOTAL_TWO}} states in the census, {{SHELL_BINARY}} are binary. Over
 {{SHELL_TRANSITIONS}} attempts, {{SHELL_STRICT_DESCENT}} lower the load energy,
 {{SHELL_ZERO_DESCENT}} move with the energy unchanged, and {{SHELL_NOOP}}
-leave the state unchanged. The preceding panel's equivariance explains why
-this census is invariant under carrier symmetry. The separate lattice example
-compares equal-covariance Gaussian divergence with the IVM shell index.
+leave the state unchanged. The repair rule commutes with the carrier
+symmetries, so the census is invariant under their action.
 
-![The descent census and the Gaussian divergence levels. Left: strict descents, zero descents and no-ops on the native load shell, with the path multiplicities. Right: half the squared norm over the first five IVM coordination shells, one column per shell, with shared levels marked.](../output/figures/fig_ga_descent.png){#fig:ga-descent width=100%}
+![Left: repair attempts on the native load shell, grouped by outcome and annotated with path multiplicities. Right: Gaussian divergence at unit covariance on the IVM coordination shells. Dots give the distinct costs on each shell, the dashed curve gives the shell maxima, and dotted lines mark costs shared by shells.](../output/figures/fig_ga_descent.png){#fig:ga-descent width=100%}
 
-One lattice step costs {{KL_ONE_STEP}} nats at unit covariance, because the
-Gaussian divergence between equal-covariance neighbours is half the squared norm
-and the first shell sits at squared distance {{KL_STEP_SQUARED_DISTANCE}}, so the
-sites at squared norm $8k^2$ cost $4k^2$. The first five shells carry
-{{SHELL_FREE_ENERGY_LEVEL_COUNTS}} distinct free-energy levels, and the levels
-{{SHELL_SHARED_FREE_ENERGY_LEVELS}} are each carried by two shells: the shell
-index does not fix the free energy, and the free energy does not fix the shell.
-The shell is a level set of a polyhedral norm and the free energy of a Euclidean
-one, and the obstruction is that neither refines the other.
+Gaussian divergence at unit covariance is half the squared distance between
+the means. One lattice step has squared length {{KL_STEP_SQUARED_DISTANCE}}
+and costs {{KL_ONE_STEP}} nats. The shell maxima occur at squared norm $8k^2$
+and cost $4k^2$. The plotted shells contain {{SHELL_FREE_ENERGY_LEVEL_COUNTS}}
+distinct costs respectively, with shared levels {{SHELL_SHARED_FREE_ENERGY_LEVELS}}.
+A coordination shell follows a polyhedral norm, while a level of Gaussian
+divergence follows the Euclidean norm. A coordination shell can contain
+several divergence values, and a single divergence value can occur on
+several shells.
 
 \clearpage
 
-## Panel 4 — the accounting: tetravolumes, one packing, and three number systems {#sec:ga-synergetics}
+## Panel 4 — tetravolumes and packing {#sec:ga-synergetics}
 
-Synergetics counts volume in tetrahedra of the prime vector and asks which
-solids come out integral. The IVM's own solids do:
-{{TETRAVOLUME_INTEGRAL_SOLIDS}}. The carrier's own solid does not: it enters at
-{{ICOSAHEDRON_TETRAVOLUME}} tetravolumes, which is
-$(5/2)(3\sqrt{2} + \sqrt{10})$ exactly. The same accounting settles the
-twelve-around-one question completely, because the cell of the twelve neighbours
-is a rhombic dodecahedron whose volume can be derived rather than looked up, and
-the ball inscribed in it gives the densest packing density in three dimensions
-[@hales2005kepler].
+The IVM table measures volume in regular tetrahedra whose edge is the
+nearest-neighbour distance. Its selected solids have integer tetravolumes
+{{TETRAVOLUME_INTEGRAL_SOLIDS}}. The carrier's regular icosahedron, measured in
+tetrahedra of its own edge length, has tetravolume
+$(5/2)(3\sqrt{2} + \sqrt{10}) \approx {{ICOSAHEDRON_TETRAVOLUME}}$.
 
-![Tetravolume accounting and the twelve-around-one cell. Left: the tetravolumes of the IVM's integral solids beside the regular icosahedron's measured tetravolume on a logarithmic axis, showing that the carrier's own solid is the one entry an integer table cannot express. Right: the Voronoi cell of the twelve neighbours with its vertex, face and edge counts, its derived tetravolume from half the squared norm at each of its vertices, and the packing density of the inscribed ball against the closed form.](../output/figures/fig_ga_synergetics.png){#fig:ga-synergetics width=100%}
+![Left: the IVM table solids and the carrier icosahedron on a logarithmic tetravolume axis. Each uses the tetrahedral unit defined above. The diamond marks the icosahedron's algebraic volume as a decimal approximation. Right: the IVM Voronoi cell's vertex, face and edge counts, its exact tetravolume and the packing density.](../output/figures/fig_ga_synergetics.png){#fig:ga-synergetics width=100%}
 
-The cell of the twelve neighbours has {{VORONOI_VERTICES}} vertices,
-{{VORONOI_FACES}} faces and {{VORONOI_EDGES}} edges, tetravolume
-{{PACKING_CELL_TETRAVOLUME}} derived from the halved squared norm at each of its
-vertices, and an inscribed ball of {{PACKING_BALL_TETRAVOLUME}} tetravolumes
-which fills density {{PACKING_DENSITY}}, exactly $\pi\sqrt{2}/6 = \pi/(3\sqrt{2})$
-because the cell's volume is rational and the ball's tetravolume is $\pi\sqrt{2}$.
-The carrier's icosahedron enters at {{ICOSAHEDRON_TETRAVOLUME}}, computed exactly
-as $\sqrt{2}$ times an element of $\mathbb{Q}(\sqrt{5})$, with squared value
-{{ICOSAHEDRON_TETRAVOLUME_SQUARED}}, exactly $175 + 75\sqrt{5}$, and is not
-integral: the tetravolume table and the carrier's own solid live in different
-arithmetics even though they are the same geometry. The three programmes' exact
-quantities live in three number systems: an integer {{KL_ONE_STEP}} nats for the
-FEP's step, the quadratic surd {{CARRIER_SHELL_GAP}} for OPH's relaxation rate,
-and integral tetravolumes beside one biquadratic one in Synergetics'.
+The IVM Voronoi cell is a rhombic dodecahedron with {{VORONOI_VERTICES}}
+vertices, {{VORONOI_FACES}} faces and {{VORONOI_EDGES}} edges. Triangulating
+its faces and joining them to the centre gives volume
+{{PACKING_CELL_TETRAVOLUME}} in the IVM tetrahedral unit. Its inscribed ball
+occupies {{PACKING_BALL_TETRAVOLUME}} tetravolumes, so the packing density is
+{{PACKING_DENSITY}}, exactly $\pi/(3\sqrt{2})$. This packing attains the
+three-dimensional maximum established by Hales [@hales2005kepler].
+The carrier's tetravolume is $\sqrt{2}$ times an element of
+$\mathbb{Q}(\sqrt{5})$, with square $175 + 75\sqrt{5} \approx
+{{ICOSAHEDRON_TETRAVOLUME_SQUARED}}$. Together with the integer
+{{KL_ONE_STEP}} nats for a lattice step and the quadratic surd
+{{CARRIER_SHELL_GAP}} for the normalised repair gap, it illustrates distinct
+units and number systems in the three comparisons.
 
 \floatplacement{figure}{tbp}
 

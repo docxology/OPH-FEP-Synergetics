@@ -38,6 +38,7 @@ from oph_fep_synergetics import geometry  # noqa: E402
 from oph_fep_synergetics.analysis.registry import (  # noqa: E402
     CORRESPONDENCES,
     FEP_SYNERGETICS,
+    KINDS,
     OPH_FEP,
     PAIRS,
     SYNERGETICS_OPH,
@@ -749,6 +750,33 @@ def orbit_figure() -> Path:
     )
 
 
+def _plot_tetravolumes(
+    axis: plt.Axes, volumes: dict[str, Fraction], *, icosahedron: float | None = None
+) -> None:
+    """Plot tetravolumes by position on a positive logarithmic axis."""
+    entries = [
+        (name.replace("_", " "), float(volume), str(volume), "o", BLUE)
+        for name, volume in volumes.items()
+    ]
+    if icosahedron is not None:
+        entries.append(("carrier icosahedron", icosahedron, f"≈ {icosahedron:.4f}", "D", VERMILLION))
+    entries.sort(key=lambda entry: entry[1])
+    for row, (_, value, label, marker, colour) in enumerate(entries):
+        axis.scatter(value, row, s=65, marker=marker, color=colour, edgecolor=INK, zorder=3)
+        axis.annotate(
+            label, (value, row), textcoords="offset points", xytext=(8, 0),
+            va="center", color=INK,
+        )
+    axis.set_xscale("log")
+    axis.set_xlim(0.75, max(entry[1] for entry in entries) * 1.8)
+    axis.set_yticks(range(len(entries)), [entry[0] for entry in entries])
+    axis.set_ylim(len(entries) - 0.35, -0.65)
+    axis.set_xticks((1, 10, 100), ("1", "10", "100"))
+    axis.xaxis.set_minor_locator(matplotlib.ticker.NullLocator())
+    axis.grid(False, axis="y")
+    axis.set_xlabel("Tetravolume (log scale)")
+
+
 def ivm_figure() -> Path:
     """IVM shell sizes and tetravolume ratios."""
     shells = list(range(0, 9))
@@ -773,36 +801,15 @@ def ivm_figure() -> Path:
     left.set_title(r"$10k^2+2$ sites in shell $k\geq 1$")
     left.set_ylim(0, max(counts) * 1.12)
 
-    names = list(lattice.VOLUME_RATIOS)
-    volumes = [float(lattice.VOLUME_RATIOS[name]) for name in names]
-    pretty = [name.replace("_", " ") for name in names]
-    order = np.argsort(volumes)
-    bars = right.barh([pretty[index] for index in order], [volumes[index] for index in order],
-                      color=BLUE)
-    right.set_xscale("log")
-    for bar, index in zip(bars, order):
-        right.annotate(
-            f"{volumes[index]:g}",
-            (volumes[index], bar.get_y() + bar.get_height() / 2),
-            textcoords="offset points",
-            xytext=(5, 0),
-            va="center",
-            fontsize=9,
-        )
-    ticks = sorted(set(volumes))
-    right.set_xticks(ticks)
-    right.xaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
-    right.xaxis.set_minor_locator(matplotlib.ticker.NullLocator())
-    right.set_xlabel("tetravolume, unit tetrahedron = 1 (log scale)")
-    right.set_title("exact integer volumes")
-    right.set_xlim(0.8, max(volumes) * 1.8)
+    _plot_tetravolumes(right, geometry.derived_volume_ratios())
+    right.set_title("Exact integer tetravolumes")
     return _save(
         figure,
         "fig_ivm.png",
         "Two panels. Left: the site count of each IVM shell, ten k squared plus two for shells "
         "one onward, as bars for shells zero to eight, with the cumulative count printed under "
         "each shell number; the first shell holds the twelve neighbours. Right: tetravolume "
-        "ratios on a logarithmic scale, with the tetrahedron at one, the cube at three, the "
+        "ratios as dots on a logarithmic scale, with the tetrahedron at one, the cube at three, the "
         "octahedron at four, the rhombic dodecahedron at six, the cuboctahedron at twenty and "
         "the truncated octahedron at ninety-six.",
     )
@@ -993,25 +1000,17 @@ def ga_triangle_figure() -> Path:
               color=INK)
 
     grouped = by_pair()
-    named = [
-        key
-        for key in ("carrier-port-chart", "native-repair-law", "free-energy-dictionary")
-        if key in by_key()
-    ]
-    highlighted = named if len(named) == 3 else []
-    if not highlighted:
-        highlighted = [
-            next(entry.key for entry in grouped[pair] if entry.kind == "isomorphism")
-            for pair in (OPH_FEP, FEP_SYNERGETICS, SYNERGETICS_OPH)
-        ]
-
-    line = 0.036  # data units per 10 pt text line at this scale
+    entries_by_key = by_key()
+    line = 0.041  # data units per text line at this scale
     placements = (
-        (OPH_FEP, (0.18, 0.72), "right"),
-        (FEP_SYNERGETICS, (0.50, 0.045), "center"),
-        (SYNERGETICS_OPH, (0.82, 0.72), "left"),
+        (OPH_FEP, "spectral-gap", "OPH and FEP", (0.18, 0.72), "right"),
+        (FEP_SYNERGETICS, "kl-lattice-metric", "FEP and Synergetics", (0.50, 0.045), "center"),
+        (SYNERGETICS_OPH, "carrier-port-chart", "OPH and Synergetics", (0.82, 0.72), "left"),
     )
-    for pair, (x_value, y_value), align in placements:
+    edge_descriptions = []
+    for pair, key, name, (x_value, y_value), align in placements:
+        if entries_by_key[key].pair != pair:
+            raise ValueError(f"{key} belongs to {entries_by_key[key].pair}, expected {pair}")
         counts = Counter(entry.kind for entry in grouped[pair])
         phrases = _kind_phrases(counts)
         axis.text(
@@ -1020,30 +1019,29 @@ def ga_triangle_figure() -> Path:
             "\n".join(phrases),
             ha=align,
             va="top",
-            fontsize=10.5,
+            fontsize=11,
             color=INK,
             linespacing=1.25,
             zorder=5,
         )
-        keys = [key for key in highlighted if by_key()[key].pair == pair]
-        if keys:
-            axis.text(
-                x_value,
-                y_value - line * (len(phrases) + 0.6),
-                "load-bearing:\n" + "\n".join(keys),
-                ha=align,
-                va="top",
-                fontsize=9.5,
-                color=BLUE,
-                linespacing=1.25,
-                zorder=5,
-            )
+        axis.text(
+            x_value,
+            y_value - line * (len(phrases) + 0.6),
+            key,
+            ha=align,
+            va="top",
+            fontsize=10,
+            color=BLUE,
+            fontweight="bold",
+            zorder=5,
+        )
+        edge_descriptions.append(f"{name} have {', '.join(phrases)}, illustrated by {key}.")
 
     three = grouped.get(THREE_WAY, ())
     if three:
         three_counts = Counter(entry.kind for entry in three)
         three_text = (
-            f"three-way: {len(three)}\n"
+            "Three-way claims\n"
             + "\n".join(_kind_phrases(three_counts))
             + "\n"
             + "\n".join(entry.key for entry in three)
@@ -1062,17 +1060,14 @@ def ga_triangle_figure() -> Path:
         bbox={"facecolor": "#F1F5F9", "edgecolor": SKY, "boxstyle": "round,pad=0.35"},
         zorder=2,
     )
-    axis.set_xlim(-0.45, 1.45)
-    axis.set_ylim(-0.24, 0.98)
+    axis.set_xlim(-0.35, 1.35)
+    axis.set_ylim(-0.16, 0.98)
     return _save(
         figure,
         "fig_ga_triangle.png",
-        "A large triangle whose vertices are OPH, Observer Patch Holography; FEP, Free Energy "
-        "Principle; and Synergetics, quadray/IVM, each named beside its marker. Each edge carries "
-        "its pairwise ledger of isomorphisms, disagreements and complementarities, with zero "
-        "counts left out, and the three load-bearing identifications are named beside the edge "
-        "they belong to. The centre gives the three-way count and its two keys, "
-        "tetravolume-arithmetic and conjugation-norm.",
+        "A triangle connects Observer Patch Holography (OPH), the Free Energy Principle (FEP) "
+        "and Fuller's Synergetics. " + " ".join(edge_descriptions) + " The centre lists "
+        f"{len(three)} three-way claims: {', '.join(entry.key for entry in three)}.",
     )
 
 
@@ -1120,7 +1115,7 @@ def ga_carrier_figure() -> Path:
     cohomology = sheaf.cohomology_dimensions(sheaf.carrier_sheaf(carrier))
     group = symmetry.carrier_automorphisms(carrier)
     rotations = symmetry.rotation_subgroup(carrier)
-    reflections = symmetry.reflection_subgroup(carrier)
+    orientation_reversing = symmetry.reflection_subgroup(carrier)
     marginal = invariants.marginal_variance(carrier)
     blanket = invariants.blanket_sizes(carrier)
     precision = invariants.pairwise_precision(carrier)
@@ -1139,20 +1134,20 @@ def ga_carrier_figure() -> Path:
         (r"$\dim H^1$", f"{cohomology['h1']}"),
         ("symmetry group order", f"{len(group)}"),
         ("  rotations", f"{len(rotations)}"),
-        ("  reflections", f"{len(reflections)}"),
+        ("  orientation reversing", f"{len(orientation_reversing)}"),
     ]
     fep_rows = [
         (r"intrinsic variance $(L^{+})_{ii}$", f"{marginal.numerator}/{marginal.denominator}"),
         ("proper Gaussian blanket size", blanket_text),
-        ("pairwise precision", f"{precision_text}".replace("-", "\u2212")),
-        ("  on pairs", f"{len(precision)}"),
+        ("precision on a seam", precision_text.replace("-", "\u2212")),
+        ("  ordered seam pairs", f"{len(precision)}"),
     ]
 
     right.set_axis_off()
     right.set_xlim(0.0, 1.0)
     right.set_ylim(0.0, 1.0)
     right.text(0.0, 0.96, "OPH-facing", fontsize=12, color=BLUE, fontweight="bold", va="center")
-    right.text(0.0, 0.40, "FEP-facing", fontsize=12, color=VERMILLION, fontweight="bold",
+    right.text(0.0, 0.40, "FEP-facing", fontsize=12, color=INK, fontweight="bold",
                va="center")
     for index, (label, value) in enumerate(oph_rows):
         y_value = 0.87 - 0.075 * index
@@ -1161,7 +1156,7 @@ def ga_carrier_figure() -> Path:
     for index, (label, value) in enumerate(fep_rows):
         y_value = 0.31 - 0.075 * index
         right.text(0.02, y_value, label, fontsize=10.5, color=INK, va="center")
-        right.text(0.98, y_value, value, fontsize=10.5, color=VERMILLION, va="center", ha="right")
+        right.text(0.98, y_value, value, fontsize=10.5, color=INK, va="center", ha="right")
     return _save(
         figure,
         "fig_ga_carrier.png",
@@ -1170,9 +1165,9 @@ def ga_carrier_figure() -> Path:
         "spectral projection, with each port labelled by index and no two edges nearly "
         "coincident. Right: a two-part ledger of invariants, OPH-facing above and FEP-facing "
         "below, listing the spanning-tree count, the dimensions of H0 and H1, the automorphism "
-        "group order with its rotation and reflection split, the intrinsic port variance "
-        "(a diagonal entry of the Laplacian pseudoinverse), and the proper Gaussian's "
-        "blanket size and pairwise precision.",
+        "group order split into rotations and orientation-reversing symmetries, the intrinsic "
+        "port variance (a diagonal entry of the Laplacian pseudoinverse), and the proper Gaussian's "
+        "blanket size and precision on ordered seam pairs.",
     )
 
 
@@ -1196,7 +1191,8 @@ def ga_descent_figure() -> Path:
         )
     left.set_ylabel("transitions")
     left.set_title(
-        f"{census['states']} states × 30 seams × 2 coins\n= {sum(values)} transitions"
+        f"{census['states']} states × {int(bound['carrier.seams'])} seams × 2 coin outcomes\n"
+        f"= {sum(values):,} attempts"
     )
     left.set_ylim(0, max(values) * 1.25)
     left.text(
@@ -1230,7 +1226,7 @@ def ga_descent_figure() -> Path:
         linestyle="--",
         marker="o",
         linewidth=1.4,
-        label=r"Gaussian KL $=4k^2$",
+        label=r"Shell maximum $4k^2$",
         zorder=2,
     )
     for level, shells in shared.items():
@@ -1242,16 +1238,13 @@ def ga_descent_figure() -> Path:
                 xytext=(5.12, level - 1.0),
                 va="top",
                 fontsize=9,
-                color=VERMILLION,
+                color=INK,
             )
     right.set_xticks(k_values)
     right.set_xlim(0.6, 7.6)
-    right.set_xlabel("shell $k$")
-    right.set_ylabel(r"Gaussian KL $=\frac{1}{2}\|x\|^2$")
-    right.set_title(
-        f"levels {_enumerated(bound['shell.shared_free_energy_levels'])} "
-        "are shared between shells"
-    )
+    right.set_xlabel("IVM coordination shell $k$")
+    right.set_ylabel("Gaussian KL (nats)")
+    right.set_title("Several Gaussian costs per shell")
     right.legend(loc="upper left")
     return _save(
         figure,
@@ -1261,66 +1254,25 @@ def ga_descent_figure() -> Path:
         f"{int(bound['shell.zero_descent'])} zero descents and {int(bound['shell.noop'])} "
         f"no-op moves, annotated with the path-multiplicity values "
         f"{_enumerated(bound['shell.multiplicities'])}. Right: the distinct Gaussian KL values "
-        f"of the first {len(bound['ivm.shell_counts'])} IVM shells at integer shell numbers, with "
+        f"of the first {len(k_values)} IVM shells at integer shell numbers, with "
         f"levels {_enumerated(bound['shell.shared_free_energy_levels'])} marked by dotted lines "
-        "where they are shared between shells, and the Gaussian KL curve annotated as four k "
-        "squared.",
+        "where they are shared between shells. The shell-wise maximum is four k squared.",
     )
 
 
 def ga_synergetics_figure() -> Path:
     """The integral tetravolume table beside the icosahedron and its Voronoi cell."""
     figure, (left, right) = plt.subplots(1, 2, figsize=(11.5, 5.2))
-    names = list(geometry.VOLUME_RATIOS)
-    volumes = [float(geometry.VOLUME_RATIOS[name]) for name in names]
-    icosahedron = geometry.icosahedron_tetravolume()
-    icosahedron_volume = float(icosahedron["tetravolume"])
-    bar_names = [name.replace("_", " ") for name in names] + ["icosahedron"]
-    bar_values = volumes + [icosahedron_volume]
-    integral = [value == int(value) for value in bar_values]
-    bars = left.barh(
-        bar_names,
-        bar_values,
-        color=[BLUE if flag else VERMILLION for flag in integral],
-        edgecolor=INK,
-    )
-    for bar, flag in zip(bars, integral):
-        if not flag:
-            bar.set_hatch("//")
-    left.set_xscale("log")
-    for bar, value, flag in zip(bars, bar_values, integral):
-        left.annotate(
-            f"{value:g}" if flag else f"{value:.4f}  (not an integer)",
-            (value, bar.get_y() + bar.get_height() / 2),
-            textcoords="offset points",
-            xytext=(5, 0),
-            va="center",
-            fontsize=9,
-            color=INK if flag else VERMILLION,
-        )
-    left.invert_yaxis()
-    left.set_xlim(0.8, max(bar_values) * 12.0)
-    left.set_xlabel("tetravolume, unit tetrahedron = 1 (log scale)")
-    left.set_title("integral table solids; the icosahedron is not")
-    left.legend(
-        handles=[
-            matplotlib.patches.Patch(facecolor=BLUE, edgecolor=INK, label="integer tetravolume"),
-            matplotlib.patches.Patch(facecolor=VERMILLION, edgecolor=INK, hatch="//",
-                                     label="non-integer tetravolume"),
-        ],
-        loc="upper right",
-        fontsize=9,
-    )
+    ivm_volumes = geometry.derived_volume_ratios()
+    ico_volume = float(geometry.icosahedron_tetravolume_exact()["tetravolume"])
+    _plot_tetravolumes(left, ivm_volumes, icosahedron=ico_volume)
+    left.set_title("IVM solids and carrier icosahedron")
 
-    cell = geometry.voronoi_cell()
     density = geometry.packing_density()
-    cell_labels = ["vertices", "faces", "edges"]
-    cell_values = [
-        int(cell["vertex_count"]),
-        int(cell["face_count"]),
-        int(cell["edge_count"]),
-    ]
-    bars = right.bar(cell_labels, cell_values, color=[BLUE, GREEN, ORANGE])
+    cell_volume = ivm_volumes["rhombic_dodecahedron"]
+    cell_labels = ("vertices", "faces", "edges")
+    cell_values = [int(density[label]) for label in cell_labels]
+    bars = right.bar(cell_labels, cell_values, color=BLUE, width=0.64)
     for bar, value in zip(bars, cell_values):
         right.annotate(
             str(value),
@@ -1330,14 +1282,15 @@ def ga_synergetics_figure() -> Path:
             ha="center",
             fontsize=9,
         )
-    right.set_ylabel("count")
-    right.set_ylim(0, max(cell_values) * 1.6)
-    right.set_title("Voronoi cell of the IVM")
+    right.set_ylabel("Count")
+    right.set_ylim(0, max(cell_values) * 1.65)
+    right.set_title("IVM Voronoi cell")
     right.text(
-        0.03,
-        0.97,
-        f"packing density {float(density['density']):.6f}\n"
-        f"closed form        {float(density['closed_form']):.6f}",
+        0.04,
+        0.96,
+        f"Cell tetravolume: {cell_volume} (exact)\n"
+        f"Packing density: {float(density['density']):.6f}\n"
+        r"Exact density: $\pi/(3\sqrt{2})$",
         transform=right.transAxes,
         va="top",
         fontsize=9.5,
@@ -1346,12 +1299,13 @@ def ga_synergetics_figure() -> Path:
     return _save(
         figure,
         "fig_ga_synergetics.png",
-        "Two panels. Left: logarithmic bars of the tetravolumes in the synergetic table, the "
-        "tetrahedron, cube, octahedron, rhombic dodecahedron, cuboctahedron and truncated "
-        "octahedron, all integral and drawn solid, beside the icosahedron's measured "
-        "tetravolume, which is not integral and is drawn hatched and labelled as such. "
-        "Right: the Voronoi cell's fourteen vertices, twelve faces and twenty-four "
-        "edges, with the measured packing density annotated against its closed form.",
+        "Left: integer tetravolumes on a logarithmic axis: "
+        + ", ".join(f"{name.replace('_', ' ')} {value}" for name, value in ivm_volumes.items())
+        + f". A diamond labels the carrier icosahedron at approximately {ico_volume:.4f}. "
+        + "Right: the IVM Voronoi cell has "
+        + ", ".join(f"{value} {name}" for name, value in zip(cell_labels, cell_values))
+        + f", exact tetravolume {cell_volume} and packing density {float(density['density']):.6f}, "
+        "equal to pi divided by three square root of two.",
     )
 
 
@@ -1445,102 +1399,57 @@ def pair_triangles_figure() -> Path:
     )
 
 
-def _contrast(foreground: str, background: str) -> float:
-    """The WCAG contrast ratio between two hex colours."""
-
-    def luminance(hex_colour: str) -> float:
-        value = hex_colour.lstrip("#")
-        channels = []
-        for index in (0, 2, 4):
-            component = int(value[index : index + 2], 16) / 255.0
-            channels.append(
-                component / 12.92 if component <= 0.03928 else ((component + 0.055) / 1.055) ** 2.4
-            )
-        return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
-
-    high, low = sorted((luminance(foreground), luminance(background)), reverse=True)
-    return (high + 0.05) / (low + 0.05)
-
-
 def scope_matrix_figure() -> Path:
-    """The registry as a dense categorical matrix in registry order."""
-    pair_colours = {
-        OPH_FEP: "#D9DEE3",
-        FEP_SYNERGETICS: "#B4BCC5",
-        SYNERGETICS_OPH: "#8F99A4",
-        THREE_WAY: "#68727D",
-    }
-    status_colours = {
-        "exact": GREEN,
-        "exact-on-domain": ORANGE,
-        "obstructed": VERMILLION,
-        "not-reproduced": GREY,
-    }
+    """Count registry claims by kind and evidence status within each scope."""
+    grouped = by_pair()
+    scopes = ("OPH / FEP", "FEP / Synergetics", "Synergetics / OPH", "Three-way")
+    statuses = (*STATUS_MARKERS, "not-reproduced")
+    panels = (
+        ("Claim kind", "kind", KINDS, ("Isomorphism", "Disagreement", "Complementarity")),
+        (
+            "Evidence status", "status", statuses,
+            ("Exact", "Exact on\ndomain", "Obstructed", "Not\nreproduced"),
+        ),
+    )
+    figure, (left, right) = plt.subplots(
+        1, 2, figsize=(11.8, 3.6), gridspec_kw={"width_ratios": (3, 4)}
+    )
+    colourmap = matplotlib.colors.LinearSegmentedColormap.from_list(
+        "registry_counts", ("#F2F6FA", "#82BBDD")
+    )
+    tables = []
+    for _, field, values, _ in panels:
+        counters = [Counter(getattr(entry, field) for entry in grouped[pair]) for pair in PAIRS]
+        tables.append([[count[value] for value in values] for count in counters])
+    highest = max(count for table in tables for row in table for count in row)
+    for axis, table, (title, _, _, columns) in zip((left, right), tables, panels):
+        axis.imshow(table, cmap=colourmap, vmin=0, vmax=highest, aspect="auto")
+        axis.set_xticks(range(len(columns)), columns)
+        axis.set_yticks(range(len(scopes)), scopes)
+        axis.xaxis.tick_top()
+        axis.tick_params(length=0, pad=7)
+        axis.set_xticks(np.arange(len(columns) + 1) - 0.5, minor=True)
+        axis.set_yticks(np.arange(len(scopes) + 1) - 0.5, minor=True)
+        axis.tick_params(which="minor", length=0)
+        axis.grid(False, which="major")
+        axis.grid(True, which="minor", color="white", linewidth=2, alpha=1)
+        for spine in axis.spines.values():
+            spine.set_visible(False)
+        for row, counts in enumerate(table):
+            for column, count in enumerate(counts):
+                axis.text(column, row, str(count), ha="center", va="center", fontsize=13, color=INK)
+        axis.set_title(title, pad=12, color=INK, fontweight="bold")
 
-    def text_colour(hex_colour: str) -> str:
-        return max(("#000000", "#FFFFFF"), key=lambda option: _contrast(option, hex_colour))
-
-    figure, axis = plt.subplots(figsize=(10.0, 10.0))
-    axis.set_axis_off()
-    axis.set_xlim(0.0, 5.0)
-    axis.set_ylim(0.0, len(CORRESPONDENCES) + 1.2)
-    headers = ["pair", "kind", "status"]
-    for column, header in enumerate(headers):
-        axis.text(
-            column + 2.15,
-            len(CORRESPONDENCES) + 0.55,
-            header,
-            ha="center",
-            va="center",
-            fontsize=10.5,
-            fontweight="bold",
-            color=INK,
-        )
-    for row, entry in enumerate(CORRESPONDENCES):
-        y_value = len(CORRESPONDENCES) - row - 0.5
-        axis.text(
-            0.02,
-            y_value,
-            entry.key,
-            ha="left",
-            va="center",
-            fontsize=9.5,
-            family="monospace",
-            color=INK,
-        )
-        cells = (
-            (pair_colours.get(entry.pair, GREY), entry.pair),
-            (KIND_COLOURS.get(entry.kind, GREY), entry.kind),
-            (status_colours.get(entry.status, GREY), entry.status),
-        )
-        for column, (colour, label) in enumerate(cells):
-            axis.add_patch(
-                plt.Rectangle(
-                    (column + 1.70, y_value - 0.42),
-                    0.90,
-                    0.84,
-                    facecolor=colour,
-                    edgecolor="white",
-                    linewidth=0.5,
-                )
-            )
-            axis.text(
-                column + 2.15,
-                y_value,
-                label,
-                ha="center",
-                va="center",
-                fontsize=9.0,
-                color=text_colour(colour),
-            )
-    axis.set_title("Registry scope matrix: pair, kind and status", fontsize=11)
+    descriptions = []
+    for scope, kinds, evidence in zip(scopes, *tables):
+        kinds_text = ", ".join(f"{kind} {count}" for kind, count in zip(KINDS, kinds))
+        evidence_text = ", ".join(f"{status} {count}" for status, count in zip(statuses, evidence))
+        descriptions.append(f"{scope} has {kinds_text} by kind and {evidence_text} by status.")
     return _save(
         figure,
         "fig_scope_matrix.png",
-        "A dense categorical matrix with one row per registry entry in registry order. The row "
-        "label is the entry key, and three columns give its pair, in neutral greys, its kind and "
-        "its status, each cell carrying its own text label. "
-        f"{len(CORRESPONDENCES)} rows are shown.",
+        f"Two matrices count the {len(CORRESPONDENCES)} claims by kind and evidence status, "
+        "with one row per scope. Values are labelled in each cell. " + " ".join(descriptions),
     )
 
 
@@ -2331,6 +2240,7 @@ def write_registry() -> Path:
             {
                 "label": "fig:" + name.removeprefix("fig_").removesuffix(".png").replace("_", "-"),
                 "filename": name,
+                "alt_text": alt,
                 "alt": alt,
             }
             for name, alt in sorted(ALT_TEXT.items())

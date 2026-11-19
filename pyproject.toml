@@ -9,7 +9,8 @@ license = {text = "MIT"}
 description = "Executable correspondences, obstructions, and complements across Observer Patch Holography, the Free Energy Principle, and Fuller's Synergetics"
 readme = "README.md"
 authors = [
-    {name = "Daniel Ari Friedman", email = "daniel@activeinference.institute"}
+    {name = "Daniel Ari Friedman", email = "daniel@activeinference.institute"},
+    {name = "Bernhard Mueller"},
 ]
 requires-python = ">=3.12"
 dependencies = [

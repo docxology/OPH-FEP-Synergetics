@@ -1,27 +1,22 @@
 # References {#sec:references}
 
-The bibliography is [`references.bib`](references.bib), read by Pandoc during the
-PDF render. The build invokes Pandoc with `--natbib`, so every `[@key]` citation
-in the manuscript is rewritten to the corresponding LaTeX command and resolved
-against the bib file.
+The PDF bibliography is generated from [`references.bib`](references.bib).
+Pandoc converts the manuscript citations to LaTeX commands, and BibTeX resolves
+their keys.
 
-Three entries are provenance records rather than literature: `oph`, `fepformal`
-and `quadmath` identify the pinned checkouts, their licences and their DOIs. A
-reader who wants the exact commits should read `data/sources.json` or run
-`oph-fep-synergetics sources`, which reports the live status of each pin rather
-than repeating a snapshot here.
+The `oph`, `fepformal` and `quadmath` entries identify the software sources.
+`data/sources.json` records the commits, licences and cited identifiers.
+`oph-fep-synergetics sources --vault-root /path/to/vault` compares those pins
+with local checkouts.
 
-The bibliography is validated for syntax and for the required fields of each
-entry type by the template's citation validator:
+Run the template's citation validator from the `docxology/template` checkout
+to check bibliography syntax and required fields.
 
 ```bash
 uv run python -m infrastructure.reference.citation.cli validate \
     projects/working/OPH-FEP-Synergetics/manuscript/references.bib --strict
 ```
 
-The validator path above is template-internal: it resolves inside the
-`docxology/template` monorepo and does not exist in this repository, where the
-equivalent public check is the repository's own render contract,
-`scripts/check_render.py`. The pre-digital books are cited the way they can be
-verified: *Synergetics* by publisher and year, while the full text of its
-second volume is archived, with the address carried in the bibliography.
+This repository checks that every cited key has a bibliography entry and each
+entry is cited. `scripts/check_render.py` also checks that citations resolve
+in the rendered PDF.

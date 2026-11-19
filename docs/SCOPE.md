@@ -1,16 +1,14 @@
-# Scope: what is reimplemented, what is cited, what is out
+# Scope and assumptions
 
-The point of this repository is to make three-way identifications *decidable*.
-That requires saying clearly where each identification is being tested, what
-domain it is being tested on, and what is deliberately left outside. This
-document is part of the deliverable: a claim is only as good as its stated
-domain.
+The registry tests finite correspondences among OPH, FEP, and Synergetics.
+Each verdict is specific to the model, parameters, and inputs described by
+its probe.
 
 ## Tested here
 
 | subject | how |
 | --- | --- |
-| OPH's twelve-port carrier | the port chart is *derived* from OPH's `ORIENTED_BASE_FACES`; the 20 triangles of the derived graph are asserted to be exactly those faces |
+| OPH's twelve-port carrier | adjacency is derived from OPH's `ORIENTED_BASE_FACES`. The 20 graph triangles recover the face vertex sets. |
 | OPH's native seam law | reimplemented on exact Python integers; conservation and the energy identity are checked on every one of the 4680 shell transitions |
 | PR-01 | the obstruction is reproduced exhaustively: 120 strict descents, 600 zero-descent mismatch-one moves, 3960 no-ops |
 | patch agreement as a sheaf condition | a cellular sheaf over the carrier whose Laplacian is asserted equal to the carrier Laplacian |
@@ -19,22 +17,24 @@ domain.
 | QuadMath's conventions | quadray gauge and embedding, the twelve neighbour moves, the coordination shells against their closed-form cuboctahedral gauge, and the tetravolume table derived exactly from explicit vertex sets |
 | icosahedral subdivision | geodesic and Goldberg counts, duality, and the equality with the IVM shell sequence |
 | the carrier's counting identities | the reduced Laplacian determinant in exact rationals (the spanning-tree number), its cross-check against the spectral product, the graph sheaf's two cohomology dimensions, and the surface's Betti numbers with its Euler characteristic |
-| the carrier's symmetry | the automorphism group by exhaustive search, closure under composition, the orbit decomposition of ports, seams and faces, the rotation/reflection split from OPH's oriented faces, eigenspace irreducibility, and the equivariance of every single transition over the full group |
+| the carrier's symmetry | the automorphism group by exhaustive search, closure under composition, the orbit decomposition of ports, seams and faces, classification by preservation of face orientation, eigenspace irreducibility, and equivariance of each shell transition |
 | two Gaussian readings of the carrier | the proper precision `L + I/n` gives the conditional-independence pattern, blankets and pairwise precisions. The diagonal of `L^+` gives the variance in the centered intrinsic field |
-| the information cost of a lattice step | equal-covariance Gaussian divergence against the IVM's squared distances at unit covariance: one step in nats, the sequence `4k^2`, and the stated dependence on the unit of length |
+| the information cost of a lattice displacement | equal-covariance Gaussian divergence at unit covariance gives 4 nats for one IVM neighbour displacement and `4k^2` nats from the origin along a neighbour direction. The value uses the declared embedding and covariance scale. |
 | the carrier's solid and the twelve-around-one cell | the icosahedron's tetravolume computed exactly in `sqrt 2 * Q(sqrt 5)` and by floating-point measurement, the two kissing arrangements compared exactly, and the Voronoi cell's counts, exact tetravolume and packing density |
 | the carrier as a network | exact effective resistances as rationals from a grounded solve, their distance-class ladder, the Kirchhoff index, the distance distribution and intersection array around a port, and the subgraph census |
 | the carrier's curvature | the angle defect at every vertex of the derived chart, summed against Gauss-Bonnet, plus the defect of the dual solid's face set |
-| the twelve-around-one families | the obstruction is exhibited rather than asserted: the cuboctahedron, the icosahedron and the cube's line graph share the twelve-around-one description and differ in counts and volumes |
+| the twelve-around-one families | compare the cuboctahedron and icosahedron as solids with distinct adjacency and volume. The cube's line graph independently realises the cuboctahedral graph. |
 | the quadratic field of the tetravolume | the Galois conjugation of $\sqrt{5}$ (fixing $\sqrt{2}$) as a probe, in exact field arithmetic: it fixes the counting invariants and moves the icosahedron's tetravolume, whose product with its conjugate is exactly 50 |
 
 ## Cited but not implemented
 
 - **OPH's quantum event algebra and its continuum limit.** Nothing here
   evaluates them, and `data/sources.json` records no identifier for either.
-- **FEP beyond the linear-Gaussian corner.** Nonlinear generative models,
-  non-Gaussian densities, multi-modal posteriors, and the path-integral and
-  stochastic-thermodynamic formulations are outside this package.
+- **General FEP methods.** The Gaussian inference model is linear with
+  quadratic energies. An asymmetric seam gives a non-Gaussian control and the
+  binary shell gives a finite Bayesian example. General nonlinear inference,
+  path integrals, and stochastic-thermodynamic formulations remain outside
+  this scope.
 - **Fuller's full synergetic apparatus.** Only the pieces the correspondence
   needs are here: quadray coordinates, the IVM, the vector-equilibrium shell,
   the volume ratios, and the subdivision counts.
@@ -80,21 +80,20 @@ carries it.
    The separate Lean copy-repair example does not characterize the native
    rule. The `pr01-obstruction` probe distinguishes constant pathwise load
    energy from the binary ensemble's nonincreasing relative entropy.
-3. **Do not let numerology stand in for a frozen prediction.** Agreement between
-   `10k^2 + 2`, the IVM shell count, the Goldberg face count and the geodesic
-   vertex count is a genuine identity of one quadratic form seen four ways, and
-   it is tested as such. It is not evidence that any two of the three programs
-   describe the same physics. The `quadray-ivm` entry is registered as a
-   *complementarity*, not an isomorphism of the theories.
+3. **Specify the objects being counted.** The IVM shell count, Goldberg face
+   count, and geodesic vertex count each give `10k^2 + 2` on the stated
+   subdivision sequence. The equality is combinatorial. The `quadray-ivm`
+   entry uses it as a complementarity.
 4. **Keep scale separations explicit.** In OPH a patch is a bounded local
    system with a specified state, access boundary, records and operations. Its
    documents assign a patch no length scale, and a graph vertex is a model
    representation of one (`docs/INTERPRETATION_AND_TERMS.md` in the OPH
    repository). The twelve ports of this package are the boundary ports of one
-   local carrier. An FEP blanket is a statistical boundary of whatever system
-   the model describes. Nothing in this repository maps one to the other, and
-   no probe claims to. The linear-Gaussian results are exact at finite size and
-   say nothing about a continuum limit.
+   local carrier. An FEP blanket is a conditional-independence structure in a
+   chosen probability model. The probes compare a finite carrier graph and
+   precisions constructed from it. A correspondence between OPH patch
+   boundaries and FEP blankets or a continuum extension requires further
+   assumptions.
 
 ## Domain limits on the isomorphism claims
 
@@ -114,6 +113,9 @@ The three `exact-on-domain` entries say so in their status:
   configurations as reference, the repairs of the sixty seams that meet a
   doubled port are no conditional law of it.
 
-Outside that corner the correspondence is an open question, not a result. The
-remaining `exact` entries are combinatorial or algebraic identities that hold
-without a domain restriction.
+The general variational identity separates divergence from log evidence when
+the expectations are defined and the evidence is positive. The quadratic
+record formula and the agreement of the posterior mean and energy minimiser
+depend on the Gaussian assumptions above. The `exact` entries also retain
+their stated domains. For example, a finite enumeration certifies the named
+carrier or shell, and a lattice metric comparison fixes the covariance scale.

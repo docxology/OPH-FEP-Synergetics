@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 368" width="820" height="368"
      role="img" aria-labelledby="overview-title overview-description">
   <title id="overview-title">Three examples from the correspondence ledger</title>
-  <desc id="overview-description">Observer Patch Holography and the Free Energy Principle agree on harmonic extension and Gaussian perception in the linear-Gaussian model. Observer Patch Holography and Synergetics contribute distinct arrangements of twelve spheres touching a central sphere. A single Synergetics lattice shell can span several free energy levels.</desc>
+  <desc id="overview-description">In the linear-Gaussian model, harmonic extension and Gaussian inference give the same posterior mean. The icosahedral carrier and Synergetics' cuboctahedron give two arrangements of twelve spheres touching a central sphere. One lattice coordination shell can contain several Gaussian divergence values at unit covariance.</desc>
 
   <rect width="820" height="368" rx="16" fill="#f8fafc"/>
-  <g fill="none" stroke="#64748b" stroke-width="2.5">
+  <g fill="none" stroke="#475569" stroke-width="2.5">
     <path d="M352 85 136 278M468 85l216 193M232 310h357"/>
   </g>
 
@@ -25,22 +25,25 @@
       <text x="694.5" y="328">Variational inference</text>
     </g>
 
-    <rect x="36" y="125" width="294" height="91" rx="10" fill="#f5f3ff" stroke="#7c3aed"/>
-    <rect x="490" y="125" width="294" height="91" rx="10" fill="#f0fdfa" stroke="#0f766e"/>
-    <rect x="253" y="261" width="314" height="98" rx="10" fill="#fffbeb" stroke="#a16207"/>
+    <rect x="36" y="123" width="294" height="106" rx="10" fill="#f5f3ff" stroke="#7c3aed"/>
+    <rect x="490" y="123" width="294" height="106" rx="10" fill="#f0fdfa" stroke="#0f766e"/>
+    <rect x="253" y="249" width="314" height="110" rx="10" fill="#fffbeb" stroke="#a16207"/>
 
     <g font-size="18" font-weight="700">
       <text x="183" y="151" fill="#5b21b6">Complementarity</text>
-      <text x="637" y="151" fill="#115e59">Correspondence</text>
-      <text x="410" y="288" fill="#854d0e">Obstruction</text>
+      <text x="637" y="151" fill="#115e59">Linear-Gaussian identity</text>
+      <text x="410" y="277" fill="#854d0e">Obstruction</text>
     </g>
     <g fill="#172554" font-size="17">
-      <text x="183" y="177">Twelve spheres touch a central</text>
-      <text x="183" y="199">sphere in two arrangements</text>
-      <text x="637" y="177">Harmonic extension matches</text>
-      <text x="637" y="199">settled linear-Gaussian inference</text>
-      <text x="410" y="315">One lattice shell spans</text>
-      <text x="410" y="337">several free energy levels</text>
+      <text x="183" y="177">Cuboctahedral and icosahedral</text>
+      <text x="183" y="198">arrangements each give twelve</text>
+      <text x="183" y="219">contacts with a central sphere.</text>
+      <text x="637" y="177">Harmonic extension and</text>
+      <text x="637" y="198">Gaussian inference give</text>
+      <text x="637" y="219">the same posterior mean.</text>
+      <text x="410" y="303">One coordination shell</text>
+      <text x="410" y="324">contains several Gaussian</text>
+      <text x="410" y="345">divergence values.</text>
     </g>
   </g>
 </svg>

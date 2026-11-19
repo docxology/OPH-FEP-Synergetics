@@ -72,6 +72,7 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
     }
     for entry in payload["figures"]:
         assert entry["filename"].endswith(".png")
+        assert entry["alt_text"] == entry["alt"]
         assert len(entry["alt"]) > 60
         assert entry["alt"].endswith(".")
 

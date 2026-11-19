@@ -1,10 +1,9 @@
 # LaTeX Preamble
 
-Packages this manuscript needs that the rendering infrastructure does not supply
-itself. Formal statements are *not* declared here: `formalism.lua` numbers
-fenced `::: {.definition}` and `::: {.proposition}` blocks by emitting a bold
-run-in marker, so no `\newtheorem` environment is involved and the numbering is
-identical in every rendered edition.
+This preamble supplies packages for the manuscript. The `formalism.lua`
+filter numbers the fenced definition and proposition blocks in manuscript
+order. Their labels keep cross-references tied to the intended statements
+when that order changes.
 
 ```latex
 % Core mathematics

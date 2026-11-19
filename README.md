@@ -1,29 +1,24 @@
 # OPH-FEP-Synergetics
 
-Executable correspondences, obstructions and complementarities across three
-programs that all claim to describe how a bounded part of a world comes to
-agree with itself:
+This package compares OPH's finite observer, a Gaussian model for variational
+inference, and Fuller's lattice geometry. Its executable registry reports
+which correspondences hold, where a proposed identification fails, and which
+constructions can be used together.
 
 - **Observer Patch Holography** (OPH) — an executable observer on a twelve-port
   icosahedral carrier with a native integer repair law.
-- **The Free Energy Principle** (FEP) — variational free energy, Bayes-optimal
-  perception, and conditional independence at a Markov blanket.
+- **The Free Energy Principle** (FEP) — variational inference and the
+  conditional-independence structure of a Markov blanket.
 - **Fuller's Synergetics** — quadray coordinates, the isotropic vector matrix,
   the cuboctahedral vector equilibrium, and rational tetravolumes.
 
-The project's purpose is to say precisely which of the three-way identifications
-survive an executable test, which are obstructed, and which are complementary
-rather than equivalent. Every claim in this repository is a probe that either
-passes or fails, and the failing direction is reported as a result rather than
-hidden as a gap.
-
-![Three example results: OPH and FEP agree on linear-Gaussian inference, OPH and Synergetics give distinct kissing arrangements, and a lattice shell can span several free energy levels.](docs/overview.svg)
+![Three pairwise examples. The linear-Gaussian model gives the same posterior mean by three routes. The two kissing arrangements have different outer contacts. A coordination shell spans several Gaussian divergence levels.](docs/overview.svg)
 
 Each edge shows one example from the [executable correspondence ledger](docs/CORRESPONDENCES.md).
 
-**The paper:** [*Observers, Blankets, and Screens*](output/pdf/OPH-FEP-Synergetics_combined.pdf)
-(PDF, rendered from `manuscript/` by `scripts/build.py`; every number in it is
-bound to the function that produces it).
+[*Observers, Blankets, and Screens*](output/pdf/OPH-FEP-Synergetics_combined.pdf)
+is the paper by Daniel Ari Friedman and Bernhard Mueller. Its numerical
+results are bound to computations or cited sources in the manuscript build.
 
 ## What runs
 
@@ -46,19 +41,23 @@ the combination of filters selects no probes.
 ## Install
 
 ```
-uv venv --python 3.15 .venv
-uv pip install --python .venv/bin/python -e ".[dev,figures]"
+uv sync --locked --extra dev --extra figures
+uv run --locked --extra dev --extra figures oph-fep-synergetics verify
 ```
 
-Any Python >= 3.12 works; without `uv`, `python3 -m venv .venv &&
-.venv/bin/pip install -e ".[dev,figures]"` is equivalent. The only runtime
-dependency is `numpy`; `figures` (matplotlib) and `dev` (pytest, pytest-cov) are
-optional extras. `.[dev]` alone runs the suite (the figure tests skip without
-matplotlib); the `figures` extra is what `scripts/make_figures.py` and the
-manuscript pipeline need.
+The package requires Python 3.12 or newer and NumPy. The `dev` extra adds
+pytest and pytest-cov. The `figures` extra adds Matplotlib for the figure suite
+and manuscript build. Add `--no-editable` to `uv sync` for a regular install.
+The installed `sources` command reads the bundled source register from any
+working directory.
 
-For a regular installation, omit `-e` from the install command. The installed
-`sources` command reads the bundled source register from any working directory.
+For a resolver-based installation using pip, run the following with a supported
+Python interpreter. Pip resolves the dependency bounds in `pyproject.toml`.
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install -e ".[dev,figures]"
+```
 
 ## Layers
 
@@ -71,7 +70,7 @@ For a regular installation, omit `-e` from the install command. The installed
 | | `core/free_energy.py` | the linear-Gaussian free-energy dictionary and the three named surprises |
 | | `core/controls.py` | the obstruction and dynamics controls: descent census, D-stability, mediators, orbits, free-energy forms |
 | | `core/invariants.py` | the Laplacian's counting identities: spanning trees, reciprocal spectrum, GMRF precision, Markov blankets |
-| | `core/symmetry.py` | the carrier's automorphism group, rotations versus reflections, orbit counts, law equivariance |
+| | `core/symmetry.py` | the carrier's automorphism group, orientation classes, orbit counts and equivariance |
 | | `core/network.py` | the carrier as a resistive network: exact effective resistances, the Kirchhoff index, shells around a port, and the subgraph census |
 | `geometry` | `geometry/quadray.py` | quadray coordinates, the A3/IVM embedding and exact tetravolumes |
 | | `geometry/lattice.py` | IVM shells, the cuboctahedral vector equilibrium, Voronoi cell and packing density, Goldberg/geodesic counts |
@@ -90,22 +89,22 @@ the three kinds and `--pair` to one of the four scopes. The full table, with the
 Synergetics reading of each entry and the values its probe asserts, is generated
 into [docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
 
-The load-bearing results are:
+Selected results follow.
 
 | claim | status | evidence | source or derivation |
 | --- | --- | --- | --- |
-| OPH's carrier is the kissing-twelve configuration, and its port chart is derived from OPH's own oriented faces | exact | 12 ports, 30 seams, 20 faces, five-regular; the 20 triangles of the derived graph are exactly OPH's 20 oriented faces | OPH’s oriented faces, with the adjacency derived here |
-| The carrier gap is the icosahedral gap | exact | `lambda_1 = 5 - sqrt(5)` in both readings (the generator of OPH's mean repair operator, and the FEP's precision), and the normalised gap `lambda_1 / (2\|E\|)` is exactly `(5 - sqrt(5)) / 60` | [Agreement and Surprise][agreement-and-surprise], §6.2, for the mean gap |
-| The native repair law conserves load and lowers `sum(x^2)/2` by `(d^2 - (\|d\| mod 2)) / 4` | exact | checked on all 4680 shell transitions | [OPH][oph-source], native repair law |
+| OPH's carrier port chart is derived from its oriented faces | exact | 12 ports, 30 seams and 20 faces. Each port has five neighbours, and the graph triangles recover the face vertex sets. | OPH’s oriented faces, with the adjacency derived here |
+| The icosahedral Laplacian determines the mean port relaxation gap | exact | `lambda_1 = 5 - sqrt(5)`. With uniform seam selection and a fair coin, the mean repair operator is `I - L / (2\|E\|)`, with gap `(5 - sqrt(5)) / 60`. The same `L` supplies the blocks of the Gaussian model. | [Agreement and Surprise][agreement-and-surprise], §6.2, for the mean gap |
+| The native repair law conserves load and changes `sum(x^2)/2` by `-(d^2 - (\|d\| mod 2)) / 4` | exact | checked on all 4680 transitions on the shell of total load two | [OPH][oph-source], native repair law |
 | On the binary shell each native repair is exact Bayesian conditioning and a variational step | exact on that domain | in all 3960 cases the repair's law is the uniform reference conditioned on the datum the repair leaves visible; it minimises `F[q] = E_q[ln q - ln pi(s, o)]` over the fibre with minimum the surprisal `log 33` or `log 66`; off the shell the identity fails on the 60 seams that meet a doubled port | [Agreement and Surprise][agreement-and-surprise], §§6.2 and 7.3; [OPH synthesis][oph-synthesis] |
 | The mean of the native law is one step of the carrier Laplacian | exact | averaging the integer rule over the 60 seam-and-coin draws gives `x - L x / 60` in exact rationals on all 78 configurations | [OPH][oph-source], native fields; exact enumeration here |
 | Patch agreement is the global-section condition of a cellular sheaf, and the sheaf Laplacian is the carrier Laplacian | exact | `carrier_sheaf(carrier).laplacian() == carrier.laplacian()` | [Agreement and Surprise][agreement-and-surprise], §7.2 |
 | On the linear-Gaussian carrier, constrained relative-entropy minimisation and predictive-coding perception give the posterior mean | exact on that domain | harmonic extension, a separate KKT solve and perception flow agree. With a proper record prior, variational free energy equals normalised surprisal at the posterior. An asymmetric seam separates its energy minimum from its posterior mean. | [Agreement and Surprise][agreement-and-surprise], Theorem 7, items 2–3; carrier, chain and asymmetric spring checks here |
-| **PR-01**: ungated repair is confluent without termination; the broken-seam gate terminates without unique normal forms | **obstructed** | 78 states, no ungated normal forms, 66 gated normal forms and 5 reachable from each doubled state. The binary attempt chain has the port gap and nonincreasing ensemble relative entropy even though individual binary paths preserve load energy. | [OPH][oph-source], PR-01; exhaustive reachability and kernel checks here |
+| **PR-01**. Ungated repair is confluent and can cycle. The broken-seam gate terminates and admits multiple reachable normal forms. | **obstructed** | 78 states, no ungated normal forms, 66 gated normal forms and 5 reachable from each doubled state. The binary attempt kernel separately has the same computed gap as the mean port operator. Individual binary paths preserve load energy and ensemble relative entropy is nonincreasing. | [OPH][oph-source], PR-01; exhaustive reachability and kernel checks here |
 | **Three distinct values at fixed records** | **obstructed** | minimum interface energy, the unnormalised record potential and normalised surprisal differ. The interior determinant cancels in the normalised probability. | [Agreement and Surprise][agreement-and-surprise], Theorem 7, item 3; equal-Schur chain control here |
 | Two-record Gaussian marginals are determined by effective resistance and the record prior | exact | all 66 carrier pairs satisfy the Schur identity; seam, distance-two and antipodal resistance are 11/30, 7/15 and 1/2 | Schur elimination and an independent rational network solve |
 | **Eliminating an interior mediator is not free** | **obstructed** | the reduced precision is `(1/3) v v^T + epsilon I`; a sum of pairwise semidefinite terms reproduces it iff `epsilon >= 1/3` | [Agreement and Surprise][agreement-and-surprise], Proposition 8; rank-one construction here |
-| **A stationary blanket need not bound the dynamics** | **obstructed** | with a zero precision entry the internal drift is `2q eta + (q - 1) b - 2 mu`, so equal blanket statistics do not fix the internal motion | [Agreement and Surprise][agreement-and-surprise], Proposition 11; Da Costa et al.’s stationary blanket example |
+| **Distinct drifts preserve the same stationary blanket** | **obstructed** | with a zero precision entry the internal drift is `2q eta + (q - 1) b - 2 mu`, which varies with `q` at fixed stationary covariance | [Agreement and Surprise][agreement-and-surprise], Proposition 11; Da Costa et al.’s stationary blanket example |
 | **Agreement can exist and be unreachable** | **obstructed** | the clipped two-node map has the origin as its only equilibrium and a source there; the relaxation orbit stays at radius `>= 0.84` with period `~7.58` | [Agreement and Surprise][agreement-and-surprise], Proposition 15; exact fixed-point census and orbit measurement here |
 | **D-stability is not free** | **obstructed** | Lyapunov form `P = (1/3)[[11,4,-8],[4,5,-2],[-8,-2,9]]`, `det P = 115/27`; at `k = 4` the Routh first column is `(1, 6, -2, 24)` and the scaled matrix has two right-half-plane roots | [Agreement and Surprise][agreement-and-surprise], §4.1 and Proposition 10; general Routh column here |
 | **Finite phases are path functions** | **obstructed** | full and half-damped iteration share every answer, yet their centered contrasts after twelve steps differ by exactly `921633999 / 40000000000` | [Agreement and Surprise][agreement-and-surprise], Proposition 6 and §4.4; exact contrast here |
@@ -113,9 +112,9 @@ The load-bearing results are:
 | Equilibrium propagation supplies the parameter gradient the repair law does not define | exact | the two-settle contrast is `(theta - target) / (1 + beta)` exactly and tends to the exact gradient | [Agreement and Surprise][agreement-and-surprise], Theorem 21; Scellier and Bengio |
 | The carrier counts its own spanning trees | exact | the reduced Laplacian's determinant is `5184000` — by Kirchhoff's matrix-tree theorem the number of spanning trees in OPH's reading and, as the determinant of the same matrix read as a Gaussian precision with one port pinned, the normalisation of the FEP's linear-Gaussian interface integral — equal to the product of the eleven nonzero eigenvalues over `12` | Kirchhoff’s matrix-tree theorem applied here to the carrier |
 | A proper Gaussian with precision `L + I/n` has the seam graph's conditional dependencies | exact | seam precision is `-1` and each port's blanket is its five neighbours. The centered intrinsic field separately gives port variance `7/36` | Carrier Gaussian precisions and intrinsic variance calculated here |
-| The agreement sheaf has one global section and nineteen obstructions, and the faces fill them all | exact | on the graph `dim H^0 = 1`, `dim H^1 = 19` (the cycle rank) with Euler characteristic `12 - 30`; with the twenty faces the face coboundary has rank 19, the surface's Betti numbers are `(1, 0, 1)` and its Euler characteristic is `2`, and OPH's oriented faces sum to a fundamental cycle | Cellular sheaf construction from [Agreement and Surprise][agreement-and-surprise], §7.2; carrier cohomology calculated here |
-| The symmetry group closes the descent census | exact | order 120 = 60 rotations + 60 reflections, transitive on ports/seams/faces; every one of the 1123200 transitions (group element x configuration x oriented seam x coin) commutes with the group, giving 4 configuration orbits and 3 outcome multisets | Carrier automorphisms and native transitions enumerated here |
-| Information cost is half the synergetic metric | exact | at unit covariance in the integer embedding one IVM step costs 4 nats and the sites `k m` cost `4k^2`; the four is the unit of length, the ratios are the content | Equal-covariance Gaussian divergence applied to QuadMath’s embedding |
+| The faces fill the cycle space of the carrier graph | exact | For the scalar sheaf, the graph has a one-dimensional space of global sections and `dim H^1 = 19`. Adding the faces gives Betti numbers `(1, 0, 1)`. The oriented faces sum to a fundamental cycle. | Cellular sheaf construction from [Agreement and Surprise][agreement-and-surprise], §7.2; carrier cohomology calculated here |
+| The symmetry group preserves the native repair law | exact | The group has 120 elements, with 60 rotations and 60 orientation-reversing symmetries. Equivariance is checked over 1123200 combinations of group element, configuration, oriented seam and coin. The shell has 4 configuration orbits and 3 outcome multisets. | Carrier automorphisms and native transitions enumerated here |
+| Gaussian divergence measures half the squared Euclidean displacement | exact | At unit covariance, one IVM neighbour displacement gives 4 nats. Displacement `k m` along a neighbour direction `m` gives `4k^2` nats from the origin. | Equal-covariance Gaussian divergence applied to QuadMath’s embedding |
 | **Twelve vertices is not one solid** | **obstructed** | the neighbour graph is four-regular with tetravolume 20; the carrier is five-regular with tetravolume `18.512295868219...` | [OPH][oph-source] and QuadMath geometry compared here |
 | **The shell index and the free energy determine neither each other** | **obstructed** | the coordination shell is the cuboctahedral gauge `max(\|u\|_inf, \|u\|_1 / 2)`, a polyhedral norm, checked against every breadth-first shell through 12; the free energy on shell `k` ranges from `2k^2` (`2k^2 + 2` for odd `k`) to `4k^2`, attained only at the twelve vertices, and the levels 36 and 52 are each shared by two shells | The Gaussian cost and cuboctahedral gauge compared here |
 | Synergetics' tetravolume table is derived, not transcribed | exact | `1, 3, 4, 6, 20, 96` come out of explicit integer vertex sets by exact convex-hull volumes in the rationals | QuadMath conventions; exact convex-hull volumes derived here |
@@ -129,18 +128,17 @@ The load-bearing results are:
 
 ## Scope
 
-This package reimplements the *software* it needs and cites everything else. It
-does not implement OPH's quantum event algebra or continuum limit, FEP's
-nonlinear or non-Gaussian cases, or Fuller's full synergetic apparatus. Four
-cautions from the review are load-bearing here and are recorded in
-[docs/SCOPE.md](docs/SCOPE.md): disambiguate "free energy"; respect OPH's
-premise discipline; do not let numerological agreement stand in for a frozen
-prediction; and keep the scale separations explicit.
+The executable scope is the finite OPH carrier, specified Gaussian models and
+controls, and selected lattice and volume constructions. The domain of a
+claim includes its reference distribution, coordinate scale, and repair
+schedule where those assumptions enter the proof. Extensions to nonlinear
+inference, continuum OPH, and empirical comparisons remain open. See the
+[scope and limits](docs/SCOPE.md).
 
 Three quantities that *Agreement and Surprise* states for the native law are
 reproduced exactly from the protocols in OPH's public model. One attempt is a
 uniform seam and a fair coin: from `(1, 1, 0, ..., 0)` the configuration stays
-with probability `13/15` and reaches each of eight neighbours with probability
+with probability `13/15` and reaches each of eight neighbouring configurations with probability
 `1/60` (`pr01-obstruction`). The two-event observer that chooses its second
 seam from its first record ends with a port-zero occupation of `35/264`,
 against `1/6` with the selector disconnected (`reduction-criterion`).
@@ -179,44 +177,24 @@ This project is released under the MIT licence; see [LICENSE](LICENSE).
 
 ## The manuscript
 
-This repository contains *Observers, Blankets, and Screens*. It uses the
-Pandoc and LaTeX pipeline from `docxology/template`. The source of truth is
-`manuscript/`: the render reads `config.yaml`,
-`references.bib`, the eleven sections and `output/figures/`, and writes
-`output/pdf/OPH-FEP-Synergetics_combined.pdf`.
+The Pandoc and LaTeX pipeline from `docxology/template` builds the paper
+from `manuscript/`. Run the build from this repository after installing the
+figure and test extras.
 
-```
-# 1. the twenty-three figures and their accessibility registry
-.venv/bin/python scripts/make_figures.py
-
-# 2. the tokens and the resolved tree, with the template checkout's interpreter
-cd /path/to/template
-TEMPLATE_REPO_ROOT=$PWD .venv/bin/python /path/to/project/scripts/z_generate_manuscript_variables.py
-
-# 3. the PDF (hydration already ran, so the stage's own hydration is skipped)
-.venv/bin/python scripts/pipeline/stage_03_render.py \
-    --project working/OPH-FEP-Synergetics --skip-manuscript-hydration
-
-# 4. the render contract, read back out of the artefact
-cd /path/to/project
-.venv/bin/python scripts/check_render.py
-```
-All four steps run in order with one command:
-
-```
-.venv/bin/python scripts/build.py --deliver
+```sh
+.venv/bin/python scripts/build.py --template-root /path/to/template
 ```
 
-The template checkout comes from `--template-root`, `$TEMPLATE_ROOT`, or the
-sibling `template/` directory beside this project; `--deliver` refreshes the
-byte-identical copy in `~/Downloads/` and prints both sha256 digests.
+The script generates figures and numerical bindings, renders the manuscript,
+and checks the PDF and its log. It selects the template checkout from
+`--template-root`, `$TEMPLATE_ROOT`, or the sibling `template/` directory.
+An optional `--deliver` also copies the verified PDF to `~/Downloads/` and
+prints both SHA-256 digests.
 
 `projects/working/OPH-FEP-Synergetics` in the template checkout must point to
-the checkout you want to build. `scripts/build.py` checks the link before
-starting. The PDF lands in that checkout's `output/pdf/`.
-The stage's own hydration call is skipped because it expects a
-project interpreter that passes the template's bytecode audit; step 2 does the
-same work with the interpreter that does.
+the checkout you want to build. The script checks that link, uses the
+template interpreter to resolve the manuscript bindings, and writes the PDF
+in this project's `output/pdf/`.
 
 The rendered edition has a deliberate front matter. Page 1 is the cover, drawn
 from `output/figures/fig_cover.png`; pages 2 to 5 are the four panels of the
@@ -229,15 +207,13 @@ this is dense reference matter with wide tables.
 
 Three disciplines hold the manuscript together, and each one is a test:
 
-- **Every number is a token.** The prose carries `{{TOKEN}}`, never a literal,
-  and `scripts/z_generate_manuscript_variables.py` fails if a token survives
-  hydration. A test asserts that the tokens the prose uses and the values the
-  package publishes are the same set, so a number cannot be quoted without being
-  bound and a bound value cannot silently fall out of use.
+- **Numerical results have bindings.** The prose quotes computed or sourced
+  results as `{{TOKEN}}`. The build checks that every token resolves and the
+  tests compare the manuscript's tokens with the package's bindings.
 - **Every formalism is numbered by the renderer.** Definitions and propositions
   are fenced `::: {.proposition #prop:key}` blocks referenced as `[@prop:key]`,
-  and the template's `formalism.lua` owns the counters, so no statement is
-  hand-numbered and the numbering cannot drift between editions.
+  and the template's `formalism.lua` owns the counters. Cross-references
+  follow each statement's label when its number changes.
 - **Every citation resolves.** Pandoc's `--natbib` resolves `[@key]` against
   `manuscript/references.bib`. A test asserts that the cited keys and the
   bibliography are the same set: no undefined citation, and no uncited entry.

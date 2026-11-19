@@ -1,25 +1,24 @@
-# Reproducibility: pins, commands, and the binding of every number to a function {#sec:reproducibility}
+# Reproducibility {#sec:reproducibility}
 
 ## What this manuscript is made of
 
-The manuscript is a project of the `docxology/template` research monorepo: LaTeX
-is produced by Pandoc, citations are resolved with `--natbib` against
-[`references.bib`](references.bib), equations are numbered by `pandoc-crossref`,
-and formal statements are numbered by the repository's `formalism.lua` filter, so
-that a definition or a proposition has the same number in every rendered edition
-[@template].
+The manuscript uses the `docxology/template` rendering pipeline [@template].
+Pandoc produces LaTeX and resolves bibliographic citations against
+[`references.bib`](references.bib). The `pandoc-crossref` and `formalism.lua`
+filters generate numbering and cross-references from stable labels. Numbers
+can change when statements move between editions.
 
-Every number in the prose is a brace-delimited token resolved at build time from
-`manuscript_variables/values.py`, which binds each value
-to the function or source that produces it. A token that the generator does not
-emit fails the build, and a value that changes changes the prose. The binding is
-the reason the paper can claim that its numbers are not transcribed.
+Quoted numerical results are brace-delimited tokens resolved at build time.
+`manuscript_variables/values.py` binds each token to its computation or source.
+The build fails if a token remains unresolved, and the tests verify that the
+manuscript and value table use the same set of bindings.
 
 | Surface | Authored | Generated |
 |:-------------------------------------------|:-------------|:------------------------------------------|
 | `manuscript/*.md` | yes | never |
 | `references.bib` | yes | never |
-| `src/`, `geometry/`, `analysis/` | yes | never |
+| `src/oph_fep_synergetics/` | yes | never |
+| `uv.lock` | no | `uv lock` |
 | `output/figures/*.png` | no | `scripts/make_figures.py` |
 | `output/figures/figure_registry.json` | no | `scripts/make_figures.py` |
 | `docs/CORRESPONDENCES.md`, `docs/MANUSCRIPT_VALUES.md`, `docs/CONCORDANCE.md` | no | `scripts/render_docs.py` |
@@ -46,14 +45,18 @@ attributes to each source; each identifier names a file, a line range and a
 symbol, so that a reader can check the reading rather than trust it.
 {#tbl:pins}
 
-A pin is a reading, not a promise. `oph-fep-synergetics sources` reports `match`
-when the live checkout is at the pinned commit, `moved` when it has advanced,
-`absent` when the checkout is not present, and `unavailable` when Git cannot be
-queried. A `moved` result is not a failure: it says the reading is historical.
+The pin records the commit used for the reading. With `--vault-root`,
+`oph-fep-synergetics sources` reports `match` for the pinned commit, `moved`
+for a different commit, `absent` for a path without Git metadata, and
+`unavailable` for an unreadable checkout or HEAD. Without a vault root the
+command reports the recorded pins and leaves the live checks unavailable.
 
 ## The commands
 
 ```bash
+# install the locked test and figure environment
+uv sync --locked --extra dev --extra figures
+
 # the suite, and the coverage gate (90% branch minimum)
 .venv/bin/python -m pytest tests/ --cov --cov-report=term-missing
 
@@ -66,49 +69,47 @@ queried. A `moved` result is not a failure: it says the reading is historical.
 # the pins, checked against the live checkouts
 .venv/bin/oph-fep-synergetics sources --vault-root /path/to/vault
 
-# the figures and their accessibility registry
-.venv/bin/python scripts/make_figures.py
-
 # the generated reference documents
 .venv/bin/python scripts/render_docs.py --check
 
-# the manuscript tokens, then the PDF; both run from the template checkout
-cd /path/to/template
-TEMPLATE_REPO_ROOT=$PWD .venv/bin/python /path/to/project/scripts/z_generate_manuscript_variables.py
-.venv/bin/python scripts/pipeline/stage_03_render.py --project working/OPH-FEP-Synergetics --skip-manuscript-hydration
+# generate figures and tokens, render the PDF, and check it against the render log
+.venv/bin/python scripts/build.py --template-root /path/to/template
 ```
 
 : The reproduction commands, in order. The plain `verify` runs all
 {{REGISTRY_ENTRIES}} probes; `--pair` runs one ledger, of
 {{REGISTRY_OPH_FEP}}, {{REGISTRY_SYNERGETICS_OPH}},
 {{REGISTRY_FEP_SYNERGETICS}} and {{REGISTRY_THREE_WAY}} claims respectively, and
-`--json` writes the same report as machine-readable values. The last two commands
-run from the `docxology/template` checkout, because the rendering infrastructure
-lives there. {#tbl:commands}
+`--json` writes the same report as machine-readable values. The build command
+uses the renderer and interpreter in the selected template checkout.
+{#tbl:commands}
 
 ## Environment
 
-The package depends on `numpy` and on nothing else at run time; the test and
-figure extras add `pytest`, `pytest-cov` and `matplotlib`. The supported
-interpreters and library versions are the lower bounds in `pyproject.toml`
-(`CPython >= 3.12`, `numpy >= 1.24`), and `scripts/build.py` prints the
-interpreter and numpy versions of the run that produced a given PDF. Every exact
-value -- the counts, the ranks, the tetravolume table, the icosahedron's volume in
-$\mathbb{Q}(\sqrt{5})$ -- is computed in Python's `fractions` arithmetic and does
-not depend on the numpy version. The suite has no network dependency; the
-provenance check reads the local checkouts with `git rev-parse` and reports
-`absent` when they are not mounted.
+NumPy is the runtime dependency. The test and figure extras add `pytest`,
+`pytest-cov` and Matplotlib. `pyproject.toml` declares the supported Python
+range and dependency bounds. `uv.lock` records the Python dependency
+resolution, and `uv sync --locked` checks its consistency with the project
+metadata. Platform and interpreter markers determine which locked packages
+are installed. A `pip` install resolves the declared bounds independently.
 
-The rendering toolchain is `Pandoc 3.13` with `pandoc-crossref` and a TeX Live
-installation. The template's own documentation records the full toolchain
-[@template]; this section records only what the manuscript needs.
+The suite runs offline once the dependencies and tools are installed.
+The exact geometry uses integer and rational arithmetic and the quadratic
+field implemented in the package. Gaussian calculations and numerical sheaf
+ranks use NumPy. The build prints the interpreter and NumPy versions for
+the run.
+
+Rendering also uses the separate `docxology/template` environment, Pandoc,
+`pandoc-crossref`, and LuaLaTeX with PDF tagging support [@template]. The
+figure registry supplies the embedded alternative descriptions. In the template checkout,
+`projects/working/OPH-FEP-Synergetics` must resolve to the project being
+built. The Python lock covers this project. The rendered PDF also depends on
+the template revision and the external toolchain.
 
 ## What a reader should check first
 
-A reader who wants to test the paper rather than read it should run three
-commands. `oph-fep-synergetics verify` reproduces every number in
-[@sec:correspondences], [@sec:disagreements] and [@sec:complementarities] and
-exits non-zero on any failure. `oph-fep-synergetics sources` shows whether the
-three readings are still current. And `pytest` shows whether the values the prose
-quotes are still the values the code returns, which is the property that makes
-this paper different from a summary of three literatures.
+Start with `oph-fep-synergetics verify` for the probe verdicts and computed
+values. Run `oph-fep-synergetics sources --vault-root /path/to/vault` to
+compare the recorded pins with local checkouts. Run the test suite to check
+the package and manuscript bindings, and use `scripts/build.py` to validate
+a fresh render.

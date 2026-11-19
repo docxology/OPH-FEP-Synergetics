@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add Bernhard Mueller as second author with affiliations to Pragma Research
+  and the Active Inference Institute.
+- Track the verified `uv.lock` and install its development and figure
+  dependencies in CI on both supported Python versions exercised there.
 - Add a README overview with one executable example for each pair of programs.
   Cite *Agreement and Surprise* at the results it supplies and distinguish
   those results from derivations and examples introduced here.

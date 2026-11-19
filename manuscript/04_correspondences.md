@@ -1,10 +1,9 @@
-# Agreement: the identifications each pairwise scope survives {#sec:correspondences}
+# Agreement: exact identities on the finite models {#sec:correspondences}
 
 The registry records {{REGISTRY_ISOMORPHISMS}} isomorphisms across the three
-pairwise scopes. This section states each one, gives the exact values the probe
-reports, and says what the identification does *not* cover. [@fig:registry] shows
-the whole registry at a glance, and [@fig:pair-triangles] shows the same registry
-split by the pair of programmes each claim relates.
+pairwise scopes. This section gives the values and assumptions behind each
+identity. [@fig:registry] shows the registry by kind and status.
+[@fig:pair-triangles] groups the entries by the programmes each claim relates.
 
 ![The registry as a matrix. Each row is one correspondence, coloured by kind
 (isomorphism, disagreement, complementarity) and marked by status (exact,
@@ -18,21 +17,15 @@ its statuses, computed from the registry the command line executes. The panels
 are drawn from `analysis/registry.py` by `scripts/make_figures.py`, so a scope
 that gains or loses a claim changes its triangle.](../output/figures/fig_pair_triangles.png){#fig:pair-triangles width=100%}
 
-## The port chart is a consequence, not a transcription {#sec:port-chart}
+## Recovering the port chart from faces {#sec:port-chart}
 
-[@prop:carrier] is exact in the strongest sense available: the derivation returns
-{{CARRIER_PORTS}} ports, {{CARRIER_SEAMS}} seams and {{CARRIER_FACES}} faces; every
-degree is {{CARRIER_DEGREE}}; the twenty triangles of the derived graph are exactly the twenty
-oriented faces; and the derived adjacency equals the declared adjacency. The
-probe reports all six facts separately, so a failure of any one of them is
-visible rather than masked by the conjunction.
-
-This matters for a reason that is methodological rather than mathematical. A
-published table of adjacencies can be copied with a transposition and still
-produce a plausible graph. Deriving the graph from the faces, and then checking
-that its triangles reproduce the faces, closes the loop: a transposition
-anywhere in the source data would break the round trip. The same pattern is used
-wherever this package reads a table that has consequences.
+The derivation in [@prop:carrier] returns {{CARRIER_PORTS}} ports,
+{{CARRIER_SEAMS}} seams and {{CARRIER_FACES}} faces, with degree
+{{CARRIER_DEGREE}} at each port. The triangles of the derived graph match
+the vertex sets of the oriented source faces, and the derived adjacency
+matches the declared adjacency. The triangle check detects an extra or missing
+clique. The comparison with the declared, labelled adjacency is a separate
+check. Face orientation is checked separately in [@sec:symmetry].
 
 ## The spectrum is closed-form {#sec:spectrum}
 
@@ -48,21 +41,19 @@ $$
 \gamma \;=\; \frac{\lambda_1}{2\lvert E\rvert} \;=\; \frac{5-\sqrt{5}}{60} \;=\; {{CARRIER_SHELL_GAP}},
 $$ {#eq:gamma}
 
-gives a number that is invariant under rescaling and is the one that appears in
-the relaxation estimates below. The corresponding **repair chain** is the
-symmetric stochastic matrix
+gives the gap of the **mean repair operator**. For a uniform seam and a fair
+coin, the operator on port loads is the symmetric stochastic matrix
 
 $$
 P \;=\; I - \frac{L}{2\lvert E\rvert},
 $$ {#eq:chain}
 
-whose rows sum to one, whose entries are non-negative because every degree is at
-most $2\lvert E\rvert$, and whose second eigenvalue is $1-\gamma = {{CERTIFICATE_SECOND_EIGENVALUE}}$ — the
-`certificate-species` correspondence, reported by the probe as a row-stochastic,
-symmetric, non-negative matrix with exactly that second eigenvalue and induced
-infinity norm {{CERTIFICATE_INFINITY_NORM}}. The chain of [@eq:chain] is the natural object behind the phrase "the shell
-mixes at the spectral gap": its mixing is governed by $\gamma$, and $\gamma$ is a
-property of the carrier alone.
+whose rows sum to one and whose entries are non-negative. Its second eigenvalue
+is $1-\gamma = {{CERTIFICATE_SECOND_EIGENVALUE}}$ and its induced infinity
+norm is {{CERTIFICATE_INFINITY_NORM}}. These are the values checked by
+`certificate-species`. The operator acts on expected loads at ports. The
+binary-shell Markov kernel acts on distributions over configurations, and
+[@sec:pr01] checks its gap separately.
 
 The chain is also what the integer rule does on average, and the probe checks
 that on the rule itself. Averaging [@eq:repair] over every seam and both coins,
@@ -83,21 +74,15 @@ $\binom{12}{2}$ (two occupied ports out of twelve), which share no code with it.
 The check is worth having because the enumerated set is the one that the repair
 census below partitions.
 
-## The native repair law is reproduced, not approximated {#sec:repair-law}
+## The exact integer repair law {#sec:repair-law}
 
 The `native-repair-law` correspondence reimplements OPH's rule on exact integers
 and checks it over all {{SHELL_TRANSITIONS}} transitions of the
-{{SHELL_TOTAL_TWO}}-state shell. The rule itself is [@eq:repair]; the closed form
-for the energy drop is $\Delta E = -\bigl(d^{2} - (\lvert d\rvert \bmod 2)\bigr)/4$, reported
-by the probe as a string so that the formula, and not merely a sample of its
-values, is part of the record.
-
-The reimplementation is exact in the sense that matters: it is not a numerical
-approximation of OPH's rule but the same integer arithmetic, and the energy
-identity is checked rather than assumed. What the correspondence does *not* say
-is that OPH's rule is the right dynamics; that is an empirical question, and
-OPH's own status document records that no retained laboratory comparison selects
-a native record law [@oph].
+{{SHELL_TOTAL_TWO}}-state shell. For [@eq:repair], the energy decrease
+$E(x)-E(x')$ is $\bigl(d^{2} - (\lvert d\rvert \bmod 2)\bigr)/4$.
+The probe compares that formula with the energy computed before and after the
+update. OPH records the selection of a native record law by laboratory
+comparison as an open empirical question [@oph].
 
 ::: {#prop:ve .proposition}
 Let $L$ be the carrier Laplacian partitioned into recorded ports $o$ and free
@@ -177,11 +162,12 @@ case and `{{CONDITIONING_SURPRISAL_SETTLED}}` in the second. Evaluated on
 coin above that minimum, and a rule that always waits or always swaps pays
 `{{CONDITIONING_DETERMINISTIC_EXCESS}}`.
 
-Because $K_e$ is a conditional expectation of $u$, every law $p$ on the shell
-obeys $D(p\,\|\,u) = D(p\,\|\,pK_e) + D(pK_e\,\|\,u)$. Each repair lowers the
-relative entropy to the reference by exactly $D(p\,\|\,pK_e)$, which the probe
-checks on a mixed state for every seam. OPH states both facts for the binary
-shell [@oph; @mueller2026observers].
+Every law $p$ on the shell obeys
+$D(p\,\|\,u) = D(p\,\|\,pK_e) + D(pK_e\,\|\,u)$.
+Within each fibre, $pK_e$ has the probability mass of $p$ and the
+conditional distribution of $u$. Splitting the logarithm of $p/u$
+proves the identity. The probe checks it on a mixed state for every seam.
+The conditioning interpretation is recorded as OPH premise `PR-07` [@oph].
 
 The status is `exact-on-domain`, and the probe asserts the boundary. With the
 uniform law on all {{SHELL_TOTAL_TWO}} configurations as reference the identity
@@ -372,7 +358,8 @@ declared orientation used by the rotation and reflection count [@prop:symmetry].
 The automorphism group of the carrier has order {{SYMMETRY_GROUP_ORDER}}, is
 closed under composition, and acts transitively on the {{CARRIER_PORTS}} ports,
 the {{CARRIER_SEAMS}} seams and the {{CARRIER_FACES}} faces. It splits into
-{{SYMMETRY_ROTATIONS}} rotations and {{SYMMETRY_REFLECTIONS}} reflections, and
+{{SYMMETRY_ROTATIONS}} rotations and {{SYMMETRY_REFLECTIONS}}
+orientation-reversing symmetries, and
 the Laplacian eigenspaces of dimensions {{SYMMETRY_EIGENSPACE_DIMENSIONS}} are irreducible under
 it. Across all group elements and all {{SYMMETRY_CONFIGURATIONS}} total-two
 configurations, the multiset of descent outcomes takes
@@ -382,39 +369,29 @@ configurations.
 
 The probe reports each part separately: the group order from an exhaustive
 backtracking search, closure under composition, the orbit decomposition of ports,
-seams and faces, the split into rotations and reflections, the orbit ranks and
+seams and faces, the orientation split, the orbit ranks and
 commutant dimensions of the three nontrivial eigenspaces against their
 dimensions, and the equivariance of
 the descent law over the full product of ${{SYMMETRY_GROUP_ORDER}}$ group
 elements and ${{SYMMETRY_CONFIGURATIONS}}$ configurations.
 
-Three readings follow, and they are the reason this correspondence is in the
-registry rather than in an appendix. First, the symmetry is a symmetry of the
-*object*, so any claim about the carrier that is not group-invariant is a claim
-about a labelling. Second, the eigenspaces being irreducible means the
-multiplicities {{SYMMETRY_EIGENSPACE_DIMENSIONS}} are forced: they are the
-dimensions of the icosahedral group's representations, so no perturbation that
-keeps the symmetry can change the multiplicity pattern. The eigenvalues are not
-forced: the permutation representation is multiplicity-free, so every invariant
-symmetric matrix has these eigenspaces, each with its own value. Third, and most
-useful for this paper, the repair law is equivariant transition by transition:
-for every group element, configuration, oriented seam and coin, repairing the
-relabelled configuration on the relabelled seam gives the relabelled result, so
-the multiset of outcomes is preserved, and the probe finds no witness that would
-break it. The census numbers in
-[@sec:pr01] are therefore invariants, and the {{SYMMETRY_ORBITS}} orbits are the
-right unit of analysis. The registry carries this section as three entries:
+The permutation representation is multiplicity-free. An invariant symmetric
+operator acts as a scalar on each irreducible subspace. The subspace dimensions
+{{SYMMETRY_EIGENSPACE_DIMENSIONS}} are fixed, and the eigenvalues can vary or
+coincide across subspaces. The repair rule also commutes with relabelling. For
+each group element, configuration, oriented seam and coin, repairing the
+relabelled state and seam gives the relabelled result of the original repair.
+The descent outcome multiset in [@sec:pr01] is therefore constant within each
+of the {{SYMMETRY_ORBITS}} configuration orbits. The registry records these
+checks in
 `icosahedral-symmetry`, `eigenspace-irreducibility` and `law-equivariance`.
 
-The rotation and reflection counts require the orientation of the faces, and that
-detail is a correction worth reporting. Testing orientation by the set of
-directed edges of a face fails on a closed surface, because such a set already
-contains every edge in both directions; the test used here compares the cyclic
-order of each face, rotated so that its smallest port leads, and only then does it
-separate {{SYMMETRY_ROTATIONS}} rotations from
-{{SYMMETRY_REFLECTIONS}} reflections.
+To test orientation, the probe compares the cyclic order of each face up to
+cyclic permutation. The union of directed edges would lose the distinction
+because each seam occurs in both directions on the closed surface. The
+orientation-reversing class includes central inversion.
 
-## Information cost is the synergetic metric over two {#sec:kl-metric}
+## Gaussian divergence from squared lattice distance {#sec:kl-metric}
 
 ::: {#prop:kl .proposition}
 For two Gaussians of equal covariance $\Sigma$ centred at the origin and at a
@@ -437,18 +414,13 @@ The probe reports the divergence for each of the twelve neighbour moves, the
 squared distance of a move, and the costs of the sites $k\,m$ for the first four
 multiples [@kullback1951information].
 
-This is the shortest of the identifications and the one with the widest reach,
-because it is the only place in the registry where the FEP's own currency and
-Synergetics' own metric are the same function. The lattice supplies the distances;
-the divergence turns them into costs; and because every squared distance between
-lattice sites is a multiple of eight in this embedding, every cost is an integer
-number of nats, a multiple of four. The number four is a statement about the
-unit of length, not about the lattice: rescaling the covariance rescales every
-cost by the same factor, and with the covariance equal to the squared prime
-vector one step costs half a nat. What the identification fixes is the ratio of
-costs, which is the ratio of squared distances. It also fixes a convention that
-the paper uses everywhere else: a "one-step cost" is a divergence, not an energy,
-and the two differ by the factor of two that [@eq:kl] makes explicit.
+At unit covariance in the default embedding, each lattice displacement gives
+an integer multiple of the neighbour divergence. Rescaling an isotropic
+covariance rescales each divergence inversely and preserves their ratios.
+Taking the variance per coordinate equal to the squared prime-vector length
+gives half a nat for a neighbour displacement. The quadratic sequence in
+[@prop:kl] compares endpoints along a ray. Additive path costs would give a
+linear sequence instead.
 
 ## The carrier's subgraphs are the solid's own counts {#sec:census}
 
@@ -494,15 +466,13 @@ against the surface Euler characteristic {{SHEAF_SURFACE_EULER_CHARACTERISTIC}}
 that the cohomology of [@prop:cohomology] reaches from the other direction. OPH's derived chart is the icosahedron's triangulation, so the
 angular-defect accounting Synergetics supplies for that solid applies unchanged:
 the vertex figure the accounting measures is the very five-face figure every port
-carries. The identity is the reason twelve five-fold vertices close into
-a sphere rather than a dish, and it is exact for the same reason the tree number
-is: rational quantities over a finite complex. Registered as `angle-defect`.
+carries. The angle sum agrees with the Euler characteristic computed from
+the given spherical triangulation. Registered as `angle-defect`.
 
 ![The carrier read as a network. Panel one gives the exact resistance ladder between port pairs with the Kirchhoff index; panel two colours the twelve ports by their graph distance from one port and annotates the intersection array; panel three counts the subgraphs; panel four compares the twelve-around-one cell with its dual, whose counts and tetravolumes are read from the geometry package. Every number is computed from the executed package at draw time rather than transcribed.](../output/figures/fig_network.png){#fig:network width=100%}
 
-[@fig:network] draws this section and the two that follow it: the resistance
-ladder, the shells around a port, the census ([@prop:subgraph-census]), the
-defect ([@prop:defect]), and the dual pair.
+[@fig:network] links the resistance ladder, the shells around a port, the
+census ([@prop:subgraph-census]) and the dual pair ([@prop:dual-cells]).
 
 ## What the agreements do not say
 
@@ -521,6 +491,6 @@ reports them with the same care: a symmetry group of order
 integer, and a cohomology dimension is an exact rank. What none of them supplies
 is a claim that either programme's *learning* dynamics is the other's.
 
-The next section reports the places where an identification fails, and most of
-them fail for one reason: the authors of each programme attach a
-*dynamical* claim to that shared object, and the dynamical claims do not agree.
+The next section gives explicit counterexamples to proposed identifications.
+Several keep the same stationary law or equilibrium while changing the
+compatible dynamics.

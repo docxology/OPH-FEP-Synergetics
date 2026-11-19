@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "project": "oph-fep-synergetics",
-  "note": "Provenance pins for the three source programs this package maps. Every commit is the current upstream main, read with `git ls-remote` and `git rev-parse` on 2026-11-13, and every cited identifier below was re-read at that commit; the pins are point-in-time, not perpetual. Line references are relative to the pinned commit. This project relicenses nothing: each source keeps its own terms and the package cites rather than copies.",
+  "note": "Provenance pins for the three source programs this package maps. Each pin records upstream main as observed with git ls-remote and git rev-parse on 2026-11-13. The cited identifiers and line ranges refer to those revisions. Each source retains its original licence terms.",
   "sources": [
     {
       "id": "oph",
@@ -76,7 +76,7 @@
           "path": "docs/EMPIRICAL_STATUS.md",
           "lines": "3",
           "symbol": "empirical status",
-          "role": "'No retained laboratory comparison selects a native record law.'"
+          "role": "the reported absence of a retained laboratory comparison that selects among native record laws"
         },
         {
           "kind": "markdown",

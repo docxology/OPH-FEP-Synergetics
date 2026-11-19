@@ -1,30 +1,30 @@
-# The three programs and the one object they share, stated in their own vocabularies {#sec:framework}
+# Carrier and comparison models {#sec:framework}
 
 ## The carrier
 
-All three programs, read charitably, make claims about one finite object: a
-twelve-vertex, thirty-edge, twenty-face complex. This section fixes that object
-and then states each program's mathematics on it.
+We start from OPH's finite icosahedral carrier. A Gaussian model on its graph
+provides the inference comparison. Synergetics supplies a lattice and a unit
+of volume for comparing the carrier's geometry with that of close packing.
 
 ::: {#def:carrier .definition}
-A **patch complex** is a finite simplicial complex $K=(V,E,F)$ with twelve
-vertices (*ports*), thirty edges (*seams*) and twenty triangular faces. A **load
-configuration** is a map $x\colon V\to\mathbb{Z}$; the *total load* is
-$\sum_{v} x_v$. A load configuration is **binary** when $x_v\in\{0,1\}$ for every
-port. The **carrier** is the specific complex whose twenty oriented faces are
-those of the regular icosahedron under the port chart of [@oph].
+The **carrier** is the simplicial complex $K=(V,E,F)$ whose oriented faces
+come from OPH's port chart of the regular icosahedron [@oph]. Its vertices
+are *ports*, and its edges are *seams*. A **load configuration** is a map
+$x\colon V\to\mathbb{Z}_{\geq 0}$ with total load $\sum_v x_v$. A
+configuration is **binary** when $x_v\in\{0,1\}$ for every port.
 :::
 
-The port chart is not decoration. OPH ships the twenty oriented faces, and the
-adjacency is a consequence of them: two ports are joined exactly when some face
-contains both. This package derives the adjacency that way and then asserts that
-the twenty triangles of the derived graph are exactly the twenty faces it started
-from, so a transcription error in either direction would be caught.
+OPH supplies the oriented faces. Two ports share a seam exactly when some face
+contains both. We derive the adjacency from that rule and compare the vertex
+sets of the resulting graph triangles with the supplied face vertex sets.
+The original face orientations also provide the input to the rotation census
+and the surface cohomology check.
 
 ::: {#prop:carrier .proposition}
-The graph obtained from OPH's twenty oriented faces is
+The graph obtained from OPH's oriented faces is
 {{CARRIER_DEGREE}}-regular on {{CARRIER_PORTS}} ports with {{CARRIER_SEAMS}} seams,
-and its {{CARRIER_FACES}} triangles are exactly the twenty generating faces.
+and the vertex sets of its {{CARRIER_FACES}} triangles are the generating
+face vertex sets.
 :::
 
 The adjacency that results is listed in [@tbl:adjacency]; it is reproduced here
@@ -41,17 +41,18 @@ will not reproduce any downstream number.
 | 4 | {{CARRIER_CHART_4}} | 10 | {{CARRIER_CHART_10}} |
 | 5 | {{CARRIER_CHART_5}} | 11 | {{CARRIER_CHART_11}} |
 
-: The derived carrier adjacency: every port meets {{CARRIER_DEGREE}} others, and the triangles
-of this graph are exactly OPH's twenty oriented faces. {#tbl:adjacency}
+: Each port in the derived graph has {{CARRIER_DEGREE}} neighbours. The graph
+triangles and OPH's faces have the same vertex sets. {#tbl:adjacency}
 
 The carrier's Laplacian is the standard graph Laplacian
-$L = 5I - A$, which is how OPH writes it, and its spectrum is closed-form. The
+$L = 5I - A$. Its spectrum is closed-form. The
 algebraic connectivity is $5-\sqrt{5}$ [@fiedler1973connectivity], and the gap
-normalised by the total degree $2\lvert E\rvert$ is $(5-\sqrt{5})/60$. In OPH's
-reading $L$ is not the energy the repair law lowers (that is [@eq:energy] below);
-it is the generator of the *mean* repair operator $I - L/(2\lvert E\rvert)$ and the
-quadratic form of the seam-disagreement energy
+normalised by the total degree $2\lvert E\rvert$ is $(5-\sqrt{5})/60$. A
+uniform seam and a fair coin give the *mean* repair operator
+$I - L/(2\lvert E\rvert)$ on port loads. The Laplacian also defines the
+seam-disagreement energy
 $\tfrac{1}{2}\sum_{\{a,b\}\in E}(x_a - x_b)^{2} = \tfrac{1}{2}x^{\top}Lx$.
+Individual repairs lower or preserve the load energy defined in [@eq:energy].
 
 ::: {#prop:spectrum .proposition}
 The carrier Laplacian has spectrum
@@ -111,9 +112,9 @@ which {{SHELL_BINARY}} are binary.
 
 ## FEP: a bound on surprisal
 
-The Free Energy Principle starts from a system with sensory states $o$ and
-internal states $s$, and a recognition density $q(s)$. The variational free
-energy is
+For a given record $o$, let $s$ be the latent state in a generative model with
+positive evidence $p(o)$. Take a recognition density $q(s)$ that is absolutely
+continuous with respect to the posterior. The variational free energy is
 
 $$
 \mathcal{F}[q] \;=\; \mathbb{E}_{q}\bigl[-\log p(o,s)\bigr]
@@ -121,10 +122,11 @@ $$
 \;=\; D_{\mathrm{KL}}\bigl[q(s)\,\|\,p(s\mid o)\bigr] \;-\; \log p(o),
 $$ {#eq:vfe}
 
-so that minimising $\mathcal{F}$ over $q$ at fixed $o$ is minimising a divergence,
-and $-\mathcal{F}$ is a lower bound on the log evidence, the evidence lower bound
-[@friston2010; @friston2007synthese]. The bound is tight exactly when the
-recognition density is the posterior; the residual is the divergence.
+so minimising $\mathcal{F}$ at fixed $o$ minimises the divergence to the
+posterior. The negative free energy is a lower bound on the log evidence
+[@friston2010; @friston2007synthese]. It is tight exactly at the posterior.
+If the recognition family excludes the posterior, the residual divergence
+measures the gap.
 
 In the linear-Gaussian construction, partition the carrier Laplacian $L$ into
 recorded ports $o$ and free ports $x$. The seam energy is
@@ -154,33 +156,33 @@ $$
 p(i,e\mid b) \;=\; p(i\mid b)\,p(e\mid b).
 $$ {#eq:blanket}
 
-[@eq:blanket] is a statement about a probability distribution. It becomes a
-statement about dynamics only under further conditions, which is the content of
-[@prop:stationary].
+Equation [@eq:blanket] constrains the probability distribution. In the
+stationary control in [@prop:stationary], a family of distinct drifts
+preserves the same distribution and blanket.
 
 ## Synergetics: tetravolume accounting
 
-Synergetics replaces Cartesian coordinates with four signed counts whose sum is
-free, the **quadray** coordinates [@eq:quadray]. A quadray $q=(a,b,c,d)$ is an equivalence
-class,
+**Quadray** coordinates represent a point by four components with a common
+offset. The representation identifies any tuples related by
 
 $$
 (a,b,c,d) \;\sim\; (a+t,\,b+t,\,c+t,\,d+t) \qquad \text{for every } t\in\mathbb{R},
 $$ {#eq:quadray}
 
-so that a point is determined by differences. In the default embedding the four
-axes map to the vertices `(1, 1, 1)`, `(-1, 1, -1)`, `(-1, -1, 1)` and
-`(1, -1, -1)` of a regular tetrahedron, and in the integer lattice the twelve nearest neighbours of
-the origin are the distinct permutations of $(2,1,1,0)$:
+so component differences determine the point. The four axes map to
+`(1, 1, 1)`, `(-1, 1, -1)`, `(-1, -1, 1)` and `(1, -1, -1)`, the
+vertices of a regular tetrahedron. In the IVM sublattice, the nearest neighbours
+of the origin are the distinct permutations of $(2,1,1,0)$.
 
 $$
 \mathcal{N} \;=\; \bigl\{\,\pi(2,1,1,0) \;:\; \pi \text{ a permutation}\,\bigr\},
 \qquad \lvert\mathcal{N}\rvert = {{IVM_NEIGHBOR_MOVES}} .
 $$ {#eq:neighbours}
 
-This is the twelve-around-one configuration, the *vector equilibrium* of
-Synergetics and the kissing configuration of the A3 root lattice, the
-face-centred cubic lattice [@conway1999sphere; @schutte1953dreizehn]. The
+The neighbour moves generate the IVM sublattice of integer quadrays. The first
+shell is the *vector equilibrium* of Synergetics and the kissing arrangement
+of the A3 root lattice, the face-centred cubic lattice
+[@conway1999sphere; @schutte1953dreizehn]. The
 neighbours are at squared distance {{IVM_NEIGHBOR_SQUARED_DISTANCE}} in the
 default embedding, so this embedding's unit of length is half the edge of the
 cube whose face diagonals are the neighbour moves; every Euclidean number below
@@ -230,43 +232,27 @@ coordination shells of $10k^{2}+2$ sites with cumulative counts
 `{{IVM_VOLUME_RATIOS}}`, each derived exactly.
 :::
 
-## One object, three vocabularies, and a dictionary this paper tests
+## Objects compared by the probes
 
-[@tbl:vocabulary] states the translation the rest of the paper tests. It is a
-dictionary, not an argument: each row asserts that two terms denote the same
-mathematical object, and [@sec:correspondences] reports whether the assertion
-survives execution.
+The OPH carrier, its Gaussian models, and the IVM lattice play different roles.
+Each row of [@tbl:vocabulary] names the mathematical object and the assumptions
+that make the comparison possible.
 
-| OPH | FEP | Synergetics | probed by |
-|:----|:----|:------------|:----------|
-| port (patch) | coordinate of the generative model | quadray site | `carrier-port-chart` |
-| seam | edge of the precision graph | IVM neighbour move | `gmrf-independence`, `kl-lattice-metric` |
-| load configuration | state of the recognition density | site occupancy | `shell-counts` |
-| seam repair | variational update | local re-accounting | `native-repair-law`, `variational-equivalence` |
-| total load | conserved quantity of the dynamics | no counterpart: a load total is not a shell frequency | `native-repair-law`, `shell-counts` |
-| \{{{CARRIER_PORTS}}, {{CARRIER_SEAMS}}, {{CARRIER_FACES}}\} carrier | blanket-structured precision graph | icosahedron on the IVM | `carrier-port-chart`, `gmrf-independence`, `kissing-twelve` |
-| carrier automorphisms | symmetries of the precision | icosahedral group of order {{SYMMETRY_GROUP_ORDER}} | `icosahedral-symmetry` |
-| obstructed seam cycles | frustrated cycle space of the precision | cycle rank {{SHEAF_H1}} for the identity sheaf | `sheaf-cohomology` |
-| one shell step | one divergence step of {{KL_ONE_STEP}} nats | one move of squared distance {{KL_STEP_SQUARED_DISTANCE}} | `kl-lattice-metric`, `tetravolume-arithmetic` |
-| the carrier's twenty faces | faces of the simplicial complex | icosahedron of {{ICOSAHEDRON_TETRAVOLUME}} tetravolumes | `subgraph-census`, `icosahedron-tetravolume` |
-| the twelve-around-one cell | neighbourhood of one coordinate | rhombic dodecahedron of {{PACKING_CELL_TETRAVOLUME}} tetravolumes | `packing-density`, `dual-cells` |
+| Object | Relation tested | Registry probes |
+|:-------|:----------------|:----------------|
+| Carrier ports and seams | Port coordinates index Gaussian variables on the carrier. In the diagonally shifted proper Gaussian, seams are conditional dependencies. | `carrier-port-chart`, `gmrf-independence` |
+| Carrier Laplacian | It determines the mean load update on ports and the precision blocks of a grounded Gaussian model. | `spectral-gap`, `variational-equivalence` |
+| Repair of a fixed seam | With the uniform binary-shell reference, the native transition law is the reference conditioned on the preserved record. | `repair-is-conditioning` |
+| Carrier scalar sheaf | Its agreement Laplacian is the graph Laplacian, and its first cohomology records seam assignments modulo coboundaries. | `sheaf-agreement`, `sheaf-cohomology` |
+| Carrier solid and IVM vector equilibrium | Both are kissing arrangements. Their outer contacts, graphs and volumes distinguish them. | `kissing-twelve`, `cuboctahedron-vs-icosahedron` |
+| IVM nearest-neighbour displacement | At unit covariance, the Gaussian divergence is {{KL_ONE_STEP}} nats for squared displacement {{KL_STEP_SQUARED_DISTANCE}}. | `kl-lattice-metric` |
+| Carrier solid and IVM Voronoi cell | Both volumes use the same tetrahedral unit. The carrier volume is algebraic and the cell has an integral tetravolume. | `icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic` |
 
-: The vocabulary dictionary this paper tests. Each row is a claim, and the last
-column names the registry entries whose probes execute it;
-[@sec:correspondences] reports the verdicts. The last two rows are the ones where
-the dictionary is least conservative, because a solid is not a graph: the
-agreements there are statements about the same geometry read from different
-constructions, and [@sec:cuboctahedron] reports where reading them as the same
-solid fails. {#tbl:vocabulary}
+: Finite objects, the relations tested, and the probes that report the
+evidence. {#tbl:vocabulary}
 
-The dictionary is deliberately conservative. It does not say that a port *is* a
-quadray site, only that the two play the same role in the three formalisms and
-that the resulting numbers must therefore agree where both are defined. Where the
-numbers do not agree, [@sec:disagreements] says so. The carrier's counting
-invariants — {{CARRIER_TREE_NUMBER}} spanning trees,
-{{SHEAF_H1}} sheaf obstructions, {{SYMMETRY_GROUP_ORDER}} automorphisms, and a
-census of {{CARRIER_TRIANGLES}} triangles, {{CARRIER_PENTAGONS}} five-cycles,
-{{CARRIER_PERFECT_MATCHINGS}} matchings and {{CARRIER_HAMILTONIAN_CYCLES}}
-Hamiltonian cycles — are derived from the same complex in
-[@sec:correspondences], and each of them is a statement that two vocabularies
-inherit rather than assert.
+An OPH port describes a boundary coordinate of the local carrier. A Gaussian
+blanket in these probes is a set of coordinates of a chosen precision model.
+The IVM site belongs to the independently defined lattice. The comparisons
+use adjacency, transition laws, or metrics with the assumptions shown above
+[@sec:correspondences; @sec:disagreements].

@@ -968,14 +968,13 @@ def contraction_displacement_bounds(rate: float, disagreement: float) -> dict[st
 
 
 def replicator_asymmetric_control(points: int = 25, seed: int = 7) -> dict[str, object]:
-    """The potential reading needs a symmetric payoff, and fails without one.
+    """Compare the payoff-quadratic gradient for two fixed payoff matrices.
 
     For a symmetric payoff ``A`` the replicator field equals ``M(x) grad F`` with
-    ``F = (1/2) x^T A x`` at every interior point; the check runs over a fixed
-    grid of points.  For a non-symmetric payoff the field is still ``M(x) A x``,
-    but ``grad F = (1/2)(A + A^T) x`` no longer reproduces it, so the claim that
-    selection climbs a potential is a statement about symmetric (partnership)
-    games and not about selection in general.
+    ``F = (1/2) x^T A x`` at every interior point. The control samples interior
+    points with a fixed seed. Its ``asymmetric_not_gradient`` result means the
+    selected asymmetric matrix fails the test against this particular ``F``
+    at every sampled point.
     """
     rng = np.random.default_rng(seed)
     symmetric = np.array([[0.0, 1.0, -1.0], [1.0, 0.0, 2.0], [-1.0, 2.0, 0.0]])
