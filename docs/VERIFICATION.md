@@ -72,7 +72,14 @@ identity.
 `pyproject.toml` enforces `fail_under = 90` with branch coverage over
 `src/oph_fep_synergetics`. The command above reports the current result and any
 uncovered statements or branches. GitHub Actions runs the same gate on the
-oldest supported Python and on Python 3.14.
+oldest supported Python and on Python 3.14. It installs the runtime, test,
+and figure dependencies from `uv.lock` and checks the packaged source register
+from outside the checkout.
+
+```sh
+uv lock --check
+uv sync --locked --extra dev --extra figures
+```
 
 ## Generated documents
 
