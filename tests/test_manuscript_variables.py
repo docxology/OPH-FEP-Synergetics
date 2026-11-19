@@ -339,12 +339,19 @@ def test_control_values_match_the_executed_controls():
 def test_orbit_values_separate_the_source_bound_from_the_measured():
     radius = _value("two_node.relaxation_min_radius")
     period = _value("two_node.relaxation_period")
+    radius_estimate = _value("two_node.relaxation_min_radius_measured")
+    period_estimate = _value("two_node.relaxation_period_measured")
+    synchronous_sample = _value("two_node.sync_min_radius")
+
     assert radius.value == 0.84
     assert period.value == 7.58
-    assert radius.note and "measured" in radius.note
-    assert period.note and "measured" in period.note
-    assert _value("two_node.sync_min_radius").value == 1.0
-    assert "different object" in _value("two_node.sync_min_radius").note
+    assert all("Agreement and Surprise" in value.source for value in (radius, period))
+    assert all(value.source.startswith("two_node_relaxation_orbit")
+               for value in (radius_estimate, period_estimate))
+    assert radius_estimate.value >= radius.value
+    assert period_estimate.value == pytest.approx(period.value, abs=0.05)
+    assert synchronous_sample.value == 1.0
+    assert synchronous_sample.source == "two_node_orbit_min_radius"
 
 
 def test_ivm_values_match_the_geometry_module():
