@@ -1259,6 +1259,7 @@ def _probe_quadray_ivm() -> tuple[bool, dict]:
     enumerated = tuple(len(geometry.generate_shell(k)) for k in range(5))
     cumulative = tuple(int(geometry.cumulative_count(k)) for k in range(5))
     ratios = sorted(float(value) for value in geometry.VOLUME_RATIOS.values())
+    derived_volumes = geometry.derived_volume_ratios()
     values = {
         "neighbor_moves": len(moves),
         "distinct_moves": len(set(moves)),
@@ -1269,9 +1270,9 @@ def _probe_quadray_ivm() -> tuple[bool, dict]:
         "cumulative_counts": cumulative,
         "volume_ratios_present": ratios,
         "volume_ratios_derived": {
-            name: str(value) for name, value in sorted(geometry.derived_volume_ratios().items())
+            name: str(value) for name, value in sorted(derived_volumes.items())
         },
-        "derived_table_equals_declared": geometry.derived_volume_ratios() == geometry.VOLUME_RATIOS,
+        "derived_table_equals_declared": derived_volumes == geometry.VOLUME_RATIOS,
         "max_shell": geometry.MAX_SHELL,
         "neighbor_squared_distance": geometry.NEIGHBOR_SQUARED_DISTANCE,
     }
@@ -1470,7 +1471,8 @@ def _probe_tetravolume_arithmetic() -> tuple[bool, dict]:
     kl = free_energy_module.gaussian_kl(origin, identity, geometry.to_xyz(move), identity)
     measured = dict(geometry.icosahedron_tetravolume())
     density = dict(geometry.packing_density())
-    table = {name: str(value) for name, value in sorted(geometry.derived_volume_ratios().items())}
+    derived_volumes = geometry.derived_volume_ratios()
+    table = {name: str(value) for name, value in sorted(derived_volumes.items())}
     exact_ico = geometry.icosahedron_tetravolume_exact()
     values = {
         "fep_currency": "nats",
@@ -1486,10 +1488,9 @@ def _probe_tetravolume_arithmetic() -> tuple[bool, dict]:
         "synergetics_currency": "tetravolumes of the prime vector",
         "synergetics_table": table,
         "synergetics_table_is_integral": all(
-            value.denominator == 1 for value in geometry.derived_volume_ratios().values()
+            value.denominator == 1 for value in derived_volumes.values()
         ),
-        "synergetics_table_derived_exactly": geometry.derived_volume_ratios()
-        == geometry.VOLUME_RATIOS,
+        "synergetics_table_derived_exactly": derived_volumes == geometry.VOLUME_RATIOS,
         "synergetics_icosahedron_exact": f"sqrt 2 ({exact_ico['sqrt2_coefficient']})",
         "synergetics_icosahedron_tetravolume": float(measured["tetravolume"]),
         "synergetics_icosahedron_is_integral": measured["integral"],

@@ -65,8 +65,11 @@ def test_the_unit_tetrahedron_has_volume_eight_thirds():
 
 
 def test_every_table_entry_is_derived_from_its_vertex_set():
+    volumes = derived_volume_ratios()
+    assert volumes == VOLUME_RATIOS
+    assert all(value.denominator == 1 for value in volumes.values())
+    volumes.clear()
     assert derived_volume_ratios() == VOLUME_RATIOS
-    assert all(value.denominator == 1 for value in derived_volume_ratios().values())
 
 
 @pytest.mark.parametrize(

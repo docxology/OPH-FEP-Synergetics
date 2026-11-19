@@ -352,12 +352,18 @@ def derived_volume_ratios() -> dict[str, Fraction]:
     """Return each table solid's tetravolume, computed exactly from its vertices.
 
     The volume is exact and the unit tetrahedron of the prime vector has volume
-    ``8/3``, so each entry is a rational number with no rounding anywhere.
+    ``8/3``, so each entry is a rational number. Callers get a fresh dictionary
+    made from the cached exact volumes.
     """
-    return {
-        name: Fraction(convex_volume(vertices)) / IVM_TETRA_UNIT  # type: ignore[arg-type]
+    return dict(_derived_volume_entries())
+
+
+@functools.cache
+def _derived_volume_entries() -> tuple[tuple[str, Fraction], ...]:
+    return tuple(
+        (name, Fraction(convex_volume(vertices)) / IVM_TETRA_UNIT)  # type: ignore[arg-type]
         for name, vertices in ivm_solid_vertices().items()
-    }
+    )
 
 
 def exact_icosahedron_vertices() -> tuple[Point, ...]:

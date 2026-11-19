@@ -12,7 +12,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
@@ -36,8 +36,9 @@ jobs:
       - name: Check the installed source register
         working-directory: ${{ runner.temp }}
         run: oph-fep-synergetics sources --json
-      - name: Test, verify probes and check generated docs
-        run: |
-          python -m pytest tests/ --cov --cov-report=term-missing
-          oph-fep-synergetics verify
-          python scripts/render_docs.py --check
+      - name: Run tests and check coverage
+        run: python -m pytest tests/ --cov --cov-report=term-missing
+      - name: Verify correspondence probes
+        run: oph-fep-synergetics verify
+      - name: Check generated docs
+        run: python scripts/render_docs.py --check

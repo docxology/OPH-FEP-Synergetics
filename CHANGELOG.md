@@ -28,6 +28,8 @@
   in integers, including at scales beyond floating-point precision.
 - Reject empty correspondence selections, distinguish absent pins from
   unavailable HEADs, and check for unresolved references in the rendered PDF.
+- Reuse exact tetravolume derivations within a run and report tests, probes,
+  and generated documents as distinct CI steps.
 
 Corrections (a claim was wrong):
 
