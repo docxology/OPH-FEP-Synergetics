@@ -28,6 +28,7 @@ from typing import Iterator
 from .quadray import (
     EMBEDDING,
     Quadray,
+    _to_xyz_int,
     neighbor_moves,
     neighbor_sites,
     squared_distance,
@@ -164,7 +165,7 @@ def cuboctahedral_gauge(point: Quadray | tuple[int, int, int, int]) -> int:
     checked against the breadth-first shells; it is not used to build them.
     """
     quadray = Quadray(*point) if not isinstance(point, Quadray) else point
-    xyz = [int(round(value)) for value in to_xyz(quadray)]
+    xyz = _to_xyz_int(quadray)
     if any(value % 2 for value in xyz):
         raise ValueError("an IVM site has even coordinates in the default embedding")
     halved = [value // 2 for value in xyz]

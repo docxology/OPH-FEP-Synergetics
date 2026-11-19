@@ -23,10 +23,9 @@ Exit codes:
 | --- | --- |
 | `0` | every selected probe passed |
 | `1` | at least one selected probe failed |
-| `2` | an unknown key, pair or kind was requested |
+| `2` | a filter was unknown or the filters selected no probes |
 
-An unknown key is an error rather than an empty selection, so a typo cannot be
-mistaken for a clean run.
+When combining filters, the probes must match every specified filter.
 
 ## The suite
 
@@ -35,7 +34,7 @@ mistaken for a clean run.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-406 tests. The suite runs offline from a fresh process and exercises the actual
+420 tests. The suite runs offline from a fresh process and exercises the actual
 scientific code paths.
 
 | file | what it pins down |
@@ -124,7 +123,7 @@ suite rather than in LaTeX, so a defect is reported by `pytest`:
 | `test_the_registry_table_lists_exactly_the_registered_keys` | a manuscript registry table that drifts from `analysis/registry.py` |
 | `test_figure_links_match_the_accessibility_registry` | a figure link without a registry entry, or a missing PNG |
 | `test_figures.py` | a builder that is not orchestrated, or a registry entry without alt text |
-| `test_render_contract.py` | a PDF with misplaced front matter, missing panel captions or registry keys, or a left margin over the check's 0.6 in limit. Separate tests cover LaTeX log diagnostics. |
+| `test_render_contract.py` | PDF front matter, panel captions, registry keys, printed reference placeholders and the 0.6 in left-margin limit, plus LaTeX log diagnostics |
 
 The [tracked PDF](../output/pdf/OPH-FEP-Synergetics_combined.pdf) places the
 cover on page 1, the four graphical-abstract panels and their captions on

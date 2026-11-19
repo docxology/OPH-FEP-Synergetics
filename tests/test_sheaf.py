@@ -43,6 +43,8 @@ def test_a_chain_needs_at_least_one_node():
     with pytest.raises(ValueError):
         linear_chain_sheaf(0)
     assert linear_chain_sheaf(1).edges == ()
+    with pytest.raises(ValueError, match="finite and nonnegative"):
+        linear_chain_sheaf(2, edge_weight=-1.0)
 
 
 def test_coboundary_is_the_stacked_disagreement():
@@ -78,6 +80,8 @@ def test_pack_and_unpack_round_trip():
     assert all(np.allclose(a, b) for a, b in zip(sheaf.unpack(packed), nodes))
     with pytest.raises(ValueError):
         sheaf.pack(nodes[:2])
+    with pytest.raises(ValueError, match="stalk dimension"):
+        sheaf.pack((np.zeros(2), np.zeros(0), np.zeros(1)))
     with pytest.raises(ValueError):
         sheaf.unpack(np.zeros(4))
     with pytest.raises(ValueError):
@@ -149,12 +153,25 @@ def test_diffusion_converges_to_the_harmonic_extension():
     assert np.allclose(final, [0.0, 1.0, 2.0], atol=1e-6)
 
 
+def test_diffusion_clamps_records_before_its_first_update():
+    sheaf = linear_chain_sheaf(3)
+    initial = np.array([-100.0, 0.0, 100.0])
+    observations = {0: [0.0], 2: [2.0]}
+    assert np.allclose(sheaf.diffuse(initial, observations, steps=0), [0.0, 0.0, 2.0])
+    assert np.allclose(sheaf.diffuse(initial, observations, steps=1), [0.0, 0.2, 2.0])
+    assert np.allclose(initial, [-100.0, 0.0, 100.0])
+
+
 def test_diffusion_rejects_bad_arguments():
     sheaf = linear_chain_sheaf(3)
     with pytest.raises(ValueError):
         sheaf.diffuse(np.zeros(3), {}, steps=-1)
     with pytest.raises(ValueError):
         sheaf.diffuse(np.zeros(2), {})
+    with pytest.raises(IndexError):
+        sheaf.diffuse(np.zeros(3), {-1: [0.0]}, steps=0)
+    with pytest.raises(ValueError, match="wrong dimension"):
+        sheaf.diffuse(np.zeros(3), {0: [1.0, 2.0]}, steps=0)
 
 
 def test_sheaf_rejects_malformed_definitions():
@@ -172,6 +189,23 @@ def test_sheaf_rejects_malformed_definitions():
         CellularSheaf((1, 1), [EdgeRestriction(0, 1, np.zeros((2, 1)), np.zeros((1, 1)))])
     with pytest.raises(ValueError):
         CellularSheaf((1, 1), [EdgeRestriction(0, 1, np.zeros((1, 2)), np.zeros((1, 1)))])
+    with pytest.raises(ValueError, match="must be matrices"):
+        CellularSheaf((1, 1), [EdgeRestriction(0, 1, np.zeros((1, 1, 1)), np.zeros((1, 1)))])
+    with pytest.raises(ValueError, match="must be finite"):
+        CellularSheaf((1, 1), [EdgeRestriction(0, 1, np.array([[np.nan]]), np.eye(1))])
+
+
+def test_sheaf_operators_are_snapshots_of_the_restrictions():
+    edge = identity_edge()
+    sheaf = CellularSheaf((1, 1), [edge])
+    edge.map_u[0, 0] = 100.0
+    matrix = coboundary_matrix(sheaf)
+    assert np.array_equal(matrix, [[-1.0, 1.0]])
+    assert np.array_equal(matrix.T @ matrix, sheaf.laplacian())
+    with pytest.raises(ValueError, match="read-only"):
+        sheaf.edges[0].map_u[0, 0] = 100.0
+    with pytest.raises(ValueError, match="read-only"):
+        sheaf.laplacian()[0, 0] = 100.0
 
 
 def test_carrier_sheaf_reproduces_the_carrier_laplacian():
@@ -221,3 +255,16 @@ def test_chain_cohomology_dimensions():
     assert report["euler_characteristic"] == 1
     assert report["h0_minus_h1"] == 1
     assert report["laplacian_equals_coboundary_square"] is True
+
+
+def test_weak_restrictions_use_one_tolerance_for_rank_and_kernel():
+    sheaf = linear_chain_sheaf(2, edge_weight=1e-12)
+    report = cohomology_dimensions(sheaf)
+    assert report["coboundary_rank"] == 1
+    assert (report["h0"], report["h1"]) == (1, 0)
+    assert report["h0_minus_h1"] == report["euler_characteristic"] == 1
+    basis = sheaf.global_section_basis()
+    assert basis.shape == (2, 1)
+    assert np.allclose(coboundary_matrix(sheaf) @ basis, 0.0)
+    assert sheaf.record_injectivity([0])
+    assert not sheaf.record_injectivity([])

@@ -19,6 +19,7 @@ import math
 import random
 from dataclasses import dataclass
 from fractions import Fraction
+from operator import index
 from typing import Iterable, Sequence
 
 from .carrier import IcosahedralCarrier, icosahedral_carrier
@@ -38,17 +39,23 @@ class RepairStep:
     before: tuple[int, ...]
     after: tuple[int, ...]
     current: int
-    energy_before: float
-    energy_after: float
+    energy_before: Fraction
+    energy_after: Fraction
 
     @property
-    def energy_decrease(self) -> float:
+    def energy_decrease(self) -> Fraction:
         return self.energy_before - self.energy_after
 
 
-def energy(loads: Sequence[int]) -> float:
-    """The quadratic seam energy ``sum(x_i^2) / 2``."""
-    return sum(x * x for x in loads) / 2.0
+def energy(loads: Sequence[int]) -> Fraction:
+    """The exact quadratic load energy ``sum(x_i^2) / 2``."""
+    return Fraction(sum(index(load) ** 2 for load in loads), 2)
+
+
+def _validated_loads(loads: Sequence[int]) -> tuple[int, ...]:
+    if any(int(load) != load or load < 0 for load in loads):
+        raise ValueError("loads must be nonnegative integers")
+    return tuple(int(load) for load in loads)
 
 
 def mismatch(loads: Sequence[int], a: int, b: int) -> int:
@@ -79,14 +86,13 @@ def native_repair(
     """
     if coin not in (0, 1):
         raise ValueError("coin must be 0 or 1")
+    coin = int(coin)
     a, b = seam
     if a == b:
         raise ValueError("a seam joins two distinct ports")
     if a < 0 or b < 0 or a >= len(loads) or b >= len(loads):
         raise IndexError("seam port outside the load vector")
-    if any(int(x) != x or x < 0 for x in loads):
-        raise ValueError("loads must be nonnegative integers")
-    before = tuple(int(x) for x in loads)
+    before = _validated_loads(loads)
     difference = before[a] - before[b]
     numerator = difference - (2 * coin - 1) * (abs(difference) % 2)
     current = numerator // 2
@@ -106,10 +112,10 @@ def native_repair(
     )
 
 
-def predict_energy_decrease(loads: Sequence[int], a: int, b: int) -> float:
+def predict_energy_decrease(loads: Sequence[int], a: int, b: int) -> int:
     """The exact quadratic-energy decrease of repairing seam ``(a, b)``."""
     difference = mismatch(loads, a, b)
-    return (difference * difference - (abs(difference) % 2)) / 4.0
+    return (difference * difference - (abs(difference) % 2)) // 4
 
 
 def classify_native_outcome(
@@ -127,7 +133,7 @@ def classify_native_outcome(
     step = native_repair(loads, seam, coin)
     if step.after == step.before:
         kind = "noop"
-    elif step.energy_decrease > 1e-12:
+    elif step.energy_decrease > 0:
         kind = "strict"
     else:
         kind = "zero"
@@ -162,7 +168,7 @@ def simulate_repairs(
     """
     if min_mismatch < 1:
         raise ValueError("min_mismatch must be at least one")
-    state = tuple(int(x) for x in loads)
+    state = _validated_loads(loads)
     history: list[RepairStep] = []
     if coins is None:
         generator = rng if rng is not None else random.Random(0)

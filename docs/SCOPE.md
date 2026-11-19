@@ -48,8 +48,8 @@ domain.
   energy model.
 - **Fuller's jitterbug.** The continuous motion that carries the vector
   equilibrium through the icosahedron is cited to explain why Synergetics
-  distinguishes the two twelve-vertex solids; the kissing slack that permits it
-  is measured, the motion itself is not simulated.
+  distinguishes the two twelve-vertex solids. The executable comparison
+  measures contacts and gaps in the two static kissing arrangements.
 
 ## Three source quantities and their protocols
 

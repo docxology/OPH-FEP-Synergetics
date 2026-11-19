@@ -98,24 +98,31 @@ def _rows(embedding: Iterable[Iterable[int]]) -> tuple[tuple[int, ...], ...]:
     return rows
 
 
+def _to_xyz_int(
+    point: Quadray | Sequence[int],
+    embedding: Iterable[Iterable[int]] = EMBEDDING,
+) -> tuple[int, int, int]:
+    """Apply the integer embedding without a floating-point conversion."""
+    rows = _rows(embedding)
+    values = _components(point)
+    x, y, z = (
+        sum(weight * value for weight, value in zip(row, values))
+        for row in rows
+    )
+    return x, y, z
+
+
 def to_xyz(
     point: Quadray | Sequence[int],
     embedding: Iterable[Iterable[int]] = EMBEDDING,
 ) -> tuple[float, float, float]:
     """Map a quadray to :math:`\\mathbb{R}^3` by the 3x4 embedding.
 
-    The default embedding removes the common gauge first.  Custom embeddings
-    keep the ordinary linear map, matching QuadMath's documented boundary.
+    The default embedding annihilates any common offset. Custom embeddings
+    apply their rows directly to the supplied components.
     """
-    rows = _rows(embedding)
-    values = _components(point)
-    if rows == EMBEDDING:
-        shift = min(values)
-        values = tuple(value - shift for value in values)
-    return tuple(  # type: ignore[return-value]
-        float(sum(weight * value for weight, value in zip(row, values)))
-        for row in rows
-    )
+    x, y, z = _to_xyz_int(point, embedding)
+    return float(x), float(y), float(z)
 
 
 def _round_half_up(value: float) -> int:
@@ -130,11 +137,13 @@ def from_xyz(
     z: float,
     embedding: Iterable[Iterable[int]] = EMBEDDING,
 ) -> Quadray:
-    """Return the canonical lattice quadray whose embedding is nearest ``(x, y, z)``.
+    """Map ``(x, y, z)`` to a canonical quadray by component-wise half-up rounding.
 
-    For the default gauge-compatible embedding this is the minimum-norm
-    preimage (component sum zero) rounded half-up and normalised.  It is a
-    lattice projection, not an exact inverse for arbitrary off-lattice points.
+    Gauge-compatible embeddings use the zero-sum preimage, shifted to have
+    minimum component zero before rounding. Other embeddings round the
+    minimum-norm least-squares solution before normalising it. For an
+    off-lattice input, another lattice point can have a smaller Cartesian
+    distance than the result.
     """
     rows = _rows(embedding)
     scale = max(abs(value) for row in rows for value in row)

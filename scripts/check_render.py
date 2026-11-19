@@ -11,9 +11,11 @@ The manuscript makes five promises that only a rendered artefact can keep:
    registry table is the registry rather than a summary of it;
 4. the text margin is the narrow one the manuscript claims, measured from the
    PDF's own word bounding boxes rather than read back from the preamble;
-5. LaTeX resolved every reference and the log carries no overfull box.
+5. numbered references and citations resolved, and the LaTeX log carries no
+   overfull box.
 
-The first four are read from the PDF; the fifth is read from the LaTeX log.
+The layout and printed reference checks read the PDF. A release check also
+reads the LaTeX log.
 Nothing here computes project results: it is a check on the render, and it exits
 non-zero when a promise is broken.
 """
@@ -35,7 +37,6 @@ from oph_fep_synergetics.analysis.registry import CORRESPONDENCES  # noqa: E402
 PROJECT = Path(__file__).resolve().parents[1]
 DEFAULT_PDF = PROJECT / "output" / "pdf" / "OPH-FEP-Synergetics_combined.pdf"
 DEFAULT_LOG = PROJECT / "output" / "pdf" / "_combined_manuscript.log"
-DEFAULT_TEX = PROJECT / "output" / "pdf" / "_combined_manuscript.tex"
 
 #: The panels of the graphical abstract, in the order they must occupy pages.
 PANELS = ("Panel 1", "Panel 2", "Panel 3", "Panel 4")
@@ -43,9 +44,17 @@ PANELS = ("Panel 1", "Panel 2", "Panel 3", "Panel 4")
 #: The physical pages the four panels must occupy.
 PANEL_PAGES = (2, 3, 4, 5)
 
-OVERFULL = re.compile(r"Overfull \\hbox")
+OVERFULL = re.compile(r"Overfull \\[hv]box")
 UNDEFINED_CITATION = re.compile(r"Citation [`'][^']+'[^\n]*undefined|There were undefined citations")
-UNRESOLVED_REFERENCE = re.compile(r"\?\?")
+UNDEFINED_REFERENCE = re.compile(
+    r"LaTeX Warning: (?:Reference[^\n]*\bundefined\b|There were undefined references)"
+)
+PRINTED_REFERENCE_PLACEHOLDER = re.compile(
+    r"\[\?\]|\[@(?:sec|eq|fig|tbl|def|prop|thm|lem|cor|rmk|exa):[\w-]+\]"
+    r"|\b(?:section|equation|figure|table|definition|proposition|theorem|lemma|"
+    r"corollary|remark|example)\s+\(?\?\?",
+    re.IGNORECASE,
+)
 TOKEN = re.compile(r"\{\{[A-Z][A-Z0-9_]*\}\}")
 
 
@@ -120,7 +129,7 @@ def log_findings(log_text: str) -> dict[str, object]:
     return {
         "overfull": len(OVERFULL.findall(log_text)),
         "undefined_citations": bool(UNDEFINED_CITATION.search(log_text)),
-        "undefined_references": bool(re.search(r"LaTeX Warning: Reference", log_text)),
+        "undefined_references": bool(UNDEFINED_REFERENCE.search(log_text)),
         "unresolved_tokens": TOKEN.findall(log_text),
     }
 
@@ -198,12 +207,16 @@ def check(
         lines.append("  absent: " + ", ".join(absent))
     passed &= not absent
 
+    placeholders = PRINTED_REFERENCE_PLACEHOLDER.findall(text)
+    lines.append(f"printed unresolved references or citations: {len(placeholders)}")
+    passed &= not placeholders
+
     if log is None:
         lines.append("log: not requested for the standalone PDF check")
     elif log.is_file():
         findings = log_findings(log.read_text(encoding="utf-8", errors="replace"))
         lines.append(
-            "log: {overfull} overfull hbox, undefined citations {undefined_citations}, "
+            "log: {overfull} overfull boxes, undefined citations {undefined_citations}, "
             "undefined references {undefined_references}, unresolved tokens {unresolved_tokens}".format(
                 **findings
             )

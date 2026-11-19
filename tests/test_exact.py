@@ -140,4 +140,5 @@ def test_the_two_kissing_arrangements_are_distinguished_exactly():
     assert report["icosahedron_edge_over_radius_squared"] == Surd5(2, Fraction(-2, 5))
     assert report["icosahedron_ratio_float"] == pytest.approx(2 - 2 * math.sqrt(5) / 5)
     assert report["icosahedron_has_slack"] is True
-    assert report["cuboctahedron_is_rigid"] is True
+    assert report["cuboctahedron_neighbours_touch"] is True
+    assert report["cuboctahedron_is_rigid"] == report["cuboctahedron_neighbours_touch"]

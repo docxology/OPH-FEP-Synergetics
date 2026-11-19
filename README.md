@@ -40,8 +40,8 @@ oph-fep-synergetics carrier                # carrier counts, gap, shell sizes
 oph-fep-synergetics geometry               # IVM moves, shell counts, volumes
 ```
 
-`verify` exits non-zero when any probe fails, and exits `2` on a misspelled key
-or pair so that a typo cannot pass as an empty run.
+`verify` exits `1` when a probe fails and `2` when a filter is unknown or
+the combination of filters selects no probes.
 
 ## Install
 
@@ -120,7 +120,7 @@ The load-bearing results are:
 | **The shell index and the free energy determine neither each other** | **obstructed** | the coordination shell is the cuboctahedral gauge `max(\|u\|_inf, \|u\|_1 / 2)`, a polyhedral norm, checked against every breadth-first shell through 12; the free energy on shell `k` ranges from `2k^2` (`2k^2 + 2` for odd `k`) to `4k^2`, attained only at the twelve vertices, and the levels 36 and 52 are each shared by two shells | The Gaussian cost and cuboctahedral gauge compared here |
 | Synergetics' tetravolume table is derived, not transcribed | exact | `1, 3, 4, 6, 20, 96` come out of explicit integer vertex sets by exact convex-hull volumes in the rationals | QuadMath conventions; exact convex-hull volumes derived here |
 | The carrier's own solid has an exact algebraic volume | exact | computed in exact field arithmetic as `sqrt 2 (15/2 + (5/2) sqrt 5) = 18.512295868219...`, squared exactly `175 + 75 sqrt 5`; its conjugate is `2.7009...` and the product is exactly `50` | Carrier geometry; exact field computation here |
-| Both twelve-around-one arrangements attain the kissing number, differently | exact | squared edge over squared circumradius is exactly `1` for the cuboctahedron (rigid) and `2 - 2 sqrt 5 / 5` for the icosahedron (slack): the carrier is the loose arrangement | Carrier and vector equilibrium compared here |
+| Both twelve-around-one arrangements attain the kissing number, differently | exact | squared edge over squared circumradius is exactly `1` for the cuboctahedron, where each outer sphere touches four others, and `2 - 2 sqrt 5 / 5` for the icosahedron, where each outer sphere touches only the centre | Carrier and vector equilibrium compared here |
 | The twelve-around-one cell is the densest packing's cell | exact | 14 vertices, 12 rhombic faces, 24 edges, tetravolume exactly 6, ball tetravolume exactly `pi sqrt 2`, density exactly `pi / (3 sqrt 2)` — optimal among lattice packings (Gauss) and all packings (Hales) | Exact Voronoi cell calculated here; packing optimality from Gauss and Hales |
 
 [agreement-and-surprise]: https://philpapers.org/rec/MUEAAS-2
@@ -258,7 +258,7 @@ scripts/make_figures.py              renders the twenty-three figures and their 
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (406 tests)
+tests/                               the suite (420 tests)
 ```
 
 ## Tests
@@ -267,7 +267,7 @@ tests/                               the suite (406 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-406 tests. The suite checks exact values rather than
+420 tests. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

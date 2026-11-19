@@ -93,6 +93,13 @@ def test_verify_rejects_an_unknown_key(capsys):
     assert captured.out == ""
 
 
+def test_verify_rejects_valid_filters_with_no_common_probe(capsys):
+    assert main(["verify", "--json", "--key", "quadray-ivm", "--pair", "oph-fep"]) == 2
+    captured = capsys.readouterr()
+    assert "no correspondence probes match" in captured.err
+    assert captured.out == ""
+
+
 def test_sources_report_pins_and_licences(capsys):
     assert main(["sources"]) == 0
     out = capsys.readouterr().out

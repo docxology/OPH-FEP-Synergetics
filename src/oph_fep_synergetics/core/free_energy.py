@@ -37,11 +37,33 @@ def _as_vector(value: Sequence[float], length: int, name: str) -> np.ndarray:
     vector = np.asarray(value, dtype=float)
     if vector.shape != (length,):
         raise ValueError(f"{name} must have shape ({length},)")
+    if not np.isfinite(vector).all():
+        raise ValueError(f"{name} must be finite")
     return vector
 
 
 def _symmetrise(matrix: np.ndarray) -> np.ndarray:
     return 0.5 * (matrix + matrix.T)
+
+
+def _covariance_and_logdet(
+    value: np.ndarray, dimension: int, name: str
+) -> tuple[np.ndarray, float]:
+    covariance = np.asarray(value, dtype=float)
+    if covariance.shape != (dimension, dimension):
+        raise ValueError(f"{name} must have shape ({dimension}, {dimension})")
+    if not np.isfinite(covariance).all() or not np.allclose(
+        covariance, covariance.T, rtol=1e-12, atol=0.0
+    ):
+        raise ValueError(f"{name} must be finite and symmetric")
+    # Use the original entries when already symmetric to preserve their scale.
+    if not np.array_equal(covariance, covariance.T):
+        covariance = _symmetrise(covariance)
+    try:
+        factor = np.linalg.cholesky(covariance)
+    except np.linalg.LinAlgError as exc:
+        raise ValueError(f"{name} must be positive definite") from exc
+    return covariance, 2.0 * float(np.log(np.diag(factor)).sum())
 
 
 def gaussian_kl(
@@ -51,25 +73,18 @@ def gaussian_kl(
     sigma_1: np.ndarray,
 ) -> float:
     """The KL divergence ``KL[N(mu_0, sigma_0) || N(mu_1, sigma_1)]``."""
-    mu_0 = np.asarray(mu_0, dtype=float)
-    mu_1 = np.asarray(mu_1, dtype=float)
-    sigma_0 = np.asarray(sigma_0, dtype=float)
-    sigma_1 = np.asarray(sigma_1, dtype=float)
-    if mu_0.shape != mu_1.shape:
-        raise ValueError("Gaussian means must share a shape")
-    dimension = mu_0.shape[0]
-    if sigma_0.shape != (dimension, dimension) or sigma_1.shape != (dimension, dimension):
-        raise ValueError("Gaussian covariances must be square and match the means")
-    sigma_1 = _symmetrise(sigma_1)
-    sigma_0 = _symmetrise(sigma_0)
-    sign_1, logdet_1 = np.linalg.slogdet(sigma_1)
-    sign_0, logdet_0 = np.linalg.slogdet(sigma_0)
-    if sign_1 <= 0 or sign_0 <= 0:
-        raise ValueError("Gaussian covariances must be positive definite")
-    difference = mu_1 - mu_0
-    solved = np.linalg.solve(sigma_1, sigma_0)
+    first = np.asarray(mu_0, dtype=float)
+    if first.ndim != 1:
+        raise ValueError("Gaussian means must be vectors")
+    dimension = first.size
+    first = _as_vector(first, dimension, "first mean")
+    second = _as_vector(mu_1, dimension, "second mean")
+    covariance_0, logdet_0 = _covariance_and_logdet(sigma_0, dimension, "first covariance")
+    covariance_1, logdet_1 = _covariance_and_logdet(sigma_1, dimension, "second covariance")
+    difference = second - first
+    solved = np.linalg.solve(covariance_1, covariance_0)
     trace_term = float(np.trace(solved))
-    quadratic = float(difference @ np.linalg.solve(sigma_1, difference))
+    quadratic = float(difference @ np.linalg.solve(covariance_1, difference))
     return 0.5 * (trace_term + quadratic - dimension + logdet_1 - logdet_0)
 
 
@@ -237,12 +252,6 @@ class GaussianSheafModel:
         records: Sequence[float],
     ) -> float:
         """Return ``KL[q || posterior]``, the part of free energy that repair removes."""
-        mean = _as_vector(mean, self.interior_dim, "mean")
-        covariance = np.asarray(covariance, dtype=float)
-        if covariance.shape != (self.interior_dim, self.interior_dim):
-            raise ValueError("covariance has the wrong shape")
-        if self.interior_dim == 0:
-            return 0.0
         posterior_mean, posterior_covariance = self.posterior(records)
         return gaussian_kl(mean, covariance, posterior_mean, posterior_covariance)
 
@@ -283,7 +292,9 @@ class GaussianSheafModel:
         """
         mean = _as_vector(mean, self.interior_dim, "mean")
         observed = self._records(records)
-        covariance = _symmetrise(np.asarray(covariance, dtype=float))
+        covariance, logdet = _covariance_and_logdet(
+            covariance, self.interior_dim, "recognition covariance"
+        )
         energy = 0.5 * float(
             mean @ self._l_xx @ mean
             + 2.0 * mean @ self._l_xo @ observed
@@ -296,9 +307,6 @@ class GaussianSheafModel:
             )
         if self.interior_dim == 0:
             return energy
-        sign, logdet = np.linalg.slogdet(covariance)
-        if sign <= 0:
-            raise ValueError("the recognition covariance must be positive definite")
         expected_energy = energy + 0.5 * float(np.trace(self._l_xx @ covariance))
         entropy = 0.5 * (self.interior_dim * (1.0 + math.log(2.0 * math.pi)) + logdet)
         return expected_energy - entropy
@@ -343,9 +351,9 @@ class GaussianSheafModel:
         The step size is ``1 / lambda_max(L_xx)``, which is stable for the
         gradient system.  Returns ``(interior, residual_norm, iterations)``.
         """
-        target = self.harmonic_extension(records)
+        observed = self._records(records)
         if self.interior_dim == 0:
-            return target, 0.0, 0
+            return np.zeros(0), 0.0, 0
         if initial is None:
             state = np.zeros(self.interior_dim)
         else:
@@ -353,11 +361,11 @@ class GaussianSheafModel:
         if self._largest_eigenvalue is None:
             self._largest_eigenvalue = float(np.linalg.eigvalsh(self._l_xx)[-1])
         step = 1.0 / self._largest_eigenvalue if self._largest_eigenvalue > 0 else 1.0
-        residual = self._residual(state, self._records(records))
+        residual = self._residual(state, observed)
         iterations = 0
         while float(np.linalg.norm(residual)) > tolerance and iterations < max_steps:
             state = state - step * residual
-            residual = self._residual(state, self._records(records))
+            residual = self._residual(state, observed)
             iterations += 1
         return state, float(np.linalg.norm(residual)), iterations
 

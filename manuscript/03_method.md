@@ -87,7 +87,7 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `quadray-ivm` | complementarity | `exact` | `synergetics-oph` | IVM coordinates supply exact geometry; the tetravolume table is derived from vertex sets |
 | `equilibrium-propagation` | complementarity | `exact` | `oph-fep` | the energy-based learning identity holds exactly |
 | `replicator-potential` | complementarity | `exact` | `oph-fep` | the replicator field is a Shahshahani gradient for symmetric payoffs, and not otherwise |
-| `kissing-twelve` | complementarity | `exact` | `synergetics-oph` | both twelve-around-one arrangements attain the kissing number: the cuboctahedral rigidly, the icosahedral with slack |
+| `kissing-twelve` | complementarity | `exact` | `synergetics-oph` | both twelve-around-one arrangements attain the kissing number, with outer contacts in the cuboctahedron and gaps in the icosahedron |
 | `icosahedron-tetravolume` | complementarity | `exact` | `synergetics-oph` | the carrier's solid is ${{ICOSAHEDRON_TETRAVOLUME}}\ldots$, squared exactly $175 + 75\sqrt{5}$ |
 | `packing-density` | complementarity | `exact` | `synergetics-oph` | Voronoi cell ${{VORONOI_VERTICES}}/{{VORONOI_FACES}}/{{VORONOI_EDGES}}$, tetravolume six, density $\pi/(3\sqrt{2})$ |
 | `tetravolume-arithmetic` | complementarity | `exact` | `three-way` | integer nats, a surd gap, and an integral table beside a non-integral carrier |

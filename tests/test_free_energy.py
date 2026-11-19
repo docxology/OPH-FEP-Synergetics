@@ -46,6 +46,14 @@ def test_gaussian_kl_rejects_bad_shapes_and_signs():
         gaussian_kl([0.0], np.eye(2), [0.0], np.eye(1))
     with pytest.raises(ValueError):
         gaussian_kl([0.0], np.array([[-1.0]]), [0.0], np.eye(1))
+    with pytest.raises(ValueError, match="means must be vectors"):
+        gaussian_kl(0.0, np.eye(1), 0.0, np.eye(1))
+    with pytest.raises(ValueError, match="second mean must be finite"):
+        gaussian_kl([0.0], np.eye(1), [math.nan], np.eye(1))
+    with pytest.raises(ValueError, match="finite and symmetric"):
+        gaussian_kl([0.0, 0.0], [[1.0, 0.5], [0.0, 1.0]], [0.0, 0.0], np.eye(2))
+    with pytest.raises(ValueError, match="positive definite"):
+        gaussian_kl([0.0, 0.0], np.eye(2), [0.0, 0.0], -np.eye(2))
 
 
 def test_demo_chain_needs_at_least_three_nodes():
@@ -159,12 +167,28 @@ def test_excess_free_energy_rejects_a_bad_covariance(chain_model):
         chain_model.excess_free_energy([0.0, 0.0], np.eye(3), [1.0, 2.0])
 
 
+def test_both_free_energy_routes_require_a_positive_definite_covariance(chain_model):
+    for evaluate in (chain_model.variational_free_energy, chain_model.energy_minus_entropy):
+        with pytest.raises(ValueError, match="positive definite"):
+            evaluate([0.0, 0.0], -np.eye(2), [1.0, 2.0])
+
+
 def test_perceive_returns_the_harmonic_extension(chain_model):
     records = [1.0, 3.0]
     interior, residual, iterations = chain_model.perceive(records)
     assert np.allclose(interior, chain_model.harmonic_extension(records), atol=1e-8)
     assert residual <= 1e-10
     assert iterations > 0
+
+
+def test_perceive_does_not_require_a_direct_solve(chain_model, monkeypatch):
+    def fail_solve(*args):
+        pytest.fail("iterative perception called the direct solve")
+
+    monkeypatch.setattr(np.linalg, "solve", fail_solve)
+    interior, residual, _ = chain_model.perceive([1.0, 3.0])
+    assert np.allclose(interior, [5 / 3, 7 / 3])
+    assert residual <= 1e-10
 
 
 def test_perceive_accepts_an_initial_state(chain_model):

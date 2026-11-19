@@ -413,6 +413,9 @@ def test_kissing_twelve_values():
     assert values["ivm_moves"] == values["ivm_shell_one"] == 12
     assert values["move_squared_norm"] == 8.0
     assert values["geometric_adjacency_isomorphic"] is True
+    assert values["cuboctahedral_neighbours_touch"] is True
+    assert values["cuboctahedral_outer_contact_degrees"] == [4]
+    assert values["icosahedral_neighbours_have_slack"] is True
 
 
 def test_repair_is_conditioning_values():

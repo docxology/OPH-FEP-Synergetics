@@ -82,7 +82,7 @@ def gated_descent_census() -> dict[str, int]:
                     continue
                 predicted = predict_energy_decrease(state, a, b)
                 observed = step.energy_decrease
-                if not math.isclose(observed, predicted, rel_tol=0.0, abs_tol=1e-12):
+                if observed != predicted:
                     raise AssertionError(
                         f"energy decrease mismatch at {state} seam {(a, b)} coin {coin}"
                     )

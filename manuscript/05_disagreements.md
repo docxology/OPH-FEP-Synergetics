@@ -395,15 +395,13 @@ where the confusion starts, and they attain the kissing number in different
 ways. With the twelve centres at twice the sphere radius from the centre, the
 cuboctahedron's squared edge over squared circumradius is
 {{KISSING_CUBOCTAHEDRON_EDGE_RATIO_SQUARED}}, so every sphere touches four of its
-neighbours as well as the centre: the rigid arrangement of the densest packing.
+neighbours as well as the centre in the local arrangement of the densest packing.
 The icosahedron's ratio is $2 - 2\sqrt{5}/5 \approx
-{{KISSING_ICOSAHEDRON_EDGE_RATIO_SQUARED}}$, so its spheres touch the centre and
-none of each other. The slack is what Fuller's jitterbug uses to carry the
-vector equilibrium continuously through the icosahedron to the octahedron
-[@fuller1975synergetics; @verheyen1989jitterbug], and the volume is not
-conserved along the way. Synergetics therefore does not conflate the two solids
--- it distinguishes them and connects them by a motion -- and the obstruction is
-to a reader who identifies them by their count.
+{{KISSING_ICOSAHEDRON_EDGE_RATIO_SQUARED}}$, so its outer spheres touch only the
+centre. Fuller's jitterbug connects the vector equilibrium and the icosahedron
+through a continuous motion that continues to the octahedron
+[@fuller1975synergetics; @verheyen1989jitterbug]. The comparison here measures
+the contact pattern of each arrangement.
 
 The same coincidence is why this entry is a disagreement rather than a
 complementarity: the neighbour *cell* of [@sec:packing] is the rhombic
@@ -471,10 +469,9 @@ test, and no choice of radius repairs it: the carrier is finite with diameter
 
 What survives is a structural statement rather than an identification. The
 carrier is distance-regular, with intersection array
-{{CARRIER_INTERSECTION_ARRAY}} read off a single representative per shell, so
-its neighbourhood structure is rigid: from any port, at any distance, the
-outward and backward degrees are the same [@brouwer1989distance]. That is a
-stronger fact than the identification it replaces, and it follows from the
+{{CARRIER_INTERSECTION_ARRAY}} read off a single representative per shell. At
+each distance, the outward and backward degrees are independent of the
+starting port [@brouwer1989distance]. The independence follows from the
 symmetry: the group of order {{SYMMETRY_GROUP_ORDER}} is transitive on the pairs
 of ports at each distance, and a distance-transitive graph is distance-regular.
 

@@ -50,14 +50,14 @@ oph-fep-synergetics sources --json
 With no `--vault-root` the command reports the pins and marks every check
 `unavailable`: no location is guessed. A vault root is an ordinary local
 directory beneath which the pinned checkouts live; with one given, each pin is
-compared against `git -C <checkout> rev-parse HEAD` and reported as:
+compared against the verified `HEAD` of its Git checkout and reported as follows.
 
 | status | meaning |
 | --- | --- |
 | `match` | the checkout is at the pinned commit |
 | `moved` | the checkout resolves to a different commit |
-| `absent` | the checkout has no resolvable `HEAD` |
-| `unavailable` | no vault root was given, or no checkout was consulted |
+| `absent` | the checkout has no Git metadata at the specified path |
+| `unavailable` | no vault root was given, or the checkout's Git metadata or `HEAD` could not be read |
 
 **A moved pin is a reading, not a failure.** `check_pins` reports it as `moved`
 and `verify` does not treat it as a broken claim. A pin records what was read on

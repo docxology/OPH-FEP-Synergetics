@@ -15,17 +15,15 @@ PROJECT = Path(__file__).resolve().parents[1]
 PDF = PROJECT / "output" / "pdf" / "OPH-FEP-Synergetics_combined.pdf"
 
 
-def _load():
-    spec = importlib.util.spec_from_file_location(
-        "check_render", PROJECT / "scripts" / "check_render.py"
-    )
+def _load(script: str):
+    spec = importlib.util.spec_from_file_location(script, PROJECT / "scripts" / f"{script}.py")
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
     return module
 
 
-check_render = _load()
+check_render = _load("check_render")
 
 
 def _pages(*texts: str) -> list[str]:
@@ -93,14 +91,18 @@ def test_missing_keys_are_reported_in_registry_order():
 def test_log_findings_catch_each_failure_mode():
     findings = check_render.log_findings(
         "Overfull \\hbox (12.0pt too wide) in paragraph\n"
+        "Overfull \\vbox (1.0pt too high) detected\n"
         "LaTeX Warning: Citation `oph' on page 3 undefined on input line 40.\n"
         "LaTeX Warning: Reference `tbl:registry' on page 5 undefined on input line 60.\n"
         "the value {{CARRIER_PORTS}} was not resolved\n"
     )
-    assert findings["overfull"] == 1
+    assert findings["overfull"] == 2
     assert findings["undefined_citations"] is True
     assert findings["undefined_references"] is True
     assert findings["unresolved_tokens"] == ["{{CARRIER_PORTS}}"]
+    assert check_render.log_findings("LaTeX Warning: There were undefined references.")[
+        "undefined_references"
+    ]
 
 
 def test_a_clean_log_reports_nothing():
@@ -111,6 +113,40 @@ def test_a_clean_log_reports_nothing():
         "undefined_references": False,
         "unresolved_tokens": [],
     }
+
+
+def test_missing_explicit_template_root_does_not_fall_back(tmp_path, monkeypatch, capsys):
+    build = _load("build")
+    fallback = tmp_path / "fallback"
+    for name in (".venv/bin/python", "scripts/pipeline/stage_03_render.py"):
+        file = fallback / name
+        file.parent.mkdir(parents=True, exist_ok=True)
+        file.touch()
+    monkeypatch.setenv("TEMPLATE_ROOT", str(fallback))
+
+    with pytest.raises(SystemExit) as exit_info:
+        build.main(["--template-root", str(tmp_path / "missing")])
+    assert exit_info.value.code == 2
+    assert "no usable template checkout" in capsys.readouterr().err
+
+
+def test_standalone_pdf_rejects_printed_reference_markers(tmp_path, monkeypatch):
+    pdf = tmp_path / "test.pdf"
+    pdf.touch()
+    pages = [
+        "Observers, Blankets, and Screens",
+        *(f"Panel {index}\nFigure {index}: panel" for index in range(1, 5)),
+        "Contents",
+        "See Proposition ?? and [@def:missing]. Citation [?]. Is this punctuation??",
+        "\n".join(f"Figure {index}: caption" for index in range(5, 16)),
+    ]
+    monkeypatch.setattr(check_render, "pdf_text", lambda _: pages)
+    monkeypatch.setattr(check_render, "text_left_margin", lambda *_: 36.0)
+
+    passed, lines = check_render.check(pdf, log=None, keys=())
+
+    assert not passed
+    assert "printed unresolved references or citations: 3" in lines
 
 
 @pytest.mark.skipif(not PDF.is_file(), reason="no rendered PDF in this checkout")

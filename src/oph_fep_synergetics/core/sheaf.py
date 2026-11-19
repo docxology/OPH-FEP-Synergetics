@@ -15,7 +15,9 @@ Synergetic cell complexes at the level of linear algebra.
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
+from operator import index
 from typing import Mapping, Sequence
 
 import numpy as np
@@ -63,15 +65,22 @@ class CellularSheaf:
                 raise ValueError("an edge joins two distinct nodes")
             if not (0 <= edge.u < len(self.stalk_dims) and 0 <= edge.v < len(self.stalk_dims)):
                 raise IndexError("edge endpoint outside the node set")
-            map_u = np.atleast_2d(np.asarray(edge.map_u, dtype=float))
-            map_v = np.atleast_2d(np.asarray(edge.map_v, dtype=float))
+            map_u = np.atleast_2d(np.array(edge.map_u, dtype=float, copy=True))
+            map_v = np.atleast_2d(np.array(edge.map_v, dtype=float, copy=True))
+            if map_u.ndim != 2 or map_v.ndim != 2:
+                raise ValueError("edge restriction maps must be matrices")
             if map_u.shape[0] != map_v.shape[0]:
                 raise ValueError("edge restriction maps must share an edge stalk")
             if map_u.shape[1] != self.stalk_dims[edge.u] or map_v.shape[1] != self.stalk_dims[edge.v]:
                 raise ValueError("edge restriction map shape does not match its stalk")
+            if not np.isfinite(map_u).all() or not np.isfinite(map_v).all():
+                raise ValueError("edge restriction maps must be finite")
+            map_u.setflags(write=False)
+            map_v.setflags(write=False)
             normalized.append(EdgeRestriction(edge.u, edge.v, map_u, map_v))
         self.edges = tuple(normalized)
         self._laplacian = self._build_laplacian()
+        self._laplacian.setflags(write=False)
 
     # -- identity and sizes -------------------------------------------------
     @property
@@ -91,7 +100,10 @@ class CellularSheaf:
     def pack(self, vectors: Sequence[np.ndarray]) -> np.ndarray:
         if len(vectors) != self.node_count:
             raise ValueError("one vector per node is required")
-        return np.concatenate([np.asarray(v, dtype=float) for v in vectors])
+        nodes = [np.asarray(v, dtype=float) for v in vectors]
+        if any(vector.shape != (dim,) for vector, dim in zip(nodes, self.stalk_dims)):
+            raise ValueError("each vector must match its stalk dimension")
+        return np.concatenate(nodes)
 
     def unpack(self, vector: np.ndarray) -> tuple[np.ndarray, ...]:
         vector = np.asarray(vector, dtype=float)
@@ -113,8 +125,8 @@ class CellularSheaf:
     def laplacian(self) -> np.ndarray:
         """Return the sheaf Laplacian ``delta^T delta`` as a dense matrix.
 
-        The matrix is assembled once at construction and cached, so repeated
-        calls return the same dense array without rebuilding it.
+        The matrix is assembled once at construction and returned as a cached
+        read-only array.
         """
         return self._laplacian
 
@@ -139,13 +151,33 @@ class CellularSheaf:
 
     def global_section_basis(self, tolerance: float = 1e-9) -> np.ndarray:
         """Return an orthonormal basis of global sections as columns."""
-        eigenvalues, eigenvectors = np.linalg.eigh(self.laplacian())
-        return eigenvectors[:, eigenvalues <= tolerance]
+        matrix = coboundary_matrix(self)
+        _, singular_values, vectors = np.linalg.svd(
+            matrix, full_matrices=matrix.shape[0] < matrix.shape[1]
+        )
+        rank = np.count_nonzero(singular_values > tolerance)
+        return vectors[rank:].T
 
     def is_global_section(self, vector: np.ndarray, tolerance: float = 1e-9) -> bool:
         return float(np.linalg.norm(self.coboundary(vector))) <= tolerance
 
     # -- clamped boundary problems -----------------------------------------
+    def _observed_stalks(
+        self, observations: Mapping[int, Sequence[float]]
+    ) -> dict[int, np.ndarray]:
+        observed = {}
+        for key, values in observations.items():
+            node = index(key)
+            if not 0 <= node < self.node_count:
+                raise IndexError(f"observed node {node} is outside the sheaf")
+            value = np.asarray(values, dtype=float)
+            if value.shape != (self.stalk_dims[node],):
+                raise ValueError(f"observation at node {node} has the wrong dimension")
+            if not np.isfinite(value).all():
+                raise ValueError(f"observation at node {node} must be finite")
+            observed[node] = value
+        return observed
+
     def harmonic_extension(
         self,
         observations: Mapping[int, Sequence[float]],
@@ -157,12 +189,7 @@ class CellularSheaf:
         This is the unique minimiser of the sheaf energy over assignments that
         agree with ``observations`` when the free block is positive definite.
         """
-        observed = {int(node): np.asarray(value, dtype=float) for node, value in observations.items()}
-        for node, value in observed.items():
-            if not 0 <= node < self.node_count:
-                raise IndexError(f"observed node {node} is outside the sheaf")
-            if value.shape != (self.stalk_dims[node],):
-                raise ValueError(f"observation at node {node} has the wrong dimension")
+        observed = self._observed_stalks(observations)
         free = [node for node in range(self.node_count) if node not in observed]
         laplacian = self.laplacian()
         offsets = self.offsets()
@@ -193,7 +220,8 @@ class CellularSheaf:
     def record_injectivity(self, record_nodes: Sequence[int], *, tolerance: float = 1e-9) -> bool:
         """Whether records separate global sections.
 
-        Equivalently, the interior block of the Laplacian is positive definite.
+        The interior block of the Laplacian is positive definite exactly when
+        the coboundary restricted to the interior has full column rank.
         """
         records = set(int(node) for node in record_nodes)
         if any(not 0 <= node < self.node_count for node in records):
@@ -207,8 +235,8 @@ class CellularSheaf:
             for node in interior
             for index in range(offsets[node], offsets[node + 1])
         ]
-        block = self.laplacian()[np.ix_(indices, indices)]
-        return bool(np.linalg.eigvalsh(0.5 * (block + block.T))[0] > tolerance)
+        block = coboundary_matrix(self)[:, indices]
+        return bool(np.linalg.matrix_rank(block, tol=tolerance) == len(indices))
 
     def diffuse(
         self,
@@ -225,11 +253,17 @@ class CellularSheaf:
         if state.shape != (self.total_dim,):
             raise ValueError("initial vector has the wrong total dimension")
         offsets = self.offsets()
+        clamped = [
+            (slice(offsets[node], offsets[node + 1]), value)
+            for node, value in self._observed_stalks(observations).items()
+        ]
+        for region, value in clamped:
+            state[region] = value
         laplacian = self.laplacian()
         for _ in range(steps):
             state = state - step_size * (laplacian @ state)
-            for node, value in observations.items():
-                state[offsets[node] : offsets[node + 1]] = np.asarray(value, dtype=float)
+            for region, value in clamped:
+                state[region] = value
         return state
 
 
@@ -237,12 +271,15 @@ def linear_chain_sheaf(node_count: int, *, edge_weight: float = 1.0) -> Cellular
     """A scalar sheaf on a path with identity restrictions and equal weights."""
     if node_count < 1:
         raise ValueError("a chain needs at least one node")
+    if not math.isfinite(edge_weight) or edge_weight < 0:
+        raise ValueError("edge weight must be finite and nonnegative")
+    restriction = np.array([[math.sqrt(edge_weight)]])
     edges = tuple(
         EdgeRestriction(
             u=i,
             v=i + 1,
-            map_u=np.array([[np.sqrt(edge_weight)]]),
-            map_v=np.array([[np.sqrt(edge_weight)]]),
+            map_u=restriction,
+            map_v=restriction,
         )
         for i in range(node_count - 1)
     )
@@ -303,8 +340,7 @@ def cohomology_dimensions(sheaf: CellularSheaf, *, tolerance: float = 1e-9) -> d
     """
     matrix = coboundary_matrix(sheaf)
     rank = int(np.linalg.matrix_rank(matrix, tol=tolerance))
-    eigenvalues = np.linalg.eigvalsh(sheaf.laplacian())
-    h0 = int((eigenvalues <= tolerance).sum())
+    h0 = sheaf.total_dim - rank
     h1 = int(matrix.shape[0] - rank)
     euler = sheaf.total_dim - int(matrix.shape[0])
     return {

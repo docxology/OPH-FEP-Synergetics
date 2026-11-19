@@ -201,7 +201,7 @@ def _probe_native_law() -> tuple[bool, dict]:
                 if sum(step.after) != sum(step.before):
                     return False, {"failure": "load not conserved", "seam": (a, b)}
                 predicted = repair_module.predict_energy_decrease(state, a, b)
-                if abs(step.energy_decrease - predicted) > 1e-12:
+                if step.energy_decrease != predicted:
                     return False, {"failure": "energy decrease", "seam": (a, b)}
                 transitions += 1
     return True, {"transitions": transitions, "states": 78, "closed_form": "(d^2 - (|d| mod 2)) / 4"}
@@ -743,11 +743,11 @@ def _probe_pr01() -> tuple[bool, dict]:
     values["total_transitions"] = census["strict"] + census["zero"] + census["noop"]
     values["excursion_states"] = len(walk)
     values["excursion_distinct_states"] = len(set(walk))
-    values["excursion_energy"] = repair_module.energy(walk[-1])
+    values["excursion_energy"] = float(repair_module.energy(walk[-1]))
     values["coin_zero_current"] = waits.current
     values["coin_one_current"] = swaps.current
-    values["coin_zero_decrease"] = waits.energy_decrease
-    values["coin_one_decrease"] = swaps.energy_decrease
+    values["coin_zero_decrease"] = float(waits.energy_decrease)
+    values["coin_one_decrease"] = float(swaps.energy_decrease)
     # The one-attempt law out of (1, 1, 0, ..., 0): a uniform seam and a fair coin,
     # sixty equally likely draws.  Route one enumerates the draws; route two counts
     # the seams that meet exactly one of the two adjacent occupied ports.
@@ -769,7 +769,7 @@ def _probe_pr01() -> tuple[bool, dict]:
         1
         for a, b in carrier.edges
         for coin in (0, 1)
-        if repair_module.native_repair(pair_state, (a, b), coin).energy_decrease != 0.0
+        if repair_module.native_repair(pair_state, (a, b), coin).energy_decrease != 0
     )
     rewrite = native_dynamics.native_rewrite_census()
     ensemble = native_dynamics.binary_ensemble_census()
@@ -790,8 +790,8 @@ def _probe_pr01() -> tuple[bool, dict]:
         and values["excursion_distinct_states"] == len(walk)
         and values["excursion_energy"] == 0.5
         and waits.current != swaps.current
-        and waits.energy_decrease == 0.0
-        and swaps.energy_decrease == 0.0
+        and waits.energy_decrease == 0
+        and swaps.energy_decrease == 0
         and rewrite["ungated_normal_forms"] == 0
         and rewrite["ungated_has_cycle"]
         and rewrite["binary_is_closed_connected_class"]
@@ -1341,7 +1341,10 @@ def _probe_kissing_twelve() -> tuple[bool, dict]:
         kissing["icosahedron_edge_over_radius_squared"]
     )
     values["icosahedron_edge_over_radius_squared_float"] = kissing["icosahedron_ratio_float"]
-    values["cuboctahedral_neighbours_touch"] = kissing["cuboctahedron_is_rigid"]
+    values["cuboctahedral_neighbours_touch"] = kissing["cuboctahedron_neighbours_touch"]
+    values["cuboctahedral_outer_contact_degrees"] = sorted(
+        {sum(row) for row in geometry.cuboctahedron_adjacency()}
+    )
     values["icosahedral_neighbours_have_slack"] = kissing["icosahedron_has_slack"]
     passed = (
         values["carrier_ports"] == 12
@@ -1353,6 +1356,7 @@ def _probe_kissing_twelve() -> tuple[bool, dict]:
         and values["cuboctahedron_edge_over_radius_squared"] == "1"
         and values["icosahedron_edge_over_radius_squared"] == "2 - 2/5 sqrt 5"
         and values["cuboctahedral_neighbours_touch"] is True
+        and values["cuboctahedral_outer_contact_degrees"] == [4]
         and values["icosahedral_neighbours_have_slack"] is True
     )
     return passed, values
@@ -2167,10 +2171,10 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="kissing-twelve",
         kind=COMPLEMENTARITY,
         pair=SYNERGETICS_OPH,
-        claim="Twelve is the kissing number in three dimensions and both twelve-port arrangements attain it, in different ways: with the twelve sphere centres at distance 2r from a central sphere of radius r, the IVM's cuboctahedral shell has edge equal to circumradius, so the twelve spheres touch the centre and each other, while the icosahedral arrangement has squared edge over squared circumradius exactly 2 - 2 sqrt(5) / 5, so its spheres touch the centre and not each other; the geometric icosahedral realisation is isomorphic to OPH's labelled carrier.",
+        claim="Twelve is the kissing number in three dimensions and both arrangements attain it. With the twelve sphere centres at distance 2r from a central sphere of radius r, the IVM's cuboctahedral shell has edge equal to circumradius, so each outer sphere touches the centre and four other outer spheres. The icosahedral arrangement has squared edge over squared circumradius exactly 2 - 2 sqrt(5) / 5, so its outer spheres touch only the centre. The geometric icosahedral realisation is isomorphic to OPH's labelled carrier.",
         oph="The twelve-port carrier is the icosahedral kissing arrangement, the one with slack between neighbours.",
         fep="No fixed carrier.",
-        synergetics="Twelve-around-one: the vector equilibrium is the rigid lattice arrangement, and the icosahedral one is the loose arrangement the jitterbug passes through.",
+        synergetics="The vector equilibrium has contacts between outer spheres. The icosahedral arrangement has gaps between them.",
         status="exact",
         source="QuadMath shell_count and IVM_NEIGHBOR_MOVES; OPH carrier counts",
         probe=_probe_kissing_twelve,
@@ -2355,8 +2359,8 @@ def verify(
 ) -> tuple[CorrespondenceResult, ...]:
     """Run every registered probe, or only the selected ones.
 
-    An unknown key, pairwise scope or kind raises ``ValueError`` instead of
-    selecting nothing, so a mistyped argument cannot pass as an empty run.
+    An unknown filter value or an empty intersection raises ``ValueError`` so
+    a verification run must exercise at least one probe.
     """
     selected = CORRESPONDENCES
     if keys is not None:
@@ -2377,6 +2381,8 @@ def verify(
         if unknown_kinds:
             raise ValueError(f"unknown kind(s): {', '.join(unknown_kinds)}")
         selected = tuple(entry for entry in selected if entry.kind in wanted_kinds)
+    if not selected:
+        raise ValueError("no correspondence probes match the requested filters")
     return tuple(entry.run() for entry in selected)
 
 

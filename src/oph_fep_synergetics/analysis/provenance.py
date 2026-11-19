@@ -147,21 +147,40 @@ def load_sources(path: Path | str = DEFAULT_SOURCES) -> tuple[SourcePin, ...]:
 
 def head_of(checkout: Path) -> str | None:
     """Return the commit at ``HEAD`` of a checkout, or ``None`` when unavailable."""
-    if not (checkout / ".git").exists():
-        return None
+    observed, _ = _read_checkout_head(checkout)
+    return observed
+
+
+def _read_checkout_head(checkout: Path) -> tuple[str | None, str]:
+    """Distinguish missing Git metadata from a failed observation of it."""
+    try:
+        (checkout / ".git").lstat()
+    except (FileNotFoundError, NotADirectoryError):
+        return None, "absent"
+    except OSError:
+        return None, "unavailable"
+
+    # Git's repository selectors take precedence over -C. Read the indicated
+    # checkout even when the caller is running from a different Git operation.
+    env = os.environ.copy()
+    for name in ("GIT_DIR", "GIT_WORK_TREE", "GIT_COMMON_DIR", "GIT_NAMESPACE"):
+        env.pop(name, None)
+    env["GIT_NO_LAZY_FETCH"] = "1"
     try:
         completed = subprocess.run(
-            ["git", "-C", str(checkout), "rev-parse", "HEAD"],
+            ["git", "-C", str(checkout), "--git-dir=.git", "rev-parse", "--verify", "-q", "HEAD^{commit}"],
             capture_output=True,
             text=True,
             timeout=30,
             stdin=subprocess.DEVNULL,
+            env=env,
         )
-    except (OSError, subprocess.SubprocessError):  # pragma: no cover - environment
-        return None
-    if completed.returncode != 0:
-        return None
-    return completed.stdout.strip() or None
+    except (OSError, subprocess.SubprocessError):
+        return None, "unavailable"
+    observed = completed.stdout.strip()
+    if completed.returncode != 0 or not observed:
+        return None, "unavailable"
+    return observed, "observed"
 
 
 def check_pins(
@@ -181,12 +200,8 @@ def check_pins(
         if root is None:
             checks.append(PinCheck(pin.id, pin.checkout, pin.commit, None, "unavailable"))
             continue
-        observed = head_of(root / pin.checkout)
-        if observed is None:
-            status = "absent"
-        elif observed == pin.commit:
-            status = "match"
-        else:
-            status = "moved"
+        observed, status = _read_checkout_head(root / pin.checkout)
+        if observed is not None:
+            status = "match" if observed == pin.commit else "moved"
         checks.append(PinCheck(pin.id, pin.checkout, pin.commit, observed, status))
     return tuple(checks)

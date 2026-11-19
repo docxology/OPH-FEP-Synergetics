@@ -177,6 +177,32 @@ def test_a_matching_and_a_moved_checkout_are_distinguished(tmp_path):
     assert moved.matched is False
 
 
+def test_a_checkout_with_an_unreadable_head_is_unavailable(tmp_path):
+    source = load_sources()[0]
+    _point_head_at_a_commit(tmp_path)
+    checkout = tmp_path / source.checkout
+    (checkout / ".git").mkdir(parents=True)
+
+    check = check_pins((source,), vault_root=tmp_path)[0]
+    assert check.status == "unavailable"
+    assert check.observed is None
+
+    _point_head_at_a_commit(checkout)
+    (checkout / ".git" / "HEAD").write_text("f" * 40 + "\n", encoding="utf-8")
+    check = check_pins((source,), vault_root=tmp_path)[0]
+    assert check.status == "unavailable"
+    assert check.observed is None
+
+
+def test_head_of_uses_the_checkout_instead_of_an_inherited_git_dir(tmp_path, monkeypatch):
+    checkout = tmp_path / "checkout"
+    checkout.mkdir()
+    observed = _point_head_at_a_commit(checkout)
+    monkeypatch.setenv("GIT_DIR", str(tmp_path / "unrelated-store"))
+
+    assert head_of(checkout) == observed
+
+
 def test_head_of_a_directory_that_is_not_a_repository_is_none(tmp_path):
     assert head_of(tmp_path) is None
     assert head_of(tmp_path / "does-not-exist") is None

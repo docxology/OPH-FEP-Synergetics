@@ -417,10 +417,11 @@ def kissing_arrangements() -> dict[str, object]:
     central sphere of radius ``r``.  The neighbours touch each other exactly
     when the arrangement's edge equals its circumradius.  The ratio
     ``edge^2 / circumradius^2`` is computed for both arrangements: the IVM's
-    cuboctahedron gives exactly ``1`` (rigid: every neighbour touches four
-    others), and the icosahedron gives exactly ``2 - 2 sqrt 5 / 5``, which is
-    greater than one, so its twelve spheres touch the centre and none of each
-    other.  That slack is what lets Fuller's jitterbug move between the two.
+    cuboctahedron gives exactly ``1``, so its outer spheres touch along the
+    cuboctahedral edges. The icosahedron gives exactly ``2 - 2 sqrt 5 / 5``,
+    which is greater than one, so its outer spheres touch only the centre.
+    The deprecated ``cuboctahedron_is_rigid`` key reports the same contact
+    result as ``cuboctahedron_neighbours_touch``.
     """
     icosahedron = exact_icosahedron_vertices()
     ico_radius = Surd5.of(_dot(icosahedron[0], icosahedron[0]))
@@ -429,7 +430,7 @@ def kissing_arrangements() -> dict[str, object]:
             Surd5.of(_dot(_sub(first, second), _sub(first, second)))
             for first, second in itertools.combinations(icosahedron, 2)
         ),
-        key=float,
+        key=functools.cmp_to_key(lambda left, right: (left - right).sign()),
     )
     ico_ratio = ico_edge / ico_radius
     neighbours = ivm_solid_vertices()["cuboctahedron"]
@@ -438,10 +439,12 @@ def kissing_arrangements() -> dict[str, object]:
         Fraction(_dot(_sub(first, second), _sub(first, second)))  # type: ignore[arg-type]
         for first, second in itertools.combinations(neighbours, 2)
     )
+    neighbours_touch = cubo_edge == cubo_radius
     return {
         "cuboctahedron_edge_over_radius_squared": cubo_edge / cubo_radius,
         "icosahedron_edge_over_radius_squared": ico_ratio,
         "icosahedron_ratio_float": float(ico_ratio),
         "icosahedron_has_slack": ico_ratio.sign() == 1 and (ico_ratio - 1).sign() == 1,
-        "cuboctahedron_is_rigid": cubo_edge == cubo_radius,
+        "cuboctahedron_neighbours_touch": neighbours_touch,
+        "cuboctahedron_is_rigid": neighbours_touch,
     }

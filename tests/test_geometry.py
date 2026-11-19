@@ -15,6 +15,7 @@ from oph_fep_synergetics.geometry import (
     PHI,
     VOLUME_RATIOS,
     Quadray,
+    cuboctahedral_gauge,
     cuboctahedron_adjacency,
     cuboctahedron_edges,
     cuboctahedron_faces,
@@ -120,6 +121,13 @@ def test_xyz_round_trip_is_exact_on_shell_sites():
         assert from_xyz(*to_xyz(point)) == point.normalize()
 
 
+def test_off_lattice_xyz_uses_quadray_component_rounding():
+    xyz = (0.125, 0.125, 0.9375)
+    point = from_xyz(*xyz)
+    assert point == Quadray(1, 0, 0, 0)
+    assert math.dist(xyz, to_xyz(Quadray(0, 0, 0, 0))) < math.dist(xyz, to_xyz(point))
+
+
 def test_xyz_projection_and_singular_embeddings():
     assert to_xyz((1, 2, 0, 3)) == (2.0, 0.0, -4.0)
     custom = ((1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0))
@@ -194,6 +202,13 @@ def test_first_shell_is_the_twelve_around_one():
 def test_shell_index_rejects_points_outside_the_enumeration():
     with pytest.raises(ValueError):
         shell_index((1, 1, 0, 0))
+
+
+def test_cuboctahedral_gauge_preserves_large_integer_coordinates_and_parity():
+    k = 2**53 + 1
+    assert cuboctahedral_gauge(Quadray(2, 1, 1, 0).scale(k)) == k
+    with pytest.raises(ValueError, match="even coordinates"):
+        cuboctahedral_gauge((k, 0, 0, 0))
 
 
 # ---------------------------------------------------------------------------

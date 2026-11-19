@@ -42,9 +42,9 @@ Twelve around one is where the three programs touch, and it is not one object:
 the carrier is the icosahedral kissing arrangement, with slack between
 neighbours, while the IVM's first shell is the cuboctahedral one,
 `ivm.neighbor_moves` sites at squared distance `ivm.neighbor_squared_distance`,
-rigid. Both attain the kissing number; the identities of this section are about
-the carrier itself, and the twelve-around-one conflation is an obstruction in
-section 3.
+with contacts between outer spheres. Both attain the kissing number. The
+identities of this section are about the carrier itself, and the
+twelve-around-one conflation is an obstruction in section 3.
 
 ## 2. Agreement as a minimisation
 
@@ -125,7 +125,7 @@ identification that looks natural in prose fails as stated.
   `cuboctahedron.degree`-regular with tetravolume
   `cuboctahedron.tetravolume`; the carrier is `icosahedron.degree`-regular with
   tetravolume `icosahedron.tetravolume`. Both are kissing arrangements, the
-  cuboctahedral one rigid and the icosahedral one with slack
+  cuboctahedral one with outer contacts and the icosahedral one with gaps
   (`kissing.icosahedron_edge_ratio_squared`). A shared vertex count is not an
   identification.
 - **The shell index and the free energy determine neither each other.** The

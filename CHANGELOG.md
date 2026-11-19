@@ -22,9 +22,18 @@
   `sources` command works in a wheel-only environment.
 - Check the template's project lane before rendering so a manuscript build
   targets the requested checkout.
+- Validate finite positive-definite Gaussian covariances. Clamp sheaf records
+  before diffusion and use the same rank tolerance for sections and cohomology.
+- Keep native repair energies in exact rationals and the cuboctahedral gauge
+  in integers, including at scales beyond floating-point precision.
+- Reject empty correspondence selections, distinguish absent pins from
+  unavailable HEADs, and check for unresolved references in the rendered PDF.
 
 Corrections (a claim was wrong):
 
+- The kissing-arrangement probe measures outer-sphere contacts. The
+  `cuboctahedron_neighbours_touch` result replaces
+  `cuboctahedron_is_rigid`, which remains a deprecated alias.
 - The `13/15` and `1/60` transition probabilities and the `35/264` port-zero
   occupation of *Agreement and Surprise* were recorded `not-reproduced`. All
   three are determined by protocols in OPH's public model

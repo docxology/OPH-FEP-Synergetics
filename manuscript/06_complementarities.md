@@ -54,12 +54,12 @@ geometric icosahedron's adjacency is isomorphic to the derived carrier adjacency
 which the probe checks by constructing a witness. The coincidence is not a
 numerological one: twelve is the kissing number in three dimensions
 [@schutte1953dreizehn; @conway1999sphere], and both arrangements attain it. They
-attain it differently, which the `kissing-twelve` probe measures exactly: the
-cuboctahedral arrangement is rigid, its spheres touching their neighbours, while
-the icosahedral one has slack, its squared edge over squared circumradius being
-$2 - 2\sqrt{5}/5 \approx {{KISSING_ICOSAHEDRON_EDGE_RATIO_SQUARED}}$ rather than
-{{KISSING_CUBOCTAHEDRON_EDGE_RATIO_SQUARED}} ([@sec:cuboctahedron]). The carrier
-is the loose arrangement; the lattice is the tight one.
+attain it with different contacts. In the cuboctahedral arrangement, the outer
+spheres touch along the edges, and the ratio of squared edge length to squared
+circumradius is {{KISSING_CUBOCTAHEDRON_EDGE_RATIO_SQUARED}}. In the icosahedral
+arrangement, each outer sphere touches only the centre, with a ratio of
+$2 - 2\sqrt{5}/5 \approx {{KISSING_ICOSAHEDRON_EDGE_RATIO_SQUARED}}$. The
+`kissing-twelve` probe computes both ratios exactly ([@sec:cuboctahedron]).
 
 ## The same quadratic sequence appears three times {#sec:subdivision}
 
@@ -224,11 +224,10 @@ densest packing in three dimensions.
 
 The carrier does not inherit that optimality, and the same cell is the reason
 the disagreement of [@sec:cuboctahedron] is not a quibble. The densest packing's
-kissing arrangement is the rigid cuboctahedral one, whose cell is the rhombic
-dodecahedron of tetravolume six; the carrier's solid is the loose icosahedral
-arrangement, of tetravolume ${{ICOSAHEDRON_TETRAVOLUME}}$, with a
-{{ICOSAHEDRON_DEGREE}}-regular graph. Both put twelve spheres around one, and they
-are different objects.
+kissing arrangement is the cuboctahedral one, whose cell is the rhombic
+dodecahedron of tetravolume six. The carrier's icosahedral arrangement has gaps
+between the outer spheres, tetravolume ${{ICOSAHEDRON_TETRAVOLUME}}$, and a
+{{ICOSAHEDRON_DEGREE}}-regular graph.
 
 ## Three number systems and no common unit {#sec:currencies}
 

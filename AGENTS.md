@@ -139,8 +139,8 @@ requires an interpreter that passes the template's bytecode audit.
   `docs/MANUSCRIPT_VALUES.md`.
 - Any new correspondence names its OPH, FEP and Synergetics reading and its
   source.
-- The manuscript renders: the PDF exists, its LaTeX log has no overfull box, and
-  its `.tex` has no unresolved `??` cross-reference.
+- The manuscript renders. The PDF has no unresolved reference placeholders,
+  and its LaTeX log has no overfull boxes or undefined references or citations.
 - The test count in `README.md` and `docs/VERIFICATION.md` matches the collected
   count; `test_docs.py` fails when it does not.
 

@@ -23,6 +23,7 @@ from oph_fep_synergetics.core import (
     shell_gap,
     simulate_repairs,
 )
+from oph_fep_synergetics.core.repair import classify_native_outcome
 
 ONE_AT_ZERO = (1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
@@ -108,6 +109,23 @@ def test_predict_energy_decrease_is_the_closed_form():
     assert predict_energy_decrease((3, 0), 0, 1) == 2.0
     assert predict_energy_decrease((6, 0), 0, 1) == 9.0
     assert predict_energy_decrease((7, 0), 0, 1) == (49 - 1) / 4.0
+
+
+def test_repair_classifies_an_exact_unit_drop_at_arbitrary_load_scale():
+    large = 10**200
+    loads = (2, 0, large)
+    outcome = classify_native_outcome(loads, (0, 1), 0)
+    step = outcome["step"]
+    assert step.after == (1, 1, large)
+    assert outcome["kind"] == "strict"
+    assert step.energy_before == Fraction(large**2 + 4, 2)
+    assert step.energy_decrease == predict_energy_decrease(loads, 0, 1) == 1
+    assert predict_energy_decrease((large, 0), 0, 1) == large**2 // 4
+
+
+def test_schedule_rejects_fractional_loads_before_running():
+    with pytest.raises(ValueError, match="nonnegative integers"):
+        simulate_repairs((1.5, 0), [(0, 1)], steps=0)
 
 
 def test_repair_rejects_bad_arguments():

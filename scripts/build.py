@@ -39,22 +39,16 @@ PROJECT_NAME = "OPH-FEP-Synergetics"
 
 def _template_root(explicit: str | None) -> Path:
     """Find the template checkout: flag, environment, then the sibling default."""
-    candidates = [
-        Path(explicit) if explicit else None,
-        Path(os.environ["TEMPLATE_ROOT"]) if os.environ.get("TEMPLATE_ROOT") else None,
-        PROJECT.parent / "template",
-    ]
-    for candidate in candidates:
-        if candidate is None:
-            continue
-        python = candidate / ".venv" / "bin" / "python"
-        stage = candidate / "scripts" / "pipeline" / "stage_03_render.py"
-        if python.is_file() and stage.is_file():
-            return candidate.resolve()
-    raise SystemExit(
-        "no template checkout found: pass --template-root, set $TEMPLATE_ROOT, "
-        "or place a template/ checkout beside this project"
-    )
+    configured = explicit if explicit is not None else os.environ.get("TEMPLATE_ROOT")
+    candidate = Path(configured).expanduser() if configured else PROJECT.parent / "template"
+    python = candidate / ".venv" / "bin" / "python"
+    stage = candidate / "scripts" / "pipeline" / "stage_03_render.py"
+    if not python.is_file() or not stage.is_file():
+        raise FileNotFoundError(
+            f"no usable template checkout at {candidate}. "
+            "Pass --template-root or set TEMPLATE_ROOT to a checkout with its own .venv."
+        )
+    return candidate.resolve()
 
 
 def _run(command: list[str], *, cwd: Path | None = None, env: dict[str, str] | None = None) -> None:
@@ -74,7 +68,10 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    template = _template_root(args.template_root)
+    try:
+        template = _template_root(args.template_root)
+    except FileNotFoundError as error:
+        parser.error(str(error))
     template_project = f"working/{PROJECT_NAME}"
     lane = template / "projects" / template_project
     if lane.resolve() != PROJECT:
