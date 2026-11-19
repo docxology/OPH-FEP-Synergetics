@@ -248,6 +248,8 @@ def _edge_clearance(flat: np.ndarray, edges: np.ndarray) -> float:
     stop = flat[edges[:, 1]]
     direction = stop - start
     length_squared = np.einsum("ij,ij->i", direction, direction)
+    if np.any(length_squared <= np.finfo(float).eps):
+        return 0.0
     offset = flat[:, None, :] - start[None, :, :]
     fraction = np.clip(np.einsum("vej,ej->ve", offset, direction) / length_squared, 0.0, 1.0)
     nearest = start[None, :, :] + fraction[:, :, None] * direction[None, :, :]
@@ -258,8 +260,22 @@ def _edge_clearance(flat: np.ndarray, edges: np.ndarray) -> float:
     return float(np.min(np.where(own, np.inf, distance)))
 
 
-def _projected_carrier() -> tuple[IcosahedralCarrier, np.ndarray]:
-    """Return the carrier and its deterministic planar spectral projection."""
+def _clearest_view(points: np.ndarray, edges: np.ndarray) -> np.ndarray:
+    """Rotate a solid to separate projected vertices from unrelated edges."""
+    best_score = -1.0
+    best_view = points
+    for theta in np.linspace(0.0, math.pi, 36, endpoint=False):
+        for phi in np.linspace(0.0, math.pi, 18, endpoint=False):
+            view = points @ _rotation(theta, phi).T
+            score = _edge_clearance(view[:, :2], edges)
+            if score > best_score:
+                best_score = score
+                best_view = view
+    return best_view
+
+
+def _carrier_view() -> tuple[IcosahedralCarrier, np.ndarray]:
+    """Return the carrier and its rotated spectral embedding, including depth."""
     carrier = icosahedral_carrier()
     eigenvalues, eigenvectors = np.linalg.eigh(carrier.laplacian())
     lam1 = 5.0 - math.sqrt(5.0)
@@ -267,22 +283,13 @@ def _projected_carrier() -> tuple[IcosahedralCarrier, np.ndarray]:
     if len(columns) != 3:
         raise RuntimeError(f"expected a three-dimensional lambda_1 eigenspace, got {len(columns)}")
     points = eigenvectors[:, columns] * math.sqrt(carrier.port_count)
-    edges = np.array(
-        [
-            (port, other)
-            for port in range(carrier.port_count)
-            for other in carrier.neighbours(port)
-            if other > port
-        ]
-    )
-    best: tuple[float, np.ndarray] = (-1.0, np.zeros((carrier.port_count, 2)))
-    for theta in np.linspace(0.0, math.pi, 36, endpoint=False):
-        for phi in np.linspace(0.0, math.pi, 18, endpoint=False):
-            flat = (points @ _rotation(theta, phi).T)[:, :2]
-            score = _edge_clearance(flat, edges)
-            if score > best[0]:
-                best = (score, flat)
-    return carrier, best[1]
+    return carrier, _clearest_view(points, np.array(carrier.edges))
+
+
+def _projected_carrier() -> tuple[IcosahedralCarrier, np.ndarray]:
+    """Return the carrier and its planar spectral projection."""
+    carrier, view = _carrier_view()
+    return carrier, view[:, :2]
 
 
 def registry_figure() -> Path:
@@ -893,64 +900,72 @@ def subdivision_figure() -> Path:
 
 
 def cover_figure() -> Path:
-    """Cover art: the carrier's ports and seams on a dark field."""
-    carrier, flat = _projected_carrier()
-    figure = plt.figure(figsize=(7.0, 7.0))
-    figure.patch.set_facecolor("#0b0f14")
-    axis = figure.add_subplot(111)
-    axis.set_facecolor("#0b0f14")
+    """Draw the carrier as a shaded solid with its full seam graph visible."""
+    carrier, view = _carrier_view()
+    flat = view[:, :2]
+    background = "#0B1823"
+    near_fill = np.array(matplotlib.colors.to_rgb("#153348"))
+    lit_fill = np.array(matplotlib.colors.to_rgb("#326A7D"))
+    light = np.array([-0.35, 0.45, 0.82])
+    light /= np.linalg.norm(light)
+    figure, axis = plt.subplots(figsize=(7.0, 7.0))
     axis.set_axis_off()
-    for face in OPH_ORIENTED_BASE_FACES:
+
+    foreground_edges = set()
+    foreground_ports = set()
+    for face in carrier.faces:
+        a, b, c = view[list(face)]
+        normal = np.cross(b - a, c - a)
+        normal /= np.linalg.norm(normal)
+        # The origin is inside the solid. Point the normal away from it.
+        if normal @ (a + b + c) < 0:
+            normal = -normal
+        if normal[2] <= 0:
+            continue
+        brightness = max(0.0, float(normal @ light))
         axis.fill(
-            [flat[port, 0] for port in face],
-            [flat[port, 1] for port in face],
-            color="#1d4e56",
-            alpha=0.35,
+            flat[list(face), 0],
+            flat[list(face), 1],
+            color=near_fill + brightness * (lit_fill - near_fill),
             linewidth=0,
-            zorder=0,
+            zorder=1,
         )
-    for port in range(carrier.port_count):
-        for other in carrier.neighbours(port):
-            if other > port:
-                axis.plot(
-                    [flat[port, 0], flat[other, 0]],
-                    [flat[port, 1], flat[other, 1]],
-                    color="#5c8f96",
-                    linewidth=1.2,
-                    alpha=0.9,
-                    zorder=1,
-                )
-    axis.scatter(
-        flat[:, 0],
-        flat[:, 1],
-        s=150,
-        color="#0b0f14",
-        edgecolor="#e6c27a",
-        linewidth=1.3,
-        zorder=3,
-    )
-    for port in range(carrier.port_count):
+        foreground_edges.update(((face[0], face[1]), (face[0], face[2]), (face[1], face[2])))
+        foreground_ports.update(face)
+
+    for edge in carrier.edges:
+        foreground = edge in foreground_edges
+        axis.plot(
+            flat[list(edge), 0],
+            flat[list(edge), 1],
+            color="#A1DCE1" if foreground else "#86A0B4",
+            linewidth=2.3 if foreground else 1.2,
+            linestyle="-" if foreground else (0, (3, 3)),
+            solid_capstyle="round",
+            zorder=3 if foreground else 2,
+        )
+    for port, (x, y) in enumerate(flat):
+        foreground = port in foreground_ports
+        rim = "#FFD58B" if foreground else "#9DB6C7"
+        axis.scatter(
+            x, y, s=310 if foreground else 250, color=background,
+            edgecolor=rim, linewidth=1.7 if foreground else 1.2, zorder=4,
+        )
         axis.text(
-            flat[port, 0],
-            flat[port, 1],
-            str(port),
-            ha="center",
-            va="center",
-            fontsize=7.5,
-            color="#e6c27a",
-            zorder=4,
+            x, y, str(port), ha="center", va="center", fontsize=11,
+            color="#FFF2D5" if foreground else "#E5EFF6", fontweight="bold", zorder=5,
         )
     axis.set_aspect("equal")
-    margin = 0.12
-    axis.set_xlim(flat[:, 0].min() - margin, flat[:, 0].max() + margin)
-    axis.set_ylim(flat[:, 1].min() - margin, flat[:, 1].max() + margin)
+    half_span = 0.60 * float(max(np.ptp(flat, axis=0)))
+    axis.set_xlim(-half_span, half_span)
+    axis.set_ylim(-half_span, half_span)
     return _save(
         figure,
         "fig_cover.png",
-        "The twelve ports of the carrier as pale gold nodes on a dark field, joined by its "
-        "thirty seams in teal and arranged in the planar spectral projection of the "
-        "icosahedron; each port is labelled with its index and the wireframe carries no title.",
-        facecolor="#0b0f14",
+        f"The finite OPH carrier on a dark field. Its {carrier.port_count} numbered ports "
+        f"and {carrier.seam_count} seams form an icosahedron. Shading shows the foreground "
+        "faces. Solid lines show foreground seams, and dashed lines trace rear seams.",
+        facecolor=background,
     )
 
 
@@ -1172,53 +1187,66 @@ def ga_carrier_figure() -> Path:
 
 
 def ga_descent_figure() -> Path:
-    """The descent census and the free-energy levels of the first five IVM shells."""
+    """Compare native-law outcomes and unit-covariance Gaussian divergence levels."""
     bound = as_dict()
     census = controls.gated_descent_census()
     multiplicities = controls.path_multiplicity_values()
     figure, (left, right) = plt.subplots(1, 2, figsize=(11.5, 5.4))
     labels = ["strict descent", "zero descent", "no-op"]
     values = [census["strict"], census["zero"], census["noop"]]
-    bars = left.bar(labels, values, color=[GREEN, ORANGE, GREY])
+    bars = left.barh(labels, values, color=[GREEN, ORANGE, GREY], height=0.6)
     for bar, value in zip(bars, values):
         left.annotate(
-            str(value),
-            (bar.get_x() + bar.get_width() / 2, bar.get_height()),
+            f"{value:,}",
+            (bar.get_width(), bar.get_y() + bar.get_height() / 2),
             textcoords="offset points",
-            xytext=(0, 3),
-            ha="center",
-            fontsize=9,
+            xytext=(6, 0),
+            va="center",
+            fontsize=10,
+            color=INK,
         )
-    left.set_ylabel("transitions")
+    left.invert_yaxis()
     left.set_title(
-        f"{census['states']} states × {int(bound['carrier.seams'])} seams × 2 coin outcomes\n"
-        f"= {sum(values):,} attempts"
+        f"{sum(values):,} native repair attempts\n"
+        f"{census['states']} states × {int(bound['carrier.seams'])} seams × 2 coin outcomes"
     )
-    left.set_ylim(0, max(values) * 1.25)
-    left.text(
-        0.03,
-        0.97,
-        "path multiplicities: " + ", ".join(str(value) for value in multiplicities),
-        transform=left.transAxes,
-        va="top",
-        fontsize=9,
-        color=INK,
-    )
+    left.set_xlim(0, max(values) * 1.24)
+    left.grid(False, axis="y")
+    left.set_xlabel("Attempt count\nPath multiplicities: " + ", ".join(map(str, multiplicities)))
 
     k_values = list(range(1, 6))
     origin = np.zeros(3)
     identity = np.eye(3)
-    shared: dict[float, list[int]] = {}
+    levels_by_shell: dict[int, list[float]] = {}
     kl_by_k: dict[int, float] = {}
     for k in k_values:
         shell = geometry.generate_shell(k)
-        levels = sorted({float(0.5 * geometry.squared_norm(site)) for site in shell})
-        right.scatter([k] * len(levels), levels, color=BLUE, s=30, zorder=3)
-        for level in levels:
-            shared.setdefault(level, []).append(k)
+        levels_by_shell[k] = sorted({float(0.5 * geometry.squared_norm(site)) for site in shell})
         target = geometry.NEIGHBOR_SQUARED_DISTANCE * k * k
         site = next(site for site in shell if geometry.squared_norm(site) == target)
         kl_by_k[k] = free_energy.gaussian_kl(origin, identity, geometry.to_xyz(site), identity)
+    occurrences = Counter(level for levels in levels_by_shell.values() for level in levels)
+    shared_levels = sorted(level for level, count in occurrences.items() if count > 1)
+    for level in shared_levels:
+        right.axhline(level, color=VERMILLION, linestyle=":", linewidth=1.1, zorder=1)
+    ordinary = [
+        (k, level) for k, levels in levels_by_shell.items()
+        for level in levels if occurrences[level] == 1
+    ]
+    shared = [
+        (k, level) for k, levels in levels_by_shell.items()
+        for level in levels if occurrences[level] > 1
+    ]
+    shared_labels = ", ".join(f"{level:g}" for level in shared_levels)
+    right.scatter(
+        [k for k, _ in ordinary], [level for _, level in ordinary],
+        color=BLUE, s=30, zorder=3, label="Level on one shell",
+    )
+    right.scatter(
+        [k for k, _ in shared], [level for _, level in shared],
+        facecolor="white", edgecolor=VERMILLION, marker="D", s=45,
+        linewidth=1.4, zorder=4, label=f"Shared levels ({shared_labels})",
+    )
     right.plot(
         k_values,
         [kl_by_k[k] for k in k_values],
@@ -1229,19 +1257,8 @@ def ga_descent_figure() -> Path:
         label=r"Shell maximum $4k^2$",
         zorder=2,
     )
-    for level, shells in shared.items():
-        if len(shells) > 1:
-            right.axhline(level, color=VERMILLION, linestyle=":", linewidth=1.1)
-            right.annotate(
-                f"level {level:g}: shells {', '.join(str(k) for k in shells)}",
-                xy=(max(shells), level),
-                xytext=(5.12, level - 1.0),
-                va="top",
-                fontsize=9,
-                color=INK,
-            )
     right.set_xticks(k_values)
-    right.set_xlim(0.6, 7.6)
+    right.set_xlim(0.65, 5.35)
     right.set_xlabel("IVM coordination shell $k$")
     right.set_ylabel("Gaussian KL (nats)")
     right.set_title("Several Gaussian costs per shell")
@@ -1249,19 +1266,20 @@ def ga_descent_figure() -> Path:
     return _save(
         figure,
         "fig_ga_descent.png",
-        f"Two panels. Left: the descent census as three bars, "
+        f"Two panels. Left: the descent census as three horizontal bars, "
         f"{int(bound['shell.strict_descent'])} strict descents, "
         f"{int(bound['shell.zero_descent'])} zero descents and {int(bound['shell.noop'])} "
         f"no-op moves, annotated with the path-multiplicity values "
         f"{_enumerated(bound['shell.multiplicities'])}. Right: the distinct Gaussian KL values "
         f"of the first {len(k_values)} IVM shells at integer shell numbers, with "
-        f"levels {_enumerated(bound['shell.shared_free_energy_levels'])} marked by dotted lines "
-        "where they are shared between shells. The shell-wise maximum is four k squared.",
+        f"levels {_enumerated(bound['shell.shared_free_energy_levels'])} shown as open diamonds "
+        "on dotted guides where they are shared between shells. A dashed curve joins the shell "
+        "maxima at four k squared.",
     )
 
 
 def ga_synergetics_figure() -> Path:
-    """The integral tetravolume table beside the icosahedron and its Voronoi cell."""
+    """Compare the IVM solids, the carrier icosahedron and the IVM Voronoi cell."""
     figure, (left, right) = plt.subplots(1, 2, figsize=(11.5, 5.2))
     ivm_volumes = geometry.derived_volume_ratios()
     ico_volume = float(geometry.icosahedron_tetravolume_exact()["tetravolume"])
@@ -1610,14 +1628,9 @@ def network_figure() -> Path:
     dual_axis.set_axis_off()
     dual_axis.set_title("4. The dual pair: Voronoi cell and cuboctahedron", fontsize=10.5)
 
-    def planar(points) -> np.ndarray:
-        pts = np.asarray(points, dtype=float)
-        pts = pts - pts.mean(axis=0)
-        e1 = np.array([1.0, -1.0, 0.0]) / math.sqrt(2.0)
-        e2 = np.array([1.0, 1.0, -2.0]) / math.sqrt(6.0)
-        return np.stack([pts @ e1, pts @ e2], axis=1)
-
-    def draw_solid(centre_x, projected, edges, colour, caption):
+    def draw_solid(centre_x, vertices, edges, colour, caption):
+        points = np.asarray(vertices, dtype=float)
+        projected = _clearest_view(points - points.mean(axis=0), np.array(edges))[:, :2]
         span = max(float(np.linalg.norm(row)) for row in projected)
         placed = projected / span * 0.46 + np.array([centre_x, 0.32])
         for a, b in edges:
@@ -1646,16 +1659,14 @@ def network_figure() -> Path:
             cell_edges.add((min(vertex, following), max(vertex, following)))
     draw_solid(
         -1.05,
-        planar(cell["vertices"]),
+        cell["vertices"],
         sorted(cell_edges),
         KIND_COLOURS["complementarity"],
         f"Voronoi cell: {cell['vertex_count']} vertices,\n"
         f"{cell['face_count']} rhombic faces, {cell['edge_count']} edges,\n"
         f"tetravolume {cell_tetravolume}",
     )
-    cuboctahedron_vertices = planar(
-        [geometry.to_xyz(site) for site in geometry.cuboctahedron_neighbors()]
-    )
+    cuboctahedron_vertices = [geometry.to_xyz(site) for site in geometry.cuboctahedron_neighbors()]
     cuboctahedron_adj = geometry.cuboctahedron_adjacency()
     cuboctahedron_edge_pairs = [
         (a, b)
@@ -1696,8 +1707,9 @@ def network_figure() -> Path:
         "logarithmic axis, horizontal bars for triangles, induced five-cycles (the chordless "
         "links of the twelve ports, which are the pentagonal faces of the dual dodecahedron), "
         "perfect matchings and Hamiltonian cycles, with the icosahedron face count drawn as a "
-        "reference line. Panel four compares the Voronoi cell and the cuboctahedron by their "
-        "vertex, face and edge counts and their tetravolumes, ending in the exact volume ratio.",
+        "reference line. Panel four shows separate projections of the Voronoi cell and the "
+        "cuboctahedron with every vertex visible. Their captions compare vertex, face and "
+        "edge counts and tetravolumes, ending in the exact volume ratio.",
     )
 
 
@@ -2087,11 +2099,10 @@ def _convex_hull(points: list[tuple[float, float]]) -> list[tuple[float, float]]
 
 
 def shell_gauge_figure() -> Path:
-    """A coordination shell is a polyhedral surface; a free-energy level is a sphere."""
+    """Compare polyhedral coordination shells with spherical Gaussian KL levels."""
     bound = as_dict()
     window = 6
     shared_levels = [float(level) for level in bound["shell.shared_free_energy_levels"]]
-    top_shell = geometry.MAX_SHELL if hasattr(geometry, "MAX_SHELL") else 12
     shell_range = range(1, 13)
 
     # --- left: the plane u3 = 0 of D3 coloured by the closed-form gauge -----
@@ -2140,7 +2151,7 @@ def shell_gauge_figure() -> Path:
     for level, colour, style, label in circles:
         radius = math.sqrt(level / 2.0)  # F = 2 |u|^2 on the halved lattice
         left.plot(radius * np.cos(theta), radius * np.sin(theta), color=colour, linestyle=style,
-                  linewidth=2.0, zorder=3, label=f"free-energy level {label}")
+                  linewidth=2.0, zorder=3, label=f"KL level {label}")
     left.set_aspect("equal")
     left.set_xlim(-window - 0.8, window + 0.8)
     left.set_ylim(-window - 0.8, window + 0.8)
@@ -2148,7 +2159,7 @@ def shell_gauge_figure() -> Path:
     left.set_yticks(range(-window, window + 1, 2))
     left.set_xlabel("$u_1$")
     left.set_ylabel("$u_2$")
-    left.set_title("plane $u_3=0$ of the lattice $D_3$:\nshells are squares here, levels are circles")
+    left.set_title("Shells and divergence contours in the $u_3=0$ slice")
     left.legend(loc="upper center", bbox_to_anchor=(0.5, -0.14), ncol=2, fontsize=8.5)
 
     # --- right: the range of F on each shell --------------------------------
@@ -2180,14 +2191,17 @@ def shell_gauge_figure() -> Path:
     right.scatter(shared_x, shared_y, s=34, color=ORANGE, edgecolor=INK, linewidth=0.6, zorder=4,
                   label="level shared by shells")
     curve = np.linspace(ks.min() - 0.3, ks.max() + 0.3, 100)
-    right.plot(curve, 2.0 * curve**2, color=VERMILLION, linewidth=1.6, zorder=2, label="$2k^2$")
+    right.plot(
+        curve, 2.0 * curve**2, color=VERMILLION, linewidth=1.6, zorder=2,
+        label="lower bound $2k^2$",
+    )
     right.plot(curve, 4.0 * curve**2, color=BLACK, linewidth=1.6, linestyle="--", zorder=2,
-               label="$4k^2$")
+               label="shell maximum $4k^2$")
     right.set_xticks(list(shell_range))
     right.set_xlim(0.4, 12.6)
     right.set_xlabel("coordination shell $k$")
-    right.set_ylabel(r"free energy $F=\frac{1}{2}\|x\|^2$")
-    right.set_title("free-energy range on each shell: neighbouring shells overlap")
+    right.set_ylabel(r"Gaussian KL $F=\frac{1}{2}\|x\|^2$ (nats)")
+    right.set_title("Divergence levels across coordination shells")
     right.legend(loc="upper left", fontsize=8.5, ncol=2)
     if len(set(vertex_counts)) != 1:
         raise RuntimeError(f"the maximum 4k^2 is not attained at a constant count: {vertex_counts}")
@@ -2206,22 +2220,22 @@ def shell_gauge_figure() -> Path:
         bbox={"facecolor": "white", "edgecolor": SKY, "boxstyle": "round,pad=0.35"},
         zorder=5,
     )
-    del top_shell
     return _save(
         figure,
         "fig_shell_gauge.png",
-        "Two panels on the coordination shell and the free energy. Left: the lattice points of "
+        "Two panels compare coordination shells with unit-covariance Gaussian divergence. "
+        "Left: the lattice points of "
         f"the face-centred cubic lattice D3 in the plane u3 equal to zero with both coordinates "
         f"between minus {window} and {window}, coloured by their closed-form coordination "
         "shell; the shell boundaries are drawn as nested squares in this slice, and three "
-        f"circles are overlaid for the free-energy levels {2 * demo_k**2:g}, "
+        f"circles are overlaid for the divergence levels {2 * demo_k**2:g}, "
         f"{4 * demo_k**2:g} and {max(shared_levels):g}, so a shell is a polyhedral surface and a "
-        "free-energy level is a sphere that crosses several shells. Right: for shells one to "
-        "twelve, a vertical bar from the smallest to the largest free energy on the shell, a dot "
+        "divergence level is a sphere that crosses several shells. Right: for shells one to "
+        "twelve, a vertical bar from the smallest to the largest divergence on the shell, a dot "
         "for every distinct level with the levels shared between shells highlighted, and the "
         f"curves two k squared and four k squared; the maximum four k squared is attained at "
-        f"exactly {vertex_counts[0]} sites on every shell, the twelve vertices. A free energy "
-        "bounded above bounds the shell, but shell and level are not functions of one another.",
+        f"exactly {vertex_counts[0]} sites on every shell, the twelve vertices. An upper bound "
+        "on divergence gives an upper bound on shell index.",
     )
 
 

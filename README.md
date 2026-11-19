@@ -105,12 +105,12 @@ Selected results follow.
 | Two-record Gaussian marginals are determined by effective resistance and the record prior | exact | all 66 carrier pairs satisfy the Schur identity; seam, distance-two and antipodal resistance are 11/30, 7/15 and 1/2 | Schur elimination and an independent rational network solve |
 | **Eliminating an interior mediator is not free** | **obstructed** | the reduced precision is `(1/3) v v^T + epsilon I`; a sum of pairwise semidefinite terms reproduces it iff `epsilon >= 1/3` | [Agreement and Surprise][agreement-and-surprise], Proposition 8; rank-one construction here |
 | **Distinct drifts preserve the same stationary blanket** | **obstructed** | with a zero precision entry the internal drift is `2q eta + (q - 1) b - 2 mu`, which varies with `q` at fixed stationary covariance | [Agreement and Surprise][agreement-and-surprise], Proposition 11; Da Costa et al.’s stationary blanket example |
-| **Agreement can exist and be unreachable** | **obstructed** | the clipped two-node map has the origin as its only equilibrium and a source there; the relaxation orbit stays at radius `>= 0.84` with period `~7.58` | [Agreement and Surprise][agreement-and-surprise], Proposition 15; exact fixed-point census and orbit measurement here |
+| **Agreement can exist and be unreachable** | **obstructed** | The fixed-point census finds only the unstable origin. The sampled relaxation orbit has a minimum radius of about `0.8401` and an estimated period of `7.575`. The source reports a lower bound of `0.84` and a period of `7.58`. | [Agreement and Surprise][agreement-and-surprise], Proposition 15 |
 | **D-stability is not free** | **obstructed** | Lyapunov form `P = (1/3)[[11,4,-8],[4,5,-2],[-8,-2,9]]`, `det P = 115/27`; at `k = 4` the Routh first column is `(1, 6, -2, 24)` and the scaled matrix has two right-half-plane roots | [Agreement and Surprise][agreement-and-surprise], §4.1 and Proposition 10; general Routh column here |
 | **Finite phases are path functions** | **obstructed** | full and half-damped iteration share every answer, yet their centered contrasts after twelve steps differ by exactly `921633999 / 40000000000` | [Agreement and Surprise][agreement-and-surprise], Proposition 6 and §4.4; exact contrast here |
 | Quadray geometry supplies the exact integer side of the correspondence | exact | 12 neighbour moves at squared distance 8, shells `10k^2 + 2`, rational volumes `1, 3, 4, 6, 20, 96` | QuadMath conventions; lattice counts and volumes derived here |
 | Equilibrium propagation supplies the parameter gradient the repair law does not define | exact | the two-settle contrast is `(theta - target) / (1 + beta)` exactly and tends to the exact gradient | [Agreement and Surprise][agreement-and-surprise], Theorem 21; Scellier and Bengio |
-| The carrier counts its own spanning trees | exact | the reduced Laplacian's determinant is `5184000` — by Kirchhoff's matrix-tree theorem the number of spanning trees in OPH's reading and, as the determinant of the same matrix read as a Gaussian precision with one port pinned, the normalisation of the FEP's linear-Gaussian interface integral — equal to the product of the eleven nonzero eigenvalues over `12` | Kirchhoff’s matrix-tree theorem applied here to the carrier |
+| The carrier's reduced Laplacian counts its spanning trees | exact | The grounded determinant equals `5184000`, also the product of the nonzero eigenvalues divided by `12`. In the Gaussian model with one pinned port, the integral is proportional to `5184000^(-1/2)`. | Kirchhoff’s matrix-tree theorem and the grounded Gaussian integral |
 | A proper Gaussian with precision `L + I/n` has the seam graph's conditional dependencies | exact | seam precision is `-1` and each port's blanket is its five neighbours. The centered intrinsic field separately gives port variance `7/36` | Carrier Gaussian precisions and intrinsic variance calculated here |
 | The faces fill the cycle space of the carrier graph | exact | For the scalar sheaf, the graph has a one-dimensional space of global sections and `dim H^1 = 19`. Adding the faces gives Betti numbers `(1, 0, 1)`. The oriented faces sum to a fundamental cycle. | Cellular sheaf construction from [Agreement and Surprise][agreement-and-surprise], §7.2; carrier cohomology calculated here |
 | The symmetry group preserves the native repair law | exact | The group has 120 elements, with 60 rotations and 60 orientation-reversing symmetries. Equivariance is checked over 1123200 combinations of group element, configuration, oriented seam and coin. The shell has 4 configuration orbits and 3 outcome multisets. | Carrier automorphisms and native transitions enumerated here |
@@ -120,9 +120,9 @@ Selected results follow.
 | Synergetics' tetravolume table is derived, not transcribed | exact | `1, 3, 4, 6, 20, 96` come out of explicit integer vertex sets by exact convex-hull volumes in the rationals | QuadMath conventions; exact convex-hull volumes derived here |
 | The carrier's own solid has an exact algebraic volume | exact | computed in exact field arithmetic as `sqrt 2 (15/2 + (5/2) sqrt 5) = 18.512295868219...`, squared exactly `175 + 75 sqrt 5`; its conjugate is `2.7009...` and the product is exactly `50` | Carrier geometry; exact field computation here |
 | Both twelve-around-one arrangements attain the kissing number, differently | exact | squared edge over squared circumradius is exactly `1` for the cuboctahedron, where each outer sphere touches four others, and `2 - 2 sqrt 5 / 5` for the icosahedron, where each outer sphere touches only the centre | Carrier and vector equilibrium compared here |
-| The twelve-around-one cell is the densest packing's cell | exact | 14 vertices, 12 rhombic faces, 24 edges, tetravolume exactly 6, ball tetravolume exactly `pi sqrt 2`, density exactly `pi / (3 sqrt 2)` — optimal among lattice packings (Gauss) and all packings (Hales) | Exact Voronoi cell calculated here; packing optimality from Gauss and Hales |
+| The FCC Voronoi cell gives a packing density of `pi / (3 sqrt 2)` | exact | The cell has 14 vertices, 12 rhombic faces, and 24 edges. Its tetravolume is 6 and its inscribed ball has tetravolume `pi sqrt 2`. The density attains the Kepler bound. | Exact Voronoi cell calculated here. [Formal proof of the Kepler conjecture](https://doi.org/10.1017/fmp.2017.1) |
 
-[agreement-and-surprise]: https://philpapers.org/rec/MUEAAS-2
+[agreement-and-surprise]: https://philpapers.org/versions/MUEAAS-2
 [oph-source]: https://github.com/FloatingPragma/observer-patch-holography
 [oph-synthesis]: https://philpapers.org/rec/MUEFOC
 
@@ -181,6 +181,11 @@ The Pandoc and LaTeX pipeline from `docxology/template` builds the paper
 from `manuscript/`. Run the build from this repository after installing the
 figure and test extras.
 
+The [ontology concordance](manuscript/90_ontology_concordance.md) compares
+the meanings of shared terms across the three programmes and links each
+comparison to its domain and executable evidence. The [structured source](data/ontology_concordance.json)
+contains the stable identifiers and source references used to generate it.
+
 ```sh
 .venv/bin/python scripts/build.py --template-root /path/to/template
 ```
@@ -228,13 +233,14 @@ docs/CONCORDANCE.md                  generated: where each claim is stated and e
 docs/PROVENANCE.md                   the pins and the reuse rules
 docs/SCOPE.md                        what is reimplemented, what is cited, what is out
 docs/VERIFICATION.md                 the gates and how to run them
-manuscript/                          config.yaml, preamble.md, references.bib and eleven sections
-scripts/render_docs.py               regenerates the three generated documents
+data/ontology_concordance.json       structured terms, comparisons, evidence and limits
+manuscript/                          paper, bibliography and generated ontology supplement
+scripts/render_docs.py               regenerates the reference documents and ontology supplement
 scripts/make_figures.py              renders the twenty-three figures and their accessibility registry
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (420 tests)
+tests/                               the suite (422 tests)
 ```
 
 ## Tests
@@ -243,7 +249,7 @@ tests/                               the suite (420 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-420 tests. The suite checks exact values rather than
+422 tests. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

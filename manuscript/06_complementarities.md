@@ -175,18 +175,15 @@ convention is a convention: changing the unit tetrahedron rescales every entry i
 the table, and the claim made here is the ratio the convention defines and not an
 absolute volume.
 
-Why this is a complementarity rather than an identification is now visible. OPH
-supplies the graph, and the graph's faces are triangles; Synergetics supplies the
-convention in which those triangles have exactly computable volumes; and neither
-programme as written states the volume of the solid its own graph bounds. The
-table's integral entries and the carrier's algebraic entry belong to the same
-accounting, which is what makes the disagreement of [@sec:cuboctahedron] a
-statement about solids and not about conventions.
+The oriented carrier faces bound the solid. Synergetics supplies the reference
+tetrahedron for computing its enclosed volume. This common unit makes the
+carrier's algebraic volume directly comparable with the integral entries in
+the lattice table [@sec:cuboctahedron].
 
-## The densest packing in three dimensions has the twelve-around-one cell {#sec:packing}
+## The IVM Voronoi cell determines the FCC packing density {#sec:packing}
 
 ::: {#prop:packing .proposition}
-The Voronoi cell of the twelve neighbours has {{VORONOI_VERTICES}} vertices,
+The Voronoi cell of an IVM site has {{VORONOI_VERTICES}} vertices,
 {{VORONOI_FACES}} rhombic faces and {{VORONOI_EDGES}} edges, with Euler
 characteristic two and no orientation flips. Its tetravolume is
 {{PACKING_CELL_TETRAVOLUME}}, and the ball of radius half the prime vector
@@ -194,38 +191,38 @@ inscribed in it has tetravolume {{PACKING_BALL_TETRAVOLUME}}, so the packing
 fraction is {{PACKING_DENSITY}}, equal to $\pi/(3\sqrt{2})$.
 :::
 
-This is the paper's clearest case of a number that can be *derived* instead of
-read. The tetravolume of the cell is computed from the halved squared norm at each
-of its fourteen vertices, using the same quadratic form that makes the neighbour
-distances exact, and it arrives at six: the same six the synergetic table lists
-for the rhombic dodecahedron. A reader who suspects that a table entry is a
-stylised fact can therefore check it by an independent route, which is the
-pattern this package uses wherever a source table has consequences.
+The nearest-neighbour bisectors give the candidate cell. In the Cartesian
+embedding the lattice sites are $2u$ for $u\in D_3$, where $D_3$ consists of
+integer triples of even coordinate sum. The Voronoi inequality for each site
+is $x\cdot u\leq\lVert u\rVert^2$. At the sign vertices
+$x=(\pm1,\pm1,\pm1)$, it follows from
+$\lVert u\rVert_1\leq\lVert u\rVert^2$. At the axial vertices $x=\pm2e_i$,
+it follows from $2|u_i|\leq\lVert u\rVert^2$: when $|u_i|=1$, parity forces
+another nonzero coordinate. The inequality then holds throughout the convex
+hull, so farther sites leave the candidate cell intact.
 
-The density is then derived rather than quoted, and it is exact. The cell has
-integer vertices, so its volume is computed in rational arithmetic and its
-tetravolume is exactly {{PACKING_CELL_TETRAVOLUME}}; the inscribed ball has radius
-$\sqrt{2}$, half the prime vector, so its tetravolume is exactly $\pi\sqrt{2}$;
-and the density is their ratio, $\pi\sqrt{2}/6 = \pi/(3\sqrt{2}) = {{PACKING_DENSITY}}$.
-That number is the Kepler density of the face-centred cubic arrangement, of which
-the IVM's twelve neighbours are the local picture. It is optimal among lattice
-packings [@gauss1840seeber] and among all packings
-[@hales2005kepler; @hales2017formal]. The complementarity is that Synergetics'
-twelve-around-one is not a drawing convention but the local configuration of the
-densest packing in three dimensions.
+The probe checks that the numerical cell and the exact construction give the
+same vertices. It evaluates the convex hull volume over the rationals and
+checks the result against the surface-integral and pyramid volumes. The
+tetravolume {{PACKING_CELL_TETRAVOLUME}} agrees with the Synergetics table.
+The inscribed ball has radius $\sqrt{2}$, half the prime vector, and
+tetravolume $\pi\sqrt{2}$. Their ratio is
+$\pi\sqrt{2}/6 = \pi/(3\sqrt{2}) = {{PACKING_DENSITY}}$.
+This is the computed density of the face-centred cubic (FCC) packing.
+Optimality among lattice packings and among all congruent-sphere packings
+comes from the cited theorems [@gauss1840seeber; @hales2005kepler; @hales2017formal].
 
-The carrier does not inherit that optimality, and the same cell is the reason
-the disagreement of [@sec:cuboctahedron] is not a quibble. The densest packing's
-kissing arrangement is the cuboctahedral one, whose cell is the rhombic
-dodecahedron of tetravolume six. The carrier's icosahedral arrangement has gaps
-between the outer spheres, tetravolume ${{ICOSAHEDRON_TETRAVOLUME}}$, and a
-{{ICOSAHEDRON_DEGREE}}-regular graph.
+The FCC packing gives the cuboctahedral arrangement of neighbours. The
+carrier's icosahedral arrangement has gaps between the outer spheres,
+tetravolume ${{ICOSAHEDRON_TETRAVOLUME}}$, and a
+{{ICOSAHEDRON_DEGREE}}-regular graph [@sec:cuboctahedron].
 
 ## Exact quantities on different scales {#sec:currencies}
 
 ::: {#prop:currencies .proposition}
-The three programmes' exact quantities live in different number systems. The
-FEP's divergence for one IVM step is the integer {{KL_ONE_STEP}} nats (with unit
+Under the stated conventions the calculations give an integral divergence,
+a quadratic algebraic rate, and integral or algebraic tetravolumes. The
+divergence for one IVM step is the integer {{KL_ONE_STEP}} nats (with unit
 covariance in the default embedding); the carrier's normalised spectral gap, a
 relaxation rate of OPH's mean repair operator, is the quadratic surd
 $(5-\sqrt{5})/60 \approx {{CARRIER_SHELL_GAP}}$; and Synergetics' table is

@@ -24,9 +24,9 @@ gives one; `Note` records what is measured rather than quoted.
 | `schedule.affine_contrast` | 0.02304085 | `921633999 / 40000000000` | 'Agreement and Surprise' Section 4.4 | the centered-contrast difference between full and half-damped iteration after twelve steps |
 | `d_stability.routh_k4` | (1, 6, -2, 24) | `(1, 6, -2, 24)` | 'Agreement and Surprise' Section 4.1 | the Routh first column at k = 4; two right-half-plane roots |
 | `d_stability.lyapunov_determinant` | 4.25925926 | `115 / 27` | 'Agreement and Surprise' Proposition 10 |  |
-| `two_node.relaxation_min_radius` | 0.84 |  | 'Agreement and Surprise' Proposition 15: 'at distance at least 0.84' | measured 0.8401 for the relaxation orbit; the source reports the bound, this package the measurement |
-| `two_node.relaxation_period` | 7.58 |  | 'Agreement and Surprise' Proposition 15: 'period 7.58 in units of the relaxation time' | measured 7.575 at dt = 1e-3 |
-| `two_node.sync_min_radius` | 1 |  | two_node_orbit_min_radius | the synchronous clipped map is a different object from the relaxation orbit |
+| `two_node.relaxation_min_radius` | 0.84 |  | 'Agreement and Surprise' Proposition 15: 'at distance at least 0.84' | the package reports a separate minimum over the sampled integration window |
+| `two_node.relaxation_period` | 7.58 |  | 'Agreement and Surprise' Proposition 15: 'period 7.58 in units of the relaxation time' | the package estimates the return time from a separate numerical trajectory |
+| `two_node.sync_min_radius` | 1 |  | two_node_orbit_min_radius | minimum over the synchronous sample after the discarded transient |
 | `ivm.neighbor_moves` | 12 | `the distinct permutations of (2, 1, 1, 0)` | QuadMath src/quadmath/core/quadray.py: IVM_NEIGHBOR_MOVES |  |
 | `ivm.neighbor_squared_distance` | 8 |  | QuadMath src/quadmath/lattice/omni_numbering.py | center-to-neighbor distance 2*sqrt(2) in the scale-one embedding |
 | `ivm.shell_counts` | (1, 12, 42, 92, 162) | `10k^2 + 2` | QuadMath shell_count(k) = 10k^2 + 2 |  |
@@ -38,9 +38,9 @@ gives one; `Note` records what is measured rather than quoted.
 | `fep_formal.topics` | 168 | `168` | FEP_Formal config/catalogue_metadata.yaml, roster fep-001 .. fep-168 |  |
 | `paper.five_surprises` | (numerical, bayesian, surprisal, critic, meaningful) |  | 'Agreement and Surprise' Table 7 | the first three coincide up to curvature in the linear Gaussian corner; the last two need a task |
 | `d_stability.routh_onset` | 3.16227766 | `sqrt(10)` | 'Agreement and Surprise' Section 4.1 characteristic polynomial, derived here | the third Routh entry is 2(10 - k^2)/(k + 2), so for k > 0 stability holds exactly when k < sqrt(10) |
-| `two_node.relaxation_min_radius_measured` | 0.840070783 |  | two_node_relaxation_orbit, measured in this package | the source states the bound 0.84; this is the measurement the prose reports beside it |
-| `two_node.relaxation_max_radius` | 1.05339122 |  | two_node_relaxation_orbit, measured in this package | the outer radius of the annulus that contains the relaxation orbit |
-| `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | the source states 7.58; this is the measurement the prose reports beside it |
+| `two_node.relaxation_min_radius_measured` | 0.840070783 |  | two_node_relaxation_orbit, measured in this package | minimum over the finite post-transient relaxation sample |
+| `two_node.relaxation_max_radius` | 1.05339122 |  | two_node_relaxation_orbit, measured in this package | maximum over the finite post-transient relaxation sample |
+| `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | estimated time to return near the anchor point of the sampled trajectory |
 | `registry.entries` | 44 | `44` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.isomorphisms` | 19 | `19` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.disagreements` | 15 | `15` | analysis/registry.py CORRESPONDENCES |  |

@@ -72,7 +72,7 @@ Native repair acts on a configuration, a seam and a coin outcome. Of the
 leave the state unchanged. The repair rule commutes with the carrier
 symmetries, so the census is invariant under their action.
 
-![Left: repair attempts on the native load shell, grouped by outcome and annotated with path multiplicities. Right: Gaussian divergence at unit covariance on the IVM coordination shells. Dots give the distinct costs on each shell, the dashed curve gives the shell maxima, and dotted lines mark costs shared by shells.](../output/figures/fig_ga_descent.png){#fig:ga-descent width=100%}
+![Left: horizontal bars count repair attempts on the native load shell by outcome. Labels show path multiplicities. Right: dots give the distinct Gaussian costs at unit covariance on each IVM coordination shell. The dashed curve traces shell maxima. Open diamonds and dotted guides mark costs shared by shells.](../output/figures/fig_ga_descent.png){#fig:ga-descent width=100%}
 
 Gaussian divergence at unit covariance is half the squared distance between
 the means. One lattice step has squared length {{KL_STEP_SQUARED_DISTANCE}}

@@ -15,7 +15,9 @@ manuscript and value table use the same set of bindings.
 
 | Surface | Authored | Generated |
 |:-------------------------------------------|:-------------|:------------------------------------------|
-| `manuscript/*.md` | yes | never |
+| Main manuscript sections | yes | never |
+| `data/ontology_concordance.json` | yes | never |
+| `manuscript/90_ontology_concordance.md` | no | `scripts/render_docs.py` |
 | `references.bib` | yes | never |
 | `src/oph_fep_synergetics/` | yes | never |
 | `uv.lock` | no | `uv lock` |
@@ -27,6 +29,9 @@ manuscript and value table use the same set of bindings.
 : Which surfaces are written by hand and which are produced. A generated surface
 is never edited to make a check pass; the producer is changed instead.
 {#tbl:surfaces}
+
+The ontology concordance in [@sec:ontology-concordance] maps terms to their
+model-specific meanings, applicability and relevant registry probes.
 
 ## The three source pins
 

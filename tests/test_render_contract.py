@@ -7,6 +7,8 @@ synthetic page text; the LaTeX log is available only after a local rebuild.
 from __future__ import annotations
 
 import importlib.util
+import json
+import re
 from pathlib import Path
 
 import pytest
@@ -150,12 +152,29 @@ def test_standalone_pdf_rejects_printed_reference_markers(tmp_path, monkeypatch)
 
 
 @pytest.mark.skipif(not PDF.is_file(), reason="no rendered PDF in this checkout")
-def test_the_rendered_pdf_keeps_the_front_matter_contract():
+def test_the_rendered_pdf_keeps_the_front_matter_and_ontology_supplement():
     passed, lines = check_render.check(PDF, log=None)
     assert passed, "\n".join(lines)
-    cover = " ".join(check_render.pdf_text(PDF)[0].split())
+    pages = check_render.pdf_text(PDF)
+    cover = " ".join(pages[0].split())
     first_author = cover.index("Daniel Ari Friedman")
     second_author = cover.index("Bernhard Mueller")
     assert first_author < second_author
     assert "Active Inference Institute" in cover[first_author:second_author]
     assert "Pragma Research, Active Inference Institute" in cover[second_author:]
+    supplement_page = next(
+        index for index, page in enumerate(pages)
+        if re.search(r"(?m)^\s*\d+\s+Ontology concordance\s*$", page)
+    )
+    references_page = next(
+        index for index, page in enumerate(pages)
+        if re.search(r"(?m)^\s*\d+\s+References\s*$", page)
+    )
+    assert supplement_page < references_page
+    ontology = json.loads((PROJECT / "data" / "ontology_concordance.json").read_text(encoding="utf-8"))
+    group_pages = [
+        next(index for index in range(supplement_page, references_page)
+             if re.search(rf"(?m)^\s*\d+\.\d+\s+{re.escape(group['title'])}\s*$", pages[index]))
+        for group in ontology["groups"]
+    ]
+    assert group_pages == sorted(set(group_pages))

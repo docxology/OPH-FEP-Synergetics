@@ -31,6 +31,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass, field
 from fractions import Fraction
+from itertools import combinations, product
 from typing import Callable
 
 import numpy as np
@@ -434,7 +435,9 @@ def _probe_sheaf_agreement() -> tuple[bool, dict]:
             np.allclose(sheaf.laplacian(), carrier.laplacian(), atol=1e-9)
         ),
         "global_section_dimension": int(sheaf.global_section_basis().shape[1]),
-        "injectivity_all_ports": sheaf.record_injectivity(range(carrier.port_count)),
+        "injectivity_all_ports": all(
+            sheaf.record_injectivity((port,)) for port in range(carrier.port_count)
+        ),
         "chain_injectivity_one_record": chain.record_injectivity([0]),
         "chain_injectivity_no_record": chain.record_injectivity([]),
         "chain_global_section_dimension": int(chain.global_section_basis().shape[1]),
@@ -498,10 +501,21 @@ def _probe_tree_number() -> tuple[bool, dict]:
     carrier = _carrier()
     exact = invariant_module.spanning_tree_number(carrier)
     from_spectrum = invariant_module.tree_number_from_spectrum(carrier)
+    # Pair the conjugate eigenvalues 5 ± sqrt(5) before forming the product.
+    from_closed_spectrum = Fraction((5**2 - 5)**3 * 6**5, carrier.port_count)
+    grounded = carrier.laplacian()[1:, 1:]
+    cholesky = np.linalg.cholesky(grounded)
+    log_prefactor = grounded.shape[0] * math.log(2 * math.pi) / 2
+    log_integral = log_prefactor - float(np.log(np.diag(cholesky)).sum())
+    log_integral_from_count = log_prefactor - math.log(exact) / 2
     values = {
         "spanning_trees_exact": exact,
+        "closed_form_spectral_product_matches_count": from_closed_spectrum == exact,
         "spanning_trees_from_spectrum": from_spectrum,
         "relative_residual": abs(from_spectrum - exact) / exact,
+        "grounded_gaussian_log_integrals_agree": math.isclose(
+            log_integral, log_integral_from_count, rel_tol=0.0, abs_tol=1e-12
+        ),
         "laplacian_is_integral": bool(
             np.array_equal(carrier.laplacian(), np.rint(carrier.laplacian()))
         ),
@@ -510,7 +524,9 @@ def _probe_tree_number() -> tuple[bool, dict]:
     }
     passed = (
         exact == 5184000
+        and values["closed_form_spectral_product_matches_count"]
         and values["relative_residual"] < 1e-9
+        and values["grounded_gaussian_log_integrals_agree"]
         and values["nonzero_eigenvalue_count"] == 11
         and values["laplacian_is_integral"] is True
     )
@@ -526,6 +542,17 @@ def _probe_gmrf_independence() -> tuple[bool, dict]:
     variance = invariant_module.marginal_variance(carrier)
     pairwise = invariant_module.pairwise_precision(carrier)
     inverse_diagonal = float(np.linalg.pinv(laplacian)[0][0])
+    covariance = np.linalg.inv(proper)
+    ports = tuple(range(carrier.port_count))
+    conditioned_edges = set()
+    for pair in combinations(ports, 2):
+        others = tuple(port for port in ports if port not in pair)
+        cross = covariance[np.ix_(pair, others)]
+        conditioned = covariance[np.ix_(pair, pair)] - cross @ np.linalg.solve(
+            covariance[np.ix_(others, others)], cross.T
+        )
+        if abs(conditioned[0, 1]) > 1e-12:
+            conditioned_edges.add(pair)
     values = {
         "laplacian_is_precision": bool(
             np.allclose(invariant_module.gmrf_precision(carrier), laplacian)
@@ -536,6 +563,7 @@ def _probe_gmrf_independence() -> tuple[bool, dict]:
         ),
         "proper_precision_is_positive_definite": bool(np.linalg.eigvalsh(proper)[0] > 0.0),
         "independence_matches_graph": invariant_module.independence_matches_graph(carrier),
+        "conditional_covariance_matches_seams": conditioned_edges == set(carrier.edges),
         "pairwise_precision_values": sorted(set(pairwise.values())),
         "pairwise_precision_entries": len(pairwise),
         "blanket_sizes": sorted(set(invariant_module.blanket_sizes(carrier))),
@@ -549,6 +577,7 @@ def _probe_gmrf_independence() -> tuple[bool, dict]:
         and values["proper_precision_shift_is_diagonal"]
         and values["proper_precision_is_positive_definite"]
         and values["independence_matches_graph"]
+        and values["conditional_covariance_matches_seams"]
         and values["pairwise_precision_values"] == [-1]
         and values["pairwise_precision_entries"] == 2 * carrier.seam_count
         and values["blanket_sizes"] == [5]
@@ -1095,6 +1124,14 @@ def _probe_existence_without_reachability() -> tuple[bool, dict]:
     eigenvalues = np.linalg.eigvals(control_module.two_node_relaxation_jacobian())
     orbit = control_module.two_node_relaxation_orbit()
     sync_radius = control_module.two_node_orbit_min_radius(steps=300, skip=60)
+    boundary_states = set(product((-1, 0, 1), repeat=2)) - {(0, 0)}
+    boundary_orbit = control_module.two_node_sync_orbit(
+        start=(1.0, 0.0), steps=len(boundary_states)
+    )
+    boundary_cycle_verified = (
+        {tuple(state) for state in boundary_orbit[:-1]} == boundary_states
+        and np.array_equal(boundary_orbit[0], boundary_orbit[-1])
+    )
     values = {
         "relaxation_jacobian_eigenvalues": tuple(
             sorted((round(float(real), 12), round(float(imag), 12)) for real, imag in zip(eigenvalues.real, eigenvalues.imag))
@@ -1103,6 +1140,7 @@ def _probe_existence_without_reachability() -> tuple[bool, dict]:
         "relaxation_max_radius": orbit["max_radius"],
         "relaxation_period": orbit["period"],
         "sync_map_min_radius": sync_radius,
+        "sync_boundary_cycle_verified": boundary_cycle_verified,
         "source_relaxation_min_radius": 0.84,
         "source_relaxation_period": 7.58,
     }
@@ -1112,6 +1150,7 @@ def _probe_existence_without_reachability() -> tuple[bool, dict]:
         values["relaxation_min_radius"] >= 0.84
         and abs(values["relaxation_period"] - 7.58) < 0.05
         and sync_radius >= 1.0 - 1e-12
+        and values["sync_boundary_cycle_verified"]
         and all(real > 0.0 for real, _ in values["relaxation_jacobian_eigenvalues"])
         and values["fixed_points"] == ((0, 0),)
     )
@@ -1434,7 +1473,9 @@ def _probe_packing_density() -> tuple[bool, dict]:
         "density_residual": density["density_residual"],
         "inradius_is_half_the_prime_vector": density["inradius_is_half_the_prime_vector"],
     }
-    cell_exact = geometry.convex_volume(geometry.ivm_solid_vertices()["rhombic_dodecahedron"])
+    exact_vertices = geometry.ivm_solid_vertices()["rhombic_dodecahedron"]
+    cell_exact = geometry.convex_volume(exact_vertices)
+    values["cell_vertices_match_exact_construction"] = set(cell["vertices"]) == set(exact_vertices)
     values["cell_volume_exact"] = str(cell_exact)
     values["cell_tetravolume_exact"] = str(Fraction(cell_exact) / geometry.IVM_TETRA_UNIT)
     # The inscribed ball has radius sqrt 2 (half the prime vector 2 sqrt 2), so its
@@ -1450,6 +1491,7 @@ def _probe_packing_density() -> tuple[bool, dict]:
         and values["cell_all_faces_rhombic"] is True
         and values["cell_feasible"] is True
         and values["cell_orientation_flips"] == 0
+        and values["cell_vertices_match_exact_construction"] is True
         and float(values["cell_volume_residual"]) < 1e-9
         and abs(float(values["cell_tetravolume"]) - 6.0) < 1e-9
         and values["cell_tetravolume_matches_table"] is True
@@ -1896,9 +1938,9 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="tree-number",
         kind=ISOMORPHISM,
         pair=OPH_FEP,
-        claim="One determinant, two readings: the reduced carrier Laplacian's determinant is 5184000 — the number of spanning trees of the seam graph (the seam sets that connect every port without a cycle) in OPH's reading, by Kirchhoff's matrix-tree theorem, and, as the determinant of the same matrix read as a Gaussian precision grounded at one port, the normalisation of the FEP's linear-Gaussian interface integral — and it equals the product of the eleven nonzero eigenvalues over 12.",
+        claim="The grounded carrier Laplacian has determinant 5184000, the number of spanning trees by Kirchhoff's matrix-tree theorem. The product of the nonzero Laplacian eigenvalues divided by 12 gives the same count. The grounded Gaussian integral is proportional to the inverse square root of this determinant.",
         oph="The seam structure of the twelve-port carrier, whose Laplacian generates mean repair.",
-        fep="The same matrix as a Gaussian precision, whose determinant normalises the linear-Gaussian interface integral.",
+        fep="As a grounded Gaussian precision, the matrix contributes the inverse square root of its determinant to the interface integral.",
         synergetics="The icosahedron's own graph, counted by its seam structure.",
         status="exact",
         source=_CARRIER_SOURCE,
@@ -2076,7 +2118,7 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="existence-without-reachability",
         kind=DISAGREEMENT,
         pair=OPH_FEP,
-        claim="An agreement can exist and be unreachable: the clipped two-node map has the origin as its only equilibrium and a source there, and the relaxation orbit stays at radius at least 0.84 with period about 7.58, while the synchronous clipped map, after a transient, stays at radius at least one. The fixed-point set is found by exact case analysis over the map's nine clipping regimes, so the origin is shown to be the only equilibrium rather than sampled.",
+        claim="Exact case analysis gives the origin as the only fixed point of the clipped two-node map. It is a source for the associated continuous relaxation, for which the probe estimates a radius range and period from a finite integration window. The synchronous map has an exact cycle on the clipping boundary and can therefore fail to reach the fixed point.",
         oph="Existence of a public fixed point is not reachability by the repair dynamics.",
         fep="Existence of a fixed point is not convergence of the process theory.",
         synergetics="No counterpart.",
@@ -2088,8 +2130,8 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="directed-gradient",
         kind=DISAGREEMENT,
         pair=OPH_FEP,
-        claim="A directed network's forward response need not carry its exact gradient: for J = [[-1, 2], [0, -1]] and c = (1, 0), the direct nudging response is (1, 0) while the adjoint is (1, 2).",
-        oph="The native law is self-adjoint and nonnegative, so this boundary does not bind it.",
+        claim="For J = [[-1, 2], [0, -1]] and a state loss derivative c = (1, 0), the direct nudging response is (1, 0) while the adjoint is (1, 2). The adjoint gives the loss gradient with respect to an additive drive.",
+        oph="This test concerns sensitivity of a directed equilibrium to a perturbation.",
         fep="Equilibrium propagation's gradient identity needs an energy; a directed wiring does not automatically supply one.",
         synergetics="No counterpart.",
         status="obstructed",
@@ -2196,8 +2238,8 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="packing-density",
         kind=COMPLEMENTARITY,
         pair=SYNERGETICS_OPH,
-        claim="The IVM's Voronoi cell is the rhombic dodecahedron, fourteen vertices, twelve rhombic faces and twenty-four edges with Euler characteristic two, its tetravolume is exactly six (computed in rational arithmetic), and the ball of radius half the prime vector has tetravolume exactly pi sqrt 2, so the packing density is pi sqrt 2 / 6 = pi / (3 sqrt 2): the face-centred cubic density, optimal among lattice packings and among all packings in three dimensions.",
-        oph="The densest packing's kissing arrangement is the cuboctahedral one, not the carrier's icosahedral one; the carrier inherits the kissing number, not the packing.",
+        claim="The IVM's Voronoi cell is a rhombic dodecahedron with fourteen vertices, twelve rhombic faces, twenty-four edges and Euler characteristic two. Its exact tetravolume is six. The inscribed ball has tetravolume pi sqrt 2, so the face-centred cubic packing density is pi / (3 sqrt 2).",
+        oph="The IVM's cuboctahedral arrangement and the carrier's icosahedral arrangement share the kissing number. Their outer contacts differ.",
         fep="No counterpart.",
         synergetics="The rhombic dodecahedron's six tetravolumes, derived here from the cell rather than read from the table.",
         status="exact",

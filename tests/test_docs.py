@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import re
 from pathlib import Path
+
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -37,6 +40,38 @@ def test_rendered_concordance_document_is_current():
     assert current == renderer.render_concordance()
 
 
+def test_rendered_ontology_supplement_is_current():
+    renderer = _load_renderer()
+    current = (ROOT / "manuscript" / "90_ontology_concordance.md").read_text(encoding="utf-8")
+    assert current == renderer.render_ontology()
+
+
+def test_ontology_supplement_rejects_unresolved_evidence(tmp_path, monkeypatch):
+    renderer = _load_renderer()
+    original = renderer.ONTOLOGY_SOURCE.read_text(encoding="utf-8")
+    source = tmp_path / "ontology.json"
+    monkeypatch.setattr(renderer, "ONTOLOGY_SOURCE", source)
+    for field, replacement, expected in (
+        ("probes", ["typo-probe"], "typo-probe"),
+        ("citations", ["typo-citation"], "typo-citation"),
+        ("pinned_sources", [{"id": "oph", "symbol": "typo-identifier"}], "typo-identifier"),
+    ):
+        document = json.loads(original)
+        document["groups"][0]["entries"][0][field] = replacement
+        source.write_text(json.dumps(document), encoding="utf-8")
+        with pytest.raises(ValueError, match=expected):
+            renderer.render_ontology()
+    document = json.loads(original)
+    tested_entry = next(
+        entry for group in document["groups"] for entry in group["entries"]
+        if entry["relation"] == "model-correspondence"
+    )
+    tested_entry["probes"] = []
+    source.write_text(json.dumps(document), encoding="utf-8")
+    with pytest.raises(ValueError, match="requires an executable probe"):
+        renderer.render_ontology()
+
+
 def test_the_outline_names_every_registered_claim():
     renderer = _load_renderer()
     outline = (ROOT / "manuscript" / "MANUSCRIPT_STATUS.md").read_text(encoding="utf-8")
@@ -49,6 +84,7 @@ def test_every_claim_is_named_by_some_section():
     text = renderer.render_concordance()
     assert "no section names it" not in text
     assert "**no**" not in text
+    assert "90_ontology_concordance.md" not in text
 
 
 def test_check_mode_reports_stale_documents(tmp_path, monkeypatch, capsys):
@@ -56,6 +92,7 @@ def test_check_mode_reports_stale_documents(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(renderer, "REGISTRY_DOC", tmp_path / "missing-registry.md")
     monkeypatch.setattr(renderer, "VALUES_DOC", tmp_path / "missing-values.md")
     monkeypatch.setattr(renderer, "CONCORDANCE_DOC", tmp_path / "missing-concordance.md")
+    monkeypatch.setattr(renderer, "ONTOLOGY_DOC", tmp_path / "missing-ontology.md")
     assert renderer.main(["--check"]) == 1
     captured = capsys.readouterr()
     assert "out of date" in captured.err
@@ -68,9 +105,12 @@ def test_write_mode_creates_missing_documents(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(renderer, "REGISTRY_DOC", target)
     monkeypatch.setattr(renderer, "VALUES_DOC", tmp_path / "values.md")
     monkeypatch.setattr(renderer, "CONCORDANCE_DOC", tmp_path / "concordance.md")
+    supplement = tmp_path / "ontology.md"
+    monkeypatch.setattr(renderer, "ONTOLOGY_DOC", supplement)
     assert renderer.main([]) == 0
     assert target.is_file()
     assert target.read_text(encoding="utf-8") == renderer.render_registry()
+    assert supplement.read_text(encoding="utf-8") == renderer.render_ontology()
     assert "wrote" in capsys.readouterr().out
 
 

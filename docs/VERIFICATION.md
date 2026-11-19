@@ -34,7 +34,7 @@ When combining filters, the probes must match every specified filter.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-420 tests. The suite runs offline from a fresh process and exercises the actual
+422 tests. The suite runs offline from a fresh process and exercises the actual
 scientific code paths.
 
 | file | what it pins down |
@@ -59,7 +59,7 @@ scientific code paths.
 | `test_manuscript_variables.py` | every bound value, cross-checked against the function that produces it |
 | `test_cli.py` | every subcommand, the JSON payloads, the exit codes, and the console-script declaration |
 | `test_public_api.py` | that every exported name resolves, and that no prefix of a pinned commit appears anywhere in the package |
-| `test_docs.py` | that the three generated documents are current, that the outline and the sections name every registered claim, and that the guides' relative links resolve |
+| `test_docs.py` | current generated documents and ontology supplement, registry mentions in the main prose, and working relative links in the guides |
 | `test_manuscript.py` | the eleven section files the renderer discovers, every token resolving to a bound value and every bound value being quoted, citations equal to the bibliography in both directions, a `{#sec:…}` label on every top-level heading, the manuscript's registry table against the registry, and the figure links against the accessibility registry |
 | `test_figures.py` | that every figure builder exists and is orchestrated, and that a sample renders non-trivial PNGs plus a well-formed registry (skipped without the `figures` extra) |
 
@@ -89,10 +89,10 @@ uv sync --locked --extra dev --extra figures
 ```
 
 `docs/CORRESPONDENCES.md`, `docs/MANUSCRIPT_VALUES.md` and `docs/CONCORDANCE.md`
-are rendered from the registry, from `MANUSCRIPT_VALUES` and from the manuscript
-text itself. `test_docs.py` runs the same render and compares byte-for-byte, so
-a claim, a value or a cross-reference that changes without a re-render fails
-the suite.
+are rendered from the registry, the manuscript value bindings and the text.
+The ontology supplement is generated from `data/ontology_concordance.json`.
+Its probe and source references are checked against the registry and source
+register. `test_docs.py` checks that generated content is current.
 
 The registry document rounds measured values for stable rendering across
 numerical runtimes. The JSON verifier keeps the raw values and the probes keep

@@ -356,6 +356,7 @@ def test_reduction_criterion_values():
 
 def test_existence_without_reachability_values():
     values = by_key()["existence-without-reachability"].run().values
+    assert values["sync_boundary_cycle_verified"] is True
     assert values["sync_map_min_radius"] >= 0.99
     assert values["relaxation_min_radius"] > values["source_relaxation_min_radius"] > 0.8
     assert abs(values["relaxation_period"] - values["source_relaxation_period"]) < 0.1

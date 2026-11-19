@@ -57,6 +57,7 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         make_figures.registry_figure(),
         make_figures.descent_figure(),
         make_figures.ivm_figure(),
+        make_figures.cover_figure(),
     ]
     for path in written:
         assert path.parent == tmp_path
@@ -69,12 +70,18 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         "fig:registry",
         "fig:descent",
         "fig:ivm",
+        "fig:cover",
     }
     for entry in payload["figures"]:
         assert entry["filename"].endswith(".png")
         assert entry["alt_text"] == entry["alt"]
         assert len(entry["alt"]) > 60
         assert entry["alt"].endswith(".")
+    cover = next(entry for entry in payload["figures"] if entry["label"] == "fig:cover")
+    carrier = make_figures.icosahedral_carrier()
+    assert f"{carrier.port_count} numbered ports" in cover["alt_text"]
+    assert f"{carrier.seam_count} seams" in cover["alt_text"]
+    assert "dashed lines" in cover["alt_text"]
 
 
 def test_the_same_builder_is_byte_deterministic(tmp_path, monkeypatch):

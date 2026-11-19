@@ -23,7 +23,7 @@ diagnostics below `1e-9` in magnitude are reported as such.
 | oph-fep | isomorphism | exact-on-domain | `free-energy-dictionary` | On the carrier with a Gaussian record prior, the update residual bounds Bayesian surprise through the extreme interior eigenvalues. The energy drop at fixed new records and the divergence between successive Gaussian posteriors both equal the residual quadratic. The normalised variation of record surprisal uses the Schur complement plus the record prior precision. |
 | oph-fep | isomorphism | exact | `sheaf-agreement` | Patch agreement is the global-section condition of a cellular sheaf over the carrier complex, and the sheaf Laplacian is the carrier Laplacian. |
 | oph-fep | isomorphism | exact | `certificate-species` | The native law's sharp certificate is a spectral gap: the mean repair operator is symmetric, nonnegative and doubly stochastic by construction from the five-regular Laplacian, with second eigenvalue 1 - (5 - sqrt(5)) / 60, and its induced infinity norm is exactly one, so no sup-norm contraction certifies it. |
-| oph-fep | isomorphism | exact | `tree-number` | One determinant, two readings: the reduced carrier Laplacian's determinant is 5184000 — the number of spanning trees of the seam graph (the seam sets that connect every port without a cycle) in OPH's reading, by Kirchhoff's matrix-tree theorem, and, as the determinant of the same matrix read as a Gaussian precision grounded at one port, the normalisation of the FEP's linear-Gaussian interface integral — and it equals the product of the eleven nonzero eigenvalues over 12. |
+| oph-fep | isomorphism | exact | `tree-number` | The grounded carrier Laplacian has determinant 5184000, the number of spanning trees by Kirchhoff's matrix-tree theorem. The product of the nonzero Laplacian eigenvalues divided by 12 gives the same count. The grounded Gaussian integral is proportional to the inverse square root of this determinant. |
 | oph-fep | isomorphism | exact | `gmrf-independence` | The proper Gaussian with precision L + I/n has the carrier's seam graph as its conditional-dependence graph. Each port's blanket has five neighbours and each seam's precision entry is minus one. Separately, the variance of a port's deviation from the mean in the centered intrinsic field is 7/36, the diagonal of L^+. |
 | oph-fep | isomorphism | exact | `sheaf-cohomology` | For the carrier's scalar sheaf, dim H^0 = 1 counts the constant global sections and dim H^1 = 19 gives the dimension of the space of seam assignments modulo coboundaries. The alternating sum is 12 - 30. The twenty face boundaries span the cycle space, so the triangulated surface has Betti numbers (1, 0, 1) and Euler characteristic 2. OPH's oriented faces sum to a fundamental cycle. |
 | synergetics-oph | isomorphism | exact | `icosahedral-symmetry` | The carrier's automorphism group has order 120 and acts transitively on the twelve ports, thirty seams and twenty faces. Its action on the oriented source faces distinguishes sixty rotations from sixty orientation-reversing symmetries. |
@@ -38,8 +38,8 @@ diagnostics below `1e-9` in magnitude are reported as such.
 | oph-fep | disagreement | obstructed | `d-stability` | A linear rest admits a free-energy form exactly when it is stable, and one positive local gain removes that form without moving the rest: at k = 4 the Routh first column is (1, 6, -2, 24) and the scaled matrix has two right-half-plane roots. |
 | oph-fep | disagreement | obstructed | `schedule-path` | Agreement and dissipation are state functions while finite phases are path functions: full and half-damped iteration of the same affine rule share every answer, yet their centered contrasts after twelve steps differ by exactly 921633999 / 40000000000. |
 | oph-fep | disagreement | obstructed | `reduction-criterion` | Two histories can share the present observation and need different futures, so a summary that drops the record must err by at least half the response distance on one of them: here the worst-case error floor is exactly one. |
-| oph-fep | disagreement | obstructed | `existence-without-reachability` | An agreement can exist and be unreachable: the clipped two-node map has the origin as its only equilibrium and a source there, and the relaxation orbit stays at radius at least 0.84 with period about 7.58, while the synchronous clipped map, after a transient, stays at radius at least one. The fixed-point set is found by exact case analysis over the map's nine clipping regimes, so the origin is shown to be the only equilibrium rather than sampled. |
-| oph-fep | disagreement | obstructed | `directed-gradient` | A directed network's forward response need not carry its exact gradient: for J = [[-1, 2], [0, -1]] and c = (1, 0), the direct nudging response is (1, 0) while the adjoint is (1, 2). |
+| oph-fep | disagreement | obstructed | `existence-without-reachability` | Exact case analysis gives the origin as the only fixed point of the clipped two-node map. It is a source for the associated continuous relaxation, for which the probe estimates a radius range and period from a finite integration window. The synchronous map has an exact cycle on the clipping boundary and can therefore fail to reach the fixed point. |
+| oph-fep | disagreement | obstructed | `directed-gradient` | For J = [[-1, 2], [0, -1]] and a state loss derivative c = (1, 0), the direct nudging response is (1, 0) while the adjoint is (1, 2). The adjoint gives the loss gradient with respect to an additive drive. |
 | oph-fep | disagreement | obstructed | `four-cycle-local-minimum` | A local minimum of an independently defined discrepancy can be incompatible: on a four-cycle, 0011 violates two edges and every single-bit flip also violates two. |
 | synergetics-oph | disagreement | obstructed | `cuboctahedron-vs-icosahedron` | The twelve-around-one shell and the carrier are not the same solid although each has twelve vertices: the cuboctahedron is four-regular with eight triangles and six squares and tetravolume 20, while the carrier is the icosahedron, five-regular with twenty triangles and tetravolume 18.512295868219..., so a count coincidence of twelve is not an identification. |
 | fep-synergetics | disagreement | obstructed | `shell-vs-free-energy` | The IVM shell index is not a function of the free energy: shell two spans three distinct free energies and shell four spans seven, the level 36 occurs on shells three and four, and the level 52 on shells four and five, so neither quantity is a function of the other, although the free energy does bound the shell from above (the minimum on shell k grows like 2k^2). The reason is exact: the shell index is the cuboctahedral gauge max(||u||_inf, ||u||_1 / 2) of the halved coordinates, a polyhedral norm, while the free energy is a Euclidean quadratic form; on shell k the free energy ranges from 2k^2 (2k^2 + 2 for odd k) up to 4k^2, and reaches 4k^2 only at the twelve vertices k m. |
@@ -48,7 +48,7 @@ diagnostics below `1e-9` in magnitude are reported as such.
 | oph-fep | complementarity | exact | `replicator-potential` | For a symmetric payoff A, the replicator field is the Shahshahani gradient of F(x) = x^T A x / 2, with mobility M = diag(x) - x x^T. The probe checks the identity and the nonnegative potential rate. The tested asymmetric payoff breaks this quadratic-potential identity at every sampled point. |
 | synergetics-oph | complementarity | exact | `kissing-twelve` | Twelve is the kissing number in three dimensions and both arrangements attain it. With the twelve sphere centres at distance 2r from a central sphere of radius r, the IVM's cuboctahedral shell has edge equal to circumradius, so each outer sphere touches the centre and four other outer spheres. The icosahedral arrangement has squared edge over squared circumradius exactly 2 - 2 sqrt(5) / 5, so its outer spheres touch only the centre. The geometric icosahedral realisation is isomorphic to OPH's labelled carrier. |
 | synergetics-oph | complementarity | exact | `icosahedron-tetravolume` | Synergetics' tetravolume accounting extends to the carrier's own solid: the regular icosahedron measures 18.512295868219... tetravolumes, equal to (5/2)(3 sqrt 2 + sqrt 10), whose square is exactly 175 + 75 sqrt 5, so the carrier's polytope has an exact algebraic volume that no integral table entry can express. |
-| synergetics-oph | complementarity | exact | `packing-density` | The IVM's Voronoi cell is the rhombic dodecahedron, fourteen vertices, twelve rhombic faces and twenty-four edges with Euler characteristic two, its tetravolume is exactly six (computed in rational arithmetic), and the ball of radius half the prime vector has tetravolume exactly pi sqrt 2, so the packing density is pi sqrt 2 / 6 = pi / (3 sqrt 2): the face-centred cubic density, optimal among lattice packings and among all packings in three dimensions. |
+| synergetics-oph | complementarity | exact | `packing-density` | The IVM's Voronoi cell is a rhombic dodecahedron with fourteen vertices, twelve rhombic faces, twenty-four edges and Euler characteristic two. Its exact tetravolume is six. The inscribed ball has tetravolume pi sqrt 2, so the face-centred cubic packing density is pi / (3 sqrt 2). |
 | three-way | complementarity | exact | `tetravolume-arithmetic` | Under their stated conventions, the three calculations give distinct kinds of exact quantity. The unit-covariance divergence of an IVM neighbour displacement is four nats. The mean repair operator has gap (5 - sqrt 5) / 60. The synergetic tetravolume table is integral (1, 3, 4, 6, 20, 96), while the icosahedron's tetravolume is sqrt 2 (15/2 + (5/2) sqrt 5), with square 175 + 75 sqrt 5. The values describe a displacement, relaxation and volume respectively. |
 | oph-fep | complementarity | exact | `effective-resistance` | The precision carries a metric neither programme computes: the effective resistance between two ports, exact and rational, is 11/30 across a seam, 7/15 at distance two and 1/2 across the carrier, and the 66 of them sum to 28, which is twelve times the reciprocal spectrum sum 7/3 exactly. |
 | oph-fep | isomorphism | exact | `two-record-resistance` | On every pair of carrier ports the two-record Schur complement is the difference form divided by the effective resistance. The minimum interface energy therefore equals the squared record contrast divided by twice the resistance. A proper record prior adds its own quadratic and the resulting record log normaliser. |
@@ -269,18 +269,20 @@ Probe values:
 
 **isomorphism** / **exact** / **oph-fep** / probe PASS
 
-One determinant, two readings: the reduced carrier Laplacian's determinant is 5184000 — the number of spanning trees of the seam graph (the seam sets that connect every port without a cycle) in OPH's reading, by Kirchhoff's matrix-tree theorem, and, as the determinant of the same matrix read as a Gaussian precision grounded at one port, the normalisation of the FEP's linear-Gaussian interface integral — and it equals the product of the eleven nonzero eigenvalues over 12.
+The grounded carrier Laplacian has determinant 5184000, the number of spanning trees by Kirchhoff's matrix-tree theorem. The product of the nonzero Laplacian eigenvalues divided by 12 gives the same count. The grounded Gaussian integral is proportional to the inverse square root of this determinant.
 
 - OPH: The seam structure of the twelve-port carrier, whose Laplacian generates mean repair.
-- FEP: The same matrix as a Gaussian precision, whose determinant normalises the linear-Gaussian interface integral.
+- FEP: As a grounded Gaussian precision, the matrix contributes the inverse square root of its determinant to the interface integral.
 - Synergetics: The icosahedron's own graph, counted by its seam structure.
 - Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian)
 
 Probe values:
 
 - `spanning_trees_exact` = 5184000
+- `closed_form_spectral_product_matches_count` = True
 - `spanning_trees_from_spectrum` = 5184000
 - `relative_residual` = abs < 1e-9
+- `grounded_gaussian_log_integrals_agree` = True
 - `laplacian_is_integral` = True
 - `nonzero_eigenvalue_count` = 11
 - `seams` = 30
@@ -303,6 +305,7 @@ Probe values:
 - `proper_precision_shift_is_diagonal` = True
 - `proper_precision_is_positive_definite` = True
 - `independence_matches_graph` = True
+- `conditional_covariance_matches_seams` = True
 - `pairwise_precision_values` = (-1)
 - `pairwise_precision_entries` = 60
 - `blanket_sizes` = (5)
@@ -659,7 +662,7 @@ Probe values:
 
 **disagreement** / **obstructed** / **oph-fep** / probe PASS
 
-An agreement can exist and be unreachable: the clipped two-node map has the origin as its only equilibrium and a source there, and the relaxation orbit stays at radius at least 0.84 with period about 7.58, while the synchronous clipped map, after a transient, stays at radius at least one. The fixed-point set is found by exact case analysis over the map's nine clipping regimes, so the origin is shown to be the only equilibrium rather than sampled.
+Exact case analysis gives the origin as the only fixed point of the clipped two-node map. It is a source for the associated continuous relaxation, for which the probe estimates a radius range and period from a finite integration window. The synchronous map has an exact cycle on the clipping boundary and can therefore fail to reach the fixed point.
 
 - OPH: Existence of a public fixed point is not reachability by the repair dynamics.
 - FEP: Existence of a fixed point is not convergence of the process theory.
@@ -673,6 +676,7 @@ Probe values:
 - `relaxation_max_radius` = 1.05339122
 - `relaxation_period` = 7.575
 - `sync_map_min_radius` = 1
+- `sync_boundary_cycle_verified` = True
 - `source_relaxation_min_radius` = 0.84
 - `source_relaxation_period` = 7.58
 - `fixed_points` = ((0, 0))
@@ -682,9 +686,9 @@ Probe values:
 
 **disagreement** / **obstructed** / **oph-fep** / probe PASS
 
-A directed network's forward response need not carry its exact gradient: for J = [[-1, 2], [0, -1]] and c = (1, 0), the direct nudging response is (1, 0) while the adjoint is (1, 2).
+For J = [[-1, 2], [0, -1]] and a state loss derivative c = (1, 0), the direct nudging response is (1, 0) while the adjoint is (1, 2). The adjoint gives the loss gradient with respect to an additive drive.
 
-- OPH: The native law is self-adjoint and nonnegative, so this boundary does not bind it.
+- OPH: This test concerns sensitivity of a directed equilibrium to a perturbation.
 - FEP: Equilibrium propagation's gradient identity needs an energy; a directed wiring does not automatically supply one.
 - Synergetics: No counterpart.
 - Source: Mueller, 'Agreement and Surprise: Local Repair, Dynamics and the Limits of Equilibrium', preprint of 22 October 2026 (PhilPapers MUEAAS-2), Appendix B ('directed interactions')
@@ -903,9 +907,9 @@ Probe values:
 
 **complementarity** / **exact** / **synergetics-oph** / probe PASS
 
-The IVM's Voronoi cell is the rhombic dodecahedron, fourteen vertices, twelve rhombic faces and twenty-four edges with Euler characteristic two, its tetravolume is exactly six (computed in rational arithmetic), and the ball of radius half the prime vector has tetravolume exactly pi sqrt 2, so the packing density is pi sqrt 2 / 6 = pi / (3 sqrt 2): the face-centred cubic density, optimal among lattice packings and among all packings in three dimensions.
+The IVM's Voronoi cell is a rhombic dodecahedron with fourteen vertices, twelve rhombic faces, twenty-four edges and Euler characteristic two. Its exact tetravolume is six. The inscribed ball has tetravolume pi sqrt 2, so the face-centred cubic packing density is pi / (3 sqrt 2).
 
-- OPH: The densest packing's kissing arrangement is the cuboctahedral one, not the carrier's icosahedral one; the carrier inherits the kissing number, not the packing.
+- OPH: The IVM's cuboctahedral arrangement and the carrier's icosahedral arrangement share the kissing number. Their outer contacts differ.
 - FEP: No counterpart.
 - Synergetics: The rhombic dodecahedron's six tetravolumes, derived here from the cell rather than read from the table.
 - Source: QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md
@@ -930,6 +934,7 @@ Probe values:
 - `closed_form` = 0.74048049
 - `density_residual` = abs < 1e-9
 - `inradius_is_half_the_prime_vector` = True
+- `cell_vertices_match_exact_construction` = True
 - `cell_volume_exact` = 16
 - `cell_tetravolume_exact` = 6
 - `ball_tetravolume_exact` = pi sqrt 2

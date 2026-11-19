@@ -237,11 +237,10 @@ Laplacian equal to the carrier Laplacian, one-dimensional space of global
 sections (the constants), and injective record maps at every port.
 :::
 
-The probe reports all of this, and it reports two negative controls: a chain
-sheaf with one record has a one-dimensional space of global sections, and a chain
-sheaf with no record has none. The controls matter because a sheaf whose global
-sections are one-dimensional for every choice of records would not be saying
-anything about the carrier. Registered as `sheaf-agreement`.
+The probe checks injectivity for each single port. The chain control also has
+constant global sections. Recording a chain node separates these sections.
+The empty record map sends all of them to the same value. Registered as
+`sheaf-agreement`.
 
 The sheaf formulation is the one that generalises. A scalar identity sheaf is
 the simplest case; the same construction with non-identity restrictions is how
@@ -265,37 +264,28 @@ $$
 $$ {#eq:tree}
 :::
 
-The probe reports the determinant computed in exact rational arithmetic, and,
-separately, the product of the eleven nonzero eigenvalues computed in floating
-point: the first is {{CARRIER_TREE_NUMBER}}, the second agrees with it to nine
-digits. The two computations are not redundant. The eigenvalues include the surds
-$5 \pm \sqrt{5}$ three times each, so an exact integer arising from a product of
-irrationals is a statement about the arithmetic and not about the sampling; the
-floating-point product is reported next to it because the disagreement between
-the two is the honest error bar on the spectral route.
+The probe computes the grounded determinant over the rationals. Forming the
+product in [@eq:tree] with the closed spectrum in [@prop:spectrum] gives the
+same integer because the factors $5\pm\sqrt{5}$ pair to give rational products.
+The product from a numerical eigensolve provides a further check.
 
-The count is not decoration. One determinant, two readings: in OPH's the
-integer counts the seam sets that connect every port without a cycle; read as a
-Gaussian precision with one port pinned (the gauge that makes it proper), the
-same determinant normalises the linear-Gaussian interface integral the FEP
-dictionary factorises through. Either way the carrier's spanning trees are a
-finite, exactly known family, so any claim about the existence of an agreement
-configuration can be phrased as a claim about a member of a set of known size.
-[@sec:existence] is the obstruction that shows why the size of that set does not
-by itself settle reachability.
+The grounded minor $L_g$ is the precision on the remaining coordinates when
+one port is fixed to zero. The Gaussian integral of
+$\exp(-x^\top L_g x/2)$ is $(2\pi)^{\dim(L_g)/2}/\sqrt{\tau(K)}$.
+The probe checks the same log integral by Cholesky factorisation.
 
-## The Gaussian reading makes the seam graph the independence graph {#sec:gmrf}
+## The seam graph gives the proper Gaussian's conditional dependencies {#sec:gmrf}
 
 Use $L+I/n$ as the precision of a proper Gaussian field on the $n$ carrier
 ports. The positive diagonal shift grounds the constant mode and leaves the
 off-diagonal entries unchanged. The precision's zeros determine conditional
 independence [@dempster1972covariance; @rue2005gaussian]:
 two ports are independent given the rest exactly when their precision entry
-vanishes, which here happens exactly when they are not joined by a seam, so
-conditional dependence lives exactly on the seams. The probe reports the independence pattern as a
-${{CARRIER_PORTS}} \times {{CARRIER_PORTS}}$ matrix over all {{GMRF_ORDERED_PAIRS}} ordered pairs of distinct ports, checks that
-it equals the adjacency pattern, and checks that the shifted precision is
-positive definite.
+vanishes. The nonzero off-diagonal entries therefore give the seam adjacency,
+with {{GMRF_ORDERED_PAIRS}} ordered seam entries in the
+${{CARRIER_PORTS}} \times {{CARRIER_PORTS}}$ matrix. The probe separately
+conditions every pair using the full proper covariance and recovers the
+same dependence graph.
 
 Every seam's pairwise precision is {{GMRF_PAIRWISE_PRECISION}}. A port's Markov
 blanket consists of its {{GMRF_BLANKET_SIZE}} neighbours. For the separate

@@ -7,6 +7,7 @@ from fractions import Fraction
 import numpy as np
 import pytest
 
+from oph_fep_synergetics.analysis.registry import by_key
 from oph_fep_synergetics.core import (
     blanket_sizes,
     gmrf_precision,
@@ -39,6 +40,9 @@ def test_reduced_laplacian_determinant_is_the_tree_number():
 
 def test_tree_number_from_spectrum_matches_the_exact_count():
     assert tree_number_from_spectrum() == pytest.approx(5184000, rel=1e-6)
+    values = by_key()["tree-number"].run().values
+    assert values["closed_form_spectral_product_matches_count"] is True
+    assert values["grounded_gaussian_log_integrals_agree"] is True
 
 
 def test_reciprocal_spectrum_sum_is_seven_thirds():
@@ -74,6 +78,7 @@ def test_proper_precision_shifts_only_the_diagonal():
 def test_independence_matches_the_proper_gaussian_graph():
     carrier = icosahedral_carrier()
     assert independence_matches_graph(carrier) is True
+    assert by_key()["gmrf-independence"].run().values["conditional_covariance_matches_seams"] is True
     pair = (0, 3)
     assert pair[1] not in carrier.neighbours(pair[0])
     others = tuple(port for port in range(carrier.port_count) if port not in pair)

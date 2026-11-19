@@ -1,0 +1,265 @@
+{
+  "schema": 1,
+  "groups": [
+    {
+      "id": "interfaces",
+      "title": "Interfaces and representations",
+      "entries": [
+        {
+          "id": "patch",
+          "term": "Patch",
+          "meanings": {
+            "oph": "A local subsystem specified by its own state variables, stored records and allowed operations at its interface."
+          },
+          "relation": "source-usage",
+          "limit": "The finite carrier describes one local model. Patch extent and physical scale remain open.",
+          "probes": [],
+          "citations": ["oph", "mueller2026observers"],
+          "pinned_sources": [{"id": "oph"}]
+        },
+        {
+          "id": "boundary",
+          "term": "Boundary",
+          "meanings": {
+            "oph": "An access interface specified by the patch model.",
+            "fep": "The variables separating interior and exterior in a probability model.",
+            "synergetics": "A geometric surface, such as the faces of a Voronoi cell."
+          },
+          "relation": "distinction",
+          "limit": "Access rules, conditional independence and geometric incidence define different boundary structures.",
+          "probes": [],
+          "citations": ["oph", "pearl1988probabilistic", "quadmath"],
+          "pinned_sources": [{"id": "oph"}, {"id": "quadmath", "symbol": "volume ratios"}]
+        },
+        {
+          "id": "port",
+          "term": "Port",
+          "meanings": {
+            "oph": "A boundary coordinate with an integer load on the finite carrier.",
+            "fep": "A variable indexed by the corresponding carrier vertex."
+          },
+          "relation": "model-correspondence",
+          "limit": "The Gaussian state space uses the carrier's indexing. A choice of model specifies which ports are recorded.",
+          "probes": ["carrier-port-chart", "gmrf-independence"],
+          "citations": ["oph", "mueller2026agreement"],
+          "pinned_sources": [{"id": "oph", "symbol": "ORIENTED_BASE_FACES"}]
+        },
+        {
+          "id": "seam",
+          "term": "Seam",
+          "meanings": {
+            "oph": "A carrier edge across which a repair can transfer load.",
+            "fep": "An off-diagonal coupling of the proper Gaussian precision on the carrier."
+          },
+          "relation": "model-correspondence",
+          "limit": "The same adjacency describes allowed local repairs and the conditional-dependence graph of the specified Gaussian.",
+          "probes": ["native-repair-law", "gmrf-independence"],
+          "citations": ["oph", "mueller2026agreement"],
+          "pinned_sources": [{"id": "oph", "symbol": "seams, laplacian"}]
+        },
+        {
+          "id": "blanket",
+          "term": "Markov blanket",
+          "meanings": {
+            "fep": "A set of variables that renders the interior and exterior conditionally independent."
+          },
+          "relation": "counterexample",
+          "limit": "The proper carrier Gaussian gives neighbour blankets. A stationary blanket can coexist with direct coupling in the drift.",
+          "probes": ["gmrf-independence", "stationary-blanket"],
+          "citations": ["pearl1988probabilistic", "mueller2026agreement"]
+        },
+        {
+          "id": "screen",
+          "term": "Screen",
+          "meanings": {
+            "oph": "The source constructs spherical screens by joining carriers.",
+            "fep": "The cited quantum formulation reads a Markov blanket as an information boundary."
+          },
+          "relation": "source-usage",
+          "limit": "The executable comparison concerns one finite carrier. The screen constructions supply context.",
+          "probes": [],
+          "citations": ["mueller2026observers", "fields2022generic"],
+          "pinned_sources": [{"id": "oph"}]
+        }
+      ]
+    },
+    {
+      "id": "dynamics",
+      "title": "Dynamics and inference",
+      "entries": [
+        {
+          "id": "agreement",
+          "term": "Agreement",
+          "meanings": {
+            "oph": "Adjacent carrier values satisfy their seam restrictions.",
+            "fep": "The same quadratic form penalises disagreement in the scalar Gaussian sheaf model."
+          },
+          "relation": "model-correspondence",
+          "limit": "For the chosen restrictions, agreement is a global section. The condition specifies compatible assignments separately from their reachability.",
+          "probes": ["sheaf-agreement", "sheaf-cohomology"],
+          "citations": ["mueller2026agreement"]
+        },
+        {
+          "id": "repair",
+          "term": "Native repair",
+          "meanings": {
+            "oph": "A seam acts on the loads at its endpoints with an integer transfer.",
+            "fep": "On the binary shell its law is conditional resampling of the reference at the preserved datum."
+          },
+          "relation": "conditional-identity",
+          "limit": "The conditioning reading uses a fair coin and uniform binary reference. A doubled load supplies a counterexample for the uniform full shell.",
+          "probes": ["native-repair-law", "repair-is-conditioning"],
+          "citations": ["oph", "mueller2026agreement"],
+          "pinned_sources": [{"id": "oph", "symbol": "native"}, {"id": "oph", "symbol": "PR-07"}]
+        },
+        {
+          "id": "descent",
+          "term": "Descent and termination",
+          "meanings": {
+            "oph": "The ungated rule can change state at constant load energy. The broken-seam rule permits only strict decreases.",
+            "fep": "Ensemble divergence to the binary reference is nonincreasing under uniform attempts."
+          },
+          "relation": "counterexample",
+          "limit": "On the total-load-two shell, the ungated relation is confluent and can cycle. The gated relation terminates with multiple reachable normal forms.",
+          "probes": ["pr01-obstruction"],
+          "citations": ["oph", "mueller2026agreement"],
+          "pinned_sources": [{"id": "oph", "symbol": "PR-01"}]
+        },
+        {
+          "id": "record",
+          "term": "Record",
+          "meanings": {
+            "oph": "A declared observed quantity. For a fixed seam on the binary shell, the preserved datum is its total load and the loads elsewhere.",
+            "fep": "A conditioned variable in the inference model."
+          },
+          "relation": "conditional-identity",
+          "limit": "The datum depends on the protocol. The selector control uses a signed current as a different record that can affect the next repair.",
+          "probes": ["repair-is-conditioning", "reduction-criterion"],
+          "citations": ["oph", "mueller2026agreement"],
+          "pinned_sources": [{"id": "oph", "symbol": "selected_seam"}, {"id": "oph", "symbol": "PR-07"}]
+        },
+        {
+          "id": "posterior",
+          "term": "Posterior inference",
+          "meanings": {
+            "oph": "Harmonic extension minimises interface disagreement at fixed records on the scalar carrier.",
+            "fep": "The Gaussian posterior mean has the same value in the stated model."
+          },
+          "relation": "conditional-identity",
+          "limit": "The carrier comparison fixes the likelihood model and record prior. The asymmetric nonquadratic control separates the energy minimum from the posterior mean.",
+          "probes": ["variational-equivalence", "two-record-resistance"],
+          "citations": ["friston2010", "mueller2026agreement"]
+        },
+        {
+          "id": "energy",
+          "term": "Energy and surprisal",
+          "meanings": {
+            "oph": "Load energy is quadratic in the loads. Interface energy measures seam disagreement.",
+            "fep": "Variational free energy separates into normalised record surprisal and divergence from the posterior."
+          },
+          "relation": "distinction",
+          "limit": "Fixed-record interface minima, unnormalised record potentials and normalised surprisals carry different normalisation terms.",
+          "probes": ["free-energy-name-collision", "free-energy-dictionary"],
+          "citations": ["oph", "friston2010", "mueller2026agreement"],
+          "pinned_sources": [{"id": "oph", "symbol": "mean update"}]
+        },
+        {
+          "id": "mean-and-ensemble",
+          "term": "Mean and ensemble",
+          "meanings": {
+            "oph": "The mean update acts on port-load vectors. The binary attempt kernel acts on probabilities over configurations.",
+            "fep": "The comparison on the proper carrier Gaussian reuses the Laplacian as a precision term."
+          },
+          "relation": "model-correspondence",
+          "limit": "The two relaxation gaps agree under uniform seam attempts and a fair coin. The state spaces and their observables differ.",
+          "probes": ["spectral-gap", "certificate-species", "pr01-obstruction"],
+          "citations": ["oph", "mueller2026agreement"],
+          "pinned_sources": [{"id": "oph", "symbol": "mean update"}, {"id": "oph", "symbol": "conditional path surprisal"}]
+        }
+      ]
+    },
+    {
+      "id": "geometry",
+      "title": "Shells and geometry",
+      "entries": [
+        {
+          "id": "load-shell",
+          "term": "Load shell",
+          "meanings": {
+            "oph": "The load configurations with a fixed total on the carrier.",
+            "fep": "The binary subset is the support of the reference used for the conditioning comparison."
+          },
+          "relation": "model-correspondence",
+          "limit": "Shell membership concerns a full load configuration. The binary subset adds an occupancy restriction at each port.",
+          "probes": ["shell-counts", "repair-is-conditioning"],
+          "citations": ["oph", "mueller2026agreement"],
+          "pinned_sources": [{"id": "oph", "symbol": "states"}]
+        },
+        {
+          "id": "port-distance-shell",
+          "term": "Port-distance shell",
+          "meanings": {
+            "oph": "Ports at fixed graph distance from a chosen port.",
+            "synergetics": "IVM coordination counts use the lattice neighbour moves."
+          },
+          "relation": "counterexample",
+          "limit": "The carrier's port-distance counts differ from coordination counts on the IVM lattice.",
+          "probes": ["vertex-shells"],
+          "citations": ["oph", "quadmath"],
+          "pinned_sources": [{"id": "oph", "symbol": "seams, laplacian"}, {"id": "quadmath", "symbol": "MAX_SHELL, shell_count"}]
+        },
+        {
+          "id": "coordination-shell",
+          "term": "Coordination shell",
+          "meanings": {
+            "synergetics": "Lattice sites at fixed shortest-path distance from the lattice origin.",
+            "fep": "Equal-covariance Gaussian divergence from the origin measures a squared displacement."
+          },
+          "relation": "counterexample",
+          "limit": "The cuboctahedral gauge gives the coordination index. A shell contains multiple divergence levels, and a divergence level can intersect several shells.",
+          "probes": ["quadray-ivm", "shell-vs-free-energy"],
+          "citations": ["quadmath", "conway1997lowdim"],
+          "pinned_sources": [{"id": "quadmath", "symbol": "MAX_SHELL, shell_count"}]
+        },
+        {
+          "id": "quadray",
+          "term": "Quadray coordinates",
+          "meanings": {
+            "synergetics": "Coordinates with a common-offset redundancy. Specified neighbour moves generate the IVM sublattice."
+          },
+          "relation": "geometric-comparison",
+          "limit": "The neighbour lengths and Gaussian displacement comparison use the stated integer embedding.",
+          "probes": ["quadray-ivm", "kl-lattice-metric"],
+          "citations": ["quadmath", "fuller1975synergetics"],
+          "pinned_sources": [{"id": "quadmath", "symbol": "IVM_NEIGHBOR_MOVES"}, {"id": "quadmath", "symbol": "DEFAULT_EMBEDDING"}]
+        },
+        {
+          "id": "kissing-arrangement",
+          "term": "Kissing arrangement",
+          "meanings": {
+            "oph": "The finite carrier has icosahedral incidence.",
+            "synergetics": "The vector equilibrium is the cuboctahedral arrangement of nearest IVM neighbours."
+          },
+          "relation": "geometric-comparison",
+          "limit": "Equal kissing counts allow different outer contacts and graph degrees. Geometric incidence distinguishes the solids.",
+          "probes": ["kissing-twelve", "cuboctahedron-vs-icosahedron"],
+          "citations": ["oph", "quadmath", "schutte1953dreizehn"],
+          "pinned_sources": [{"id": "oph", "symbol": "ORIENTED_BASE_FACES"}, {"id": "quadmath", "symbol": "volume ratios"}]
+        },
+        {
+          "id": "tetravolume",
+          "term": "Tetravolume",
+          "meanings": {
+            "oph": "The carrier solid has an algebraic volume in the chosen unit.",
+            "synergetics": "Volume measured in units of the tetrahedron whose edge is the prime vector."
+          },
+          "relation": "geometric-comparison",
+          "limit": "A shared unit permits comparison between volumes of different solids. The rhombic-dodecahedral Voronoi cell belongs to the IVM lattice.",
+          "probes": ["icosahedron-tetravolume", "packing-density", "tetravolume-arithmetic"],
+          "citations": ["quadmath", "fuller1975synergetics"],
+          "pinned_sources": [{"id": "quadmath", "symbol": "integer_tetra_volume"}, {"id": "quadmath", "symbol": "volume ratios"}]
+        }
+      ]
+    }
+  ]
+}

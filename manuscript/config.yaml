@@ -14,7 +14,7 @@ paper:
     # Page 1 is cover art: the carrier's twelve ports and thirty seams, drawn
     # from the same projected icosahedron the body figures use.
     image: "../output/figures/fig_cover.png"
-    alt: "The finite OPH carrier on a dark field. Twelve marked ports and thirty seams form an icosahedral graph."
+    alt: "The finite OPH carrier on a dark field. Twelve numbered ports and thirty seams form an icosahedron. Shading shows foreground faces. Solid lines show foreground seams, and dashed lines trace rear seams."
 
 # Layout. The front-matter bound is a shade tighter than the ordinary one on
 # purpose: the first figure in the document is panel 1 of the graphical

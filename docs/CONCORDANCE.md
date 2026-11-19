@@ -156,7 +156,7 @@ argue by key.
 | `eq:chain` | eq | `04_correspondences.md` | `04_correspondences.md` |
 | `eq:ve` | eq | `04_correspondences.md` | `04_correspondences.md` |
 | `eq:fibre-vfe` | eq | `04_correspondences.md` | `04_correspondences.md` |
-| `eq:tree` | eq | `04_correspondences.md` | `05_disagreements.md` |
+| `eq:tree` | eq | `04_correspondences.md` | `04_correspondences.md`, `05_disagreements.md` |
 | `eq:kl` | eq | `04_correspondences.md` | `04_correspondences.md` |
 | `eq:routh` | eq | `05_disagreements.md` | `05_disagreements.md` |
 
@@ -193,7 +193,7 @@ argue by key.
 | `{{CARRIER_SHELL_GAP}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md`, `06_complementarities.md` |
 | `{{CARRIER_SHELL_SIZES}}` | `03_method.md`, `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
 | `{{CARRIER_TOTAL_DEFECT}}` | `04_correspondences.md`, `04_correspondences.md` |
-| `{{CARRIER_TREE_NUMBER}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{CARRIER_TREE_NUMBER}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md`, `06_complementarities.md`, `06_complementarities.md` |
 | `{{CARRIER_TRIANGLES}}` | `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `06_complementarities.md` |
 | `{{CERTIFICATE_INFINITY_NORM}}` | `04_correspondences.md` |
 | `{{CERTIFICATE_SECOND_EIGENVALUE}}` | `04_correspondences.md` |
@@ -346,11 +346,11 @@ argue by key.
 | `{{SYMMETRY_ROTATIONS}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md` |
 | `{{TETRAVOLUME_GALOIS_NORM}}` | `03_method.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md` |
 | `{{TETRAVOLUME_INTEGRAL_SOLIDS}}` | `00_00_graphical_abstract.md` |
-| `{{TWO_NODE_RELAXATION_MAX_RADIUS}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{TWO_NODE_RELAXATION_MAX_RADIUS}}` | `05_disagreements.md` |
 | `{{TWO_NODE_RELAXATION_MIN_RADIUS}}` | `05_disagreements.md` |
-| `{{TWO_NODE_RELAXATION_MIN_RADIUS_MEASURED}}` | `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{TWO_NODE_RELAXATION_MIN_RADIUS_MEASURED}}` | `05_disagreements.md`, `05_disagreements.md` |
 | `{{TWO_NODE_RELAXATION_PERIOD}}` | `05_disagreements.md` |
-| `{{TWO_NODE_RELAXATION_PERIOD_MEASURED}}` | `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{TWO_NODE_RELAXATION_PERIOD_MEASURED}}` | `05_disagreements.md`, `05_disagreements.md` |
 | `{{TWO_NODE_SYNC_MIN_RADIUS}}` | `05_disagreements.md` |
 | `{{VE_EXCESS_RESIDUAL}}` | `04_correspondences.md` |
 | `{{VE_ITERATIONS}}` | `04_correspondences.md` |

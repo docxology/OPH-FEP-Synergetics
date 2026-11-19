@@ -71,6 +71,7 @@ def test_the_section_files_are_the_ones_the_renderer_discovers():
         "06_complementarities.md",
         "07_scope.md",
         "08_reproducibility.md",
+        "90_ontology_concordance.md",
         "99_references.md",
     }
     assert {path.name for path in SECTIONS} == expected
