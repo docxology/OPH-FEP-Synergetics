@@ -410,7 +410,7 @@ ${{KL_ONE_STEP}}$ nats and the sites $k\,m$ along a neighbour move $m$ cost
 {{KL_NORM_SPHERE_4}} nats for $k = 1,\dots,4$, that is $4k^{2}$.
 :::
 
-The probe reports the divergence for each of the twelve neighbour moves, the
+Using [@eq:kl], the probe reports the divergence for each neighbour move, the
 squared distance of a move, and the costs of the sites $k\,m$ for the first four
 multiples [@kullback1951information].
 

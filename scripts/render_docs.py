@@ -269,8 +269,12 @@ def render_concordance() -> str:
         for label in re.findall(r"\{#eq:([a-z0-9_-]+)\}", text):
             declared.setdefault("eq", {})[label] = path.name
     referenced: dict[str, list[str]] = {}
+    citation_group = re.compile(r"\[(-?@[^\[\]]+)\]")
+    formal_cite = re.compile(r"(?:^|;)\s*-?@((?:prop|def|eq):[a-z0-9_-]+)(?=[\s,;]|$)")
     for path in section_paths:
-        for label in re.findall(r"\[@((?:prop|def|eq):[a-z0-9_-]+)\]", path.read_text(encoding="utf-8")):
+        groups = citation_group.findall(path.read_text(encoding="utf-8"))
+        labels = dict.fromkeys(label for group in groups for label in formal_cite.findall(group))
+        for label in labels:
             referenced.setdefault(label, []).append(path.name)
     lines += [
         "",

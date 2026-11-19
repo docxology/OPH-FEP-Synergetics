@@ -110,6 +110,9 @@ two has $\lvert\Sigma_2\rvert = \binom{13}{11} = {{SHELL_TOTAL_TWO}}$ configurat
 which {{SHELL_BINARY}} are binary.
 :::
 
+The `shell-counts` probe checks these counts by enumerating the carrier's
+load configurations.
+
 ## FEP: a bound on surprisal
 
 For a given record $o$, let $s$ be the latent state in a generative model with
@@ -169,7 +172,7 @@ $$
 (a,b,c,d) \;\sim\; (a+t,\,b+t,\,c+t,\,d+t) \qquad \text{for every } t\in\mathbb{R},
 $$ {#eq:quadray}
 
-so component differences determine the point. The four axes map to
+Component differences determine the point under [@eq:quadray]. The four axes map to
 `(1, 1, 1)`, `(-1, 1, -1)`, `(-1, -1, 1)` and `(1, -1, -1)`, the
 vertices of a regular tetrahedron. In the IVM sublattice, the nearest neighbours
 of the origin are the distinct permutations of $(2,1,1,0)$.

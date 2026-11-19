@@ -81,7 +81,9 @@ def test_the_concordance_reports_no_uncited_formal_statement():
     fails when one appears.
     """
     renderer = _load_renderer()
-    assert "never cited" not in renderer.render_concordance()
+    concordance = renderer.render_concordance()
+    assert "never cited" not in concordance
+    assert "| `prop:ivm` | prop | `02_framework.md` | `01_introduction.md`" in concordance
 
 
 def test_format_probe_value_renders_containers_and_scalars():

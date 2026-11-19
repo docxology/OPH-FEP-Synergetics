@@ -13,7 +13,7 @@ argue by key.
 | --- | --- | --- | --- | --- | --- |
 | `carrier-port-chart` | isomorphism | exact | synergetics-oph | `00_00_graphical_abstract.md`, `02_framework.md` | yes |
 | `spectral-gap` | isomorphism | exact | oph-fep | `00_00_graphical_abstract.md`, `02_framework.md` | yes |
-| `shell-counts` | isomorphism | exact | oph-fep | *no section names it* | yes |
+| `shell-counts` | isomorphism | exact | oph-fep | `02_framework.md` | yes |
 | `native-repair-law` | isomorphism | exact | oph-fep | `04_correspondences.md` | yes |
 | `variational-equivalence` | isomorphism | exact-on-domain | oph-fep | `02_framework.md` | yes |
 | `free-energy-dictionary` | isomorphism | exact-on-domain | oph-fep | `04_correspondences.md` | yes |
@@ -56,7 +56,7 @@ argue by key.
 | `conjugation-norm` | complementarity | exact | three-way | `00_00_graphical_abstract.md`, `06_complementarities.md` | yes |
 | `repair-is-conditioning` | isomorphism | exact-on-domain | oph-fep | `02_framework.md`, `04_correspondences.md` | yes |
 
-43 of 44 claims are named by at least one section's prose.
+44 of 44 claims are named by at least one section's prose.
 
 ## Sections
 
@@ -65,7 +65,7 @@ argue by key.
 | `00_00_graphical_abstract.md` | `carrier-port-chart`, `spectral-gap`, `kl-lattice-metric`, `tetravolume-arithmetic`, `conjugation-norm` |
 | `00_abstract.md` | *none* |
 | `01_introduction.md` | `subgraph-census` |
-| `02_framework.md` | `carrier-port-chart`, `spectral-gap`, `variational-equivalence`, `sheaf-agreement`, `gmrf-independence`, `sheaf-cohomology`, `kl-lattice-metric`, `cuboctahedron-vs-icosahedron`, `kissing-twelve`, `icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic`, `repair-is-conditioning` |
+| `02_framework.md` | `carrier-port-chart`, `spectral-gap`, `shell-counts`, `variational-equivalence`, `sheaf-agreement`, `gmrf-independence`, `sheaf-cohomology`, `kl-lattice-metric`, `cuboctahedron-vs-icosahedron`, `kissing-twelve`, `icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic`, `repair-is-conditioning` |
 | `03_method.md` | *none* |
 | `04_correspondences.md` | `native-repair-law`, `free-energy-dictionary`, `sheaf-agreement`, `certificate-species`, `tree-number`, `icosahedral-symmetry`, `eigenspace-irreducibility`, `law-equivariance`, `subgraph-census`, `angle-defect`, `dual-cells`, `repair-is-conditioning` |
 | `05_disagreements.md` | `pr01-obstruction`, `free-energy-name-collision`, `mediator-obstruction`, `stationary-blanket`, `solenoidal-freedom`, `d-stability`, `schedule-path`, `reduction-criterion`, `existence-without-reachability`, `directed-gradient`, `four-cycle-local-minimum`, `cuboctahedron-vs-icosahedron`, `shell-vs-free-energy`, `vertex-shells`, `twelve-around-one-families` |
@@ -110,25 +110,25 @@ argue by key.
 | `def:coordination` | def | `02_framework.md` | `02_framework.md`, `05_disagreements.md`, `07_scope.md` |
 | `def:correspondence` | def | `03_method.md` | `01_introduction.md` |
 | `def:dstability` | def | `05_disagreements.md` | `05_disagreements.md` |
-| `prop:carrier` | prop | `02_framework.md` | `04_correspondences.md` |
-| `prop:spectrum` | prop | `02_framework.md` | `04_correspondences.md`, `05_disagreements.md` |
+| `prop:carrier` | prop | `02_framework.md` | `01_introduction.md`, `04_correspondences.md` |
+| `prop:spectrum` | prop | `02_framework.md` | `01_introduction.md`, `04_correspondences.md`, `05_disagreements.md` |
 | `prop:descent` | prop | `02_framework.md` | `05_disagreements.md` |
-| `prop:ivm` | prop | `02_framework.md` | *never cited* |
-| `prop:ve` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `04_correspondences.md`, `07_scope.md` |
-| `prop:conditioning` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `07_scope.md` |
+| `prop:ivm` | prop | `02_framework.md` | `01_introduction.md` |
+| `prop:ve` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `07_scope.md` |
+| `prop:conditioning` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `05_disagreements.md`, `07_scope.md` |
 | `prop:sheaf` | prop | `04_correspondences.md` | `00_00_graphical_abstract.md` |
-| `prop:tree` | prop | `04_correspondences.md` | `05_disagreements.md` |
-| `prop:cohomology` | prop | `04_correspondences.md` | `00_00_graphical_abstract.md`, `04_correspondences.md`, `04_correspondences.md` |
-| `prop:symmetry` | prop | `04_correspondences.md` | `02_framework.md`, `04_correspondences.md`, `07_scope.md` |
-| `prop:kl` | prop | `04_correspondences.md` | `04_correspondences.md`, `05_disagreements.md` |
-| `prop:subgraph-census` | prop | `04_correspondences.md` | `04_correspondences.md` |
-| `prop:defect` | prop | `04_correspondences.md` | `04_correspondences.md` |
-| `prop:census` | prop | `05_disagreements.md` | `07_scope.md` |
-| `prop:native-rewrite` | prop | `05_disagreements.md` | `05_disagreements.md`, `07_scope.md`, `07_scope.md` |
+| `prop:tree` | prop | `04_correspondences.md` | `01_introduction.md`, `05_disagreements.md` |
+| `prop:cohomology` | prop | `04_correspondences.md` | `00_00_graphical_abstract.md`, `01_introduction.md`, `04_correspondences.md` |
+| `prop:symmetry` | prop | `04_correspondences.md` | `01_introduction.md`, `02_framework.md`, `04_correspondences.md`, `07_scope.md` |
+| `prop:kl` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `05_disagreements.md` |
+| `prop:subgraph-census` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md` |
+| `prop:defect` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md` |
+| `prop:census` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
+| `prop:native-rewrite` | prop | `05_disagreements.md` | `01_introduction.md`, `05_disagreements.md`, `07_scope.md` |
 | `prop:stationary` | prop | `05_disagreements.md` | `02_framework.md` |
-| `prop:solenoid` | prop | `05_disagreements.md` | `07_scope.md` |
-| `prop:dstability` | prop | `05_disagreements.md` | `07_scope.md` |
-| `prop:mediator` | prop | `05_disagreements.md` | `07_scope.md` |
+| `prop:solenoid` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
+| `prop:dstability` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
+| `prop:mediator` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
 | `prop:existence` | prop | `05_disagreements.md` | `01_introduction.md`, `03_method.md` |
 | `prop:cuboctahedron` | prop | `05_disagreements.md` | `05_disagreements.md` |
 | `prop:shell-energy` | prop | `05_disagreements.md` | `02_framework.md`, `05_disagreements.md` |
@@ -138,26 +138,26 @@ argue by key.
 | `prop:subdivision` | prop | `06_complementarities.md` | `06_complementarities.md` |
 | `prop:ep` | prop | `06_complementarities.md` | `06_complementarities.md` |
 | `prop:replicator` | prop | `06_complementarities.md` | `06_complementarities.md` |
-| `prop:ico-volume` | prop | `06_complementarities.md` | `06_complementarities.md` |
-| `prop:packing` | prop | `06_complementarities.md` | `06_complementarities.md` |
+| `prop:ico-volume` | prop | `06_complementarities.md` | `01_introduction.md`, `06_complementarities.md` |
+| `prop:packing` | prop | `06_complementarities.md` | `01_introduction.md`, `06_complementarities.md` |
 | `prop:currencies` | prop | `06_complementarities.md` | `06_complementarities.md` |
-| `prop:resistance` | prop | `06_complementarities.md` | `06_complementarities.md` |
+| `prop:resistance` | prop | `06_complementarities.md` | `01_introduction.md`, `06_complementarities.md` |
 | `prop:dual-cells` | prop | `06_complementarities.md` | `04_correspondences.md`, `06_complementarities.md` |
 | `prop:conjugation` | prop | `06_complementarities.md` | `06_complementarities.md` |
-| `eq:repair` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md` |
-| `eq:energy` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md` |
-| `eq:vfe` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `07_scope.md` |
+| `eq:repair` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `05_disagreements.md` |
+| `eq:energy` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `05_disagreements.md` |
+| `eq:vfe` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `07_scope.md` |
 | `eq:gaussian` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `05_disagreements.md`, `06_complementarities.md` |
-| `eq:blanket` | eq | `02_framework.md` | `02_framework.md`, `05_disagreements.md`, `05_disagreements.md` |
-| `eq:quadray` | eq | `02_framework.md` | *never cited* |
+| `eq:blanket` | eq | `02_framework.md` | `02_framework.md`, `05_disagreements.md` |
+| `eq:quadray` | eq | `02_framework.md` | `02_framework.md` |
 | `eq:neighbours` | eq | `02_framework.md` | `02_framework.md`, `06_complementarities.md` |
-| `eq:shell` | eq | `02_framework.md` | `05_disagreements.md`, `05_disagreements.md`, `06_complementarities.md` |
+| `eq:shell` | eq | `02_framework.md` | `05_disagreements.md`, `06_complementarities.md` |
 | `eq:gamma` | eq | `04_correspondences.md` | `05_disagreements.md` |
 | `eq:chain` | eq | `04_correspondences.md` | `04_correspondences.md` |
 | `eq:ve` | eq | `04_correspondences.md` | `04_correspondences.md` |
-| `eq:fibre-vfe` | eq | `04_correspondences.md` | `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `eq:fibre-vfe` | eq | `04_correspondences.md` | `04_correspondences.md` |
 | `eq:tree` | eq | `04_correspondences.md` | `05_disagreements.md` |
-| `eq:kl` | eq | `04_correspondences.md` | *never cited* |
+| `eq:kl` | eq | `04_correspondences.md` | `04_correspondences.md` |
 | `eq:routh` | eq | `05_disagreements.md` | `05_disagreements.md` |
 
 ## Values
