@@ -83,6 +83,9 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
     assert f"{carrier.seam_count} seams" in cover["alt_text"]
     assert "dashed lines" in cover["alt_text"]
     assert "cuboctahedral FCC shell" in cover["alt_text"]
+    assert "full Gaussian contrast variance by graph distance" in cover["alt_text"]
+    assert "lowest-mode variance" in cover["alt_text"]
+    assert f"{len(make_figures.CORRESPONDENCES)} claims" in cover["alt_text"]
     height, width, _ = make_figures.plt.imread(written[-1]).shape
     assert width > height
 

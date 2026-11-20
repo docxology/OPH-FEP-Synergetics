@@ -17,11 +17,11 @@ explain how tetravolumes are measured.
 
 ## Panel 1 — scope of the executable claims {#sec:ga-triangle}
 
-Each edge shows the balance of claim kinds for one pair. Run
+Each edge shows the total for one pair. The ledger gives its claim kinds
+and a representative result. Run
 `oph-fep-synergetics verify --pair` with the scope name to check its entries.
-The centre lists the claims that connect all three programmes.
 
-![Counts by claim kind for each pair, with one named identification per edge. The centre lists `tetravolume-arithmetic` and `conjugation-norm`. Counts and keys come from the executable registry.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
+![Claim totals on the framework triangle, with representative results and counts by kind in the ledger. The ledger also names `tetravolume-arithmetic` and `conjugation-norm`, the three-way claims.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
 
 `carrier-port-chart` links OPH's port chart to the icosahedron's vertex set.
 `spectral-gap` links the mean repair operator to a Gaussian precision built
@@ -40,7 +40,7 @@ two ports are conditionally dependent given the rest exactly when they share a
 seam. The graph also determines the spanning-tree count and the agreement
 sheaf's cohomology dimensions ([@prop:sheaf]; [@prop:cohomology]).
 
-![Left: the carrier's ports and seams from their derived adjacency. Right: the spanning-tree count, sheaf dimensions, and symmetry counts, followed by centred intrinsic port variance and the proper Gaussian's blanket size and seam precision.](../output/figures/fig_ga_carrier.png){#fig:ga-carrier width=100%}
+![The icosahedral carrier, with solid foreground seams and dashed rear seams. The ledger groups graph and sheaf invariants, symmetries, and the intrinsic and proper Gaussian quantities.](../output/figures/fig_ga_carrier.png){#fig:ga-carrier width=100%}
 
 The reduced Laplacian has determinant {{CARRIER_TREE_NUMBER}}. By the
 matrix-tree theorem, it equals the carrier's spanning-tree count. The count
@@ -72,7 +72,7 @@ Native repair acts on a configuration, a seam and a coin outcome. Of the
 leave the state unchanged. The repair rule commutes with the carrier
 symmetries, so the census is invariant under their action.
 
-![Left: horizontal bars count repair attempts on the native load shell by outcome. Labels show path multiplicities. Right: dots give the distinct Gaussian costs at unit covariance on each IVM coordination shell. The dashed curve traces shell maxima. Open diamonds and dotted guides mark costs shared by shells.](../output/figures/fig_ga_descent.png){#fig:ga-descent width=100%}
+![Left: counts and shares of native repair attempts, with the path multiplicities below. Right: distinct unit-covariance Gaussian costs, their ranges on each coordination shell, and the dashed curve of shell maxima. Open diamonds connected by dotted guides mark costs shared by shells.](../output/figures/fig_ga_descent.png){#fig:ga-descent width=100%}
 
 Gaussian divergence at unit covariance is half the squared distance between
 the means. One lattice step has squared length {{KL_STEP_SQUARED_DISTANCE}}
@@ -94,7 +94,7 @@ nearest-neighbour distance. Its selected solids have integer tetravolumes
 tetrahedra of its own edge length, has tetravolume
 $(5/2)(3\sqrt{2} + \sqrt{10}) \approx {{ICOSAHEDRON_TETRAVOLUME}}$.
 
-![Left: the IVM table solids and the carrier icosahedron on a logarithmic tetravolume axis. Each uses the tetrahedral unit defined above. The diamond marks the icosahedron's algebraic volume as a decimal approximation. Right: the IVM Voronoi cell's vertex, face and edge counts, its exact tetravolume and the packing density.](../output/figures/fig_ga_synergetics.png){#fig:ga-synergetics width=100%}
+![Left: exact IVM tetravolumes and the carrier icosahedron's approximate tetravolume on a logarithmic axis. Right: the IVM Voronoi cell with its incidence counts, exact tetravolume and packing density.](../output/figures/fig_ga_synergetics.png){#fig:ga-synergetics width=100%}
 
 The IVM Voronoi cell is a rhombic dodecahedron with {{VORONOI_VERTICES}}
 vertices, {{VORONOI_FACES}} faces and {{VORONOI_EDGES}} edges. Triangulating

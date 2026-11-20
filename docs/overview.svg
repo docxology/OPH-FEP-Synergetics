@@ -1,49 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 368" width="820" height="368"
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 323" width="960" height="323"
      role="img" aria-labelledby="overview-title overview-description">
-  <title id="overview-title">Three examples from the correspondence ledger</title>
-  <desc id="overview-description">In the linear-Gaussian model, harmonic extension and Gaussian inference give the same posterior mean. Both the icosahedral and cuboctahedral arrangements have twelve contacts with the central sphere. Outer spheres touch one another in the cuboctahedral arrangement. One lattice coordination shell can contain several Gaussian divergence values at unit covariance.</desc>
+  <title id="overview-title">Three pairwise comparisons in the executable registry</title>
+  <desc id="overview-description">On the OPH carrier, harmonic extension and variational inference in the linear-Gaussian model give the same posterior mean. The icosahedral and cuboctahedral arrangements each have twelve contacts with the central sphere, with contacts between outer spheres in the cuboctahedral arrangement alone. One Synergetics coordination shell can contain multiple Gaussian displacement divergences at unit covariance.</desc>
 
-  <rect width="820" height="368" rx="16" fill="#f8fafc"/>
-  <g fill="none" stroke="#475569" stroke-width="2.5">
-    <path d="M352 85 136 278M468 85l216 193M232 310h357"/>
-  </g>
+  <rect width="960" height="323" rx="16" fill="#0a1726"/>
+  <g font-family="DejaVu Sans, system-ui, sans-serif">
+    <text x="25" y="45" fill="#f4f7fa" font-size="28" font-weight="700">Across the finite models</text>
+    <text x="26" y="72" fill="#bacbd9" font-size="16">Three pairwise comparisons from the executable registry</text>
+    <path d="M24 92h912" stroke="#52687a"/>
 
-  <g font-family="system-ui, sans-serif" text-anchor="middle">
-    <g fill="#172554">
-      <rect x="260" y="19" width="300" height="68" rx="10"/>
-      <rect x="18" y="275" width="215" height="70" rx="10"/>
-      <rect x="587" y="275" width="215" height="70" rx="10"/>
+    <rect x="24" y="111" width="296" height="189" rx="10" fill="#102538"/>
+    <rect x="332" y="111" width="296" height="189" rx="10" fill="#132a2d"/>
+    <rect x="640" y="111" width="296" height="189" rx="10" fill="#292325"/>
+
+    <g font-size="13" font-weight="700" letter-spacing="0.5">
+      <text x="42" y="137" fill="#add7ff">OPH × FEP</text>
+      <text x="350" y="137" fill="#a6f5eb">OPH × SYNERGETICS</text>
+      <text x="658" y="137" fill="#ffd2a1">FEP × SYNERGETICS</text>
     </g>
-    <g fill="#ffffff" font-size="19" font-weight="700">
-      <text x="410" y="48">Observer Patch Holography</text>
-      <text x="125.5" y="304">Fuller’s Synergetics</text>
-      <text x="694.5" y="304">Free Energy Principle</text>
-    </g>
-    <g fill="#dbeafe" font-size="17">
-      <text x="410" y="71">Icosahedral repair</text>
-      <text x="125.5" y="328">Quadrays and lattice shells</text>
-      <text x="694.5" y="328">Variational inference</text>
+    <g fill="#f4f7fa" font-size="20" font-weight="700">
+      <text x="42" y="166">Two inference routes</text>
+      <text x="350" y="166">Two kissing arrangements</text>
+      <text x="658" y="166">One shell, several costs</text>
     </g>
 
-    <rect x="36" y="123" width="294" height="106" rx="10" fill="#f5f3ff" stroke="#7c3aed"/>
-    <rect x="490" y="123" width="294" height="106" rx="10" fill="#f0fdfa" stroke="#0f766e"/>
-    <rect x="253" y="249" width="314" height="110" rx="10" fill="#fffbeb" stroke="#a16207"/>
+    <g fill="#d8e4ee" font-size="14">
+      <text x="54" y="198">Harmonic extension</text>
+      <text x="54" y="219">Variational inference</text>
+      <text x="54" y="256" fill="#add7ff" font-weight="700">Same posterior mean</text>
+      <text x="42" y="281" fill="#bacbd9">Linear-Gaussian model</text>
+    </g>
+    <path d="M43 192v44h11m-4-4 4 4-4 4" fill="none" stroke="#add7ff" stroke-width="1.7"/>
+    <path d="M42 266h260" stroke="#547089" opacity=".6"/>
 
-    <g font-size="18" font-weight="700">
-      <text x="183" y="151" fill="#5b21b6">Complementarity</text>
-      <text x="637" y="151" fill="#115e59">Linear-Gaussian identity</text>
-      <text x="410" y="277" fill="#854d0e">Obstruction</text>
+    <g fill="#d8e4ee" font-size="14">
+      <text x="350" y="195">12 touch the central sphere</text>
+      <text x="368" y="222">Icosahedral</text>
+      <text x="607" y="222" text-anchor="end">Outer gaps</text>
+      <text x="368" y="250">Cuboctahedral</text>
+      <text x="607" y="250" text-anchor="end" fill="#a6f5eb" font-weight="700">Outer contacts</text>
+      <text x="350" y="281" fill="#bacbd9">Equal-sized spheres</text>
     </g>
-    <g fill="#172554" font-size="17">
-      <text x="183" y="177">Both arrangements give twelve</text>
-      <text x="183" y="198">central contacts. Outer spheres</text>
-      <text x="183" y="219">touch in the cuboctahedron only.</text>
-      <text x="637" y="177">Harmonic extension and</text>
-      <text x="637" y="198">Gaussian inference give</text>
-      <text x="637" y="219">the same posterior mean.</text>
-      <text x="410" y="303">One coordination shell</text>
-      <text x="410" y="324">contains several Gaussian</text>
-      <text x="410" y="345">divergence values.</text>
+    <path d="M350 218h12" stroke="#a6f5eb" stroke-width="2" stroke-dasharray="3 3"/>
+    <path d="M350 246h12" stroke="#a6f5eb" stroke-width="2"/>
+    <path d="M350 266h260" stroke="#547089" opacity=".6"/>
+
+    <g fill="#d8e4ee" font-size="14">
+      <text x="658" y="195">A fixed lattice coordination shell</text>
+      <text x="658" y="255" fill="#ffd2a1" font-weight="700">Multiple divergence values</text>
+      <text x="658" y="281" fill="#bacbd9">Gaussian model with unit covariance</text>
     </g>
+    <path d="M660 217h236" stroke="#ffd2a1" stroke-width="1.5" opacity=".65"/>
+    <path d="M669 217v13m105-13v13m113-13v13" stroke="#ffd2a1" stroke-width="1.6"/>
+    <g fill="#ffd2a1">
+      <circle cx="669" cy="231" r="3.5"/>
+      <circle cx="774" cy="231" r="3.5"/>
+      <circle cx="887" cy="231" r="3.5"/>
+    </g>
+    <path d="M658 266h260" stroke="#547089" opacity=".6"/>
   </g>
 </svg>

@@ -11,9 +11,9 @@ paper:
   version: "0.1.0"
   date: ""  # left empty: the renderer stamps the build date
   cover:
-    # Page 1 compares the two solids using the package's carrier and lattice geometry.
+    # Page 1 summarises the carrier, lattice geometry and executable comparisons.
     image: "../output/figures/fig_cover.png"
-    alt: "The icosahedral OPH carrier has twelve numbered ports and thirty seams. Beside it the cuboctahedral FCC shell has twelve sites and twenty-four edges. Solid and dashed lines show foreground and rear edges. The carrier has triangular faces, and the FCC shell has triangular and square faces."
+    alt: "Three columns show the numbered icosahedral carrier, Gaussian port contrasts and the cuboctahedral FCC shell. The centre chart divides full Gaussian variance and squared chord length by their respective adjacent-port values. Squared chords rise faster with graph distance. The findings connect binary repair to conditional resampling, chords to the lowest Gaussian modes, and contrast the carrier and FCC neighbourhood counts. A stacked bar shows the three registry claim kinds."
 
 # Layout. The front-matter bound is a shade tighter than the ordinary one on
 # purpose: the first figure in the document is panel 1 of the graphical
@@ -23,7 +23,7 @@ paper:
 rendering:
   section_breaks: true
   include_date: true
-  cover_height_fraction: 0.42
+  cover_height_fraction: 0.51
   front_matter_figure_height_fraction: 0.42
   figure_height_fraction: 0.44
 

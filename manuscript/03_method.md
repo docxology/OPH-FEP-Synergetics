@@ -114,10 +114,9 @@ what the probes found; it does not add claims the probes do not carry.
 [@fig:scope-matrix] summarizes the same {{REGISTRY_ENTRIES}} entries by
 scope, kind and evidence status. [@tbl:registry] lists individual entries.
 
-![Correspondence counts by scope. Each row gives one scope, including the
-three-way entries. The left panel counts the entries by kind and the right
-panel counts them by evidence status. Both panels label zero counts explicitly
-and read from the executable registry.](../output/figures/fig_scope_matrix.png){#fig:scope-matrix width=90%}
+![Correspondence counts by scope. Each row aligns counts by claim kind with
+counts by evidence status and a shared scope total. The matrix labels zeros
+explicitly and reads from the executable registry.](../output/figures/fig_scope_matrix.png){#fig:scope-matrix width=100%}
 
 ## Reading a source without copying it
 

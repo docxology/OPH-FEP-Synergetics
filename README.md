@@ -12,7 +12,7 @@ constructions can be used together.
 - **Fuller's Synergetics** — quadray coordinates, the isotropic vector matrix,
   the cuboctahedral vector equilibrium, and rational tetravolumes.
 
-![Three pairwise examples. The linear-Gaussian model gives the same posterior mean by three routes. The two kissing arrangements have different outer contacts. A coordination shell spans several Gaussian divergence levels.](docs/overview.svg)
+![Three pairwise comparisons. Harmonic extension and variational inference give the same posterior mean. The kissing arrangements share twelve central contacts and differ in outer contacts. A coordination shell spans multiple Gaussian divergence levels.](docs/overview.svg)
 
 Each edge shows one example from the [executable correspondence ledger](docs/CORRESPONDENCES.md).
 
@@ -201,14 +201,13 @@ the checkout you want to build. The script checks that link, uses the
 template interpreter to resolve the manuscript bindings, and writes the PDF
 in this project's `output/pdf/`.
 
-The rendered edition has a deliberate front matter. Page 1 compares the icosahedral carrier and the FCC lattice’s
-cuboctahedral shell using `output/figures/fig_cover.png`; pages 2 to 5 are the four panels of the
-graphical abstract, one panel per page, placed with `\floatplacement{figure}{H}`
-so that a panel cannot float away from its caption; the contents page follows the
-panels, which is why `preamble.md` keeps the renderer's automatic
-`\tableofcontents` from landing between the cover and the panels and re-emits it
-from the end of `00_00_graphical_abstract.md`. The margins are 0.5 in, because
-this is dense reference matter with wide tables.
+The cover connects the carrier and FCC shell to the computed port contrasts,
+binary repair identity and executable claim counts. Its source is
+`output/figures/fig_cover.png`. Pages 2 to 5 each hold one graphical abstract
+panel and its caption, fixed in place with `\floatplacement{figure}{H}`.
+The contents follows the panels because `preamble.md` defers the automatic
+`\tableofcontents` to the end of `00_00_graphical_abstract.md`. The 0.5 in
+margins accommodate the reference tables.
 
 Three disciplines hold the manuscript together, and each one is a test:
 
