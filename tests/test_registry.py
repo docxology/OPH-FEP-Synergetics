@@ -30,8 +30,8 @@ assert KINDS == REGISTRY_KINDS, "the registry and its tests must agree on the ki
 
 
 def test_registry_entries_are_well_formed():
-    assert len(CORRESPONDENCES) == 71
-    assert len({entry.key for entry in CORRESPONDENCES}) == 71
+    assert len(CORRESPONDENCES) == 75
+    assert len({entry.key for entry in CORRESPONDENCES}) == 75
     for entry in CORRESPONDENCES:
         assert entry.kind in KINDS
         assert entry.pair in PAIRS
@@ -43,7 +43,7 @@ def test_registry_entries_are_well_formed():
 
 def test_registry_covers_all_three_relations():
     counts = {kind: sum(1 for entry in CORRESPONDENCES if entry.kind == kind) for kind in KINDS}
-    assert counts == {ISOMORPHISM: 34, DISAGREEMENT: 27, COMPLEMENTARITY: 10}
+    assert counts == {ISOMORPHISM: 37, DISAGREEMENT: 28, COMPLEMENTARITY: 10}
 
 
 def test_statuses_follow_their_kind():
@@ -66,7 +66,7 @@ def test_registry_covers_every_pairwise_scope():
     index = by_pair()
     assert set(index) == set(PAIRS)
     counts = {pair: len(entries) for pair, entries in index.items()}
-    assert counts == {OPH_FEP: 31, FEP_SYNERGETICS: 5, SYNERGETICS_OPH: 14, THREE_WAY: 21}
+    assert counts == {OPH_FEP: 31, FEP_SYNERGETICS: 5, SYNERGETICS_OPH: 16, THREE_WAY: 23}
     assert sum(counts.values()) == len(CORRESPONDENCES)
     for pair, entries in index.items():
         assert all(entry.pair == pair for entry in entries)
@@ -90,24 +90,24 @@ def test_by_key_indexes_every_entry():
 
 def test_every_probe_passes_and_reports_values():
     results = verify()
-    assert len(results) == 71
+    assert len(results) == 75
     for result in results:
         assert result.passed is True
         assert result.pair in PAIRS
         assert result.values
     report = summary(results)
-    assert report["total"] == 71
-    assert report["passed"] == 71
+    assert report["total"] == 75
+    assert report["passed"] == 75
     assert report["failed"] == 0
     assert report["failures"] == ()
-    assert report["by_kind"][ISOMORPHISM] == {"passed": 34, "failed": 0}
-    assert report["by_kind"][DISAGREEMENT] == {"passed": 27, "failed": 0}
+    assert report["by_kind"][ISOMORPHISM] == {"passed": 37, "failed": 0}
+    assert report["by_kind"][DISAGREEMENT] == {"passed": 28, "failed": 0}
     assert report["by_kind"][COMPLEMENTARITY] == {"passed": 10, "failed": 0}
     assert report["pairs"] == PAIRS
     assert report["by_pair"][OPH_FEP] == {"passed": 31, "failed": 0}
     assert report["by_pair"][FEP_SYNERGETICS] == {"passed": 5, "failed": 0}
-    assert report["by_pair"][SYNERGETICS_OPH] == {"passed": 14, "failed": 0}
-    assert report["by_pair"][THREE_WAY] == {"passed": 21, "failed": 0}
+    assert report["by_pair"][SYNERGETICS_OPH] == {"passed": 16, "failed": 0}
+    assert report["by_pair"][THREE_WAY] == {"passed": 23, "failed": 0}
 
 
 def test_selection_limits_the_run():
@@ -126,6 +126,7 @@ def test_pair_selection_limits_the_run_to_one_pairwise_scope():
         "linear-lag-closure", "single-seam-lag-obstruction", "surface-harmonic-covariance",
         "copied-surface-weight-obstruction", "root-shell-quadratic-precision",
         "fcc-plane-screen-transfer", "centered-gaussian-screen-obstruction",
+        "jitterbug-weighted-precision", "jitterbug-coordinate-closure",
     ]
     for pair in PAIRS:
         selected = verify(pairs=(pair,))

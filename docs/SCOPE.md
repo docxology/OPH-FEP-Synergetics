@@ -30,6 +30,7 @@ its probe.
 | the transfer of binary repair to the FCC first shell | replay the same fair coin and uniform seam sampling on the cuboctahedral graph. Contrast variance gives an exact quotient on both graphs. The FCC graph-distance and both centroid processes retain observable memory under stationarity. |
 | geometric Gaussian comparisons | test reciprocal conductance duality on two spherical graph pairs, compare the pulled-back seam precision for unit-direction quadratics, and use scalar Gaussian precision and vertex cuts to test central-plane screening. |
 | transfer to larger graphs and cellulations | compare two-token repair on a four-cube, complete bipartite graphs and periodic FCC. Test covariance closure by Laplacian invariance, toroidal harmonic covariance, quadratic precision on nearest-neighbour root shells and screening on larger FCC boundaries. |
+| Fuller’s Jitterbug | track the rigid triangles from the vector equilibrium through the regular icosahedron to the octahedral joint coincidences. Compare the bar and hull graphs, then test a specified weighted Gaussian and fair-repair model on their common joint labels. |
 
 ## Cited but not implemented
 
@@ -51,10 +52,10 @@ its probe.
   predictive coding: it supplies the parameter gradient that the native repair
   law does not define. No learning is implemented, and the probe is a scalar
   energy model.
-- **Fuller's jitterbug.** The continuous motion that carries the vector
-  equilibrium through the icosahedron is cited to explain why Synergetics
-  distinguishes the two twelve-vertex solids. The executable comparison
-  measures contacts and gaps in the two static kissing arrangements.
+- **Other Jitterbug motion branches.** Fuller and Stachel describe a separate
+  continuation from the octahedron toward a tetrahedral configuration. The
+  tests follow the branch from the open vector equilibrium to the
+  octahedral limit and treat the joint positions as an ideal linkage.
 
 ## Three source quantities and their protocols
 
@@ -141,6 +142,10 @@ hold.
 - `linear-lag-closure` concerns stationary second moments of a fixed binary
   load under positive seam-sampling weights and fair coins. A Gaussian match
   of all lag covariances can coexist with observed non-Markov repair.
+- `jitterbug-coordinate-closure` concerns a weighted seam model on distinct
+  joints from the cuboctahedron to the regular icosahedron. The conductance
+  assigned to each short diagonal is a model parameter. The geometry also
+  describes the octahedral joint coincidences on the longer branch.
 - `centered-gaussian-screen-obstruction` compares a grounded Gaussian with
   the same free field conditioned on an exact or noisy global sum. Screening
   under ordinary clamping alone does not carry to the constrained field.

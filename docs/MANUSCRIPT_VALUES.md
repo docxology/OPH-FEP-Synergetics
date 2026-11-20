@@ -41,14 +41,14 @@ gives one; `Note` records what is measured rather than quoted.
 | `two_node.relaxation_min_radius_measured` | 0.840070783 |  | two_node_relaxation_orbit, measured in this package | minimum over the finite post-transient relaxation sample |
 | `two_node.relaxation_max_radius` | 1.05339122 |  | two_node_relaxation_orbit, measured in this package | maximum over the finite post-transient relaxation sample |
 | `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | estimated time to return near the anchor point of the sampled trajectory |
-| `registry.entries` | 71 | `71` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.isomorphisms` | 34 | `34` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.disagreements` | 27 | `27` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.entries` | 75 | `75` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.isomorphisms` | 37 | `37` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.disagreements` | 28 | `28` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.complementarities` | 10 | `10` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.oph_fep` | 31 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
 | `registry.fep_synergetics` | 5 |  | analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics |  |
-| `registry.synergetics_oph` | 14 |  | analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph |  |
-| `registry.three_way` | 21 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
+| `registry.synergetics_oph` | 16 |  | analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph |  |
+| `registry.three_way` | 23 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
 | `carrier.tree_number` | 5184000 | `5184000` | core/invariants.py, Kirchhoff: the exact reduced-Laplacian determinant |  |
 | `gmrf.marginal_variance` | 0.194444444 | `7/36` | core/invariants.py, the reciprocal spectrum summed exactly in the rationals |  |
 | `gmrf.blanket_size` | 5 | `five` | core/invariants.py: the Markov blanket of a port is its neighbours |  |
@@ -264,6 +264,16 @@ gives one; `Note` records what is measured rather than quoted.
 | `transfer.24cell_quadratic_variance` | 1/16 |  | probe:root-shell-quadratic-precision:24cell_quadratic_variance |  |
 | `transfer.fcc_second_plane_records` | (8, 12) |  | probe:fcc-plane-screen-transfer:fcc_second_plane_records |  |
 | `transfer.fcc_second_sum_ratios` | (1371241/110112, 51529/4873) |  | probe:centered-gaussian-screen-obstruction:fcc_second_sum_ratios |  |
+| `jitterbug.rigid_triangles` | 8 |  | probe:jitterbug-rigid-motion:rigid_triangles |  |
+| `jitterbug.rigid_bars` | 24 |  | probe:jitterbug-rigid-motion:rigid_bars |  |
+| `jitterbug.octahedral_joints` | 6 |  | probe:jitterbug-rigid-motion:octahedral_joints |  |
+| `jitterbug.octahedral_edges` | 12 |  | probe:jitterbug-rigid-motion:octahedral_edges |  |
+| `jitterbug.icosahedral_edges` | 30 |  | probe:jitterbug-graph-obstruction:icosahedral_edges |  |
+| `jitterbug.matching_edges` | 6 |  | probe:jitterbug-graph-obstruction:matching_edges |  |
+| `jitterbug.matching_variances` | (7/12, 11/30) |  | probe:jitterbug-weighted-precision:matching_variances |  |
+| `jitterbug.precision_ratio` | 125/8 |  | probe:jitterbug-weighted-precision:precision_ratio |  |
+| `jitterbug.even_diagonal_eigenvalue` | 6 |  | probe:jitterbug-weighted-precision:even_diagonal_eigenvalue |  |
+| `jitterbug.chord_factors` | (32, 40) |  | probe:jitterbug-coordinate-closure:chord_factors |  |
 | `carrier.chart_0` | 1, 5, 7, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 0 |
 | `carrier.chart_1` | 0, 5, 7, 8, 9 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 1 |
 | `carrier.chart_2` | 3, 4, 6, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 2 |

@@ -28,7 +28,8 @@ and a representative result. Run
 from the same Laplacian. `kl-lattice-metric` expresses equal-covariance
 Gaussian divergence as a lattice cost. [@tbl:registry] gives the scope of
 each claim. [@sec:transfer-criteria] tests which results transfer to
-other finite graphs, lattice shells and cellulations.
+other finite graphs, lattice shells and cellulations. [@sec:jitterbug]
+follows the fixed bars through the regular carrier hull.
 
 \clearpage
 

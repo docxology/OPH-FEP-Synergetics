@@ -42,7 +42,7 @@ from ..core import centroid_dynamics
 from ..core import constraint_screening, contrast_quotients
 from ..core import controls as control_module
 from ..core import free_energy as free_energy_module
-from ..core import geometric_screening
+from ..core import geometric_screening, jitterbug_inference
 from ..core import invariants as invariant_module
 from ..core import native_dynamics
 from ..core import network as network_module
@@ -53,6 +53,7 @@ from ..core import repair as repair_module
 from ..core import sheaf as sheaf_module
 from ..core import symmetry as symmetry_module
 from ..core import weighted_duality
+from ..geometry import jitterbug
 from ..geometry.lattice import ivm_quadray_cosets
 
 ISOMORPHISM = "isomorphism"
@@ -2390,6 +2391,109 @@ def _probe_centered_gaussian_screen_obstruction() -> tuple[bool, dict]:
     ), {**rows, "fcc_second_sum_ratios": ratios[2:]}
 
 
+def _probe_jitterbug_rigid_motion() -> tuple[bool, dict]:
+    rows = jitterbug.jitterbug_census()
+    cube, golden, octa = (rows[name] for name in ("cuboctahedron", "icosahedron", "octahedron"))
+
+    def adjacency(row: dict) -> list[list[int]]:
+        count = row["vertex_count"]
+        result = [[0] * count for _ in range(count)]
+        for i, j in row["hull_edges"]:
+            result[i][j] = result[j][i] = 1
+        return result
+
+    cube_match = network_module.graphs_are_isomorphic(
+        adjacency(cube), geometry.cuboctahedron_adjacency(),
+    )
+    carrier_match = network_module.graphs_are_isomorphic(
+        adjacency(golden), carrier_module.icosahedral_carrier().adjacency_matrix().tolist(),
+    )
+    values = {
+        "rigid_triangles": len(jitterbug.jitterbug_rigid_triangles()),
+        "rigid_bars": len(jitterbug.jitterbug_rigid_edges()),
+        "octahedral_joints": octa["vertex_count"],
+        "octahedral_edges": octa["hull_edge_count"],
+        "octahedral_bar_multiplicities": octa["bar_multiplicities"],
+        "cuboctahedron_matches_ivm": cube_match,
+        "icosahedron_matches_oph": carrier_match,
+        "endpoint_facet_counts": tuple(row["facet_counts"] for row in (cube, golden, octa)),
+        "all_bar_lengths_and_orientations_match": all(
+            row["bar_lengths_match"] and row["rigid_orientations_match"] for row in rows.values()
+        ),
+    }
+    return values == {
+        "rigid_triangles": 8, "rigid_bars": 24, "octahedral_joints": 6, "octahedral_edges": 12,
+        "octahedral_bar_multiplicities": (2,) * 12, "cuboctahedron_matches_ivm": True,
+        "icosahedron_matches_oph": True, "endpoint_facet_counts": (((3, 8), (4, 6)), ((3, 20),), ((3, 8),)),
+        "all_bar_lengths_and_orientations_match": True,
+    }, values
+
+
+def _probe_jitterbug_graph_obstruction() -> tuple[bool, dict]:
+    rows = jitterbug.jitterbug_census()
+    cube, middle, golden, beyond = (
+        rows[name] for name in ("cuboctahedron", "intermediate", "icosahedron", "contracted")
+    )
+    fields = ("bar_edge_count", "hull_edge_count", "shortest_pair_count", "contact_pair_count")
+    incidence_counts = tuple(tuple(row[field] for field in fields) for row in (cube, middle, golden, beyond))
+    values = {
+        "incidence_count_order": fields,
+        "incidence_counts": incidence_counts,
+        "hull_edges_match_independent_support_test": all(
+            row["hull_matches_designated_graph"] and row["matching_lengths_match"] for row in rows.values()
+        ),
+        "icosahedral_edges": golden["hull_edge_count"],
+        "matching_edges": golden["matching_edge_count"],
+        "operation_parameter": golden["parameter"],
+        "golden_lengths_agree": golden["bar_squared_length"] == golden["matching_squared_length"],
+    }
+    return (
+        incidence_counts == ((24, 24, 24, 24), (24, 30, 24, 0), (24, 30, 30, 0), (24, 30, 6, 0))
+        and values["hull_edges_match_independent_support_test"] and values["golden_lengths_agree"]
+        and values["matching_edges"] == 6
+    ), values
+
+
+def _probe_jitterbug_weighted_precision() -> tuple[bool, dict]:
+    rows = jitterbug_inference.jitterbug_inference_census()["weighted_samples"]
+    unit_rods, _, unit_hull, _ = rows
+    checks = ("matrix_spectrum_matches", "matrix_tree_weight_matches", "matrix_rod_variances_match",
+              "matrix_closing_variances_match")
+    values = {
+        "weighted_samples": rows,
+        "even_diagonal_eigenvalue": unit_rods["nonzero_precision_eigenvalues"][0][0],
+        "matching_variances": (unit_rods["closing_pair_variance"], unit_hull["closing_pair_variance"]),
+        "precision_ratio": unit_hull["entropy_precision_ratio"],
+    }
+    return (
+        all(all(row[key] for key in checks) for row in rows)
+        and values["matching_variances"] == (Fraction(7, 12), Fraction(11, 30))
+        and values["precision_ratio"] == Fraction(125, 8)
+        and (unit_rods["tree_weight"], unit_hull["tree_weight"]) == (331776, 5184000)
+    ), values
+
+
+def _probe_jitterbug_coordinate_closure() -> tuple[bool, dict]:
+    rows = jitterbug_inference.jitterbug_inference_census()["coordinate_samples"]
+    cube, rods, tuned, hull, golden_rods, golden = rows
+    closed = (cube, tuned, golden)
+    obstructed = (rods, hull, golden_rods)
+    values = {
+        "coordinate_samples": rows,
+        "chord_factors": tuple(4 * row["unit_rod_chord_factor"] for row in (cube, golden)),
+    }
+    return (
+        all(row["matrix_lag_defect_matches"] for row in rows)
+        and all(row["coordinate_covariance_closes"] and row["matrix_coordinate_mode_matches"]
+                and row["matrix_chord_factor_matches"] and row["lag_two_defect"] == 0 for row in closed)
+        and all(not row["coordinate_covariance_closes"] for row in obstructed)
+        and tuple(row["lag_two_defect"] for row in obstructed)
+        == (Fraction(49, 360000), Fraction(1, 22500), Fraction(1, 2880))
+        and tuned["tuned_weight"] == Fraction(7, 12)
+        and values["chord_factors"] == (32, 40)
+    ), values
+
+
 CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="carrier-port-chart",
@@ -3242,6 +3346,54 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         status="obstructed",
         source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; Bolin and Wallin (2021) for Gaussian linear constraints; rank-one and FCC witnesses derived here",
         probe=_probe_centered_gaussian_screen_obstruction,
+    ),
+    Correspondence(
+        key="jitterbug-rigid-motion",
+        kind=ISOMORPHISM,
+        pair=SYNERGETICS_OPH,
+        claim="A fixed-bar Jitterbug branch carries the cuboctahedral joints through a regular icosahedral hull with the OPH carrier incidence and reaches an octahedral limit with doubled bars.",
+        oph="The regular icosahedral hull matches the native carrier graph up to relabelling.",
+        fep="A scalar seam Gaussian can be specified on any of the chosen joint graphs.",
+        synergetics="Eight rigid triangles deform the vector equilibrium through the regular icosahedron.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; Fuller (1975), §460 and fig. 460.08; Verheyen (1989); Stachel (1994), motion M_O; exact landmark census here",
+        probe=_probe_jitterbug_rigid_motion,
+    ),
+    Correspondence(
+        key="jitterbug-graph-obstruction",
+        kind=DISAGREEMENT,
+        pair=SYNERGETICS_OPH,
+        claim="On the open contraction branch the convex hull includes six short diagonals in addition to the fixed 24 bars. The shortest-pair graph equals the carrier hull only at the regular icosahedral pose.",
+        oph="Hull incidence realises the 30 carrier seams, while the linkage has 24 bars with unchanged joint labels.",
+        fep="Precision based on bars and precision based on hull edges are different models.",
+        synergetics="The former square regions are skew and the hull uses the short diagonal before its length equals the bar length.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; Fuller (1975), fig. 460.08; Fuller (1979), §938.13; supporting-plane and chord tests here",
+        probe=_probe_jitterbug_graph_obstruction,
+    ),
+    Correspondence(
+        key="jitterbug-weighted-precision",
+        kind=ISOMORPHISM,
+        pair=THREE_WAY,
+        claim="Adding a common conductance on the Jitterbug short matching yields an exact Gaussian precision spectrum and local contrast law. From zero to unit conductance the matching variance decreases from 7/12 to 11/30 and the centred determinant grows by 125/8.",
+        oph="Including the additional matching with unit precision gives the carrier seam model at the regular pose.",
+        fep="A sign-character decomposition and an independent network solve give the Gaussian contrasts and determinant.",
+        synergetics="The rigid bars supply the fixed base graph and the hull supplies the candidate extra seams.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; Fuller (1979), §938.13 for the extra edges; exact weighted precision and resistance derived here",
+        probe=_probe_jitterbug_weighted_precision,
+    ),
+    Correspondence(
+        key="jitterbug-coordinate-closure",
+        kind=ISOMORPHISM,
+        pair=THREE_WAY,
+        claim="On the cuboctahedron-to-regular-icosahedron branch, the moving coordinate space is Laplacian-invariant exactly when the short matching has common weight 1/t minus t. This preserves Gaussian Markov lag covariances at each fixed pose under weighted fair repair.",
+        oph="Seam sampling is proportional to the specified weights and uses the same fair binary update.",
+        fep="The unique invariant coordinate space gives the Gaussian lag match and a lowest-mode chord factor.",
+        synergetics="The joint coordinate ratio runs from the vector equilibrium to the golden-ratio landmark.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; Stachel (1994) for geometric motion; exact covariance closure and matrix witnesses derived here",
+        probe=_probe_jitterbug_coordinate_closure,
     ),
 )
 

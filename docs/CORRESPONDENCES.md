@@ -86,21 +86,25 @@ diagnostics below `1e-9` in magnitude are reported as such.
 | three-way | isomorphism | exact-on-domain | `root-shell-quadratic-precision` | On nearest-neighbour D_d root shells for d at least three, the quadratic observation space is invariant and its unit Gaussian precision has diagonal and off-diagonal factors 2d(d-2) and 8(d-2). The factors coincide only at d=4. |
 | three-way | isomorphism | exact-on-domain | `fcc-plane-screen-transfer` | Coordinate and signed body-diagonal central planes separate the strict sides of every positive-frequency FCC boundary. Scalar seam Gaussians with grounded plane records then screen the two sides. |
 | three-way | disagreement | obstructed | `centered-gaussian-screen-obstruction` | Under a global zero-sum condition, a geometric seam separator still leaves a rank-one coupling between the free halves. The exact sum gives infinite conditional mutual information, and noisy totals give a finite computable coupling. |
+| synergetics-oph | isomorphism | exact-on-domain | `jitterbug-rigid-motion` | A fixed-bar Jitterbug branch carries the cuboctahedral joints through a regular icosahedral hull with the OPH carrier incidence and reaches an octahedral limit with doubled bars. |
+| synergetics-oph | disagreement | obstructed | `jitterbug-graph-obstruction` | On the open contraction branch the convex hull includes six short diagonals in addition to the fixed 24 bars. The shortest-pair graph equals the carrier hull only at the regular icosahedral pose. |
+| three-way | isomorphism | exact-on-domain | `jitterbug-weighted-precision` | Adding a common conductance on the Jitterbug short matching yields an exact Gaussian precision spectrum and local contrast law. From zero to unit conductance the matching variance decreases from 7/12 to 11/30 and the centred determinant grows by 125/8. |
+| three-way | isomorphism | exact-on-domain | `jitterbug-coordinate-closure` | On the cuboctahedron-to-regular-icosahedron branch, the moving coordinate space is Laplacian-invariant exactly when the short matching has common weight 1/t minus t. This preserves Gaussian Markov lag covariances at each fixed pose under weighted fair repair. |
 
-Totals: 71/71 probes pass, 0 fail.
+Totals: 75/75 probes pass, 0 fail.
 
 By kind:
 
-- isomorphism: 34 passing, 0 failing
-- disagreement: 27 passing, 0 failing
+- isomorphism: 37 passing, 0 failing
+- disagreement: 28 passing, 0 failing
 - complementarity: 10 passing, 0 failing
 
 By pairwise scope:
 
 - oph-fep: 31 passing, 0 failing
 - fep-synergetics: 5 passing, 0 failing
-- synergetics-oph: 14 passing, 0 failing
-- three-way: 21 passing, 0 failing
+- synergetics-oph: 16 passing, 0 failing
+- three-way: 23 passing, 0 failing
 
 ## `carrier-port-chart`
 
@@ -1779,4 +1783,82 @@ Probe values:
 - `frequency_2_axis` = site_count=42, seam_count=96, partition_sizes=(8, 17, 17), crossing_seams=0, side_sum_variances=(1123/48, 1123/48), soft_information_ratio=1371241/110112, soft_canonical_correlation_squared=1261129/1371241, centered_antipodal_cross_covariance=-867/35936, witness_site=(1, -2, -1)
 - `frequency_2_diagonal` = site_count=42, seam_count=96, partition_sizes=(12, 15, 15), crossing_seams=0, side_sum_variances=(216/11, 216/11), soft_information_ratio=51529/4873, soft_canonical_correlation_squared=46656/51529, centered_antipodal_cross_covariance=-49/2112, witness_site=(-1, 1, 2)
 - `fcc_second_sum_ratios` = (1371241/110112, 51529/4873)
+
+## `jitterbug-rigid-motion`
+
+**isomorphism** / **exact-on-domain** / **synergetics-oph** / probe PASS
+
+A fixed-bar Jitterbug branch carries the cuboctahedral joints through a regular icosahedral hull with the OPH carrier incidence and reaches an octahedral limit with doubled bars.
+
+- OPH: The regular icosahedral hull matches the native carrier graph up to relabelling.
+- FEP: A scalar seam Gaussian can be specified on any of the chosen joint graphs.
+- Synergetics: Eight rigid triangles deform the vector equilibrium through the regular icosahedron.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Fuller (1975), §460 and fig. 460.08; Verheyen (1989); Stachel (1994), motion M_O; exact landmark census here
+
+Probe values:
+
+- `rigid_triangles` = 8
+- `rigid_bars` = 24
+- `octahedral_joints` = 6
+- `octahedral_edges` = 12
+- `octahedral_bar_multiplicities` = (2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)
+- `cuboctahedron_matches_ivm` = True
+- `icosahedron_matches_oph` = True
+- `endpoint_facet_counts` = (((3, 8), (4, 6)), ((3, 20)), ((3, 8)))
+- `all_bar_lengths_and_orientations_match` = True
+
+## `jitterbug-graph-obstruction`
+
+**disagreement** / **obstructed** / **synergetics-oph** / probe PASS
+
+On the open contraction branch the convex hull includes six short diagonals in addition to the fixed 24 bars. The shortest-pair graph equals the carrier hull only at the regular icosahedral pose.
+
+- OPH: Hull incidence realises the 30 carrier seams, while the linkage has 24 bars with unchanged joint labels.
+- FEP: Precision based on bars and precision based on hull edges are different models.
+- Synergetics: The former square regions are skew and the hull uses the short diagonal before its length equals the bar length.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Fuller (1975), fig. 460.08; Fuller (1979), §938.13; supporting-plane and chord tests here
+
+Probe values:
+
+- `incidence_count_order` = (bar_edge_count, hull_edge_count, shortest_pair_count, contact_pair_count)
+- `incidence_counts` = ((24, 24, 24, 24), (24, 30, 24, 0), (24, 30, 30, 0), (24, 30, 6, 0))
+- `hull_edges_match_independent_support_test` = True
+- `icosahedral_edges` = 30
+- `matching_edges` = 6
+- `operation_parameter` = -1/2 + 1/2 sqrt 5
+- `golden_lengths_agree` = True
+
+## `jitterbug-weighted-precision`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+Adding a common conductance on the Jitterbug short matching yields an exact Gaussian precision spectrum and local contrast law. From zero to unit conductance the matching variance decreases from 7/12 to 11/30 and the centred determinant grows by 125/8.
+
+- OPH: Including the additional matching with unit precision gives the carrier seam model at the regular pose.
+- FEP: A sign-character decomposition and an independent network solve give the Gaussian contrasts and determinant.
+- Synergetics: The rigid bars supply the fixed base graph and the hull supplies the candidate extra seams.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Fuller (1979), §938.13 for the extra edges; exact weighted precision and resistance derived here
+
+Probe values:
+
+- `weighted_samples` = (closing_weight=0, nonzero_precision_eigenvalues=((6, 0, 0, 2), (4, 0, 0, 3), (4, -1, 4, 3), (4, 1, 4, 3)), precision_pseudodeterminant=3981312, tree_weight=331776, closing_pair_variance=7/12, rod_pair_variance=11/24, entropy_precision_ratio=1, matrix_spectrum_matches=True, matrix_tree_weight_matches=True, matrix_rod_variances_match=True, matrix_closing_variances_match=True, closing_weight=1/2, nonzero_precision_eigenvalues=((6, 0, 0, 2), (5, 0, 0, 3), (9/2, -1, 17/4, 3), (9/2, 1, 17/4, 3)), precision_pseudodeterminant=18432000, tree_weight=1536000, closing_pair_variance=9/20, rod_pair_variance=193/480, entropy_precision_ratio=125/27, matrix_spectrum_matches=True, matrix_tree_weight_matches=True, matrix_rod_variances_match=True, matrix_closing_variances_match=True, closing_weight=1, nonzero_precision_eigenvalues=((6, 0, 0, 2), (6, 0, 0, 3), (5, -1, 5, 3), (5, 1, 5, 3)), precision_pseudodeterminant=62208000, tree_weight=5184000, closing_pair_variance=11/30, rod_pair_variance=11/30, entropy_precision_ratio=125/8, matrix_spectrum_matches=True, matrix_tree_weight_matches=True, matrix_rod_variances_match=True, matrix_closing_variances_match=True, closing_weight=2, nonzero_precision_eigenvalues=((6, 0, 0, 2), (8, 0, 0, 3), (6, -1, 8, 3), (6, 1, 8, 3)), precision_pseudodeterminant=404619264, tree_weight=33718272, closing_pair_variance=15/56, rod_pair_variance=109/336, entropy_precision_ratio=2744/27, matrix_spectrum_matches=True, matrix_tree_weight_matches=True, matrix_rod_variances_match=True, matrix_closing_variances_match=True)
+- `even_diagonal_eigenvalue` = 6
+- `matching_variances` = (7/12, 11/30)
+- `precision_ratio` = 125/8
+
+## `jitterbug-coordinate-closure`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+On the cuboctahedron-to-regular-icosahedron branch, the moving coordinate space is Laplacian-invariant exactly when the short matching has common weight 1/t minus t. This preserves Gaussian Markov lag covariances at each fixed pose under weighted fair repair.
+
+- OPH: Seam sampling is proportional to the specified weights and uses the same fair binary update.
+- FEP: The unique invariant coordinate space gives the Gaussian lag match and a lowest-mode chord factor.
+- Synergetics: The joint coordinate ratio runs from the vector equilibrium to the golden-ratio landmark.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Stachel (1994) for geometric motion; exact covariance closure and matrix witnesses derived here
+
+Probe values:
+
+- `coordinate_samples` = (case=cuboctahedron, t=1, closing_weight=0, tuned_weight=0, coordinate_covariance_closes=True, lag_two_defect=0, coordinate_eigenvalue=2, unit_rod_chord_factor=8, matrix_lag_defect_matches=True, matrix_coordinate_mode_matches=True, matrix_chord_factor_matches=True, case=interior-rods, t=3/4, closing_weight=0, tuned_weight=7/12, coordinate_covariance_closes=False, lag_two_defect=49/360000, coordinate_eigenvalue=None, unit_rod_chord_factor=None, matrix_lag_defect_matches=True, case=interior-tuned, t=3/4, closing_weight=7/12, tuned_weight=7/12, coordinate_covariance_closes=True, lag_two_defect=0, coordinate_eigenvalue=5/2, unit_rod_chord_factor=125/13, matrix_lag_defect_matches=True, matrix_coordinate_mode_matches=True, matrix_chord_factor_matches=True, case=interior-hull, t=3/4, closing_weight=1, tuned_weight=7/12, coordinate_covariance_closes=False, lag_two_defect=1/22500, coordinate_eigenvalue=None, unit_rod_chord_factor=None, matrix_lag_defect_matches=True, case=icosahedral-rods, t=-1/2 + 1/2 sqrt 5, closing_weight=0, tuned_weight=1, coordinate_covariance_closes=False, lag_two_defect=1/2880, coordinate_eigenvalue=None, unit_rod_chord_factor=None, matrix_lag_defect_matches=True, case=icosahedron, t=-1/2 + 1/2 sqrt 5, closing_weight=1, tuned_weight=1, coordinate_covariance_closes=True, lag_two_defect=0, coordinate_eigenvalue=5 - 1 sqrt 5, unit_rod_chord_factor=10, matrix_lag_defect_matches=True, matrix_coordinate_mode_matches=True, matrix_chord_factor_matches=True)
+- `chord_factors` = (32, 40)
 

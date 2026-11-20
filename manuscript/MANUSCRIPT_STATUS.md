@@ -230,3 +230,15 @@ surfaces. The cube, periodic FCC and strengthened 24-cell examples
 show which data determine these properties. The root-shell calculation
 separates diagonal and mixed modes. The FCC plane proof extends beyond
 the first shell and compares grounded, noisy-sum and exact-sum conditioning.
+
+## Fuller's Jitterbug and the carrier graph
+
+**Entries:** `jitterbug-rigid-motion`, `jitterbug-graph-obstruction`,
+`jitterbug-weighted-precision`, `jitterbug-coordinate-closure`.
+
+The coordinate path keeps the eight triangles rigid. The hull already
+has triangulated openings on the contracting branch before the short
+diagonals reach the bar length. The Gaussian comparison distinguishes
+bar-only precision from adding conductance to the short matching.
+The latter gives a unique weight law for the moving linear coordinate
+modes and a finite counterexample when the weight is held fixed.

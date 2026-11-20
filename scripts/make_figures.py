@@ -54,6 +54,7 @@ from oph_fep_synergetics.core import (  # noqa: E402
     free_energy,
     geometric_screening,
     invariants,
+    jitterbug_inference,
     native_dynamics,
     network,
     planar_duality,
@@ -70,7 +71,7 @@ from oph_fep_synergetics.core.carrier import (  # noqa: E402
     IcosahedralCarrier,
     icosahedral_carrier,
 )
-from oph_fep_synergetics.geometry import lattice  # noqa: E402
+from oph_fep_synergetics.geometry import jitterbug, lattice  # noqa: E402
 from oph_fep_synergetics.manuscript_variables import as_dict, format_value  # noqa: E402
 
 FIGURES: Path = ROOT / "output" / "figures"
@@ -1153,7 +1154,7 @@ def ga_triangle_figure() -> Path:
     vertices = {"OPH": (0.50, 0.78), "FEP": (0.17, 0.24), "Synergetics": (0.83, 0.24)}
     examples = (
         (OPH_FEP, "OPH", "FEP", "spectral-gap", "Mean repair and Gaussian precision share a Laplacian."),
-        (SYNERGETICS_OPH, "OPH", "Synergetics", "carrier-port-chart", "The oriented faces recover the carrier graph."),
+        (SYNERGETICS_OPH, "OPH", "Synergetics", "jitterbug-rigid-motion", "The Jitterbug reaches the regular carrier hull."),
         (FEP_SYNERGETICS, "FEP", "Synergetics", "cuboctahedral-distance-split", "FCC pairs two steps apart can have different variances."),
     )
     for axis in (diagram, ledger):
@@ -2971,6 +2972,130 @@ def geometry_transfer_figure() -> Path:
     )
 
 
+def jitterbug_figure() -> Path:
+    """Separate the moving bars, the convex hull, and the inference model."""
+    figure = plt.figure(figsize=(10.5, 6.2))
+    layout = figure.add_gridspec(3, 4, height_ratios=(2.25, 0.32, 2.3))
+    ico = jitterbug.ICOSAHEDRON_PARAMETER
+    intermediate = Fraction(4, 5)
+    landmarks = (
+        (Fraction(1), "Cuboctahedron", "$t=1$"),
+        (intermediate, "Intermediate hull", "$t=4/5$"),
+        (ico, "Regular icosahedral hull", r"$t=(\sqrt{5}-1)/2$"),
+        (Fraction(0), "Octahedral limit", "$t=0$ · paired joints"),
+    )
+    bars = jitterbug.jitterbug_rigid_edges()
+    added = jitterbug.jitterbug_matching_edges()
+    # A common oblique view separates the vertices from unrelated projected
+    # edges across all four landmarks. Every panel uses bar length two.
+    rotation = _rotation(math.radians(45), math.radians(35))
+    for column, (parameter, title, label) in enumerate(landmarks):
+        axis = figure.add_subplot(layout[0, column])
+        position = float(parameter)
+        points = np.asarray(jitterbug.scaled_jitterbug_vertices(parameter))
+        points, inverse = np.unique(points, axis=0, return_inverse=True)
+        view = points @ rotation.T
+        visible_bars = sorted({tuple(sorted((inverse[a], inverse[b]))) for a, b in bars})
+        visible_diagonals = [(inverse[a], inverse[b]) for a, b in added] if 0 < position < 1 else []
+        segments = [
+            (float(view[[a, b], 2].mean()), a, b, colour, width, linestyle)
+            for edges, colour, width, linestyle in (
+                (visible_bars, BLUE, 1.75 if position else 2.45, "-"),
+                (visible_diagonals, VERMILLION, 1.55, (0, (3.0, 2.0))),
+            )
+            for a, b in edges
+        ]
+        for depth, a, b, colour, width, linestyle in sorted(segments):
+            axis.plot(view[[a, b], 0], view[[a, b], 1], color=colour, linewidth=width,
+                      linestyle=linestyle, solid_capstyle="round", alpha=0.94 if depth >= 0 else 0.48)
+        axis.scatter(view[:, 0], view[:, 1], color=INK, alpha=0.95, s=15 if position else 23,
+                     edgecolors="white", linewidths=0.45, zorder=4)
+        axis.set(xlim=(-2.04, 2.04), ylim=(-2.04, 2.04), aspect="equal")
+        axis.set_title(f"{title}\n{label}", fontsize=11.5, linespacing=1.3, fontweight="bold")
+        axis.set_axis_off()
+
+    legend_axis = figure.add_subplot(layout[1, :])
+    legend_axis.set_axis_off()
+    legend_axis.legend(
+        handles=(
+            plt.Line2D([], [], color=BLUE, linewidth=2.0, label="Persistent bars"),
+            plt.Line2D([], [], color=VERMILLION, linewidth=1.8, linestyle=(0, (3.0, 2.0)),
+                       label="Diagonals added by the convex hull"),
+        ),
+        loc="center", ncol=2, columnspacing=2.6, handlelength=2.4,
+    )
+
+    length_axis = figure.add_subplot(layout[2, :2])
+    weight_axis = figure.add_subplot(layout[2, 2:])
+    t_values = np.linspace(0, 1, 121)
+    bar_a, bar_b = bars[0]
+    diag_a, diag_b = added[0]
+
+    def relative_diagonal(parameter: float) -> float:
+        points = np.asarray(jitterbug.scaled_jitterbug_vertices(float(parameter)))
+        return float(np.linalg.norm(points[diag_a] - points[diag_b])
+                     / np.linalg.norm(points[bar_a] - points[bar_b]))
+
+    length_axis.plot(t_values, [relative_diagonal(parameter) for parameter in t_values],
+                     color=VERMILLION, linewidth=2.1)
+    length_axis.axhline(1, color=GREY, linestyle="--", linewidth=1.05)
+    length_axis.axvline(float(ico), color=GREY, linestyle="--", linewidth=1.05)
+    length_axis.scatter([float(ico)], [relative_diagonal(float(ico))], color=VERMILLION,
+                        edgecolors="white", linewidths=0.8, s=60, zorder=4)
+    length_axis.annotate("Equal lengths", (float(ico), 1), xytext=(-8, 9),
+                         textcoords="offset points", ha="right", fontsize=10)
+    length_axis.set(
+        xlim=(-0.025, 1.025), ylim=(0, 1.51), xlabel="Contraction parameter $t$",
+        ylabel="Short diagonal / bar length",
+    )
+    length_axis.set_xticks((0, float(ico), 1), labels=("$0$", r"$1/\varphi$", "$1$"))
+    length_axis.set_yticks((0, 0.5, 1, math.sqrt(2)), labels=("$0$", "$0.5$", "$1$", r"$\sqrt{2}$"))
+    length_axis.set_title("Hull geometry", loc="left", fontweight="bold")
+    length_axis.grid(False, axis="x")
+
+    # Plot the tuned inference model only on the cuboctahedral-to-icosahedral
+    # interval, where its additional positive couplings range from zero to one.
+    weight_parameters = (ico, intermediate, Fraction(1))
+    weights = [jitterbug_inference.jitterbug_coordinate_inference(parameter)["tuned_weight"]
+               for parameter in weight_parameters]
+    weight_grid = [ico + Fraction(step, 72) * (1 - ico) for step in range(73)]
+    weight_line = [jitterbug_inference.jitterbug_coordinate_inference(parameter)["tuned_weight"]
+                   for parameter in weight_grid]
+    weight_axis.plot(list(map(float, weight_grid)), list(map(float, weight_line)),
+                     color=GREEN, linewidth=2.1)
+    weight_axis.scatter(list(map(float, weight_parameters)), list(map(float, weights)),
+                        color=GREEN, edgecolors="white", linewidths=0.8, s=55, zorder=4)
+    for parameter, value, align, offset in zip(
+        weight_parameters, weights, ("left", "center", "right"),
+        ((7, -9), (0, 9), (-7, 9)), strict=True,
+    ):
+        weight_axis.annotate(
+            format_value(value), (float(parameter), float(value)), xytext=offset,
+            textcoords="offset points", ha=align, va="bottom", fontsize=11, fontweight="bold",
+        )
+    weight_axis.set(xlim=(float(ico) - 0.026, 1.035), ylim=(-0.05, 1.09),
+                    xlabel="Contraction parameter $t$", ylabel=r"Tuned conductance $w_*=1/t-t$")
+    weight_axis.set_xticks(list(map(float, weight_parameters)),
+                          labels=(r"$1/\varphi$", "$4/5$", "$1$"))
+    weight_axis.set_yticks((0, 0.25, 0.5, 0.75, 1))
+    weight_axis.set_title("Gaussian inference model", loc="left", fontweight="bold")
+    weight_axis.grid(False, axis="x")
+
+    return _save(
+        figure, "fig_jitterbug.png",
+        "Four views share one rotation, projection and scale. The cuboctahedron at t=1, "
+        "intermediate hull at t=4/5, and regular icosahedral hull at t=1/phi each have "
+        "twelve separate joints. At t=0 the joints meet in pairs at six octahedral vertices, "
+        f"with two of the original {len(bars)} bars along each apparent octahedral edge. "
+        f"In the intermediate and regular views, {len(added)} dashed orange lines show diagonal "
+        "edges added by the convex hull of the joints. "
+        "The short diagonal divided by the fixed bar length increases from zero at t=0 to "
+        "one at t=1/phi and square root of two at t=1. The inference plot covers t from 1/phi "
+        "to 1. The added matching conductance w equals 1/t minus t and takes the values "
+        f"{_enumerated(weights)} at t=1/phi, 4/5 and 1, respectively.",
+    )
+
+
 def write_registry() -> Path:
     """Write the accessibility registry the renderer reads for figure alt text.
 
@@ -3029,6 +3154,7 @@ def main() -> int:
         centroid_memory_figure,
         repair_transfer_figure,
         geometry_transfer_figure,
+        jitterbug_figure,
     )
     unrendered = {
         name

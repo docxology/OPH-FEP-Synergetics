@@ -82,8 +82,12 @@ argue by key.
 | `root-shell-quadratic-precision` | isomorphism | exact-on-domain | three-way | `07_transfer_criteria.md` | yes |
 | `fcc-plane-screen-transfer` | isomorphism | exact-on-domain | three-way | `07_transfer_criteria.md` | yes |
 | `centered-gaussian-screen-obstruction` | disagreement | obstructed | three-way | `07_transfer_criteria.md` | yes |
+| `jitterbug-rigid-motion` | isomorphism | exact-on-domain | synergetics-oph | `02_framework.md`, `07_jitterbug.md` | yes |
+| `jitterbug-graph-obstruction` | disagreement | obstructed | synergetics-oph | `07_jitterbug.md` | yes |
+| `jitterbug-weighted-precision` | isomorphism | exact-on-domain | three-way | `07_jitterbug.md` | yes |
+| `jitterbug-coordinate-closure` | isomorphism | exact-on-domain | three-way | `07_jitterbug.md` | yes |
 
-71 of 71 claims are named by at least one section's prose.
+75 of 75 claims are named by at least one section's prose.
 
 ## Sections
 
@@ -92,12 +96,13 @@ argue by key.
 | `00_00_graphical_abstract.md` | `carrier-port-chart`, `spectral-gap`, `kl-lattice-metric` |
 | `00_abstract.md` | *none* |
 | `01_introduction.md` | `quadray-ivm`, `subgraph-census`, `binary-conditional-variance`, `carrier-spectral-chords` |
-| `02_framework.md` | `carrier-port-chart`, `spectral-gap`, `shell-counts`, `variational-equivalence`, `sheaf-agreement`, `gmrf-independence`, `sheaf-cohomology`, `kl-lattice-metric`, `cuboctahedron-vs-icosahedron`, `kissing-twelve`, `icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic`, `repair-is-conditioning` |
+| `02_framework.md` | `carrier-port-chart`, `spectral-gap`, `shell-counts`, `variational-equivalence`, `sheaf-agreement`, `gmrf-independence`, `sheaf-cohomology`, `kl-lattice-metric`, `cuboctahedron-vs-icosahedron`, `kissing-twelve`, `icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic`, `repair-is-conditioning`, `jitterbug-rigid-motion` |
 | `03_method.md` | *none* |
 | `04_correspondences.md` | `native-repair-law`, `free-energy-dictionary`, `sheaf-agreement`, `certificate-species`, `tree-number`, `icosahedral-symmetry`, `eigenspace-irreducibility`, `law-equivariance`, `subgraph-census`, `angle-defect`, `dual-cells`, `repair-is-conditioning`, `binary-conditional-variance`, `carrier-spectral-chords` |
 | `05_disagreements.md` | `pr01-obstruction`, `free-energy-name-collision`, `mediator-obstruction`, `stationary-blanket`, `solenoidal-freedom`, `d-stability`, `schedule-path`, `reduction-criterion`, `existence-without-reachability`, `directed-gradient`, `four-cycle-local-minimum`, `cuboctahedron-vs-icosahedron`, `shell-vs-free-energy`, `vertex-shells`, `twelve-around-one-families` |
 | `06_complementarities.md` | `quadray-ivm`, `equilibrium-propagation`, `replicator-potential`, `kissing-twelve`, `effective-resistance`, `two-record-resistance`, `dual-cells`, `conjugation-norm` |
 | `06_finite_extensions.md` | `carrier-spectral-chords`, `repair-first-entry`, `repair-distance-lumping`, `grounded-forest-precision`, `greedy-record-placement`, `planar-dual-covariance`, `cuboctahedral-spectral-chords`, `cuboctahedral-distance-split` |
+| `07_jitterbug.md` | `jitterbug-rigid-motion`, `jitterbug-graph-obstruction`, `jitterbug-weighted-precision`, `jitterbug-coordinate-closure` |
 | `07_scope.md` | `pr01-obstruction`, `reduction-criterion` |
 | `07_three_way_limits.md` | `planar-dual-covariance`, `repair-contrast-quotient`, `repair-distance-counterexample`, `reciprocal-dual-weights`, `copied-dual-weight-obstruction`, `quadratic-even-field`, `quadratic-isotropy-obstruction`, `central-plane-screening`, `repair-centroid-memory` |
 | `07_transfer_criteria.md` | `reciprocal-dual-weights`, `repair-centroid-memory`, `distance-regular-repair`, `bipartite-contrast-collision`, `periodic-fcc-contrast-collision`, `linear-lag-closure`, `single-seam-lag-obstruction`, `surface-harmonic-covariance`, `copied-surface-weight-obstruction`, `root-shell-quadratic-precision`, `fcc-plane-screen-transfer`, `centered-gaussian-screen-obstruction` |
@@ -122,6 +127,7 @@ argue by key.
 | `fig:ga-triangle` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
 | `fig:geometry-transfer` | `07_transfer_criteria.md` | `copied-surface-weight-obstruction` |
 | `fig:ivm` | `06_complementarities.md` | *package readings, no single claim* |
+| `fig:jitterbug` | `07_jitterbug.md` | `jitterbug-graph-obstruction`, `jitterbug-rigid-motion` |
 | `fig:mediator` | `05_disagreements.md` | `mediator-obstruction`, `reduction-criterion` |
 | `fig:network` | `04_correspondences.md` | *package readings, no single claim* |
 | `fig:orbit` | `05_disagreements.md` | *package readings, no single claim* |
@@ -339,6 +345,16 @@ argue by key.
 | `{{IVM_NEIGHBOR_SQUARED_DISTANCE}}` | `02_framework.md`, `02_framework.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md` |
 | `{{IVM_SHELL_COUNTS}}` | `06_complementarities.md` |
 | `{{IVM_VOLUME_RATIOS}}` | `02_framework.md`, `02_framework.md`, `06_complementarities.md` |
+| `{{JITTERBUG_CHORD_FACTORS}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_EVEN_DIAGONAL_EIGENVALUE}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_ICOSAHEDRAL_EDGES}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_MATCHING_EDGES}}` | `07_jitterbug.md`, `07_jitterbug.md` |
+| `{{JITTERBUG_MATCHING_VARIANCES}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_OCTAHEDRAL_EDGES}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_OCTAHEDRAL_JOINTS}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_PRECISION_RATIO}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_RIGID_BARS}}` | `07_jitterbug.md`, `07_jitterbug.md` |
+| `{{JITTERBUG_RIGID_TRIANGLES}}` | `07_jitterbug.md` |
 | `{{KISSING_CUBOCTAHEDRON_EDGE_RATIO_SQUARED}}` | `05_disagreements.md`, `06_complementarities.md` |
 | `{{KISSING_ICOSAHEDRON_EDGE_RATIO_SQUARED}}` | `05_disagreements.md`, `06_complementarities.md` |
 | `{{KL_NORM_SPHERE_1}}` | `04_correspondences.md` |
@@ -476,7 +492,7 @@ argue by key.
 | `{{VORONOI_FACES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
 | `{{VORONOI_VERTICES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
 
-268 of the bound values are quoted by the prose. The cover is
+278 of the bound values are quoted by the prose. The cover is
 placed by `manuscript/config.yaml`; the accessibility registry that gives
 each figure its alternative text is `output/figures/figure_registry.json`,
 written by `scripts/make_figures.py`.

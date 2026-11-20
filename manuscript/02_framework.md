@@ -244,7 +244,7 @@ that make the comparison possible.
 | Carrier Laplacian | It determines the mean load update on ports and the precision blocks of a grounded Gaussian model. | `spectral-gap`, `variational-equivalence` |
 | Repair of a fixed seam | With the uniform binary-shell reference, the native transition law is the reference conditioned on the preserved record. | `repair-is-conditioning` |
 | Carrier scalar sheaf | Its agreement Laplacian is the graph Laplacian, and its first cohomology records seam assignments modulo coboundaries. | `sheaf-agreement`, `sheaf-cohomology` |
-| Carrier solid and IVM vector equilibrium | Both are kissing arrangements. Their outer contacts, graphs and volumes distinguish them. | `kissing-twelve`, `cuboctahedron-vs-icosahedron` |
+| Carrier solid and IVM vector equilibrium | Both are kissing arrangements and appear along one fixed-bar Jitterbug branch. The icosahedral hull has additional edges beyond the bars. | `kissing-twelve`, `cuboctahedron-vs-icosahedron`, `jitterbug-rigid-motion` |
 | IVM nearest-neighbour displacement | At unit covariance, the Gaussian divergence is {{KL_ONE_STEP}} nats for squared displacement {{KL_STEP_SQUARED_DISTANCE}}. | `kl-lattice-metric` |
 | Carrier solid and IVM Voronoi cell | Both volumes use the same tetrahedral unit. The carrier volume is algebraic and the cell has an integral tetravolume. | `icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic` |
 

@@ -98,8 +98,8 @@ formula then gives the vertex count, and duality exchanges vertices and faces.
 The independent lattice count enumerates the cuboctahedral boundary sites
 using the coordination metric. The geodesic counts are the $T = f^{2}$ case
 of the Caspar–Klug construction [@caspar1962physical; @coxeter1973regular].
-The agreement is between counts. Fuller's jitterbug gives geometric context
-for comparing the two solids [@fuller1975synergetics; @verheyen1989jitterbug].
+The agreement is between counts. The base solids also appear as landmarks
+of Fuller's Jitterbug, traced in [@sec:jitterbug].
 
 ## Energy-based learning supplies the gradient the repair law lacks {#sec:equilibrium-propagation}
 

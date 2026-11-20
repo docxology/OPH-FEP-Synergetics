@@ -308,6 +308,16 @@ EXPECTED_KEYS = {
     "transfer.torus_copied_residual",
     "transfer.torus_reciprocal_residual",
     "transfer.torus_unit_residual",
+    "jitterbug.chord_factors",
+    "jitterbug.even_diagonal_eigenvalue",
+    "jitterbug.icosahedral_edges",
+    "jitterbug.matching_edges",
+    "jitterbug.matching_variances",
+    "jitterbug.octahedral_edges",
+    "jitterbug.octahedral_joints",
+    "jitterbug.precision_ratio",
+    "jitterbug.rigid_bars",
+    "jitterbug.rigid_triangles",
 }
 
 

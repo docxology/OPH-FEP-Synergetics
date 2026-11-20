@@ -380,6 +380,24 @@ def _transfer_values() -> tuple[BoundValue, ...]:
     return tuple(entries)
 
 
+def _jitterbug_values() -> tuple[BoundValue, ...]:
+    """Bind the measured quantities quoted for the Jitterbug linkage."""
+    groups = (
+        ("jitterbug-rigid-motion", (
+            "rigid_triangles", "rigid_bars", "octahedral_joints", "octahedral_edges",
+        )),
+        ("jitterbug-graph-obstruction", ("icosahedral_edges", "matching_edges")),
+        ("jitterbug-weighted-precision", ("matching_variances", "precision_ratio", "even_diagonal_eigenvalue")),
+        ("jitterbug-coordinate-closure", ("chord_factors",)),
+    )
+    entries = []
+    for probe, fields in groups:
+        evidence = _probe_values(probe)
+        entries.extend(BoundValue(f"jitterbug.{field}", evidence[field], f"probe:{probe}:{field}")
+                       for field in fields)
+    return tuple(entries)
+
+
 MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     BoundValue("carrier.ports", 12, "OPH carrier (book/44-appendix-a.md:45)", "twelve"),
     BoundValue("carrier.seams", 30, "OPH carrier (book/44-appendix-a.md:45)", "thirty"),
@@ -1536,6 +1554,7 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     *_extension_values(),
     *_three_way_values(),
     *_transfer_values(),
+    *_jitterbug_values(),
     *_chart_values(),
 )
 

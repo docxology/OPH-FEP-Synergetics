@@ -14,7 +14,7 @@ contracts.
 .venv/bin/oph-fep-synergetics verify --kind <kind>
 ```
 
-Each of the 71 entries carries an executable probe. Its return value
+Each of the 75 entries carries an executable probe. Its return value
 `(passed, values)` records both the verdict and the quantities checked.
 
 Exit codes:
@@ -34,7 +34,7 @@ When combining filters, the probes must match every specified filter.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-452 tests. The suite runs offline from a fresh process and exercises the actual
+460 tests. The suite runs offline from a fresh process and exercises the actual
 scientific code paths.
 
 | file | what it pins down |
@@ -53,6 +53,8 @@ scientific code paths.
 | `test_root_shells.py` | quadratic precision formula across dimensions and exact lag-two covariance leakage from one strengthened seam |
 | `test_surface_duality.py` | toroidal harmonic periods and exact ranks under reciprocal and copied conductances |
 | `test_constraint_screening.py` | exact FCC plane cuts, joint Gaussian hard and noisy sum conditioning, and a general weighted-graph witness |
+| `test_jitterbug.py` | rigid triangle lengths, supporting hulls, endpoint graph isomorphism and octahedral bar coincidence |
+| `test_jitterbug_inference.py` | full weighted Laplacian invariants, exact coordinate projection and independent binary-kernel covariance |
 | `test_controls.py` | the descent census, the Routh column in closed form, the Lyapunov pair and its determinant, the mediator threshold, the affine contrast as an exact rational, the orbits, the four-cycle trap, and the replicator potential |
 | `test_geometry.py` | the twelve moves and their metric, the gauge, the exact xyz round-trip over shell sites, the shell sequence, the exact volumes, the vector equilibrium, and the subdivision identities |
 | `test_geometry_guards.py` | the icosahedral adjacency matrix and every range guard |

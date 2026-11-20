@@ -123,6 +123,10 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `root-shell-quadratic-precision` | isomorphism | `exact-on-domain` | `three-way` | the quadratic covariance is isotropic only in the four-dimensional member of the root-shell family |
 | `fcc-plane-screen-transfer` | isomorphism | `exact-on-domain` | `three-way` | parity gives separating planes on FCC boundaries at all frequencies |
 | `centered-gaussian-screen-obstruction` | disagreement | `obstructed` | `three-way` | conditioning on a total-field sum couples the strict sides of a seam cut |
+| `jitterbug-rigid-motion` | isomorphism | `exact-on-domain` | `synergetics-oph` | fixed bars carry the cuboctahedral joints through the regular carrier hull |
+| `jitterbug-graph-obstruction` | disagreement | `obstructed` | `synergetics-oph` | the icosahedral hull adds geometric seams to the fixed linkage |
+| `jitterbug-weighted-precision` | isomorphism | `exact-on-domain` | `three-way` | weighting the short diagonals yields an exact Gaussian determinant and contrast family |
+| `jitterbug-coordinate-closure` | isomorphism | `exact-on-domain` | `three-way` | a unique matching conductance preserves the moving coordinate modes |
 
 : The {{REGISTRY_ENTRIES}} correspondences, in registry order:
 {{REGISTRY_ISOMORPHISMS}} isomorphisms, {{REGISTRY_DISAGREEMENTS}}

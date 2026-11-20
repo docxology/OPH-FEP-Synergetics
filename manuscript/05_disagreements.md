@@ -400,10 +400,9 @@ cuboctahedron's squared edge over squared circumradius is
 neighbours as well as the centre in the local arrangement of the densest packing.
 The icosahedron's ratio is $2 - 2\sqrt{5}/5 \approx
 {{KISSING_ICOSAHEDRON_EDGE_RATIO_SQUARED}}$, so its outer spheres touch only the
-centre. Fuller's jitterbug connects the vector equilibrium and the icosahedron
-through a continuous motion that continues to the octahedron
-[@fuller1975synergetics; @verheyen1989jitterbug]. The comparison here measures
-the contact pattern of each arrangement.
+centre. [@sec:jitterbug] follows Fuller's fixed-bar motion between the two
+vertex configurations and distinguishes its bars, hull edges and nearest
+pairs. The central-sphere contact protocol used here fixes the circumradius.
 
 The same coincidence is why this entry is a disagreement rather than a
 complementarity: the neighbour *cell* of [@sec:packing] is the rhombic

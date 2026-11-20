@@ -555,6 +555,70 @@
           ]
         }
       ]
+    },
+    {
+      "id": "jitterbug-linkage",
+      "title": "Jitterbug geometry and seam models",
+      "entries": [
+        {
+          "id": "jitterbug-branch",
+          "term": "Jitterbug branch",
+          "meanings": {
+            "oph": "The regular icosahedral landmark realises the carrier incidence.",
+            "synergetics": "Rigid triangles of the vector equilibrium follow a continuous fixed-bar motion to an octahedral limit."
+          },
+          "relation": "geometric-comparison",
+          "limit": "The branch describes joint locations at fixed bar length. The central-sphere contact protocol uses a different rescaling.",
+          "probes": [
+            "jitterbug-rigid-motion"
+          ],
+          "citations": [
+            "oph",
+            "fuller1975synergetics",
+            "verheyen1989jitterbug",
+            "stachel1994heureka",
+            "kusner2018spheres"
+          ]
+        },
+        {
+          "id": "jitterbug-hull-diagonal",
+          "term": "Hull diagonal",
+          "meanings": {
+            "oph": "At regularity the carrier seam graph includes both the retained bars and the six short diagonals.",
+            "synergetics": "The skew regions of the contracting hull split across a perfect matching of short diagonals."
+          },
+          "relation": "counterexample",
+          "limit": "Hull, bar and nearest-pair graphs encode different data. The matching becomes equal in length to the bars only at the golden-ratio landmark.",
+          "probes": [
+            "jitterbug-graph-obstruction"
+          ],
+          "citations": [
+            "oph",
+            "fuller1975synergetics",
+            "fuller1979synergetics2"
+          ]
+        },
+        {
+          "id": "jitterbug-matching-conductance",
+          "term": "Matching conductance",
+          "meanings": {
+            "oph": "Fair repair samples a seam with probability proportional to its specified conductance.",
+            "fep": "An explicit weight on the matching changes Gaussian contrast and the centred precision determinant.",
+            "synergetics": "The joint-coordinate ratio determines the unique weight preserving the moving coordinate space."
+          },
+          "relation": "conditional-identity",
+          "limit": "The lag match is a statement about stationary second moments on a fixed weighted graph for each shape.",
+          "probes": [
+            "jitterbug-weighted-precision",
+            "jitterbug-coordinate-closure"
+          ],
+          "citations": [
+            "oph",
+            "fuller1979synergetics2",
+            "stachel1994heureka"
+          ]
+        }
+      ]
     }
   ]
 }

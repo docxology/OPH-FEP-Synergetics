@@ -99,3 +99,15 @@ to inspect the values for a listed probe.
 | Global sum constraint | **OPH.** Grounding a plane clamps the separator ports. **FEP.** A separate total-field constraint introduces rank-one dependence between the strict sides. **Synergetics.** The coordinate and body-diagonal FCC cuts have no crossing seams at any frequency. | **Counterexample.** Exact conditioning gives infinite conditional mutual information. Noisy sums give finite dependence. | `fcc-plane-screen-transfer`, `centered-gaussian-screen-obstruction`. [@oph; @quadmath; @bolin2021sparse] |
 
 : Transfer criteria beyond the two shells in the compared models. {#tbl:ontology-transfer-beyond-shells}
+
+\clearpage
+
+## Jitterbug geometry and seam models
+
+| Term | Meaning by programme | Relationship and scope | Evidence |
+|:-------------|:------------------------------|:------------------------------|:------------------------|
+| Jitterbug branch | **OPH.** The regular icosahedral landmark realises the carrier incidence. **Synergetics.** Rigid triangles of the vector equilibrium follow a continuous fixed-bar motion to an octahedral limit. | **Geometric comparison.** The branch describes joint locations at fixed bar length. The central-sphere contact protocol uses a different rescaling. | `jitterbug-rigid-motion`. [@oph; @fuller1975synergetics; @verheyen1989jitterbug; @stachel1994heureka; @kusner2018spheres] |
+| Hull diagonal | **OPH.** At regularity the carrier seam graph includes both the retained bars and the six short diagonals. **Synergetics.** The skew regions of the contracting hull split across a perfect matching of short diagonals. | **Counterexample.** Hull, bar and nearest-pair graphs encode different data. The matching becomes equal in length to the bars only at the golden-ratio landmark. | `jitterbug-graph-obstruction`. [@oph; @fuller1975synergetics; @fuller1979synergetics2] |
+| Matching conductance | **OPH.** Fair repair samples a seam with probability proportional to its specified conductance. **FEP.** An explicit weight on the matching changes Gaussian contrast and the centred precision determinant. **Synergetics.** The joint-coordinate ratio determines the unique weight preserving the moving coordinate space. | **Conditional identity.** The lag match is a statement about stationary second moments on a fixed weighted graph for each shape. | `jitterbug-weighted-precision`, `jitterbug-coordinate-closure`. [@oph; @fuller1979synergetics2; @stachel1994heureka] |
+
+: Jitterbug geometry and seam models in the compared models. {#tbl:ontology-jitterbug-linkage}
