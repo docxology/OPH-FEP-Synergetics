@@ -25,7 +25,7 @@ binds numerical results to computations or cited sources.
 ## What runs
 
 ```
-oph-fep-synergetics verify                 # all 61 correspondence probes
+oph-fep-synergetics verify                 # all 71 correspondence probes
 oph-fep-synergetics verify --json          # the same, as a machine-readable report
 oph-fep-synergetics verify --key pr01-obstruction
 oph-fep-synergetics verify --pair synergetics-oph   # one pairwise ledger
@@ -78,19 +78,23 @@ python3 -m venv .venv
 | | `core/weighted_duality.py` | weighted planar dual covariance and the copied-conductance counterexample |
 | | `core/quadratic_modes.py` | trace-free quadratic frames and Gaussian coefficient precision |
 | | `core/geometric_screening.py` | central-plane separators and Gaussian information between strict halves |
+| | `core/contrast_quotients.py` | distance-regular repair and resistance collisions on bipartite and periodic FCC graphs |
+| | `core/root_shells.py` | quadratic precision across root shells and the one-seam covariance defect |
+| | `core/surface_duality.py` | harmonic covariance and nonreciprocal weights on a square torus |
+| | `core/constraint_screening.py` | constrained Gaussian half-fields on larger FCC boundaries |
 | `geometry` | `geometry/quadray.py` | quadray coordinates, the A3/IVM embedding and exact tetravolumes |
 | | `geometry/lattice.py` | IVM shells, quadray classes of FCC sites and interstices, the cuboctahedral shell, Voronoi cell and packing density |
 | | `geometry/subdivision.py` | icosahedral subdivision and the dual count identities |
 | | `geometry/solids.py` | oriented faces, polyhedron volume, and the icosahedron's tetravolume against its closed form |
-| `analysis` | `analysis/registry.py` | the 61 registered correspondences, each with a pairwise or three-way scope and an executable probe |
+| `analysis` | `analysis/registry.py` | the 71 registered correspondences, each with a pairwise or three-way scope and an executable probe |
 | | `analysis/provenance.py` | source pins, licence terms and reuse policy |
 | `manuscript_variables` | `manuscript_variables/values.py` | every number the prose may quote, derived from the package where a derivation exists |
 
 ## The registry
 
-61 entries: **29 isomorphisms**, **22 disagreements**, **10 complementarities**,
+71 entries: **34 isomorphisms**, **27 disagreements**, **10 complementarities**,
 scoped to the pairs `oph-fep` (31), `synergetics-oph` (14), `fep-synergetics` (5)
-and `three-way` (11). All 61 probes pass. `verify --kind` narrows a run to one of
+and `three-way` (21). All 71 probes pass. `verify --kind` narrows a run to one of
 the three kinds and `--pair` to one of the four scopes. The full table, with the OPH / FEP /
 Synergetics reading of each entry and the values its probe asserts, is generated
 into [docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
@@ -100,6 +104,11 @@ carrier and the FCC first shell under the same finite models. It gives exact
 contrast-variance quotients and tests where geometry fails to transfer between
 the shells. A Gaussian process reproduces all lag covariances of the stationary
 centroid on either shell, yet three-time events detect memory.
+
+The [transfer chapter](manuscript/07_transfer_criteria.md) proves when these
+claims generalise. It checks a cube quotient, resistance collisions on
+periodic FCC, a weighted twenty-four-cell, harmonic covariance on a torus
+and plane screening under global constraints.
 
 Selected results follow.
 
@@ -240,7 +249,7 @@ Three disciplines hold the manuscript together, and each one is a test:
 
 ```
 data/sources.json                    pinned sources, licences, cited identifiers
-docs/CORRESPONDENCES.md              generated: the 61 entries and their probe values
+docs/CORRESPONDENCES.md              generated: the 71 entries and their probe values
 docs/MANUSCRIPT_VALUES.md            generated: every bound value
 docs/CONCORDANCE.md                  generated: where each claim is stated and each figure appears
 docs/PROVENANCE.md                   the pins and the reuse rules
@@ -249,11 +258,11 @@ docs/VERIFICATION.md                 the gates and how to run them
 data/ontology_concordance.json       structured terms, comparisons, evidence and limits
 manuscript/                          paper, bibliography and generated ontology supplement
 scripts/render_docs.py               regenerates the reference documents and ontology supplement
-scripts/make_figures.py              renders the twenty-six figures and their accessibility registry
+scripts/make_figures.py              renders the twenty-eight figures and their accessibility registry
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (439 tests)
+tests/                               the suite (452 tests)
 ```
 
 ## Tests
@@ -262,7 +271,7 @@ tests/                               the suite (439 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-439 tests. The suite checks exact values rather than
+452 tests. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

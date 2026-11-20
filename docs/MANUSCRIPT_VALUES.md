@@ -41,14 +41,14 @@ gives one; `Note` records what is measured rather than quoted.
 | `two_node.relaxation_min_radius_measured` | 0.840070783 |  | two_node_relaxation_orbit, measured in this package | minimum over the finite post-transient relaxation sample |
 | `two_node.relaxation_max_radius` | 1.05339122 |  | two_node_relaxation_orbit, measured in this package | maximum over the finite post-transient relaxation sample |
 | `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | estimated time to return near the anchor point of the sampled trajectory |
-| `registry.entries` | 61 | `61` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.isomorphisms` | 29 | `29` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.disagreements` | 22 | `22` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.entries` | 71 | `71` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.isomorphisms` | 34 | `34` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.disagreements` | 27 | `27` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.complementarities` | 10 | `10` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.oph_fep` | 31 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
 | `registry.fep_synergetics` | 5 |  | analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics |  |
 | `registry.synergetics_oph` | 14 |  | analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph |  |
-| `registry.three_way` | 11 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
+| `registry.three_way` | 21 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
 | `carrier.tree_number` | 5184000 | `5184000` | core/invariants.py, Kirchhoff: the exact reduced-Laplacian determinant |  |
 | `gmrf.marginal_variance` | 0.194444444 | `7/36` | core/invariants.py, the reciprocal spectrum summed exactly in the rationals |  |
 | `gmrf.blanket_size` | 5 | `five` | core/invariants.py: the Markov blanket of a port is its neighbours |  |
@@ -244,6 +244,26 @@ gives one; `Note` records what is measured rather than quoted.
 | `three.fcc_planes` | 7 |  | probe:central-plane-screening:fcc_planes |  |
 | `three.carrier_centroid_probs` | (1/180, 1/60) |  | probe:repair-centroid-memory:carrier_centroid_probs |  |
 | `three.fcc_centroid_probs` | (1/72, 1/48) |  | probe:repair-centroid-memory:fcc_centroid_probs |  |
+| `transfer.cube_resistances` | (15/32, 7/12, 61/96, 2/3) |  | probe:distance-regular-repair:cube_resistances |  |
+| `transfer.periodic_fcc_vertices` | 32 |  | probe:periodic-fcc-contrast-collision:periodic_fcc_vertices |  |
+| `transfer.periodic_fcc_degree` | 12 |  | probe:periodic-fcc-contrast-collision:periodic_fcc_degree |  |
+| `transfer.periodic_fcc_collision` | 17/96 |  | probe:periodic-fcc-contrast-collision:periodic_fcc_collision |  |
+| `transfer.periodic_fcc_displacements` | ((0, 2, 2), (1, 1, 2)) |  | probe:periodic-fcc-contrast-collision:periodic_fcc_displacements |  |
+| `transfer.periodic_fcc_target` | 11/64 |  | probe:periodic-fcc-contrast-collision:periodic_fcc_target |  |
+| `transfer.periodic_fcc_jumps` | (0, 1/192) |  | probe:periodic-fcc-contrast-collision:periodic_fcc_jumps |  |
+| `transfer.periodic_fcc_history` | (1/240, 1/192) |  | probe:periodic-fcc-contrast-collision:periodic_fcc_history |  |
+| `transfer.24cell_unit_lag` | 47/48 |  | probe:linear-lag-closure:24cell_unit_lag |  |
+| `transfer.24cell_weight` | 97 |  | probe:single-seam-lag-obstruction:24cell_weight |  |
+| `transfer.24cell_weighted_lag_two` | 2819/3072 |  | probe:single-seam-lag-obstruction:24cell_weighted_lag_two |  |
+| `transfer.24cell_lag_defect` | 11/576 |  | probe:single-seam-lag-obstruction:24cell_lag_defect |  |
+| `transfer.torus_cells` | (9, 18, 9) |  | probe:surface-harmonic-covariance:torus_cells |  |
+| `transfer.torus_unit_residual` | 1/9 |  | probe:surface-harmonic-covariance:torus_unit_residual |  |
+| `transfer.torus_reciprocal_residual` | 1/14 |  | probe:copied-surface-weight-obstruction:torus_reciprocal_residual |  |
+| `transfer.torus_copied_residual` | -11/21 |  | probe:copied-surface-weight-obstruction:torus_copied_residual |  |
+| `transfer.root_dimensions` | (3, 4, 5, 6, 7) |  | probe:root-shell-quadratic-precision:root_dimensions |  |
+| `transfer.24cell_quadratic_variance` | 1/16 |  | probe:root-shell-quadratic-precision:24cell_quadratic_variance |  |
+| `transfer.fcc_second_plane_records` | (8, 12) |  | probe:fcc-plane-screen-transfer:fcc_second_plane_records |  |
+| `transfer.fcc_second_sum_ratios` | (1371241/110112, 51529/4873) |  | probe:centered-gaussian-screen-obstruction:fcc_second_sum_ratios |  |
 | `carrier.chart_0` | 1, 5, 7, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 0 |
 | `carrier.chart_1` | 0, 5, 7, 8, 9 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 1 |
 | `carrier.chart_2` | 3, 4, 6, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 2 |

@@ -354,6 +354,32 @@ def _three_way_values() -> tuple[BoundValue, ...]:
     return tuple(entries)
 
 
+def _transfer_values() -> tuple[BoundValue, ...]:
+    """Bind the exact measurements quoted in the transfer chapter."""
+    groups = (
+        ("distance-regular-repair", ("cube_resistances",)),
+        ("periodic-fcc-contrast-collision", (
+            "periodic_fcc_vertices", "periodic_fcc_degree", "periodic_fcc_collision",
+            "periodic_fcc_displacements", "periodic_fcc_target", "periodic_fcc_jumps", "periodic_fcc_history",
+        )),
+        ("linear-lag-closure", ("24cell_unit_lag",)),
+        ("single-seam-lag-obstruction", (
+            "24cell_weight", "24cell_weighted_lag_two", "24cell_lag_defect",
+        )),
+        ("surface-harmonic-covariance", ("torus_cells", "torus_unit_residual")),
+        ("copied-surface-weight-obstruction", ("torus_reciprocal_residual", "torus_copied_residual")),
+        ("root-shell-quadratic-precision", ("root_dimensions", "24cell_quadratic_variance")),
+        ("fcc-plane-screen-transfer", ("fcc_second_plane_records",)),
+        ("centered-gaussian-screen-obstruction", ("fcc_second_sum_ratios",)),
+    )
+    entries = []
+    for probe, fields in groups:
+        evidence = _probe_values(probe)
+        entries.extend(BoundValue(f"transfer.{field}", evidence[field], f"probe:{probe}:{field}")
+                       for field in fields)
+    return tuple(entries)
+
+
 MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     BoundValue("carrier.ports", 12, "OPH carrier (book/44-appendix-a.md:45)", "twelve"),
     BoundValue("carrier.seams", 30, "OPH carrier (book/44-appendix-a.md:45)", "thirty"),
@@ -1509,6 +1535,7 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     ),
     *_extension_values(),
     *_three_way_values(),
+    *_transfer_values(),
     *_chart_values(),
 )
 

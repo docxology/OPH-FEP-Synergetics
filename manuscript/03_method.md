@@ -113,6 +113,16 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `quadratic-isotropy-obstruction` | disagreement | `obstructed` | `three-way` | equal linear isotropy leaves different quadratic variances on the FCC shell |
 | `central-plane-screening` | disagreement | `obstructed` | `three-way` | cuboctahedral equators can screen while icosahedral equators leave dependence |
 | `repair-centroid-memory` | disagreement | `obstructed` | `three-way` | matching Gaussian lag covariances leaves non-Markov centroid probabilities |
+| `distance-regular-repair` | isomorphism | `exact-on-domain` | `three-way` | distance-regular graphs give the exact binary distance quotient, with variance as an equivalent record |
+| `bipartite-contrast-collision` | disagreement | `obstructed` | `three-way` | equal resistance on a complete bipartite family can hide different one-step repair rates |
+| `periodic-fcc-contrast-collision` | disagreement | `obstructed` | `three-way` | resistance, distance and common-neighbour counts fail to determine a repair quotient on a regular FCC graph |
+| `linear-lag-closure` | isomorphism | `exact-on-domain` | `three-way` | invariance of the linear observation space is necessary and sufficient for Gaussian Markov covariance closure |
+| `single-seam-lag-obstruction` | disagreement | `obstructed` | `three-way` | changing a single seam weight on the twenty-four-cell yields a rank-one lag-two defect |
+| `surface-harmonic-covariance` | isomorphism | `exact-on-domain` | `three-way` | reciprocal edge weights leave a harmonic projector of rank twice the genus |
+| `copied-surface-weight-obstruction` | disagreement | `obstructed` | `three-way` | copied weights can preserve the torus trace and break positivity |
+| `root-shell-quadratic-precision` | isomorphism | `exact-on-domain` | `three-way` | the quadratic covariance is isotropic only in the four-dimensional member of the root-shell family |
+| `fcc-plane-screen-transfer` | isomorphism | `exact-on-domain` | `three-way` | parity gives separating planes on FCC boundaries at all frequencies |
+| `centered-gaussian-screen-obstruction` | disagreement | `obstructed` | `three-way` | conditioning on a total-field sum couples the strict sides of a seam cut |
 
 : The {{REGISTRY_ENTRIES}} correspondences, in registry order:
 {{REGISTRY_ISOMORPHISMS}} isomorphisms, {{REGISTRY_DISAGREEMENTS}}

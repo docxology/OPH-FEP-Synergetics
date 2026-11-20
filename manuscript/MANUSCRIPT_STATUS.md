@@ -215,3 +215,18 @@ give separate geometric counterexamples to transfer of Gaussian isotropy
 and screening. The chapter and structured concordance specify each
 protocol and cite its executable probe. The two figures show the
 conditional-probability and geometry results directly.
+
+## Transfer criteria beyond the two shells
+
+**Entries:** `distance-regular-repair`, `bipartite-contrast-collision`,
+`periodic-fcc-contrast-collision`, `linear-lag-closure`,
+`single-seam-lag-obstruction`, `surface-harmonic-covariance`,
+`copied-surface-weight-obstruction`, `root-shell-quadratic-precision`,
+`fcc-plane-screen-transfer`, `centered-gaussian-screen-obstruction`.
+
+The transfer chapter gives conditions for a resistance quotient,
+Gaussian lag covariance closure and reciprocal duality on closed
+surfaces. The cube, periodic FCC and strengthened 24-cell examples
+show which data determine these properties. The root-shell calculation
+separates diagonal and mixed modes. The FCC plane proof extends beyond
+the first shell and compares grounded, noisy-sum and exact-sum conditioning.

@@ -27,8 +27,8 @@ and a representative result. Run
 `spectral-gap` links the mean repair operator to a Gaussian precision built
 from the same Laplacian. `kl-lattice-metric` expresses equal-covariance
 Gaussian divergence as a lattice cost. [@tbl:registry] gives the scope of
-each claim. [@sec:three-way-limits] gives exact examples and counterexamples
-that use all three frameworks.
+each claim. [@sec:transfer-criteria] tests which results transfer to
+other finite graphs, lattice shells and cellulations.
 
 \clearpage
 

@@ -76,13 +76,23 @@ diagnostics below `1e-9` in magnitude are reported as such.
 | three-way | disagreement | obstructed | `quadratic-isotropy-obstruction` | The carrier and FCC shell both have isotropic linear evaluation frames. Quadratic Gaussian coefficient covariance remains isotropic on the carrier but is anisotropic on the FCC shell: rotating a unit diagonal form into an off-diagonal one changes its variance from 1/6 to 1/8. |
 | three-way | disagreement | obstructed | `central-plane-screening` | No plane through the centre of the OPH carrier screens its strict halves in the seam Gaussian. All seven vertex-spanned central planes do so on the FCC shell. The carrier's fifteen vertex-spanned planes leave conditional mutual information (1/2) log(10/9) in the clamped unit intrinsic field. |
 | three-way | disagreement | obstructed | `repair-centroid-memory` | On both twelve-vertex shells, the stationary binary repair centroid has the same full lag covariance sequence as an isotropic sampled Ornstein–Uhlenbeck process, but its next-step law depends on the previous observed centroid even after conditioning on the current one. |
+| three-way | isomorphism | exact-on-domain | `distance-regular-repair` | For a connected simple regular graph, fair binary repair has an exact graph-distance quotient if and only if the graph is distance-regular. In that regime unit Gaussian contrast variance strictly labels the same quotient. |
+| three-way | disagreement | obstructed | `bipartite-contrast-collision` | In the family K_(m,m+1) for m at least two, small-part pairs and cross-part pairs have equal Gaussian contrast variance but unequal one-step repair rates to the large-part pair class. |
+| three-way | disagreement | obstructed | `periodic-fcc-contrast-collision` | On the periodic FCC graph modulo four, equal contrast variance, graph distance, degree and common-neighbour count can coexist with unequal one-attempt arrival rates to a target variance. Grounding and characters of the period group agree on every contrast variance. |
+| three-way | isomorphism | exact-on-domain | `linear-lag-closure` | For weighted fair repair at a fixed binary load, the stationary covariance of a centred linear observation matches a Gaussian Markov process of the same dimension at every lag exactly when the observation space is Laplacian-invariant. |
+| three-way | disagreement | obstructed | `single-seam-lag-obstruction` | Strengthening one seam of the 24-cell leaves its geometric coordinate frame unchanged but creates a rank-one covariance semigroup defect of trace 11/576 under weighted fair binary repair. |
+| three-way | isomorphism | exact-on-domain | `surface-harmonic-covariance` | With reciprocal conductances up to global scale on a closed orientable cellulation with simple faces, matched Gaussian edge covariance projectors sum to the identity minus a harmonic projector of rank twice the genus. |
+| three-way | disagreement | obstructed | `copied-surface-weight-obstruction` | On the square torus, copying a strengthened conductance from the primal to the dual leaves the Gaussian edge remainder trace two but makes the remainder indefinite and rank four. |
+| three-way | isomorphism | exact-on-domain | `root-shell-quadratic-precision` | On nearest-neighbour D_d root shells for d at least three, the quadratic observation space is invariant and its unit Gaussian precision has diagonal and off-diagonal factors 2d(d-2) and 8(d-2). The factors coincide only at d=4. |
+| three-way | isomorphism | exact-on-domain | `fcc-plane-screen-transfer` | Coordinate and signed body-diagonal central planes separate the strict sides of every positive-frequency FCC boundary. Scalar seam Gaussians with grounded plane records then screen the two sides. |
+| three-way | disagreement | obstructed | `centered-gaussian-screen-obstruction` | Under a global zero-sum condition, a geometric seam separator still leaves a rank-one coupling between the free halves. The exact sum gives infinite conditional mutual information, and noisy totals give a finite computable coupling. |
 
-Totals: 61/61 probes pass, 0 fail.
+Totals: 71/71 probes pass, 0 fail.
 
 By kind:
 
-- isomorphism: 29 passing, 0 failing
-- disagreement: 22 passing, 0 failing
+- isomorphism: 34 passing, 0 failing
+- disagreement: 27 passing, 0 failing
 - complementarity: 10 passing, 0 failing
 
 By pairwise scope:
@@ -90,7 +100,7 @@ By pairwise scope:
 - oph-fep: 31 passing, 0 failing
 - fep-synergetics: 5 passing, 0 failing
 - synergetics-oph: 14 passing, 0 failing
-- three-way: 11 passing, 0 failing
+- three-way: 21 passing, 0 failing
 
 ## `carrier-port-chart`
 
@@ -1552,4 +1562,221 @@ Probe values:
 - `cuboctahedron` = attempts_per_state=48, graph_matches_reference=True, uniform_stationary=True, coordinate_eigenvalue=2, coordinate_mode_verified=True, retention=23/24, retention_parts=(23/24, 0), conditional_mean_verified=True, one_axis_variance=40/33, stationary_variance_verified=True, target_centroid=(0, 1, -1), zero_fibre_size=6, zero_fibre_jump_counts=(0, 0, 1, 1, 1, 1), witness_matches_edge_moves=True, witness_matches_reversible_formula=True, next_target_given_zero=1/72, next_target_given_previous_target_and_zero=1/48, stationary_centroid_non_markov=True
 - `carrier_centroid_probs` = (1/180, 1/60)
 - `fcc_centroid_probs` = (1/72, 1/48)
+
+## `distance-regular-repair`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+For a connected simple regular graph, fair binary repair has an exact graph-distance quotient if and only if the graph is distance-regular. In that regime unit Gaussian contrast variance strictly labels the same quotient.
+
+- OPH: Uniform fair seam attempts give the two-token move counts.
+- FEP: Exact resistance from the intrinsic scalar field gives an equivalent Markov record.
+- Synergetics: Distance-regular geometry supplies the intersection counts, checked on the four-dimensional cube beyond the original shells.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Biggs (1993) for monotone resistance on distance-regular graphs; equivalence and cube witness derived here
+
+Probe values:
+
+- `vertices` = 16
+- `degree` = 4
+- `class_sizes` = (32, 48, 32, 8)
+- `attempts_per_state` = 64
+- `attempt_count_matrix` = ((58, 6, 0, 0), (4, 56, 4, 0), (0, 6, 56, 2), (0, 0, 8, 56))
+- `resistances` = (15/32, 7/12, 61/96, 2/3)
+- `uniform_stationary` = True
+- `all_rows_match_hamming_moves` = True
+- `distance_matrix_coefficients_match` = True
+- `biggs_matches_grounded` = True
+- `resistance_strictly_increases` = True
+- `cube_resistances` = (15/32, 7/12, 61/96, 2/3)
+
+## `bipartite-contrast-collision`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+In the family K_(m,m+1) for m at least two, small-part pairs and cross-part pairs have equal Gaussian contrast variance but unequal one-step repair rates to the large-part pair class.
+
+- OPH: Replaying the fair seam operation gives different escape rates from a merged observation.
+- FEP: Equal effective resistance can merge states whose reduced dynamics has memory.
+- Synergetics: The explicit two-part incidence geometry gives a family outside the nearest-neighbour shells.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md for the baseline shell comparison; bipartite proof and exact checks derived here
+
+Probe values:
+
+- `cases` = (side_sizes=(2, 3), class_sizes=(1, 6, 3), attempts_per_state=12, attempt_count_matrix=((6, 6, 0), (1, 9, 2), (0, 4, 8)), resistances=(2/3, 2/3, 1), collision=True, uniform_stationary=True, all_rows_match_bipartite_moves=True, grounded_matches_formula=True, next_larger_side_probabilities=(0, 1/6), stationary_next_target_given_collision=1/7, stationary_next_target_given_previous_target_and_collision=1/6, stationary_probabilities_match_formula=True, side_sizes=(3, 4), class_sizes=(3, 12, 6), attempts_per_state=24, attempt_count_matrix=((16, 8, 0), (2, 19, 3), (0, 6, 18)), resistances=(1/2, 1/2, 2/3), collision=True, uniform_stationary=True, all_rows_match_bipartite_moves=True, grounded_matches_formula=True, next_larger_side_probabilities=(0, 1/8), stationary_next_target_given_collision=1/10, stationary_next_target_given_previous_target_and_collision=1/8, stationary_probabilities_match_formula=True, side_sizes=(4, 5), class_sizes=(6, 20, 10), attempts_per_state=40, attempt_count_matrix=((30, 10, 0), (3, 33, 4), (0, 8, 32)), resistances=(2/5, 2/5, 1/2), collision=True, uniform_stationary=True, all_rows_match_bipartite_moves=True, grounded_matches_formula=True, next_larger_side_probabilities=(0, 1/10), stationary_next_target_given_collision=1/13, stationary_next_target_given_previous_target_and_collision=1/10, stationary_probabilities_match_formula=True)
+
+## `periodic-fcc-contrast-collision`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+On the periodic FCC graph modulo four, equal contrast variance, graph distance, degree and common-neighbour count can coexist with unequal one-attempt arrival rates to a target variance. Grounding and characters of the period group agree on every contrast variance.
+
+- OPH: Fair binary repair distinguishes the two layouts by its rate into a specified class.
+- FEP: The enlarged variance and distance record fails to give a Markov quotient.
+- Synergetics: The nearest-neighbour steps act on the even-parity periodic FCC lattice.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; periodic Fourier and move witnesses derived here
+
+Probe values:
+
+- `period` = 4
+- `vertices` = 32
+- `degree` = 12
+- `attempts_per_state` = 384
+- `target_variance` = 11/64
+- `witnesses` = (((0, 2, 2), 2, 4, 17/96, 0), ((1, 1, 2), 2, 4, 17/96, 1/192))
+- `fourier_matches_grounded` = True
+- `native_matches_geometry` = True
+- `collision_displacement_attempt_counts` = ((0, 3), (2, 12))
+- `stationary_next_target_given_collision` = 1/240
+- `stationary_next_target_given_previous_target_and_collision` = 1/192
+- `periodic_fcc_vertices` = 32
+- `periodic_fcc_degree` = 12
+- `periodic_fcc_collision` = 17/96
+- `periodic_fcc_displacements` = ((0, 2, 2), (1, 1, 2))
+- `periodic_fcc_target` = 11/64
+- `periodic_fcc_jumps` = (0, 1/192)
+- `periodic_fcc_history` = (1/240, 1/192)
+
+## `linear-lag-closure`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+For weighted fair repair at a fixed binary load, the stationary covariance of a centred linear observation matches a Gaussian Markov process of the same dimension at every lag exactly when the observation space is Laplacian-invariant.
+
+- OPH: The binary update is a random seam transposition with probability one half.
+- FEP: The lag-two semigroup defect is a positive semidefinite Gram matrix and detects failure of Gaussian covariance closure.
+- Synergetics: The coordinate columns of the unit-weight 24-cell furnish an invariant space beyond the first FCC shell.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Caputo, Liggett and Richthammer (2010) for symmetric exclusion; Cohn et al. (2007) for the D4 root shell; closure criterion derived here
+
+Probe values:
+
+- `vertices` = 24
+- `seams` = 96
+- `routes_match` = True
+- `lag_one` = 47/48
+- `lag_two` = 2209/2304
+- `defect_trace` = 0
+- `rank_one_chord` = False
+- `24cell_unit_lag` = 47/48
+
+## `single-seam-lag-obstruction`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+Strengthening one seam of the 24-cell leaves its geometric coordinate frame unchanged but creates a rank-one covariance semigroup defect of trace 11/576 under weighted fair binary repair.
+
+- OPH: The native rule remains fair on the chosen seam, with changes only to seam sampling.
+- FEP: The observed lag-two covariance cannot equal the square of the lag-one covariance in a Gaussian Markov readout of that dimension.
+- Synergetics: A single weighted chord breaks the coordinate-space invariance of the original root-shell geometry.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Cohn et al. (2007) for the 24-cell graph geometry; weighted defect derived here
+
+Probe values:
+
+- `vertices` = 24
+- `seams` = 96
+- `binary_states` = 276
+- `changed_weight` = 97
+- `unit_coordinate_modes` = True
+- `unit` = routes_match=True, lag_one=47/48, lag_two=2209/2304, defect_trace=0, rank_one_chord=False
+- `weighted` = routes_match=True, lag_one=91/96, lag_two=2819/3072, defect_trace=11/576, rank_one_chord=True
+- `24cell_weight` = 97
+- `24cell_weighted_lag_two` = 2819/3072
+- `24cell_lag_defect` = 11/576
+
+## `surface-harmonic-covariance`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+With reciprocal conductances up to global scale on a closed orientable cellulation with simple faces, matched Gaussian edge covariance projectors sum to the identity minus a harmonic projector of rank twice the genus.
+
+- OPH: The signed face boundaries generalise the carrier's oriented seam incidence.
+- FEP: Conductance-normalised primal and dual Gaussian edge contrasts fill the complement of the harmonic space.
+- Synergetics: A periodic square lattice supplies two independent winding directions beyond the spherical solids.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); de Goes et al. (2016) for discrete harmonic forms; weighted covariance and square torus witness derived here
+
+Probe values:
+
+- `cells` = (9, 18, 9)
+- `genus` = 1
+- `changed_edge` = (0, 1)
+- `changed_weight` = 4
+- `entries_checked` = 324
+- `boundary_of_boundary_zero` = True
+- `unit` = primal_diagonal=4/9, dual_diagonal=4/9, remainder_diagonal=1/9, remainder_trace=2, remainder_rank=2, cross_pairing_rank=0, is_projector=True, harmonic_periods_match=True, period_gram=((1, 0), (0, 1)), uniform_direction_blocks_match=True
+- `reciprocal` = primal_diagonal=16/21, dual_diagonal=1/6, remainder_diagonal=1/14, remainder_trace=2, remainder_rank=2, cross_pairing_rank=0, is_projector=True, harmonic_periods_match=True, period_gram=((8/7, 0), (0, 1))
+- `rescaled_reciprocal` = primal_diagonal=16/21, dual_diagonal=1/6, remainder_diagonal=1/14, remainder_trace=2, remainder_rank=2, cross_pairing_rank=0, is_projector=True, harmonic_periods_match=True, period_gram=((8/7, 0), (0, 1))
+- `copied` = primal_diagonal=16/21, dual_diagonal=16/21, remainder_diagonal=-11/21, remainder_trace=2, remainder_rank=4, cross_pairing_rank=1, is_projector=False
+- `torus_cells` = (9, 18, 9)
+- `torus_unit_residual` = 1/9
+
+## `copied-surface-weight-obstruction`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+On the square torus, copying a strengthened conductance from the primal to the dual leaves the Gaussian edge remainder trace two but makes the remainder indefinite and rank four.
+
+- OPH: A nonreciprocal primal and dual weighting violates the cancellation around an oriented face.
+- FEP: The trace is fixed by Euler characteristic even when the remainder has a negative direction.
+- Synergetics: The periodic cellulation separates the true winding modes from the extra directions created by nonreciprocal weights.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); de Goes et al. (2016); exact nonreciprocal torus witness and rank formula derived here
+
+Probe values:
+
+- `changed_weight` = 4
+- `reciprocal` = primal_diagonal=16/21, dual_diagonal=1/6, remainder_diagonal=1/14, remainder_trace=2, remainder_rank=2, cross_pairing_rank=0, is_projector=True, harmonic_periods_match=True, period_gram=((8/7, 0), (0, 1))
+- `copied` = primal_diagonal=16/21, dual_diagonal=16/21, remainder_diagonal=-11/21, remainder_trace=2, remainder_rank=4, cross_pairing_rank=1, is_projector=False
+- `torus_reciprocal_residual` = 1/14
+- `torus_copied_residual` = -11/21
+
+## `root-shell-quadratic-precision`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+On nearest-neighbour D_d root shells for d at least three, the quadratic observation space is invariant and its unit Gaussian precision has diagonal and off-diagonal factors 2d(d-2) and 8(d-2). The factors coincide only at d=4.
+
+- OPH: The scalar seam Laplacian is applied to antipodally even vertex fields.
+- FEP: The pulled-back Gaussian precisions distinguish trace-free diagonal from off-diagonal coefficients.
+- Synergetics: The D3 cuboctahedral IVM shell starts the family, and the 24-cell is the unique isotropic case within it.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; Cohn et al. (2007) for the 24-cell; exact shell formulas derived here
+
+Probe values:
+
+- `shells` = ((3, 12, 24, (1, 2), (6, 8), (1/6, 1/8), True), (4, 24, 96, (2, 2), (16, 16), (1/16, 1/16), True), (5, 40, 240, (3, 2), (30, 24), (1/30, 1/24), True), (6, 60, 480, (4, 2), (48, 32), (1/48, 1/32), True), (7, 84, 840, (5, 2), (70, 40), (1/70, 1/40), True))
+- `root_dimensions` = (3, 4, 5, 6, 7)
+- `24cell_quadratic_variance` = 1/16
+
+## `fcc-plane-screen-transfer`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+Coordinate and signed body-diagonal central planes separate the strict sides of every positive-frequency FCC boundary. Scalar seam Gaussians with grounded plane records then screen the two sides.
+
+- OPH: Clamping the sites on a plane fixes a seam-supported interface record.
+- FEP: No cross block remains in the grounded scalar precision.
+- Synergetics: Even lattice parity rules out a seam crossing without touching one of these planes at every shell frequency.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; parity and plane-count argument derived here
+
+Probe values:
+
+- `planes` = ((4, 4, 4), (6, 3, 3), (8, 17, 17), (12, 15, 15))
+- `crossing_seams` = (0, 0, 0, 0)
+- `fcc_second_plane_records` = (8, 12)
+
+## `centered-gaussian-screen-obstruction`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+Under a global zero-sum condition, a geometric seam separator still leaves a rank-one coupling between the free halves. The exact sum gives infinite conditional mutual information, and noisy totals give a finite computable coupling.
+
+- OPH: The observed separator still isolates seams, while the separate total-field record constrains both interiors.
+- FEP: Linear Gaussian conditioning creates a cross block even when the grounded precision is block diagonal.
+- Synergetics: Frequency-one and frequency-two FCC boundaries supply exact coordinate and body-diagonal witnesses.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; Bolin and Wallin (2021) for Gaussian linear constraints; rank-one and FCC witnesses derived here
+
+Probe values:
+
+- `frequency_1_axis` = site_count=12, seam_count=24, partition_sizes=(4, 4, 4), crossing_seams=0, side_sum_variances=(2, 2), soft_information_ratio=9/5, soft_canonical_correlation_squared=4/9, centered_antipodal_cross_covariance=-1/16, witness_site=(1, -1, 0)
+- `frequency_1_diagonal` = site_count=12, seam_count=24, partition_sizes=(6, 3, 3), crossing_seams=0, side_sum_variances=(3/2, 3/2), soft_information_ratio=25/16, soft_canonical_correlation_squared=9/25, centered_antipodal_cross_covariance=-1/12, witness_site=(0, 1, 1)
+- `frequency_2_axis` = site_count=42, seam_count=96, partition_sizes=(8, 17, 17), crossing_seams=0, side_sum_variances=(1123/48, 1123/48), soft_information_ratio=1371241/110112, soft_canonical_correlation_squared=1261129/1371241, centered_antipodal_cross_covariance=-867/35936, witness_site=(1, -2, -1)
+- `frequency_2_diagonal` = site_count=42, seam_count=96, partition_sizes=(12, 15, 15), crossing_seams=0, side_sum_variances=(216/11, 216/11), soft_information_ratio=51529/4873, soft_canonical_correlation_squared=46656/51529, centered_antipodal_cross_covariance=-49/2112, witness_site=(-1, 1, 2)
+- `fcc_second_sum_ratios` = (1371241/110112, 51529/4873)
 

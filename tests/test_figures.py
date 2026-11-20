@@ -61,6 +61,8 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         make_figures.extended_claims_figure(),
         make_figures.three_way_figure(),
         make_figures.centroid_memory_figure(),
+        make_figures.repair_transfer_figure(),
+        make_figures.geometry_transfer_figure(),
         make_figures.cover_figure(),
     ]
     for path in written:
@@ -77,6 +79,8 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         "fig:extensions",
         "fig:three-way",
         "fig:centroid-memory",
+        "fig:repair-transfer",
+        "fig:geometry-transfer",
         "fig:cover",
     }
     for entry in payload["figures"]:

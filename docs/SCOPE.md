@@ -29,6 +29,7 @@ its probe.
 | the quadratic field of the tetravolume | the Galois conjugation of $\sqrt{5}$ (fixing $\sqrt{2}$) as a probe, in exact field arithmetic: it fixes the counting invariants and moves the icosahedron's tetravolume, whose product with its conjugate is exactly 50 |
 | the transfer of binary repair to the FCC first shell | replay the same fair coin and uniform seam sampling on the cuboctahedral graph. Contrast variance gives an exact quotient on both graphs. The FCC graph-distance and both centroid processes retain observable memory under stationarity. |
 | geometric Gaussian comparisons | test reciprocal conductance duality on two spherical graph pairs, compare the pulled-back seam precision for unit-direction quadratics, and use scalar Gaussian precision and vertex cuts to test central-plane screening. |
+| transfer to larger graphs and cellulations | compare two-token repair on a four-cube, complete bipartite graphs and periodic FCC. Test covariance closure by Laplacian invariance, toroidal harmonic covariance, quadratic precision on nearest-neighbour root shells and screening on larger FCC boundaries. |
 
 ## Cited but not implemented
 
@@ -133,6 +134,16 @@ hold.
   Laplacian Gaussian. In the plane calculation, `central-plane-screening`
   grounds the plane ports for the intrinsic comparison so the free half-field
   coordinates carry a Dirichlet density.
+- `surface-harmonic-covariance` uses closed orientable cellulations with
+  simple face boundaries, distinct incident faces per edge and connected
+  primal and dual graphs. Positive reciprocal weights leave a harmonic
+  part of dimension twice the genus.
+- `linear-lag-closure` concerns stationary second moments of a fixed binary
+  load under positive seam-sampling weights and fair coins. A Gaussian match
+  of all lag covariances can coexist with observed non-Markov repair.
+- `centered-gaussian-screen-obstruction` compares a grounded Gaussian with
+  the same free field conditioned on an exact or noisy global sum. Screening
+  under ordinary clamping alone does not carry to the constrained field.
 
 The general variational identity separates divergence from log evidence when
 the expectations are defined and the evidence is positive. The quadratic

@@ -39,6 +39,7 @@ import numpy as np
 from .. import geometry
 from ..core import carrier as carrier_module
 from ..core import centroid_dynamics
+from ..core import constraint_screening, contrast_quotients
 from ..core import controls as control_module
 from ..core import free_energy as free_energy_module
 from ..core import geometric_screening
@@ -47,6 +48,7 @@ from ..core import native_dynamics
 from ..core import network as network_module
 from ..core import planar_duality
 from ..core import quadratic_modes
+from ..core import root_shells, surface_duality
 from ..core import repair as repair_module
 from ..core import sheaf as sheaf_module
 from ..core import symmetry as symmetry_module
@@ -2253,6 +2255,141 @@ def _probe_repair_centroid_memory() -> tuple[bool, dict]:
     }
 
 
+def _probe_distance_regular_repair() -> tuple[bool, dict]:
+    values = contrast_quotients.distance_regular_repair_census()
+    checks = ("uniform_stationary", "all_rows_match_hamming_moves",
+              "distance_matrix_coefficients_match", "biggs_matches_grounded",
+              "resistance_strictly_increases")
+    return (
+        all(values[key] for key in checks)
+        and values["class_sizes"] == (32, 48, 32, 8)
+        and values["attempts_per_state"] == 64
+        and values["resistances"] == ("15/32", "7/12", "61/96", "2/3")
+        and values["attempt_count_matrix"] == ((58, 6, 0, 0), (4, 56, 4, 0), (0, 6, 56, 2), (0, 0, 8, 56))
+    ), {**values, "cube_resistances": values["resistances"]}
+
+
+def _probe_bipartite_contrast_collision() -> tuple[bool, dict]:
+    cases = tuple(contrast_quotients.bipartite_contrast_census(m) for m in range(2, 5))
+    checks = ("collision", "uniform_stationary", "all_rows_match_bipartite_moves",
+              "grounded_matches_formula", "stationary_probabilities_match_formula")
+    return all(
+        all(row[key] for key in checks)
+        and row["next_larger_side_probabilities"] == ("0", f"1/{2 * (m + 1)}")
+        and row["stationary_next_target_given_collision"] == f"1/{3 * m + 1}"
+        for m, row in enumerate(cases, 2)
+    ), {"cases": cases}
+
+
+def _probe_periodic_fcc_contrast_collision() -> tuple[bool, dict]:
+    values = contrast_quotients.periodic_fcc_contrast_census()
+    history = (values["stationary_next_target_given_collision"],
+               values["stationary_next_target_given_previous_target_and_collision"])
+    return (
+        values["fourier_matches_grounded"] and values["native_matches_geometry"]
+        and (values["vertices"], values["degree"]) == (32, 12)
+        and values["witnesses"] == (((0, 2, 2), 2, 4, "17/96", "0"),
+                                   ((1, 1, 2), 2, 4, "17/96", "1/192"))
+        and values["target_variance"] == "11/64" and history == ("1/240", "1/192")
+    ), {
+        **values,
+        "periodic_fcc_vertices": values["vertices"],
+        "periodic_fcc_degree": values["degree"],
+        "periodic_fcc_collision": values["witnesses"][0][3],
+        "periodic_fcc_displacements": tuple(row[0] for row in values["witnesses"]),
+        "periodic_fcc_target": values["target_variance"],
+        "periodic_fcc_jumps": tuple(row[4] for row in values["witnesses"]),
+        "periodic_fcc_history": history,
+    }
+
+
+def _probe_linear_lag_closure() -> tuple[bool, dict]:
+    values = root_shells.root_shell_lag_census()
+    unit = values["unit"]
+    return (
+        values["unit_coordinate_modes"] and unit["routes_match"]
+        and unit["lag_one"] == Fraction(47, 48)
+        and unit["lag_two"] == Fraction(47, 48)**2 and unit["defect_trace"] == 0
+    ), {"vertices": values["vertices"], "seams": values["seams"],
+        **unit, "24cell_unit_lag": unit["lag_one"]}
+
+
+def _probe_single_seam_lag_obstruction() -> tuple[bool, dict]:
+    values = root_shells.root_shell_lag_census()
+    weighted = values["weighted"]
+    return (
+        values["changed_weight"] == 97 and weighted["routes_match"] and weighted["rank_one_chord"]
+        and weighted["lag_one"] == Fraction(91, 96) and weighted["lag_two"] == Fraction(2819, 3072)
+        and weighted["defect_trace"] == Fraction(11, 576)
+    ), {**values, "24cell_weight": values["changed_weight"], "24cell_weighted_lag_two": weighted["lag_two"],
+        "24cell_lag_defect": weighted["defect_trace"]}
+
+
+def _probe_surface_harmonic_covariance() -> tuple[bool, dict]:
+    values = surface_duality.toroidal_duality_census()
+    unit, reciprocal = values["unit"], values["reciprocal"]
+    return (
+        values["cells"] == (9, 18, 9) and values["genus"] == 1 and values["entries_checked"] == 324
+        and values["boundary_of_boundary_zero"]
+        and all(row["remainder_rank"] == row["remainder_trace"] == 2 and row["is_projector"]
+                and row["harmonic_periods_match"] and row["cross_pairing_rank"] == 0
+                for row in (unit, reciprocal, values["rescaled_reciprocal"]))
+        and unit["uniform_direction_blocks_match"] and unit["remainder_diagonal"] == Fraction(1, 9)
+        and reciprocal["remainder_diagonal"] == Fraction(1, 14)
+    ), {**values, "torus_cells": values["cells"], "torus_unit_residual": unit["remainder_diagonal"]}
+
+
+def _probe_copied_surface_weight_obstruction() -> tuple[bool, dict]:
+    values = surface_duality.toroidal_duality_census()
+    reciprocal, copied = values["reciprocal"], values["copied"]
+    return (
+        reciprocal["remainder_trace"] == copied["remainder_trace"] == 2
+        and copied["remainder_rank"] == 4 and copied["cross_pairing_rank"] == 1
+        and not copied["is_projector"] and copied["remainder_diagonal"] == Fraction(-11, 21)
+    ), {
+        "changed_weight": values["changed_weight"], "reciprocal": reciprocal, "copied": copied,
+        "torus_reciprocal_residual": reciprocal["remainder_diagonal"],
+        "torus_copied_residual": copied["remainder_diagonal"],
+    }
+
+
+def _probe_root_shell_quadratic_precision() -> tuple[bool, dict]:
+    rows = root_shells.root_shell_quadratics()
+    sizes = tuple(row[0] for row in rows)
+    return (
+        sizes == (3, 4, 5, 6, 7)
+        and all(row[-1] and row[4] == (2 * d * (d - 2), 8 * (d - 2))
+                and (row[5][0] == row[5][1]) == (d == 4) for d, row in zip(sizes, rows, strict=True))
+    ), {"shells": rows, "root_dimensions": sizes, "24cell_quadratic_variance": rows[1][5][0]}
+
+
+def _probe_fcc_plane_screen_transfer() -> tuple[bool, dict]:
+    rows = constraint_screening.fcc_sum_constraint_census()
+    partitions = tuple(row["partition_sizes"] for row in rows.values())
+    return (
+        partitions == ((4, 4, 4), (6, 3, 3), (8, 17, 17), (12, 15, 15))
+        and tuple(row["seam_count"] for row in rows.values()) == (24, 24, 96, 96)
+        and all(row["crossing_seams"] == 0 for row in rows.values())
+    ), {"planes": partitions, "crossing_seams": tuple(row["crossing_seams"] for row in rows.values()),
+        "fcc_second_plane_records": (partitions[2][0], partitions[3][0])}
+
+
+def _probe_centered_gaussian_screen_obstruction() -> tuple[bool, dict]:
+    rows = constraint_screening.fcc_sum_constraint_census()
+    expected = (
+        (Fraction(9, 5), Fraction(-1, 16)),
+        (Fraction(25, 16), Fraction(-1, 12)),
+        (Fraction(1371241, 110112), Fraction(-867, 35936)),
+        (Fraction(51529, 4873), Fraction(-49, 2112)),
+    )
+    ratios = tuple(row["soft_information_ratio"] for row in rows.values())
+    return (
+        tuple((row["soft_information_ratio"], row["centered_antipodal_cross_covariance"])
+              for row in rows.values()) == expected
+        and all(row["crossing_seams"] == 0 for row in rows.values())
+    ), {**rows, "fcc_second_sum_ratios": ratios[2:]}
+
+
 CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="carrier-port-chart",
@@ -2985,6 +3122,126 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         status="obstructed",
         source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; Uhlenbeck and Ornstein (1930) for the Gaussian process; exact centroid comparison derived here",
         probe=_probe_repair_centroid_memory,
+    ),
+    Correspondence(
+        key="distance-regular-repair",
+        kind=ISOMORPHISM,
+        pair=THREE_WAY,
+        claim="For a connected simple regular graph, fair binary repair has an exact graph-distance quotient if and only if the graph is distance-regular. In that regime unit Gaussian contrast variance strictly labels the same quotient.",
+        oph="Uniform fair seam attempts give the two-token move counts.",
+        fep="Exact resistance from the intrinsic scalar field gives an equivalent Markov record.",
+        synergetics="Distance-regular geometry supplies the intersection counts, checked on the four-dimensional cube beyond the original shells.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; Biggs (1993) for monotone resistance on distance-regular graphs; equivalence and cube witness derived here",
+        probe=_probe_distance_regular_repair,
+    ),
+    Correspondence(
+        key="bipartite-contrast-collision",
+        kind=DISAGREEMENT,
+        pair=THREE_WAY,
+        claim="In the family K_(m,m+1) for m at least two, small-part pairs and cross-part pairs have equal Gaussian contrast variance but unequal one-step repair rates to the large-part pair class.",
+        oph="Replaying the fair seam operation gives different escape rates from a merged observation.",
+        fep="Equal effective resistance can merge states whose reduced dynamics has memory.",
+        synergetics="The explicit two-part incidence geometry gives a family outside the nearest-neighbour shells.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE} for the baseline shell comparison; bipartite proof and exact checks derived here",
+        probe=_probe_bipartite_contrast_collision,
+    ),
+    Correspondence(
+        key="periodic-fcc-contrast-collision",
+        kind=DISAGREEMENT,
+        pair=THREE_WAY,
+        claim="On the periodic FCC graph modulo four, equal contrast variance, graph distance, degree and common-neighbour count can coexist with unequal one-attempt arrival rates to a target variance. Grounding and characters of the period group agree on every contrast variance.",
+        oph="Fair binary repair distinguishes the two layouts by its rate into a specified class.",
+        fep="The enlarged variance and distance record fails to give a Markov quotient.",
+        synergetics="The nearest-neighbour steps act on the even-parity periodic FCC lattice.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; periodic Fourier and move witnesses derived here",
+        probe=_probe_periodic_fcc_contrast_collision,
+    ),
+    Correspondence(
+        key="linear-lag-closure",
+        kind=ISOMORPHISM,
+        pair=THREE_WAY,
+        claim="For weighted fair repair at a fixed binary load, the stationary covariance of a centred linear observation matches a Gaussian Markov process of the same dimension at every lag exactly when the observation space is Laplacian-invariant.",
+        oph="The binary update is a random seam transposition with probability one half.",
+        fep="The lag-two semigroup defect is a positive semidefinite Gram matrix and detects failure of Gaussian covariance closure.",
+        synergetics="The coordinate columns of the unit-weight 24-cell furnish an invariant space beyond the first FCC shell.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; Caputo, Liggett and Richthammer (2010) for symmetric exclusion; Cohn et al. (2007) for the D4 root shell; closure criterion derived here",
+        probe=_probe_linear_lag_closure,
+    ),
+    Correspondence(
+        key="single-seam-lag-obstruction",
+        kind=DISAGREEMENT,
+        pair=THREE_WAY,
+        claim="Strengthening one seam of the 24-cell leaves its geometric coordinate frame unchanged but creates a rank-one covariance semigroup defect of trace 11/576 under weighted fair binary repair.",
+        oph="The native rule remains fair on the chosen seam, with changes only to seam sampling.",
+        fep="The observed lag-two covariance cannot equal the square of the lag-one covariance in a Gaussian Markov readout of that dimension.",
+        synergetics="A single weighted chord breaks the coordinate-space invariance of the original root-shell geometry.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; Cohn et al. (2007) for the 24-cell graph geometry; weighted defect derived here",
+        probe=_probe_single_seam_lag_obstruction,
+    ),
+    Correspondence(
+        key="surface-harmonic-covariance",
+        kind=ISOMORPHISM,
+        pair=THREE_WAY,
+        claim="With reciprocal conductances up to global scale on a closed orientable cellulation with simple faces, matched Gaussian edge covariance projectors sum to the identity minus a harmonic projector of rank twice the genus.",
+        oph="The signed face boundaries generalise the carrier's oriented seam incidence.",
+        fep="Conductance-normalised primal and dual Gaussian edge contrasts fill the complement of the harmonic space.",
+        synergetics="A periodic square lattice supplies two independent winding directions beyond the spherical solids.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; de Goes et al. (2016) for discrete harmonic forms; weighted covariance and square torus witness derived here",
+        probe=_probe_surface_harmonic_covariance,
+    ),
+    Correspondence(
+        key="copied-surface-weight-obstruction",
+        kind=DISAGREEMENT,
+        pair=THREE_WAY,
+        claim="On the square torus, copying a strengthened conductance from the primal to the dual leaves the Gaussian edge remainder trace two but makes the remainder indefinite and rank four.",
+        oph="A nonreciprocal primal and dual weighting violates the cancellation around an oriented face.",
+        fep="The trace is fixed by Euler characteristic even when the remainder has a negative direction.",
+        synergetics="The periodic cellulation separates the true winding modes from the extra directions created by nonreciprocal weights.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; de Goes et al. (2016); exact nonreciprocal torus witness and rank formula derived here",
+        probe=_probe_copied_surface_weight_obstruction,
+    ),
+    Correspondence(
+        key="root-shell-quadratic-precision",
+        kind=ISOMORPHISM,
+        pair=THREE_WAY,
+        claim="On nearest-neighbour D_d root shells for d at least three, the quadratic observation space is invariant and its unit Gaussian precision has diagonal and off-diagonal factors 2d(d-2) and 8(d-2). The factors coincide only at d=4.",
+        oph="The scalar seam Laplacian is applied to antipodally even vertex fields.",
+        fep="The pulled-back Gaussian precisions distinguish trace-free diagonal from off-diagonal coefficients.",
+        synergetics="The D3 cuboctahedral IVM shell starts the family, and the 24-cell is the unique isotropic case within it.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; Cohn et al. (2007) for the 24-cell; exact shell formulas derived here",
+        probe=_probe_root_shell_quadratic_precision,
+    ),
+    Correspondence(
+        key="fcc-plane-screen-transfer",
+        kind=ISOMORPHISM,
+        pair=THREE_WAY,
+        claim="Coordinate and signed body-diagonal central planes separate the strict sides of every positive-frequency FCC boundary. Scalar seam Gaussians with grounded plane records then screen the two sides.",
+        oph="Clamping the sites on a plane fixes a seam-supported interface record.",
+        fep="No cross block remains in the grounded scalar precision.",
+        synergetics="Even lattice parity rules out a seam crossing without touching one of these planes at every shell frequency.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; parity and plane-count argument derived here",
+        probe=_probe_fcc_plane_screen_transfer,
+    ),
+    Correspondence(
+        key="centered-gaussian-screen-obstruction",
+        kind=DISAGREEMENT,
+        pair=THREE_WAY,
+        claim="Under a global zero-sum condition, a geometric seam separator still leaves a rank-one coupling between the free halves. The exact sum gives infinite conditional mutual information, and noisy totals give a finite computable coupling.",
+        oph="The observed separator still isolates seams, while the separate total-field record constrains both interiors.",
+        fep="Linear Gaussian conditioning creates a cross block even when the grounded precision is block diagonal.",
+        synergetics="Frequency-one and frequency-two FCC boundaries supply exact coordinate and body-diagonal witnesses.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; Bolin and Wallin (2021) for Gaussian linear constraints; rank-one and FCC witnesses derived here",
+        probe=_probe_centered_gaussian_screen_obstruction,
     ),
 )
 

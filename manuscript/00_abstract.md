@@ -37,6 +37,11 @@ all lag covariances of a Gaussian process. The weighted dual identity
 requires reciprocal conductances up to a global scale. The geometries also give different
 quadratic coefficient variances and different Gaussian screening by
 central planes.
+Beyond the two shells, distance regularity is equivalent to an exact
+distance quotient for fair binary repair on regular graphs. Equal variance
+fails as a Markov record on a periodic FCC graph. Reciprocal duality leaves a
+harmonic projector on a torus, and a sum constraint can couple half-fields
+across a grounded geometric separator.
 Cuboctahedral and icosahedral configurations attain the same kissing number
 with different contacts among the outer spheres. The cuboctahedral gauge
 determines lattice coordination shells, and equal-covariance Gaussian

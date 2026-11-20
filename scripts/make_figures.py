@@ -48,6 +48,8 @@ from oph_fep_synergetics.analysis.registry import (  # noqa: E402
 )
 from oph_fep_synergetics.core import (  # noqa: E402
     centroid_dynamics,
+    contrast_quotients,
+    constraint_screening,
     controls,
     free_energy,
     geometric_screening,
@@ -56,7 +58,10 @@ from oph_fep_synergetics.core import (  # noqa: E402
     network,
     planar_duality,
     quadratic_modes,
+    root_shells,
+    root_shells,
     sheaf,
+    surface_duality,
     symmetry,
     weighted_duality,
 )
@@ -1032,9 +1037,9 @@ def cover_figure() -> Path:
         field += glow[..., None] * color
     axis.imshow(field.astype(np.uint8), origin="lower", extent=(0, width, 0, height),
                 interpolation="bilinear", zorder=0)
-    axis.text(0.52, 8.65, "Where the frameworks meet", va="center", color=paper,
+    axis.text(0.52, 8.65, "What transfers across frameworks", va="center", color=paper,
               fontsize=29, fontweight="bold")
-    axis.text(0.54, 8.17, "Compare repair, Gaussian inference and geometry on two twelve-vertex shells.",
+    axis.text(0.54, 8.17, "Test repair, Gaussian inference and geometry beyond the two twelve-vertex shells.",
               va="center", color=secondary, fontsize=15)
     for level in (7.86, 3.11, 1.53):
         axis.hlines(level, 0.52, 12.98, color="#89A9BB", linewidth=0.85, alpha=0.48)
@@ -1052,17 +1057,17 @@ def cover_figure() -> Path:
         (carrier_center[0], teal, "OPH", "Icosahedral carrier",
          "Binary repair",
          ("Fair repair = uniform conditional law", "Dirichlet form = mean fibre variance",
-          "A centroid can hide memory")),
+          "Equal variance can hide different moves")),
         (6.75, blue, "FREE ENERGY PRINCIPLE", "Gaussian port contrasts",
          "Carrier chords",
          (f"Chord² = {values['chord.variance_factor']} × lowest-mode variance",
           f"For icosahedral edge length {edge_length:g}",
           f"Full variance needs {values['chord.full_rank']} dimensions")),
         (shell_center[0], gold, "SYNERGETICS", "Cuboctahedral FCC shell",
-         "Geometric screens",
-         (f"{values['three.fcc_planes']} FCC equators screen both halves",
-          f"{values['three.carrier_planes']} carrier equators leave cross-seams",
-          "Two variances at FCC distance two")),
+         "FCC plane screens",
+         ("Planes cut seams at every frequency",
+          "Grounded fields screen across the cut",
+          "A global sum couples the halves")),
     ):
         axis.text(cx, 7.53, label, ha="center", va="center", color=color,
                   fontsize=13, fontweight="bold")
@@ -1118,9 +1123,9 @@ def cover_figure() -> Path:
         f"{resistance_alt}. Squared chords "
         f"equal {values['chord.variance_factor']} times the lowest-mode variance at edge length "
         f"{edge_length:g}. Fair binary repair resamples conditionally. Its Dirichlet form equals "
-        "mean fibre variance. The stationary centroid can hide memory. "
-        f"All {values['three.fcc_planes']} vertex-spanned FCC equators screen their halves. "
-        f"All {values['three.carrier_planes']} carrier equators leave cross-seams. "
+        "mean fibre variance. Equal contrast variance can hide different repair moves. "
+        "Coordinate and signed body-diagonal planes screen the grounded FCC field at every "
+        "shell frequency. A global sum couples the two halves. "
         f"The {total} claims include {kinds['isomorphism']} isomorphisms, {kinds['disagreement']} "
         f"disagreements and {kinds['complementarity']} complementarities. "
         f"{len(by_pair()[THREE_WAY])} claims use all three frameworks."
@@ -1197,9 +1202,9 @@ def ga_triangle_figure() -> Path:
         va="center", color=INK, fontsize=12,
     )
     ledger.text(0.02, 0.23, "Three-way claims", va="top", color=INK, fontsize=14, fontweight="bold")
-    ledger.text(0.02, 0.14, "Gaussian covariance can match a repair process with memory.",
+    ledger.text(0.02, 0.14, "Equal variance can hide different repair rates.",
                 va="top", color=BLUE, fontsize=12)
-    ledger.text(0.02, 0.07, "Repair quotients, conductance duality, quadratic fields and screens",
+    ledger.text(0.02, 0.07, "Transfer tests on periodic lattices, root shells and a torus",
                 va="top", color=INK, fontsize=10.5)
     return _save(
         figure,
@@ -1207,8 +1212,8 @@ def ga_triangle_figure() -> Path:
         "A triangle connects Observer Patch Holography (OPH), the Free Energy Principle (FEP) "
         f"and Fuller's Synergetics. Its edge totals and centre account for all "
         f"{len(CORRESPONDENCES)} executable claims. " + " ".join(edge_descriptions)
-        + f" The centre counts {len(three)} three-way claims, including comparison of repair "
-        "quotients and centroid memory, weighted duality, quadratic fields and geometric screens.",
+        + f" The centre counts {len(three)} three-way claims, including transfer tests for "
+        "repair records, Gaussian covariance and screening on periodic lattices, root shells and a torus.",
     )
 
 
@@ -2655,6 +2660,114 @@ def three_way_figure() -> Path:
     )
 
 
+def repair_transfer_figure() -> Path:
+    """Show which geometric summaries transfer repair dynamics."""
+    figure, axes = plt.subplots(2, 2, figsize=(12.3, 7.2))
+    cube_axis, fcc_axis, family_axis, lag_axis = axes.ravel()
+
+    cube = contrast_quotients.distance_regular_repair_census()
+    variance = tuple(map(Fraction, cube["resistances"]))
+    distances = tuple(range(1, len(variance) + 1))
+    cube_axis.plot(distances, list(map(float, variance)), color=BLUE, marker="o", linewidth=2.2)
+    for distance, value in zip(distances, variance, strict=True):
+        cube_axis.annotate(str(value), (distance, float(value)), xytext=(0, 9),
+                           textcoords="offset points", ha="center", color=BLUE, fontsize=12)
+    cube_axis.set_xticks(
+        distances, [f"{distance}\n{size} pairs" for distance, size in
+                    zip(distances, cube["class_sizes"], strict=True)],
+    )
+    cube_axis.set(xlim=(0.7, len(distances) + 0.3),
+                  ylim=(float(min(variance)) - 0.04, float(max(variance)) + 0.06),
+                  xlabel="Graph distance", ylabel="Gaussian contrast variance")
+    cube_axis.set_title("A  Distance fixes contrast on the 4-cube", loc="left", fontweight="bold")
+
+    fcc = contrast_quotients.periodic_fcc_contrast_census()
+    witness_rates = tuple(Fraction(row[-1]) for row in fcc["witnesses"])
+    for row_index, rate in enumerate(witness_rates):
+        fcc_axis.barh(row_index, float(rate), height=0.42, color=VERMILLION)
+        fcc_axis.scatter([float(rate)], [row_index], s=35, color=VERMILLION, zorder=3)
+        fcc_axis.annotate(str(rate), (float(rate), row_index), xytext=(7, 0),
+                          textcoords="offset points", va="center", color=VERMILLION, fontsize=12)
+    fcc_axis.set_yticks(
+        range(len(witness_rates)), [str(row[0]) for row in fcc["witnesses"]],
+    )
+    fcc_axis.set(
+        xlim=(0, 1.37 * float(max(witness_rates))), ylim=(1.5, -0.5),
+        xlabel=f"One-attempt probability of variance {fcc['target_variance']}",
+        ylabel="Pair displacement mod 4",
+    )
+    fcc_axis.set_title(
+        f"B  FCC pairs at variance {fcc['witnesses'][0][3]} move differently",
+        loc="left", fontweight="bold",
+    )
+
+    family = tuple(contrast_quotients.bipartite_contrast_census(size) for size in (2, 3, 4))
+    positions = np.arange(len(family))
+    for field, label, colour, marker, offset in (
+        ("stationary_next_target_given_collision", "Present only", BLUE, "o", -15),
+        ("stationary_next_target_given_previous_target_and_collision",
+         "Target at previous step", VERMILLION, "D", 9),
+    ):
+        rates = tuple(Fraction(row[field]) for row in family)
+        family_axis.plot(positions, list(map(float, rates)), color=colour, marker=marker,
+                         linewidth=2, label=label)
+        for position, rate in zip(positions, rates, strict=True):
+            family_axis.annotate(str(rate), (position, float(rate)), xytext=(0, offset),
+                                 textcoords="offset points", ha="center", color=colour, fontsize=11)
+    family_axis.set_xticks(
+        positions, [f"$K_{{{left},{right}}}$" for left, right in (row["side_sizes"] for row in family)],
+    )
+    family_axis.set(xlim=(-0.3, len(family) - 0.7), ylim=(0.06, 0.20),
+                    ylabel="Probability of larger-side pair")
+    family_axis.set_title("C  Previous contrast changes the next step", loc="left", fontweight="bold")
+    family_axis.legend(loc="upper right", frameon=False, fontsize=10.5)
+
+    lag = root_shells.root_shell_lag_census()
+    defects = tuple(lag[key]["lag_two"] - lag[key]["lag_one"]**2 for key in ("unit", "weighted"))
+    for row_index, (defect, colour) in enumerate(zip(defects, (BLUE, VERMILLION), strict=True)):
+        lag_axis.barh(row_index, float(defect), height=0.42, color=colour)
+        lag_axis.scatter([float(defect)], [row_index], s=35, color=colour, zorder=3)
+        lag_axis.annotate(str(defect), (float(defect), row_index), xytext=(7, 0),
+                          textcoords="offset points", va="center", color=colour, fontsize=12)
+    lag_axis.set_yticks((0, 1), ("Uniform seams", "One weighted seam"))
+    lag_axis.set(xlim=(0, 1.37 * float(max(defects))), ylim=(1.5, -0.5),
+                 xlabel=r"Lag-two covariance excess along the chord, $M_2-M_1^2$")
+    lag_axis.set_title("D  A weighted 24-cell seam breaks closure", loc="left", fontweight="bold")
+
+    for axis in axes.ravel():
+        axis.tick_params(axis="both", labelsize=11.5)
+    for axis in (fcc_axis, lag_axis):
+        axis.grid(False, axis="y")
+        axis.grid(True, axis="x", alpha=0.24)
+
+    cube_details = ". ".join(
+        f"Distance {distance} has variance {value} for {size} pairs"
+        for distance, value, size in zip(distances, variance, cube["class_sizes"], strict=True)
+    )
+    fcc_details = ". ".join(
+        f"Displacement {offset} has distance {distance}, {common} common neighbours, variance {value} "
+        f"and target probability {rate}"
+        for offset, distance, common, value, rate in fcc["witnesses"]
+    )
+    family_details = ". ".join(
+        f"For side sizes {row['side_sizes']}, the probability is {row['stationary_next_target_given_collision']} "
+        f"with the current contrast alone and {row['stationary_next_target_given_previous_target_and_collision']} "
+        "with the previous target also observed"
+        for row in family
+    )
+    return _save(
+        figure, "fig_repair_transfer.png",
+        f"Panel A is the 4-cube contrast ladder. {cube_details}. "
+        f"Panel B shows two pairs on the period-{fcc['period']} FCC graph and the chance of reaching "
+        f"variance {fcc['target_variance']} in one attempt. {fcc_details}. "
+        f"Panel C shows stationary next-step probabilities on complete bipartite graphs. {family_details}. "
+        f"Panel D subtracts squared lag one from measured lag two in the seam direction of the 24-cell. "
+        f"Uniform seams give {defects[0]}. Weighting one seam gives measured lag two "
+        f"{lag['weighted']['lag_two']} and squared lag one {lag['weighted']['lag_one']**2}, "
+        f"an excess of {defects[1]}.",
+    )
+
+
 def centroid_memory_figure() -> Path:
     """Show common lag covariances and the conditional return witness."""
     figure, (lag_axis, return_axis) = plt.subplots(1, 2, figsize=(9.5, 3.65))
@@ -2716,6 +2829,148 @@ def centroid_memory_figure() -> Path:
     )
 
 
+def geometry_transfer_figure() -> Path:
+    """Compare topology, quadratic symmetry and two aspects of Gaussian screening."""
+    figure, axes = plt.subplots(2, 2, figsize=(10.3, 6.9))
+    torus_axis, root_axis, sum_axis, record_axis = axes.ravel()
+
+    torus = surface_duality.toroidal_duality_census()
+    torus_cases = (("Unit", torus["unit"]), ("Reciprocal", torus["reciprocal"]),
+                   ("Copied", torus["copied"]))
+    components = (
+        ("Primal", "primal_diagonal", BLUE, "white"),
+        ("Dual", "dual_diagonal", ORANGE, INK),
+        ("Remainder", "remainder_diagonal", GREEN, INK),
+    )
+    positions = (0, 1.1, 2.2)
+    for y, (_, case) in zip(positions, torus_cases, strict=True):
+        left = Fraction(0)
+        for _, field, colour, ink in components:
+            value = case[field]
+            start = left if value >= 0 else Fraction(0)
+            midpoint = float(start + value / 2)
+            torus_axis.barh(y, float(value), left=float(start), height=0.43, color=colour,
+                            edgecolor="white", linewidth=0.6, zorder=2)
+            if field == "remainder_diagonal" and value > 0:
+                torus_axis.annotate(str(value), (midpoint, y), xytext=(0, 10),
+                                    textcoords="offset points", ha="center", va="bottom",
+                                    fontsize=10.5, fontweight="bold")
+            else:
+                torus_axis.text(midpoint, y, str(value), va="center", ha="center",
+                                color=ink, fontsize=10.5, fontweight="bold", zorder=4)
+            if value > 0:
+                left += value
+    torus_axis.set_yticks(positions, labels=[f"{name} · rank {row['remainder_rank']}"
+                                            for name, row in torus_cases])
+    torus_axis.axvline(0, color=INK, linewidth=1.0, zorder=3)
+    torus_axis.axvline(1, color=GREY, linewidth=1.0, linestyle="--", zorder=1)
+    torus_axis.set_xticks((-0.5, 0, 0.5, 1, 1.5))
+    torus_axis.set(xlim=(-0.62, 1.62), ylim=(2.7, -0.63), xlabel="Normalised diagonal at the selected edge")
+    torus_axis.set_title("A  The torus leaves a remainder", loc="left", fontweight="bold")
+    torus_axis.grid(False, axis="y")
+    torus_axis.legend(
+        handles=[plt.Rectangle((0, 0), 1, 1, color=colour, label=label)
+                 for label, _, colour, _ in components],
+        loc="upper center", bbox_to_anchor=(0.5, -0.21), ncol=3,
+    )
+
+    quadratic = root_shells.root_shell_quadratics()
+    dimensions = [case[0] for case in quadratic]
+    variance_ratios = [case[5][0] / case[5][1] for case in quadratic]
+    root_axis.axhline(1, color=GREY, linewidth=1.1, linestyle="--", zorder=1)
+    root_axis.plot(dimensions, list(map(float, variance_ratios)), linewidth=1.6, color=BLUE, zorder=2)
+    for dimension, ratio in zip(dimensions, variance_ratios, strict=True):
+        isotropic = ratio == 1
+        root_axis.scatter(dimension, float(ratio), marker="D" if isotropic else "o",
+                          facecolor="white" if isotropic else BLUE, edgecolor=BLUE,
+                          linewidth=1.5, s=58, zorder=3)
+        root_axis.annotate(
+            str(ratio), (dimension, float(ratio)), xytext=(0, 8), textcoords="offset points",
+            ha="center", va="bottom", fontsize=11, fontweight="bold",
+        )
+    root_axis.set_xticks(dimensions, labels=[fr"$D_{{{value}}}$" for value in dimensions])
+    root_axis.set_yticks((0.5, 0.75, 1, 1.25))
+    root_axis.set(xlim=(dimensions[0] - 0.38, dimensions[-1] + 0.38), ylim=(0.5, 1.46),
+                  xlabel="Root shell", ylabel="Diagonal / mixed variance")
+    root_axis.set_title("B  Quadratic variance reverses order", loc="left", fontweight="bold")
+    root_axis.grid(False, axis="x")
+
+    screening = constraint_screening.fcc_sum_constraint_census()
+    frequencies = (1, 2)
+    plane_cases = (("Axis plane", "axis", BLUE, -0.19), ("Diagonal plane", "diagonal", SKY, 0.19))
+    squared_correlations = {
+        frequency: {
+            key: screening[f"frequency_{frequency}_{key}"]["soft_canonical_correlation_squared"]
+            for _, key, _, _ in plane_cases
+        }
+        for frequency in frequencies
+    }
+    for label, key, colour, shift in plane_cases:
+        values = [squared_correlations[frequency][key] for frequency in frequencies]
+        bars = sum_axis.bar([frequency + shift for frequency in frequencies], list(map(float, values)),
+                            width=0.32, color=colour, edgecolor=INK, linewidth=0.5, label=label)
+        sum_axis.bar_label(bars, labels=[f"{float(value):.1%}" for value in values],
+                           padding=3, fontsize=10, fontweight="bold")
+    shell_labels = [f"{frequency} · {screening[f'frequency_{frequency}_axis']['site_count']} sites"
+                    for frequency in frequencies]
+    sum_axis.set_xticks(frequencies, labels=shell_labels)
+    sum_axis.set_yticks((0, 0.25, 0.5, 0.75, 1), labels=("0", "25%", "50%", "75%", "100%"))
+    sum_axis.set(xlim=(0.47, 2.53), ylim=(0, 1.08), xlabel="FCC boundary frequency and size",
+                 ylabel="Squared canonical correlation")
+    sum_axis.set_title("C  A noisy global sum couples the sides", loc="left", fontweight="bold")
+    sum_axis.grid(False, axis="x")
+    sum_axis.legend(loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=2)
+
+    record_sets = [
+        (frequency, key, colour, screening[f"frequency_{frequency}_{key}"]["partition_sizes"][0],
+         screening[f"frequency_{frequency}_{key}"]["site_count"])
+        for frequency in frequencies for _, key, colour, _ in plane_cases
+    ]
+    record_positions = (0, 1, 2.35, 3.35)
+    for y, (_, _, colour, recorded, total) in zip(record_positions, record_sets, strict=True):
+        share = float(Fraction(recorded, total))
+        record_axis.barh(y, share, height=0.48, color=colour, edgecolor=INK, linewidth=0.5)
+        record_axis.annotate(f"{recorded} of {total}", (share, y), xytext=(7, 0),
+                             textcoords="offset points", va="center", fontsize=11,
+                             fontweight="bold")
+    record_axis.set_yticks(record_positions, labels=[f"{frequency} · {key.capitalize()}"
+                                                     for frequency, key, *_ in record_sets])
+    record_axis.set_xticks((0, 0.15, 0.30, 0.45, 0.60), labels=("0", "15%", "30%", "45%", "60%"))
+    record_axis.set(xlim=(0, 0.64), ylim=(3.85, -0.5), xlabel="Share of boundary sites on the plane",
+                    ylabel="Frequency · plane")
+    record_axis.set_title("D  How many sites does the plane record?", loc="left", fontweight="bold")
+    record_axis.grid(False, axis="y")
+
+    torus_details = ". ".join(
+        f"{name} has diagonal entries {_enumerated(row[field] for _, field, _, _ in components)} "
+        f"and remainder rank {row['remainder_rank']}"
+        for name, row in torus_cases
+    )
+    screening_details = ". ".join(
+        f"Frequency {frequency} has axis and diagonal squared correlations "
+        f"{_enumerated(squared_correlations[frequency][key] for _, key, _, _ in plane_cases)}"
+        for frequency in frequencies
+    )
+    record_details = ". ".join(
+        f"At frequency {frequency}, the axis and diagonal planes record "
+        f"{_enumerated(recorded for level, _, _, recorded, _ in record_sets if level == frequency)} "
+        f"of {screening[f'frequency_{frequency}_axis']['site_count']} sites, respectively"
+        for frequency in frequencies
+    )
+    return _save(
+        figure, "fig_geometry_transfer.png",
+        "Panel A shows primal, dual and remainder diagonals at the same torus edge. "
+        f"The weighted cases set the selected primal conductance to {torus['changed_weight']}. "
+        f"{torus_details}. The remainder trace is {torus['unit']['remainder_trace']} in every case. "
+        "Panel B shows the ratio of diagonal to mixed quadratic coefficient variance. "
+        f"For dimensions {_enumerated(dimensions)} the ratios are {_enumerated(variance_ratios)}, "
+        "respectively. The modes agree at dimension four. Panel C shows how conditioning "
+        "on a global sum with unit noise induces dependence across an FCC separating plane. "
+        f"{screening_details}, respectively. Panel D shows the share of boundary sites on "
+        f"each separating plane. {record_details}.",
+    )
+
+
 def write_registry() -> Path:
     """Write the accessibility registry the renderer reads for figure alt text.
 
@@ -2772,6 +3027,8 @@ def main() -> int:
         extended_claims_figure,
         three_way_figure,
         centroid_memory_figure,
+        repair_transfer_figure,
+        geometry_transfer_figure,
     )
     unrendered = {
         name

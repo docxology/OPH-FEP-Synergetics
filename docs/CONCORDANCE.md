@@ -66,14 +66,24 @@ argue by key.
 | `cuboctahedral-distance-split` | disagreement | obstructed | fep-synergetics | `06_finite_extensions.md` | yes |
 | `repair-contrast-quotient` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | yes |
 | `repair-distance-counterexample` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
-| `reciprocal-dual-weights` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | yes |
+| `reciprocal-dual-weights` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md`, `07_transfer_criteria.md` | yes |
 | `copied-dual-weight-obstruction` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
 | `quadratic-even-field` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | yes |
 | `quadratic-isotropy-obstruction` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
 | `central-plane-screening` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
-| `repair-centroid-memory` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
+| `repair-centroid-memory` | disagreement | obstructed | three-way | `07_three_way_limits.md`, `07_transfer_criteria.md` | yes |
+| `distance-regular-repair` | isomorphism | exact-on-domain | three-way | `07_transfer_criteria.md` | yes |
+| `bipartite-contrast-collision` | disagreement | obstructed | three-way | `07_transfer_criteria.md` | yes |
+| `periodic-fcc-contrast-collision` | disagreement | obstructed | three-way | `07_transfer_criteria.md` | yes |
+| `linear-lag-closure` | isomorphism | exact-on-domain | three-way | `07_transfer_criteria.md` | yes |
+| `single-seam-lag-obstruction` | disagreement | obstructed | three-way | `07_transfer_criteria.md` | yes |
+| `surface-harmonic-covariance` | isomorphism | exact-on-domain | three-way | `07_transfer_criteria.md` | yes |
+| `copied-surface-weight-obstruction` | disagreement | obstructed | three-way | `07_transfer_criteria.md` | yes |
+| `root-shell-quadratic-precision` | isomorphism | exact-on-domain | three-way | `07_transfer_criteria.md` | yes |
+| `fcc-plane-screen-transfer` | isomorphism | exact-on-domain | three-way | `07_transfer_criteria.md` | yes |
+| `centered-gaussian-screen-obstruction` | disagreement | obstructed | three-way | `07_transfer_criteria.md` | yes |
 
-61 of 61 claims are named by at least one section's prose.
+71 of 71 claims are named by at least one section's prose.
 
 ## Sections
 
@@ -90,6 +100,7 @@ argue by key.
 | `06_finite_extensions.md` | `carrier-spectral-chords`, `repair-first-entry`, `repair-distance-lumping`, `grounded-forest-precision`, `greedy-record-placement`, `planar-dual-covariance`, `cuboctahedral-spectral-chords`, `cuboctahedral-distance-split` |
 | `07_scope.md` | `pr01-obstruction`, `reduction-criterion` |
 | `07_three_way_limits.md` | `planar-dual-covariance`, `repair-contrast-quotient`, `repair-distance-counterexample`, `reciprocal-dual-weights`, `copied-dual-weight-obstruction`, `quadratic-even-field`, `quadratic-isotropy-obstruction`, `central-plane-screening`, `repair-centroid-memory` |
+| `07_transfer_criteria.md` | `reciprocal-dual-weights`, `repair-centroid-memory`, `distance-regular-repair`, `bipartite-contrast-collision`, `periodic-fcc-contrast-collision`, `linear-lag-closure`, `single-seam-lag-obstruction`, `surface-harmonic-covariance`, `copied-surface-weight-obstruction`, `root-shell-quadratic-precision`, `fcc-plane-screen-transfer`, `centered-gaussian-screen-obstruction` |
 | `08_reproducibility.md` | *none* |
 | `99_references.md` | *none* |
 
@@ -109,12 +120,14 @@ argue by key.
 | `fig:ga-descent` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
 | `fig:ga-synergetics` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
 | `fig:ga-triangle` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
+| `fig:geometry-transfer` | `07_transfer_criteria.md` | `copied-surface-weight-obstruction` |
 | `fig:ivm` | `06_complementarities.md` | *package readings, no single claim* |
 | `fig:mediator` | `05_disagreements.md` | `mediator-obstruction`, `reduction-criterion` |
 | `fig:network` | `04_correspondences.md` | *package readings, no single claim* |
 | `fig:orbit` | `05_disagreements.md` | *package readings, no single claim* |
 | `fig:pair-triangles` | `04_correspondences.md` | *package readings, no single claim* |
 | `fig:registry` | `04_correspondences.md` | *package readings, no single claim* |
+| `fig:repair-transfer` | `07_transfer_criteria.md` | `periodic-fcc-contrast-collision`, `single-seam-lag-obstruction` |
 | `fig:sandwich` | `04_correspondences.md` | `free-energy-dictionary`, `free-energy-name-collision` |
 | `fig:schedule` | `05_disagreements.md` | *package readings, no single claim* |
 | `fig:scope-matrix` | `03_method.md` | *package readings, no single claim* |
@@ -430,6 +443,26 @@ argue by key.
 | `{{THREE_FCC_QUOTIENT}}` | `07_three_way_limits.md` |
 | `{{THREE_FCC_STATIONARY}}` | `07_three_way_limits.md` |
 | `{{THREE_FCC_STATIONARY_INWARD}}` | `07_three_way_limits.md` |
+| `{{TRANSFER_24CELL_LAG_DEFECT}}` | `07_transfer_criteria.md`, `07_transfer_criteria.md` |
+| `{{TRANSFER_24CELL_QUADRATIC_VARIANCE}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_24CELL_UNIT_LAG}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_24CELL_WEIGHT}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_24CELL_WEIGHTED_LAG_TWO}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_CUBE_RESISTANCES}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_FCC_SECOND_PLANE_RECORDS}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_FCC_SECOND_SUM_RATIOS}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_PERIODIC_FCC_COLLISION}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_PERIODIC_FCC_DEGREE}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_PERIODIC_FCC_DISPLACEMENTS}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_PERIODIC_FCC_HISTORY}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_PERIODIC_FCC_JUMPS}}` | `07_transfer_criteria.md`, `07_transfer_criteria.md` |
+| `{{TRANSFER_PERIODIC_FCC_TARGET}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_PERIODIC_FCC_VERTICES}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_ROOT_DIMENSIONS}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_TORUS_CELLS}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_TORUS_COPIED_RESIDUAL}}` | `07_transfer_criteria.md`, `07_transfer_criteria.md` |
+| `{{TRANSFER_TORUS_RECIPROCAL_RESIDUAL}}` | `07_transfer_criteria.md`, `07_transfer_criteria.md` |
+| `{{TRANSFER_TORUS_UNIT_RESIDUAL}}` | `07_transfer_criteria.md` |
 | `{{TWO_NODE_RELAXATION_MAX_RADIUS}}` | `05_disagreements.md` |
 | `{{TWO_NODE_RELAXATION_MIN_RADIUS}}` | `05_disagreements.md` |
 | `{{TWO_NODE_RELAXATION_MIN_RADIUS_MEASURED}}` | `05_disagreements.md`, `05_disagreements.md` |
@@ -443,7 +476,7 @@ argue by key.
 | `{{VORONOI_FACES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
 | `{{VORONOI_VERTICES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
 
-248 of the bound values are quoted by the prose. The cover is
+268 of the bound values are quoted by the prose. The cover is
 placed by `manuscript/config.yaml`; the accessibility registry that gives
 each figure its alternative text is `output/figures/figure_registry.json`,
 written by `scripts/make_figures.py`.

@@ -433,6 +433,128 @@
           ]
         }
       ]
+    },
+    {
+      "id": "transfer-beyond-shells",
+      "title": "Transfer criteria beyond the two shells",
+      "entries": [
+        {
+          "id": "distance-regularity",
+          "term": "Distance regularity",
+          "meanings": {
+            "oph": "Uniform fair seam repair gives inward and outward move counts.",
+            "fep": "Gaussian contrast variance labels the same exact quotient.",
+            "synergetics": "A distance-regular graph has fixed intersection counts within each distance."
+          },
+          "relation": "conditional-identity",
+          "limit": "For connected simple regular graphs, distance regularity is also necessary for the distance quotient.",
+          "probes": [
+            "distance-regular-repair"
+          ],
+          "citations": [
+            "oph",
+            "biggs1993potential"
+          ]
+        },
+        {
+          "id": "resistance-collision",
+          "term": "Resistance collision",
+          "meanings": {
+            "oph": "Equal observations can hide different one-step seam moves.",
+            "fep": "Equal effective resistance need not give a Markov record.",
+            "synergetics": "Periodic FCC displacements can agree in variance, distance and common-neighbour count."
+          },
+          "relation": "counterexample",
+          "limit": "Compare other-class probabilities. In the periodic example the failure persists at stationarity.",
+          "probes": [
+            "bipartite-contrast-collision",
+            "periodic-fcc-contrast-collision"
+          ],
+          "citations": [
+            "oph",
+            "quadmath",
+            "kemeny1976finite"
+          ]
+        },
+        {
+          "id": "lag-closure",
+          "term": "Covariance closure",
+          "meanings": {
+            "oph": "A fair seam attempt is a mixture of identity and an endpoint swap.",
+            "fep": "An invariant linear observation space has the lag covariances of a Gaussian Markov process.",
+            "synergetics": "Unit seams preserve the coordinate space of the twenty-four-cell. One strengthened seam breaks invariance."
+          },
+          "relation": "conditional-identity",
+          "limit": "The match concerns stationary second moments. The observed process can retain memory.",
+          "probes": [
+            "linear-lag-closure",
+            "single-seam-lag-obstruction"
+          ],
+          "citations": [
+            "oph",
+            "cohn2007d4",
+            "caputo2010aldous"
+          ]
+        },
+        {
+          "id": "harmonic-remainder",
+          "term": "Harmonic remainder",
+          "meanings": {
+            "oph": "Vertex and oriented face incidences define two weighted seam spaces.",
+            "fep": "Reciprocal Gaussian covariances leave a harmonic projector of rank twice the genus.",
+            "synergetics": "The periodic square cellulation has two independent winding directions."
+          },
+          "relation": "conditional-identity",
+          "limit": "A fixed trace does not certify positivity. Copying a nonuniform weight can make the remainder indefinite.",
+          "probes": [
+            "surface-harmonic-covariance",
+            "copied-surface-weight-obstruction"
+          ],
+          "citations": [
+            "oph",
+            "degoes2016exterior"
+          ]
+        },
+        {
+          "id": "root-shell-quadratics",
+          "term": "Root-shell quadratics",
+          "meanings": {
+            "oph": "The scalar seam operator acts on trace-free even vertex fields.",
+            "fep": "Diagonal and off-diagonal coefficient precisions are equal only in dimension four in this family.",
+            "synergetics": "The cuboctahedral shell extends to the nearest-neighbour graphs of the signed two-coordinate roots."
+          },
+          "relation": "geometric-comparison",
+          "limit": "Use unit vertex directions, unit seams, and the Frobenius metric.",
+          "probes": [
+            "root-shell-quadratic-precision"
+          ],
+          "citations": [
+            "oph",
+            "quadmath",
+            "cohn2007d4"
+          ]
+        },
+        {
+          "id": "sum-constraint",
+          "term": "Global sum constraint",
+          "meanings": {
+            "oph": "Grounding a plane clamps the separator ports.",
+            "fep": "A separate total-field constraint introduces rank-one dependence between the strict sides.",
+            "synergetics": "The coordinate and body-diagonal FCC cuts have no crossing seams at any frequency."
+          },
+          "relation": "counterexample",
+          "limit": "Exact conditioning gives infinite conditional mutual information. Noisy sums give finite dependence.",
+          "probes": [
+            "fcc-plane-screen-transfer",
+            "centered-gaussian-screen-obstruction"
+          ],
+          "citations": [
+            "oph",
+            "quadmath",
+            "bolin2021sparse"
+          ]
+        }
+      ]
     }
   ]
 }
