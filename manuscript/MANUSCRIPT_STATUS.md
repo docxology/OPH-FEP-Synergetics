@@ -199,6 +199,11 @@ See [docs/SCOPE.md](../docs/SCOPE.md) for the full statement.
 
 ## Three-way correspondences and counterexamples
 
+**Entries:** `repair-contrast-quotient`, `repair-distance-counterexample`,
+`reciprocal-dual-weights`, `copied-dual-weight-obstruction`,
+`quadratic-even-field`, `quadratic-isotropy-obstruction`,
+`central-plane-screening`, `repair-centroid-memory`.
+
 The comparison applies the same fair binary repair law to the two
 twelve-vertex graphs. Exact covariance records preserve the dynamics after
 coarse-graining, while graph distance on the FCC shell and the observed

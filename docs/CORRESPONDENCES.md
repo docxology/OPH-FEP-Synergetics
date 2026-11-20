@@ -1414,6 +1414,9 @@ Probe values:
 
 - `carrier` = attempts_per_state=60, classes=((1, 4, 11/30, 30), (2, 6 + 2 sqrt 5, 7/15, 30), (3, 10 + 2 sqrt 5, 1/2, 6)), attempt_count_matrix=((56, 4, 0), (4, 54, 2), (0, 10, 50)), contrast_lumpable=True, distance_lumpable=True, chord_partition_matches=True, all_rows_match_token_moves=True, class_uniform_lift=True, stationary_class_masses=(5/11, 5/11, 1/11), stationarity_verified=True, distance_two_adjacency_counts_match=True, distance_two_witnesses=(((0, 3), 6 + 2 sqrt 5, 7/15, 2, 1/15))
 - `cuboctahedron` = attempts_per_state=48, classes=((1, 4, 11/24, 24), (2, 8, 7/12, 12), (2, 12, 5/8, 24), (3, 16, 2/3, 6)), attempt_count_matrix=((44, 2, 2, 0), (4, 40, 4, 0), (2, 2, 42, 2), (0, 0, 8, 40)), contrast_lumpable=True, distance_lumpable=False, chord_partition_matches=True, all_rows_match_token_moves=True, class_uniform_lift=True, stationary_class_masses=(4/11, 2/11, 4/11, 1/11), stationarity_verified=True, distance_two_adjacency_counts_match=True, distance_two_witnesses=(((0, 4), 8, 7/12, 2, 1/12), ((0, 6), 12, 5/8, 1, 1/24))
+- `fcc_attempts` = 48
+- `fcc_quotient` = ((44, 2, 2, 0), (4, 40, 4, 0), (2, 2, 42, 2), (0, 0, 8, 40))
+- `fcc_stationary` = (4/11, 2/11, 4/11, 1/11)
 
 ## `repair-distance-counterexample`
 
@@ -1431,8 +1434,11 @@ Probe values:
 - `carrier_distance_lumpable` = True
 - `fcc_distance_lumpable` = False
 - `fcc_distance_two_witnesses` = (((0, 4), 8, 7/12, 2, 1/12), ((0, 6), 12, 5/8, 1, 1/24))
-- `stationary_adjacency_probability` = 1/18
-- `adjacency_probability_after_previous_adjacency` = 1/16
+- `fcc_middle_variances` = (7/12, 5/8)
+- `fcc_common_neighbours` = (2, 1)
+- `fcc_inward` = (1/12, 1/24)
+- `fcc_stationary_inward` = 1/18
+- `fcc_history_inward` = 1/16
 
 ## `reciprocal-dual-weights`
 
@@ -1465,6 +1471,8 @@ Probe values:
 
 - `carrier` = edge=(0, 1), primal_weight=4, copied_variance_sum=2872/1827, copied_defect_entries=676, copied_cut_pairing_nonzeros=4, reciprocal_raw_variance_sum=29/21
 - `ivm` = edge=(0, 1), primal_weight=4, copied_variance_sum=1912/1197, copied_defect_entries=484, copied_cut_pairing_nonzeros=4, reciprocal_raw_variance_sum=21/19
+- `dual_changed_weight` = 4
+- `dual_copied_sums` = (2872/1827, 1912/1197)
 
 ## `quadratic-even-field`
 
@@ -1481,6 +1489,11 @@ Probe values:
 
 - `carrier` = linear_frame_isotropic=True, quadratic_modes_centered=True, frame_orthogonal=True, precision_orthogonal=True, edge_and_laplacian_precision_agree=True, laplacian_preserves_modes=True, frame=(8/5, 8/5, 8/5, 8/5, 8/5), laplacian_eigenvalues=(6, 6, 6, 6, 6), precision=(48/5, 48/5, 48/5, 48/5, 48/5), variance=(5/48, 5/48, 5/48, 5/48, 5/48)
 - `fcc` = linear_frame_isotropic=True, quadratic_modes_centered=True, frame_orthogonal=True, precision_orthogonal=True, edge_and_laplacian_precision_agree=True, laplacian_preserves_modes=True, frame=(1, 1, 2, 2, 2), laplacian_eigenvalues=(6, 6, 4, 4, 4), precision=(6, 6, 8, 8, 8), variance=(1/6, 1/6, 1/8, 1/8, 1/8)
+- `carrier_quadratic_frame` = 8/5
+- `fcc_quadratic_frame` = (1, 2)
+- `carrier_quadratic_precision` = 48/5
+- `fcc_quadratic_precisions` = (6, 8)
+- `fcc_quadratic_eigenvalues` = (6, 4)
 
 ## `quadratic-isotropy-obstruction`
 
@@ -1497,6 +1510,9 @@ Probe values:
 
 - `carrier` = isotropic_linear_frame=True, diagonal_and_mixed_variances=(5/48, 5/48), rotated_variance_ratio=1
 - `fcc` = isotropic_linear_frame=True, diagonal_and_mixed_variances=(1/6, 1/8), rotated_variance_ratio=4/3
+- `fcc_diagonal_variance` = 1/6
+- `fcc_off_diagonal_variance` = 1/8
+- `fcc_quadratic_variance_ratio` = 4/3
 
 ## `central-plane-screening`
 
@@ -1514,6 +1530,10 @@ Probe values:
 - `oph_isomorphism` = True
 - `icosahedron` = plane_classes=((4, 4, 4, 2, 10/9, 15)), vertex_spanned_planes=15, screening_planes=0, minimum_separator_size=5, minimum_separator_component_counts=(((1, 6), 12)), inverse_matches_seams=True, axis_plane_partition=((0, 3, 6, 9), (7, 8, 10, 11), (1, 2, 4, 5)), axis_plane_crossing_seams=((7, 1), (10, 4)), axis_plane_precision_determinants=(480, 480, 207360)
 - `cuboctahedron` = plane_classes=((4, 4, 4, 0, 1, 3), (6, 3, 3, 0, 1, 4)), vertex_spanned_planes=7, screening_planes=7, minimum_separator_size=4, minimum_separator_component_counts=(((1, 7), 12), ((4, 4), 3)), inverse_matches_seams=True, axis_plane_partition=((0, 4, 7, 11), (3, 5, 9, 10), (1, 2, 6, 8)), axis_plane_crossing_seams=(), axis_plane_precision_determinants=(192, 192, 36864)
+- `carrier_planes` = 15
+- `carrier_cross_seams` = 2
+- `carrier_screen_ratio` = 10/9
+- `fcc_planes` = 7
 
 ## `repair-centroid-memory`
 
@@ -1530,4 +1550,6 @@ Probe values:
 
 - `carrier` = attempts_per_state=60, graph_matches_reference=True, uniform_stationary=True, coordinate_eigenvalue=5 - 1 sqrt 5, coordinate_mode_verified=True, retention=11/12 + 1/60 sqrt 5, retention_parts=(11/12, 1/60), conditional_mean_verified=True, one_axis_variance=50/33 + 10/33 sqrt 5, stationary_variance_verified=True, target_centroid=(0, 2, 0), zero_fibre_size=6, zero_fibre_jump_counts=(0, 0, 0, 0, 1, 1), witness_matches_edge_moves=True, witness_matches_reversible_formula=True, next_target_given_zero=1/180, next_target_given_previous_target_and_zero=1/60, stationary_centroid_non_markov=True
 - `cuboctahedron` = attempts_per_state=48, graph_matches_reference=True, uniform_stationary=True, coordinate_eigenvalue=2, coordinate_mode_verified=True, retention=23/24, retention_parts=(23/24, 0), conditional_mean_verified=True, one_axis_variance=40/33, stationary_variance_verified=True, target_centroid=(0, 1, -1), zero_fibre_size=6, zero_fibre_jump_counts=(0, 0, 1, 1, 1, 1), witness_matches_edge_moves=True, witness_matches_reversible_formula=True, next_target_given_zero=1/72, next_target_given_previous_target_and_zero=1/48, stationary_centroid_non_markov=True
+- `carrier_centroid_probs` = (1/180, 1/60)
+- `fcc_centroid_probs` = (1/72, 1/48)
 

@@ -64,14 +64,14 @@ argue by key.
 | `planar-dual-covariance` | isomorphism | exact-on-domain | three-way | `06_finite_extensions.md`, `07_three_way_limits.md` | yes |
 | `cuboctahedral-spectral-chords` | isomorphism | exact-on-domain | fep-synergetics | `06_finite_extensions.md` | yes |
 | `cuboctahedral-distance-split` | disagreement | obstructed | fep-synergetics | `06_finite_extensions.md` | yes |
-| `repair-contrast-quotient` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | **no** |
-| `repair-distance-counterexample` | disagreement | obstructed | three-way | `07_three_way_limits.md` | **no** |
-| `reciprocal-dual-weights` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | **no** |
-| `copied-dual-weight-obstruction` | disagreement | obstructed | three-way | `07_three_way_limits.md` | **no** |
-| `quadratic-even-field` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | **no** |
-| `quadratic-isotropy-obstruction` | disagreement | obstructed | three-way | `07_three_way_limits.md` | **no** |
-| `central-plane-screening` | disagreement | obstructed | three-way | `07_three_way_limits.md` | **no** |
-| `repair-centroid-memory` | disagreement | obstructed | three-way | `07_three_way_limits.md` | **no** |
+| `repair-contrast-quotient` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | yes |
+| `repair-distance-counterexample` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
+| `reciprocal-dual-weights` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | yes |
+| `copied-dual-weight-obstruction` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
+| `quadratic-even-field` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | yes |
+| `quadratic-isotropy-obstruction` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
+| `central-plane-screening` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
+| `repair-centroid-memory` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
 
 61 of 61 claims are named by at least one section's prose.
 
@@ -99,7 +99,7 @@ argue by key.
 | --- | --- | --- |
 | `fig:blanket` | `05_disagreements.md` | `stationary-blanket` |
 | `fig:carrier` | `02_framework.md` | *package readings, no single claim* |
-| `fig:centroid-memory` | `07_three_way_limits.md` | *package readings, no single claim* |
+| `fig:centroid-memory` | `07_three_way_limits.md` | `repair-centroid-memory` |
 | `fig:conjugation` | `06_complementarities.md` | *package readings, no single claim* |
 | `fig:descent` | `05_disagreements.md` | `pr01-obstruction` |
 | `fig:dstability` | `05_disagreements.md` | *package readings, no single claim* |
@@ -120,7 +120,7 @@ argue by key.
 | `fig:scope-matrix` | `03_method.md` | *package readings, no single claim* |
 | `fig:shell-gauge` | `05_disagreements.md` | *package readings, no single claim* |
 | `fig:subdivision` | `06_complementarities.md` | *package readings, no single claim* |
-| `fig:three-way` | `07_three_way_limits.md` | *package readings, no single claim* |
+| `fig:three-way` | `07_three_way_limits.md` | `central-plane-screening`, `copied-dual-weight-obstruction`, `quadratic-isotropy-obstruction`, `repair-distance-counterexample` |
 | `fig:vertex-shells` | `05_disagreements.md` | *package readings, no single claim* |
 
 ## Formal statements and equations
@@ -406,23 +406,23 @@ argue by key.
 | `{{SYMMETRY_ROTATIONS}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md` |
 | `{{TETRAVOLUME_GALOIS_NORM}}` | `03_method.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md` |
 | `{{TETRAVOLUME_INTEGRAL_SOLIDS}}` | `00_00_graphical_abstract.md` |
-| `{{THREE_CARRIER_CENTROID_PROBS}}` | `07_three_way_limits.md` |
+| `{{THREE_CARRIER_CENTROID_PROBS}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
 | `{{THREE_CARRIER_CROSS_SEAMS}}` | `07_three_way_limits.md` |
-| `{{THREE_CARRIER_PLANES}}` | `07_three_way_limits.md` |
+| `{{THREE_CARRIER_PLANES}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
 | `{{THREE_CARRIER_QUADRATIC_FRAME}}` | `07_three_way_limits.md` |
 | `{{THREE_CARRIER_QUADRATIC_PRECISION}}` | `07_three_way_limits.md` |
 | `{{THREE_CARRIER_SCREEN_RATIO}}` | `07_three_way_limits.md` |
 | `{{THREE_DUAL_CHANGED_WEIGHT}}` | `07_three_way_limits.md` |
-| `{{THREE_DUAL_COPIED_SUMS}}` | `07_three_way_limits.md` |
+| `{{THREE_DUAL_COPIED_SUMS}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
 | `{{THREE_FCC_ATTEMPTS}}` | `07_three_way_limits.md` |
-| `{{THREE_FCC_CENTROID_PROBS}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_CENTROID_PROBS}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
 | `{{THREE_FCC_COMMON_NEIGHBOURS}}` | `07_three_way_limits.md` |
-| `{{THREE_FCC_DIAGONAL_VARIANCE}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_DIAGONAL_VARIANCE}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
 | `{{THREE_FCC_HISTORY_INWARD}}` | `07_three_way_limits.md` |
-| `{{THREE_FCC_INWARD}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_INWARD}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
 | `{{THREE_FCC_MIDDLE_VARIANCES}}` | `07_three_way_limits.md` |
-| `{{THREE_FCC_OFF_DIAGONAL_VARIANCE}}` | `07_three_way_limits.md` |
-| `{{THREE_FCC_PLANES}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_OFF_DIAGONAL_VARIANCE}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
+| `{{THREE_FCC_PLANES}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
 | `{{THREE_FCC_QUADRATIC_EIGENVALUES}}` | `07_three_way_limits.md` |
 | `{{THREE_FCC_QUADRATIC_FRAME}}` | `07_three_way_limits.md` |
 | `{{THREE_FCC_QUADRATIC_PRECISIONS}}` | `07_three_way_limits.md` |

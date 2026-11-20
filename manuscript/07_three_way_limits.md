@@ -94,7 +94,7 @@ by summing the native transition counts and by directly counting hops.
 It also checks the first conditional moment and stationary variance over
 the entire binary shell.
 
-![The centroid and sampled Gaussian process share their normalized lag covariance on each shell. The probability of revisiting the target centroid from zero depends on whether it was observed one step earlier.](../output/figures/fig_centroid_memory.png){#fig:centroid-memory width=100%}
+![The repair centroid and its Gaussian match share a normalised lag covariance on each shell. Conditioning on the previous centroid changes the return probabilities from zero. The two probabilities are {{THREE_CARRIER_CENTROID_PROBS}} on the carrier and {{THREE_FCC_CENTROID_PROBS}} on the FCC shell.](../output/figures/fig_centroid_memory.png){#fig:centroid-memory width=100%}
 
 ## Reciprocal conductances preserve planar duality {#sec:reciprocal-dual-weights}
 
@@ -225,4 +225,4 @@ graph separators and the clamped determinants. Thus a geometric
 equator has different screening properties on the two graphs, even
 though the same seam-precision rule applies.
 
-![Four three-way tests on the carrier and FCC shell. A compares the chance of repair stepping into adjacency from pairs at graph distance two. B compares the variance sums of weighted primal and dual edges under reciprocal and copied conductances. C compares Gaussian coefficient variances for unit trace-free quadratics. D counts vertex-spanned planes by whether a seam crosses between their strict halves.](../output/figures/fig_three_way.png){#fig:three-way width=100%}
+![Four three-way tests on the carrier and FCC shell. A shows the one-step inward probabilities at distance two, including the distinct FCC rates {{THREE_FCC_INWARD}}. B compares weighted variance sums under reciprocal and copied conductances. Copied sums are {{THREE_DUAL_COPIED_SUMS}}. C shows the FCC quadratic variance split between {{THREE_FCC_DIAGONAL_VARIANCE}} and {{THREE_FCC_OFF_DIAGONAL_VARIANCE}}. D contrasts the {{THREE_CARRIER_PLANES}} crossed carrier planes and {{THREE_FCC_PLANES}} screening FCC planes.](../output/figures/fig_three_way.png){#fig:three-way width=100%}

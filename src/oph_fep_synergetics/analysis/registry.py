@@ -2078,7 +2078,8 @@ def _probe_cuboctahedral_distance_split() -> tuple[bool, dict]:
 
 
 def _probe_repair_contrast_quotient() -> tuple[bool, dict]:
-    values = native_dynamics.repair_contrast_lumping_census()
+    cases = native_dynamics.repair_contrast_lumping_census()
+    fcc = cases["cuboctahedron"]
     expected = {
         "carrier": (60, ((56, 4, 0), (4, 54, 2), (0, 10, 50)), ("5/11", "5/11", "1/11")),
         "cuboctahedron": (
@@ -2088,11 +2089,17 @@ def _probe_repair_contrast_quotient() -> tuple[bool, dict]:
     }
     checks = ("contrast_lumpable", "chord_partition_matches", "all_rows_match_token_moves",
               "class_uniform_lift", "stationarity_verified")
-    return all(
+    passed = all(
         (row["attempts_per_state"], row["attempt_count_matrix"], row["stationary_class_masses"])
         == expected[name] and all(row[key] for key in checks)
-        for name, row in values.items()
-    ), values
+        for name, row in cases.items()
+    )
+    return passed, {
+        **cases,
+        "fcc_attempts": fcc["attempts_per_state"],
+        "fcc_quotient": fcc["attempt_count_matrix"],
+        "fcc_stationary": fcc["stationary_class_masses"],
+    }
 
 
 def _probe_repair_distance_counterexample() -> tuple[bool, dict]:
@@ -2109,8 +2116,11 @@ def _probe_repair_distance_counterexample() -> tuple[bool, dict]:
         "carrier_distance_lumpable": carrier["distance_lumpable"],
         "fcc_distance_lumpable": fcc["distance_lumpable"],
         "fcc_distance_two_witnesses": fcc["distance_two_witnesses"],
-        "stationary_adjacency_probability": stationary_rate,
-        "adjacency_probability_after_previous_adjacency": history_rate,
+        "fcc_middle_variances": tuple(row[2] for row in fcc["distance_two_witnesses"]),
+        "fcc_common_neighbours": tuple(row[3] for row in fcc["distance_two_witnesses"]),
+        "fcc_inward": witness_rates,
+        "fcc_stationary_inward": stationary_rate,
+        "fcc_history_inward": history_rate,
     }
     return (
         carrier["distance_lumpable"] and not fcc["distance_lumpable"]
@@ -2142,18 +2152,21 @@ def _probe_copied_dual_weight_obstruction() -> tuple[bool, dict]:
         "edge", "primal_weight", "copied_variance_sum", "copied_defect_entries",
         "copied_cut_pairing_nonzeros", "reciprocal_raw_variance_sum",
     )} for name, row in results.items()}
-    return (
-        (values["carrier"]["copied_variance_sum"], values["ivm"]["copied_variance_sum"])
-        == (Fraction(2872, 1827), Fraction(1912, 1197))
+    sums = tuple(values[name]["copied_variance_sum"] for name in ("carrier", "ivm"))
+    passed = (
+        sums == (Fraction(2872, 1827), Fraction(1912, 1197))
         and (values["carrier"]["copied_defect_entries"], values["ivm"]["copied_defect_entries"])
         == (676, 484)
         and all(row["primal_weight"] == 4 and row["copied_cut_pairing_nonzeros"] == 4
                 for row in values.values())
-    ), values
+    )
+    return passed, {**values, "dual_changed_weight": values["carrier"]["primal_weight"],
+                    "dual_copied_sums": sums}
 
 
 def _probe_quadratic_even_field() -> tuple[bool, dict]:
-    values = quadratic_modes.quadratic_mode_census()
+    cases = quadratic_modes.quadratic_mode_census()
+    carrier, fcc = cases["carrier"], cases["fcc"]
     expected = {
         "carrier": ((Fraction(8, 5),) * 5, (6,) * 5, (Fraction(48, 5),) * 5),
         "fcc": ((1, 1, 2, 2, 2), (6, 6, 4, 4, 4), (6, 6, 8, 8, 8)),
@@ -2161,11 +2174,19 @@ def _probe_quadratic_even_field() -> tuple[bool, dict]:
     checks = ("linear_frame_isotropic", "quadratic_modes_centered", "frame_orthogonal",
               "precision_orthogonal", "edge_and_laplacian_precision_agree",
               "laplacian_preserves_modes")
-    return all(
+    passed = all(
         (row["frame"], row["laplacian_eigenvalues"], row["precision"]) == expected[name]
         and all(row[key] for key in checks)
-        for name, row in values.items()
-    ), values
+        for name, row in cases.items()
+    )
+    return passed, {
+        **cases,
+        "carrier_quadratic_frame": carrier["frame"][0],
+        "fcc_quadratic_frame": (fcc["frame"][0], fcc["frame"][2]),
+        "carrier_quadratic_precision": carrier["precision"][0],
+        "fcc_quadratic_precisions": (fcc["precision"][0], fcc["precision"][2]),
+        "fcc_quadratic_eigenvalues": (fcc["laplacian_eigenvalues"][0], fcc["laplacian_eigenvalues"][2]),
+    }
 
 
 def _probe_quadratic_isotropy_obstruction() -> tuple[bool, dict]:
@@ -2178,14 +2199,17 @@ def _probe_quadratic_isotropy_obstruction() -> tuple[bool, dict]:
         }
         for name, row in cases.items()
     }
-    return values == {
+    passed = values == {
         "carrier": {"isotropic_linear_frame": True,
                     "diagonal_and_mixed_variances": (Fraction(5, 48),) * 2,
                     "rotated_variance_ratio": 1},
         "fcc": {"isotropic_linear_frame": True,
                 "diagonal_and_mixed_variances": (Fraction(1, 6), Fraction(1, 8)),
                 "rotated_variance_ratio": Fraction(4, 3)},
-    }, values
+    }
+    diagonal, off_diagonal = values["fcc"]["diagonal_and_mixed_variances"]
+    return passed, {**values, "fcc_diagonal_variance": diagonal, "fcc_off_diagonal_variance": off_diagonal,
+                    "fcc_quadratic_variance_ratio": values["fcc"]["rotated_variance_ratio"]}
 
 
 def _probe_central_plane_screening() -> tuple[bool, dict]:
@@ -2197,7 +2221,13 @@ def _probe_central_plane_screening() -> tuple[bool, dict]:
         and fcc["plane_classes"] == ((4, 4, 4, 0, "1", 3), (6, 3, 3, 0, "1", 4))
         and (carrier["screening_planes"], fcc["screening_planes"]) == (0, 7)
         and (carrier["minimum_separator_size"], fcc["minimum_separator_size"]) == (5, 4)
-    ), values
+    ), {
+        **values,
+        "carrier_planes": carrier["vertex_spanned_planes"],
+        "carrier_cross_seams": carrier["plane_classes"][0][3],
+        "carrier_screen_ratio": carrier["plane_classes"][0][4],
+        "fcc_planes": fcc["screening_planes"],
+    }
 
 
 def _probe_repair_centroid_memory() -> tuple[bool, dict]:
@@ -2212,10 +2242,15 @@ def _probe_repair_centroid_memory() -> tuple[bool, dict]:
               "conditional_mean_verified", "stationary_variance_verified",
               "witness_matches_edge_moves", "witness_matches_reversible_formula",
               "stationary_centroid_non_markov")
-    return all(
+    passed = all(
         tuple(row[field] for field in fields) == expected[name] and all(row[key] for key in checks)
         for name, row in values.items()
-    ), values
+    )
+    return passed, {
+        **values,
+        "carrier_centroid_probs": tuple(values["carrier"][key] for key in fields[-2:]),
+        "fcc_centroid_probs": tuple(values["cuboctahedron"][key] for key in fields[-2:]),
+    }
 
 
 CORRESPONDENCES: tuple[Correspondence, ...] = (

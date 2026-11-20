@@ -220,30 +220,30 @@ gives one; `Note` records what is measured rather than quoted.
 | `fcc.kirchhoff_index` | 37 |  | probe:cuboctahedral-spectral-chords:kirchhoff_index |  |
 | `fcc.distance_two_chords` | (8, 12) |  | probe:cuboctahedral-distance-split:distance_two_chords |  |
 | `fcc.distance_two_resistances` | (7/12, 5/8) |  | probe:cuboctahedral-distance-split:distance_two_resistances |  |
-| `three.fcc_middle_variances` | (7/12, 5/8) |  | probe:repair-distance-counterexample |  |
-| `three.fcc_common_neighbours` | (2, 1) |  | probe:repair-distance-counterexample |  |
-| `three.fcc_inward` | (1/12, 1/24) |  | probe:repair-distance-counterexample |  |
-| `three.fcc_stationary_inward` | 1/18 |  | probe:repair-distance-counterexample |  |
-| `three.fcc_history_inward` | 1/16 |  | probe:repair-distance-counterexample |  |
-| `three.fcc_attempts` | 48 |  | probe:repair-contrast-quotient |  |
-| `three.fcc_quotient` | ((44, 2, 2, 0), (4, 40, 4, 0), (2, 2, 42, 2), (0, 0, 8, 40)) |  | probe:repair-contrast-quotient |  |
-| `three.fcc_stationary` | (4/11, 2/11, 4/11, 1/11) |  | probe:repair-contrast-quotient |  |
-| `three.dual_changed_weight` | 4 |  | probe:copied-dual-weight-obstruction |  |
-| `three.dual_copied_sums` | (2872/1827, 1912/1197) |  | probe:copied-dual-weight-obstruction |  |
-| `three.carrier_quadratic_frame` | 8/5 |  | probe:quadratic-even-field |  |
-| `three.fcc_quadratic_frame` | (1, 2) |  | probe:quadratic-even-field |  |
-| `three.carrier_quadratic_precision` | 48/5 |  | probe:quadratic-even-field |  |
-| `three.fcc_quadratic_precisions` | (6, 8) |  | probe:quadratic-even-field |  |
-| `three.fcc_quadratic_eigenvalues` | (6, 4) |  | probe:quadratic-even-field |  |
-| `three.fcc_diagonal_variance` | 1/6 |  | probe:quadratic-isotropy-obstruction |  |
-| `three.fcc_off_diagonal_variance` | 1/8 |  | probe:quadratic-isotropy-obstruction |  |
-| `three.fcc_quadratic_variance_ratio` | 4/3 |  | probe:quadratic-isotropy-obstruction |  |
-| `three.carrier_planes` | 15 |  | probe:central-plane-screening |  |
-| `three.carrier_cross_seams` | 2 |  | probe:central-plane-screening |  |
-| `three.carrier_screen_ratio` | 10/9 |  | probe:central-plane-screening |  |
-| `three.fcc_planes` | 7 |  | probe:central-plane-screening |  |
-| `three.carrier_centroid_probs` | (1/180, 1/60) |  | probe:repair-centroid-memory |  |
-| `three.fcc_centroid_probs` | (1/72, 1/48) |  | probe:repair-centroid-memory |  |
+| `three.fcc_middle_variances` | (7/12, 5/8) |  | probe:repair-distance-counterexample:fcc_middle_variances |  |
+| `three.fcc_common_neighbours` | (2, 1) |  | probe:repair-distance-counterexample:fcc_common_neighbours |  |
+| `three.fcc_inward` | (1/12, 1/24) |  | probe:repair-distance-counterexample:fcc_inward |  |
+| `three.fcc_stationary_inward` | 1/18 |  | probe:repair-distance-counterexample:fcc_stationary_inward |  |
+| `three.fcc_history_inward` | 1/16 |  | probe:repair-distance-counterexample:fcc_history_inward |  |
+| `three.fcc_attempts` | 48 |  | probe:repair-contrast-quotient:fcc_attempts |  |
+| `three.fcc_quotient` | ((44, 2, 2, 0), (4, 40, 4, 0), (2, 2, 42, 2), (0, 0, 8, 40)) |  | probe:repair-contrast-quotient:fcc_quotient |  |
+| `three.fcc_stationary` | (4/11, 2/11, 4/11, 1/11) |  | probe:repair-contrast-quotient:fcc_stationary |  |
+| `three.dual_changed_weight` | 4 |  | probe:copied-dual-weight-obstruction:dual_changed_weight |  |
+| `three.dual_copied_sums` | (2872/1827, 1912/1197) |  | probe:copied-dual-weight-obstruction:dual_copied_sums |  |
+| `three.carrier_quadratic_frame` | 8/5 |  | probe:quadratic-even-field:carrier_quadratic_frame |  |
+| `three.fcc_quadratic_frame` | (1, 2) |  | probe:quadratic-even-field:fcc_quadratic_frame |  |
+| `three.carrier_quadratic_precision` | 48/5 |  | probe:quadratic-even-field:carrier_quadratic_precision |  |
+| `three.fcc_quadratic_precisions` | (6, 8) |  | probe:quadratic-even-field:fcc_quadratic_precisions |  |
+| `three.fcc_quadratic_eigenvalues` | (6, 4) |  | probe:quadratic-even-field:fcc_quadratic_eigenvalues |  |
+| `three.fcc_diagonal_variance` | 1/6 |  | probe:quadratic-isotropy-obstruction:fcc_diagonal_variance |  |
+| `three.fcc_off_diagonal_variance` | 1/8 |  | probe:quadratic-isotropy-obstruction:fcc_off_diagonal_variance |  |
+| `three.fcc_quadratic_variance_ratio` | 4/3 |  | probe:quadratic-isotropy-obstruction:fcc_quadratic_variance_ratio |  |
+| `three.carrier_planes` | 15 |  | probe:central-plane-screening:carrier_planes |  |
+| `three.carrier_cross_seams` | 2 |  | probe:central-plane-screening:carrier_cross_seams |  |
+| `three.carrier_screen_ratio` | 10/9 |  | probe:central-plane-screening:carrier_screen_ratio |  |
+| `three.fcc_planes` | 7 |  | probe:central-plane-screening:fcc_planes |  |
+| `three.carrier_centroid_probs` | (1/180, 1/60) |  | probe:repair-centroid-memory:carrier_centroid_probs |  |
+| `three.fcc_centroid_probs` | (1/72, 1/48) |  | probe:repair-centroid-memory:fcc_centroid_probs |  |
 | `carrier.chart_0` | 1, 5, 7, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 0 |
 | `carrier.chart_1` | 0, 5, 7, 8, 9 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 1 |
 | `carrier.chart_2` | 3, 4, 6, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 2 |
