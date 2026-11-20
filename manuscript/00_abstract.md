@@ -26,6 +26,11 @@ The geometry yields exact counts, effective resistances, and volumes.
 On the carrier, squared Euclidean chords recover the contribution of the
 lowest positive Laplacian modes to Gaussian contrast variance up to scale.
 The full variance has a higher-dimensional embedding.
+The extended probes distinguish first entry from binary equilibrium, give an
+exact graph-distance reduction, and count rooted forests through conditional
+Gaussian precision. A greedy record choice misses every optimal triple.
+Planar dual edge covariances complement one another, and the FCC shell splits
+one graph-distance class into two different contrast variances.
 Cuboctahedral and icosahedral configurations attain the same kissing number
 with different contacts among the outer spheres. The cuboctahedral gauge
 determines lattice coordination shells, and equal-covariance Gaussian

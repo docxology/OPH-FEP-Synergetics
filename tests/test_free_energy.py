@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import math
+from functools import cache
+from itertools import product
 
 import numpy as np
 import pytest
@@ -11,11 +13,14 @@ from oph_fep_synergetics.core import (
     CellularSheaf,
     GaussianSheafModel,
     SurpriseTriple,
+    carrier_sheaf,
     demo_chain_model,
     gaussian_kl,
+    icosahedral_carrier,
     linear_chain_sheaf,
     three_surprises,
 )
+from oph_fep_synergetics.core.free_energy import carrier_grounded_forest_census
 
 
 def test_gaussian_kl_is_zero_for_identical_gaussians():
@@ -102,6 +107,77 @@ def test_posterior_matches_the_interior_block_inverse(chain_model):
     mean, covariance = chain_model.posterior([1.0, 2.0])
     assert np.allclose(mean, chain_model.harmonic_extension([1.0, 2.0]))
     assert np.allclose(covariance, (1.0 / 3.0) * np.array([[2.0, 1.0], [1.0, 2.0]]))
+
+
+def test_grounded_carrier_determinants_count_rooted_forests():
+    census = carrier_grounded_forest_census()
+    pair_layouts = census["pair_layouts"]
+    triple_layouts = census["triple_layouts"]
+    assert tuple(row[:3] for row in pair_layouts) == (
+        ((1,), 30, 1900800),
+        ((2,), 30, 2419200),
+        ((3,), 6, 2592000),
+    )
+    assert tuple(row[:3] for row in triple_layouts) == (
+        ((1, 1, 1), 20, 522720),
+        ((1, 1, 2), 60, 604800),
+        ((1, 2, 2), 60, 712800),
+        ((1, 2, 3), 60, 743040),
+        ((2, 2, 2), 20, 846720),
+    )
+    assert census["matches_contrast_covariance"] is True
+    assert census["best_pair_example"] == (0, 3)
+    assert census["best_triple_example"] == (0, 2, 8)
+    assert census["worst_triple_example"] == (0, 1, 5)
+    assert census["greedy_triple_example"] == (0, 1, 2)
+    assert census["greedy_triple_determinants"] == ((743040, 60),)
+    assert census["optimum_to_greedy_ratio"] == "49/43"
+
+    carrier = icosahedral_carrier()
+    sheaf = carrier_sheaf(carrier)
+    neighbour_masks = tuple(
+        sum(1 << other for other in carrier.neighbours(port)) for port in range(carrier.port_count)
+    )
+
+    @cache
+    def tree_count(vertices: int) -> int:
+        root = vertices & -vertices
+        return branch_partitions(root.bit_length() - 1, vertices ^ root)
+
+    @cache
+    def branch_partitions(root: int, vertices: int) -> int:
+        if not vertices:
+            return 1
+        # The first vertex determines which branch of the root to choose next.
+        first = vertices & -vertices
+        optional = vertices ^ first
+        subset = optional
+        count = 0
+        while True:
+            branch = first | subset
+            attachments = (neighbour_masks[root] & branch).bit_count()
+            if attachments:
+                count += attachments * tree_count(branch) * branch_partitions(root, vertices ^ branch)
+            if subset == 0:
+                return count
+            subset = (subset - 1) & optional
+
+    # Independently count forests for one representative of each geometry, by
+    # assigning every interior port to a root's component and adjoining trees.
+    for _, _, determinant, records in pair_layouts + triple_layouts:
+        model = GaussianSheafModel(sheaf, records, record_prior_precision=1.0)
+        free_bits = tuple(1 << vertex for vertex in model.interior_nodes)
+        count = 0
+        for assignment in product(range(len(records)), repeat=len(free_bits)):
+            components = [1 << root for root in records]
+            for bit, slot in zip(free_bits, assignment, strict=True):
+                components[slot] |= bit
+            count += math.prod(tree_count(component) for component in components)
+        assert count == determinant
+        _, covariance = model.posterior([0.0] * len(records))
+        sign, log_determinant = np.linalg.slogdet(covariance)
+        assert sign == 1
+        assert log_determinant == pytest.approx(-math.log(determinant))
 
 
 def test_surprisal_differences_are_exact(chain_model):

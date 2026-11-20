@@ -25,11 +25,18 @@ implementation and are stated as scope limits in the manuscript.
 from __future__ import annotations
 
 import math
+from collections import Counter, defaultdict
 from dataclasses import dataclass
+from fractions import Fraction
+from functools import lru_cache
+from itertools import combinations
 from typing import Sequence
 
 import numpy as np
 
+from .carrier import icosahedral_carrier
+from .invariants import laplacian_determinant
+from .network import graph_distances, laplacian_matrix, resistance_ladder
 from .sheaf import CellularSheaf, linear_chain_sheaf
 
 
@@ -421,3 +428,90 @@ def demo_chain_model(
 def asymmetric_seam_energy(disagreement: np.ndarray) -> np.ndarray:
     """An oriented spring with twice the stiffness for positive disagreement."""
     return np.where(disagreement <= 0.0, 0.5, 1.0) * disagreement**2
+
+
+@lru_cache(maxsize=1)
+def _carrier_grounded_forest_census() -> dict[str, object]:
+    carrier = icosahedral_carrier()
+    adjacency = carrier.adjacency_matrix().astype(int).tolist()
+    laplacian = laplacian_matrix(adjacency)
+    distances = graph_distances(adjacency)
+    resistance_by_distance = {distance: value for distance, value, _ in resistance_ladder(adjacency)}
+    # Compute the tree factor from the closed carrier spectrum, independently
+    # of the principal-determinant routine. The conjugate eigenvalues pair to
+    # 5² - 5, with three copies of each eigenvalue and five copies of 6.
+    trees = Fraction((5**2 - 5) ** 3 * 6**5, carrier.port_count)
+    pair_determinants: dict[tuple[int, ...], int] = {}
+    triple_determinants: dict[tuple[int, ...], int] = {}
+    layouts = {}
+    matches_contrast_covariance = True
+
+    for size, determinants in ((2, pair_determinants), (3, triple_determinants)):
+        grouped: dict[tuple[int, ...], list[tuple[int, ...]]] = defaultdict(list)
+        for records in combinations(range(carrier.port_count), size):
+            steps = tuple(distances[a][b] for a, b in combinations(records, 2))
+            grouped[tuple(sorted(steps))].append(records)
+            determinant = laplacian_determinant(laplacian, grounded=records)
+            determinants[records] = determinant
+
+            # Jacobi's complementary-minor identity uses the contrast
+            # covariance on the additional records after grounding the first.
+            contrast_determinant = resistance_by_distance[steps[0]]
+            if size == 3:
+                r_ab, r_ac, r_bc = (resistance_by_distance[step] for step in steps)
+                covariance = (r_ab + r_ac - r_bc) / 2
+                contrast_determinant = r_ab * r_ac - covariance**2
+            matches_contrast_covariance &= determinant == trees * contrast_determinant
+
+        rows = []
+        for pattern, record_sets in sorted(grouped.items()):
+            (determinant,) = {determinants[records] for records in record_sets}
+            rows.append((pattern, len(record_sets), determinant, record_sets[0]))
+        layouts[size] = tuple(rows)
+
+    best_pair = max(pair_determinants.values())
+    best_pairs = {
+        records for records, determinant in pair_determinants.items() if determinant == best_pair
+    }
+    greedy_extensions = {
+        records: determinant
+        for records, determinant in triple_determinants.items()
+        if any(pair in best_pairs for pair in combinations(records, 2))
+    }
+    best_greedy = max(greedy_extensions.values())
+    best_triple = max(triple_determinants.values())
+    worst_triple = min(triple_determinants.values())
+    return {
+        "pair_layouts": layouts[2],
+        "triple_layouts": layouts[3],
+        "pairs_checked": len(pair_determinants),
+        "triples_checked": len(triple_determinants),
+        "matches_contrast_covariance": matches_contrast_covariance,
+        "best_pair_example": min(best_pairs),
+        "best_pair_determinant": best_pair,
+        "best_triple_example": next(
+            records for records, determinant in triple_determinants.items() if determinant == best_triple
+        ),
+        "best_triple_determinant": best_triple,
+        "worst_triple_example": next(
+            records for records, determinant in triple_determinants.items() if determinant == worst_triple
+        ),
+        "worst_triple_determinant": worst_triple,
+        "greedy_triple_example": next(
+            records for records, determinant in greedy_extensions.items() if determinant == best_greedy
+        ),
+        "greedy_triple_determinants": tuple(sorted(Counter(greedy_extensions.values()).items())),
+        "optimum_to_greedy_ratio": str(Fraction(best_triple, best_greedy)),
+    }
+
+
+def carrier_grounded_forest_census() -> dict[str, object]:
+    """Compare two- and three-record precision minors on the unit carrier.
+
+    A layout row gives the sorted pairwise graph distances, the number of
+    record sets, the grounded determinant, and the first set in port order.
+    The contrast-covariance route uses exact effective resistances from a
+    separate grounded inverse and the tree factor from the closed spectrum.
+    The greedy extensions start from any pair that maximises the determinant.
+    """
+    return _carrier_grounded_forest_census().copy()

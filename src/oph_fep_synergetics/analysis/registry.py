@@ -43,6 +43,7 @@ from ..core import free_energy as free_energy_module
 from ..core import invariants as invariant_module
 from ..core import native_dynamics
 from ..core import network as network_module
+from ..core import planar_duality
 from ..core import repair as repair_module
 from ..core import sheaf as sheaf_module
 from ..core import symmetry as symmetry_module
@@ -1925,6 +1926,153 @@ def _probe_carrier_spectral_chords() -> tuple[bool, dict]:
     return passed, values
 
 
+def _probe_repair_first_entry() -> tuple[bool, dict]:
+    values = native_dynamics.first_entry_census()
+    return values == {
+        "doubled_states": 12,
+        "binary_states": 66,
+        "attempts_per_state": 60,
+        "entry_blocks_match": True,
+        "survival_per_attempt": "5/6",
+        "hazard_per_attempt": "1/6",
+        "mean_attempts": "6",
+        "variance_attempts": "30",
+        "entry_pairs_per_doubled_state": 5,
+        "uniform_doubled_entry_pairs": 30,
+        "uniform_doubled_entry_pair_mass": "1/30",
+        "stationary_pair_mass": "1/66",
+        "entry_to_stationary_support_ratio": "11/5",
+        "entry_to_stationary_total_variation": "6/11",
+        "entry_one_port_occupancy": "1/6",
+        "stationary_one_port_occupancy": "1/6",
+        "entry_one_port_marginals_match": True,
+    }, values
+
+
+def _probe_repair_distance_lumping() -> tuple[bool, dict]:
+    values = native_dynamics.repair_distance_lumping_census()
+    return values == {
+        "class_sizes": (12, 30, 30, 6),
+        "attempts_per_state": 60,
+        "attempt_count_matrix": ((50, 10, 0, 0), (0, 56, 4, 0), (0, 4, 54, 2), (0, 0, 10, 50)),
+        "all_rows_match": True,
+        "class_uniform_lift": True,
+        "stationary_class_masses": ("0", "5/11", "5/11", "1/11"),
+        "stationarity_verified": True,
+        "binary_eigenvalue_sum": "5/3",
+        "binary_eigenvalue_product": "311/450",
+        "binary_eigenvalue_discriminant": "1/75",
+    }, values
+
+
+def _probe_grounded_forest_precision() -> tuple[bool, dict]:
+    result = free_energy_module.carrier_grounded_forest_census()
+    values = {key: result[key] for key in (
+        "pairs_checked", "triples_checked", "pair_layouts", "triple_layouts", "matches_contrast_covariance",
+    )}
+    passed = (
+        values["matches_contrast_covariance"] is True
+        and values["pairs_checked"] == 66
+        and values["triples_checked"] == 220
+        and tuple(row[:3] for row in values["pair_layouts"]) == (
+            ((1,), 30, 1900800), ((2,), 30, 2419200), ((3,), 6, 2592000),
+        )
+        and tuple(row[:3] for row in values["triple_layouts"]) == (
+            ((1, 1, 1), 20, 522720), ((1, 1, 2), 60, 604800),
+            ((1, 2, 2), 60, 712800), ((1, 2, 3), 60, 743040),
+            ((2, 2, 2), 20, 846720),
+        )
+    )
+    return passed, values
+
+
+def _probe_greedy_record_placement() -> tuple[bool, dict]:
+    result = free_energy_module.carrier_grounded_forest_census()
+    values = {key: result[key] for key in (
+        "best_pair_example", "best_pair_determinant", "best_triple_example",
+        "best_triple_determinant", "worst_triple_example", "worst_triple_determinant",
+        "greedy_triple_example", "greedy_triple_determinants", "optimum_to_greedy_ratio",
+    )}
+    values["greedy_triple_determinant"] = result["greedy_triple_determinants"][0][0]
+    return result["matches_contrast_covariance"] is True and values == {
+        "best_pair_example": (0, 3),
+        "best_pair_determinant": 2592000,
+        "best_triple_example": (0, 2, 8),
+        "best_triple_determinant": 846720,
+        "worst_triple_example": (0, 1, 5),
+        "worst_triple_determinant": 522720,
+        "greedy_triple_example": (0, 1, 2),
+        "greedy_triple_determinant": 743040,
+        "greedy_triple_determinants": ((743040, 60),),
+        "optimum_to_greedy_ratio": "49/43",
+    }, values
+
+
+def _probe_planar_dual_covariance() -> tuple[bool, dict]:
+    result = planar_duality.planar_duality_census()
+    values = {
+        "families": {
+            name: {
+                **row,
+                "primal_resistances": tuple(map(str, row["primal_resistances"])),
+                "dual_resistances": tuple(map(str, row["dual_resistances"])),
+            }
+            for name, row in result.items()
+        },
+        "matrix_entries": sum(row["matrix_entries_checked"] for row in result.values()),
+    }
+    for name in ("carrier", "ivm"):
+        row = values["families"][name]
+        values[f"{name}_resistances"] = row["primal_resistances"] + row["dual_resistances"]
+    return values["families"] == {
+        "carrier": {
+            "edge_count": 30, "cut_ranks": (11, 19), "tree_counts": (5184000, 5184000),
+            "primal_resistances": ("11/30",), "dual_resistances": ("19/30",),
+            "matrix_entries_checked": 900, "covariances_sum_to_identity": True,
+        },
+        "ivm": {
+            "edge_count": 24, "cut_ranks": (11, 13), "tree_counts": (331776, 331776),
+            "primal_resistances": ("11/24",), "dual_resistances": ("13/24",),
+            "matrix_entries_checked": 576, "covariances_sum_to_identity": True,
+        },
+    }, values
+
+
+def _probe_cuboctahedral_spectral_chords() -> tuple[bool, dict]:
+    result = network_module.cuboctahedral_resistance_geometry()
+    values = {
+        "spectrum": result["spectrum"],
+        "ranks": result["ranks"],
+        "chord_to_lowest_variance_factor": int(result["chord_to_lowest_variance_factor"]),
+        "lowest_mode_variances": tuple(str(row[3]) for row in result["pair_classes"]),
+        "kirchhoff_index": int(result["kirchhoff_index"]),
+    }
+    passed = (
+        result["chord_to_lowest_variance_factor"] == 32
+        and result["kirchhoff_index"] == 37
+        and values["spectrum"] == ((0, 1), (2, 3), (4, 3), (6, 5))
+        and values["ranks"] == (11, 3)
+        and values["lowest_mode_variances"] == ("1/8", "1/4", "3/8", "1/2")
+    )
+    return passed, values
+
+
+def _probe_cuboctahedral_distance_split() -> tuple[bool, dict]:
+    result = network_module.cuboctahedral_resistance_geometry()
+    classes = tuple(
+        (distance, int(chord), str(resistance), count)
+        for distance, chord, resistance, _, count in result["pair_classes"]
+    )
+    distance_two = tuple(row for row in classes if row[0] == 2)
+    values = {
+        "pair_classes": classes,
+        "distance_two_chords": tuple(row[1] for row in distance_two),
+        "distance_two_resistances": tuple(row[2] for row in distance_two),
+    }
+    return classes == ((1, 4, "11/24", 24), (2, 8, "7/12", 12),
+                       (2, 12, "5/8", 24), (3, 16, "2/3", 6)), values
+
+
 CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="carrier-port-chart",
@@ -2477,6 +2625,90 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         status="exact",
         source=f"{_CARRIER_SOURCE}; Osting (2023) for the regular-polyhedron eigenspace; Klein and Randić (1993) for resistance; exact comparison derived here",
         probe=_probe_carrier_spectral_chords,
+    ),
+    Correspondence(
+        key="repair-first-entry",
+        kind=ISOMORPHISM,
+        pair=OPH_FEP,
+        claim="Under uniform fair attempts on the load-two shell, the exit time from a doubled state is geometric with parameter 1/6 and independent of the first adjacent pair entered. A uniform doubled start gives a uniform law over seams at entry. Binary stationarity gives the same one-port marginals, with total variation distance 6/11 between the two joint laws.",
+        oph="A doubled load splits deterministically when an incident seam is selected.",
+        fep="First-entry and stationary ensembles give different joint distributions with identical single-port marginals.",
+        synergetics="The icosahedral graph determines how many seams meet the initial port.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; Kemeny and Snell (1976), §3.2 for first passage; exact transient and entrance blocks derived here",
+        probe=_probe_repair_first_entry,
+    ),
+    Correspondence(
+        key="repair-distance-lumping",
+        kind=ISOMORPHISM,
+        pair=OPH_FEP,
+        claim="Occupied-port graph distance, with zero for a double, is a strong four-state lumping of the uniform fair repair chain on the load-two shell. The quotient also lifts class-uniform laws to class-uniform laws. On the binary block its nonconstant modes are (25 ± sqrt 3)/30.",
+        oph="Distance between the two token positions is a record of the microstate.",
+        fep="Exact Markov reduction for arbitrary initial laws. The class-uniform lift preserves relative entropy to binary stationarity.",
+        synergetics="The carrier intersection array supplies the interclass attempt counts.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; Kemeny and Snell (1976), theorem 6.3.2 for strong lumpability; exact quotient derived here",
+        probe=_probe_repair_distance_lumping,
+    ),
+    Correspondence(
+        key="grounded-forest-precision",
+        kind=ISOMORPHISM,
+        pair=OPH_FEP,
+        claim="With a nonempty set of clamped records in the unit Gaussian carrier, the determinant of the interior precision counts spanning forests with one record in each component. All pair and triple record layouts agree with an independent determinant of the anchored record-contrast covariance times the tree number.",
+        oph="Record placement grounds a chosen set of carrier ports.",
+        fep="The grounded determinant fixes conditional Gaussian entropy for a fixed number of records.",
+        synergetics="Distances between the selected ports classify the tested layouts.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; Chaiken (1982) for the all-minors matrix-tree theorem; exact layout census derived here",
+        probe=_probe_grounded_forest_precision,
+    ),
+    Correspondence(
+        key="greedy-record-placement",
+        kind=DISAGREEMENT,
+        pair=OPH_FEP,
+        claim="On the unit Gaussian carrier, extending any optimal pair of clamped records by a third gives determinant 743040. Every optimal triple has determinant 846720. The greedy conditional entropy exceeds the optimum by half the logarithm of 49/43.",
+        oph="Antipodal pairs maximise the pair score. Optimal triples have pair distances (2, 2, 2).",
+        fep="Greedy minimisation of conditional entropy by adding records can miss every optimum at the next budget.",
+        synergetics="The optimal pair and triple layouts have distinct carrier geometries.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; exhaustive grounded determinant census here",
+        probe=_probe_greedy_record_placement,
+    ),
+    Correspondence(
+        key="planar-dual-covariance",
+        kind=ISOMORPHISM,
+        pair=THREE_WAY,
+        claim="With corresponding edge orientations and unit precision, the primal and dual intrinsic Gaussian edge covariances sum to the identity. Exact projectors are checked for the carrier and its dodecahedral dual, and for the FCC shell and its Voronoi dual. In each pair the spanning-tree counts agree.",
+        oph="The oriented carrier faces induce a dodecahedral dual with one matched edge per seam.",
+        fep="Gradient covariances are orthogonal projectors onto complementary subspaces in the common edge space.",
+        synergetics="The same identity holds for the cuboctahedral shell and its rhombic dodecahedral dual.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; Furrer, Hungerbühler and Jantschgi (2020) for dual resistance; exact full matrices derived here",
+        probe=_probe_planar_dual_covariance,
+    ),
+    Correspondence(
+        key="cuboctahedral-spectral-chords",
+        kind=ISOMORPHISM,
+        pair=FEP_SYNERGETICS,
+        claim="On the edge-length-two FCC first shell, squared chords equal 32 times the first positive Laplacian contribution to contrast variance in the centred unit-precision Gaussian. Polynomial projectors and grounded solves agree on the full variance of every pair.",
+        oph="The carrier supplies a comparison at the same edge scale, with factor 40.",
+        fep="The first nonzero covariance modes give an exact squared-distance embedding of the cuboctahedral chords.",
+        synergetics="The first coordination shell has an explicit integer quadray realisation.",
+        status="exact-on-domain",
+        source=f"{_QUADRAY_SOURCE}; Klein and Randić (1993) for effective resistance; exact projector and chord comparison derived here",
+        probe=_probe_cuboctahedral_spectral_chords,
+    ),
+    Correspondence(
+        key="cuboctahedral-distance-split",
+        kind=DISAGREEMENT,
+        pair=FEP_SYNERGETICS,
+        claim="On the FCC first shell, pairs two graph steps apart have squared chords 8 or 12 at edge length two. They have intrinsic Gaussian contrast variances 7/12 and 5/8, respectively. The full variance thus depends on more than graph distance on this shell.",
+        oph="The icosahedral carrier gives one resistance per distance class.",
+        fep="The Gaussian contrast variance separates two pair types at the same number of graph steps.",
+        synergetics="The geometry of the cuboctahedron distinguishes the two types.",
+        status="obstructed",
+        source=f"{_QUADRAY_SOURCE}; all-pairs resistance comparison derived here",
+        probe=_probe_cuboctahedral_distance_split,
     ),
 )
 

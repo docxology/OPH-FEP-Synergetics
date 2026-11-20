@@ -69,6 +69,7 @@ def test_the_section_files_are_the_ones_the_renderer_discovers():
         "04_correspondences.md",
         "05_disagreements.md",
         "06_complementarities.md",
+        "06_finite_extensions.md",
         "07_scope.md",
         "08_reproducibility.md",
         "90_ontology_concordance.md",
@@ -229,7 +230,7 @@ def test_figure_links_match_the_accessibility_registry():
     for path in SECTIONS:
         for match in FIGURE_LINK.finditer(path.read_text(encoding="utf-8")):
             links[match.group(2)] = match.group(1)
-    assert len(links) == 22, sorted(links)
+    assert len(links) == 23, sorted(links)
     registry = PROJECT / "output" / "figures" / "figure_registry.json"
     if not registry.is_file():  # the figures are generated artefacts
         return

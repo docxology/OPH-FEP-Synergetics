@@ -21,7 +21,7 @@ Each edge shows the total for one pair. The ledger gives its claim kinds
 and a representative result. Run
 `oph-fep-synergetics verify --pair` with the scope name to check its entries.
 
-![Claim totals on the framework triangle, with representative results and counts by kind in the ledger. The ledger also names `tetravolume-arithmetic` and `conjugation-norm`, the three-way claims.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
+![Claim totals on the framework triangle, with representative results and counts by kind in the ledger. The ledger also names the three-way comparisons of tetravolumes, conjugation and planar dual covariance.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
 
 `carrier-port-chart` links OPH's port chart to the icosahedron's vertex set.
 `spectral-gap` links the mean repair operator to a Gaussian precision built

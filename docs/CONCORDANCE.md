@@ -45,7 +45,7 @@ argue by key.
 | `kissing-twelve` | complementarity | exact | synergetics-oph | `02_framework.md`, `06_complementarities.md` | yes |
 | `icosahedron-tetravolume` | complementarity | exact | synergetics-oph | `02_framework.md` | yes |
 | `packing-density` | complementarity | exact | synergetics-oph | `02_framework.md` | yes |
-| `tetravolume-arithmetic` | complementarity | exact | three-way | `00_00_graphical_abstract.md`, `02_framework.md` | yes |
+| `tetravolume-arithmetic` | complementarity | exact | three-way | `02_framework.md` | yes |
 | `effective-resistance` | complementarity | exact | oph-fep | `06_complementarities.md` | yes |
 | `two-record-resistance` | isomorphism | exact | oph-fep | `06_complementarities.md` | yes |
 | `vertex-shells` | disagreement | obstructed | synergetics-oph | `05_disagreements.md` | yes |
@@ -53,18 +53,25 @@ argue by key.
 | `angle-defect` | isomorphism | exact | synergetics-oph | `04_correspondences.md` | yes |
 | `twelve-around-one-families` | disagreement | obstructed | synergetics-oph | `05_disagreements.md` | yes |
 | `dual-cells` | complementarity | exact | synergetics-oph | `04_correspondences.md`, `06_complementarities.md` | yes |
-| `conjugation-norm` | complementarity | exact | three-way | `00_00_graphical_abstract.md`, `06_complementarities.md` | yes |
+| `conjugation-norm` | complementarity | exact | three-way | `06_complementarities.md` | yes |
 | `repair-is-conditioning` | isomorphism | exact-on-domain | oph-fep | `02_framework.md`, `04_correspondences.md` | yes |
 | `binary-conditional-variance` | isomorphism | exact-on-domain | oph-fep | `01_introduction.md`, `04_correspondences.md` | yes |
-| `carrier-spectral-chords` | isomorphism | exact | fep-synergetics | `01_introduction.md`, `04_correspondences.md` | yes |
+| `carrier-spectral-chords` | isomorphism | exact | fep-synergetics | `01_introduction.md`, `04_correspondences.md`, `06_finite_extensions.md` | yes |
+| `repair-first-entry` | isomorphism | exact-on-domain | oph-fep | `06_finite_extensions.md` | yes |
+| `repair-distance-lumping` | isomorphism | exact-on-domain | oph-fep | `06_finite_extensions.md` | yes |
+| `grounded-forest-precision` | isomorphism | exact-on-domain | oph-fep | `06_finite_extensions.md` | yes |
+| `greedy-record-placement` | disagreement | obstructed | oph-fep | `06_finite_extensions.md` | yes |
+| `planar-dual-covariance` | isomorphism | exact-on-domain | three-way | `06_finite_extensions.md` | yes |
+| `cuboctahedral-spectral-chords` | isomorphism | exact-on-domain | fep-synergetics | `06_finite_extensions.md` | yes |
+| `cuboctahedral-distance-split` | disagreement | obstructed | fep-synergetics | `06_finite_extensions.md` | yes |
 
-46 of 46 claims are named by at least one section's prose.
+53 of 53 claims are named by at least one section's prose.
 
 ## Sections
 
 | section | claims its prose names |
 | --- | --- |
-| `00_00_graphical_abstract.md` | `carrier-port-chart`, `spectral-gap`, `kl-lattice-metric`, `tetravolume-arithmetic`, `conjugation-norm` |
+| `00_00_graphical_abstract.md` | `carrier-port-chart`, `spectral-gap`, `kl-lattice-metric` |
 | `00_abstract.md` | *none* |
 | `01_introduction.md` | `quadray-ivm`, `subgraph-census`, `binary-conditional-variance`, `carrier-spectral-chords` |
 | `02_framework.md` | `carrier-port-chart`, `spectral-gap`, `shell-counts`, `variational-equivalence`, `sheaf-agreement`, `gmrf-independence`, `sheaf-cohomology`, `kl-lattice-metric`, `cuboctahedron-vs-icosahedron`, `kissing-twelve`, `icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic`, `repair-is-conditioning` |
@@ -72,6 +79,7 @@ argue by key.
 | `04_correspondences.md` | `native-repair-law`, `free-energy-dictionary`, `sheaf-agreement`, `certificate-species`, `tree-number`, `icosahedral-symmetry`, `eigenspace-irreducibility`, `law-equivariance`, `subgraph-census`, `angle-defect`, `dual-cells`, `repair-is-conditioning`, `binary-conditional-variance`, `carrier-spectral-chords` |
 | `05_disagreements.md` | `pr01-obstruction`, `free-energy-name-collision`, `mediator-obstruction`, `stationary-blanket`, `solenoidal-freedom`, `d-stability`, `schedule-path`, `reduction-criterion`, `existence-without-reachability`, `directed-gradient`, `four-cycle-local-minimum`, `cuboctahedron-vs-icosahedron`, `shell-vs-free-energy`, `vertex-shells`, `twelve-around-one-families` |
 | `06_complementarities.md` | `quadray-ivm`, `equilibrium-propagation`, `replicator-potential`, `kissing-twelve`, `effective-resistance`, `two-record-resistance`, `dual-cells`, `conjugation-norm` |
+| `06_finite_extensions.md` | `carrier-spectral-chords`, `repair-first-entry`, `repair-distance-lumping`, `grounded-forest-precision`, `greedy-record-placement`, `planar-dual-covariance`, `cuboctahedral-spectral-chords`, `cuboctahedral-distance-split` |
 | `07_scope.md` | `pr01-obstruction`, `reduction-criterion` |
 | `08_reproducibility.md` | *none* |
 | `99_references.md` | *none* |
@@ -85,6 +93,7 @@ argue by key.
 | `fig:conjugation` | `06_complementarities.md` | *package readings, no single claim* |
 | `fig:descent` | `05_disagreements.md` | `pr01-obstruction` |
 | `fig:dstability` | `05_disagreements.md` | *package readings, no single claim* |
+| `fig:extensions` | `06_finite_extensions.md` | *package readings, no single claim* |
 | `fig:families` | `05_disagreements.md` | *package readings, no single claim* |
 | `fig:ga-carrier` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
 | `fig:ga-descent` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
@@ -126,7 +135,7 @@ argue by key.
 | `prop:kl` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `05_disagreements.md` |
 | `prop:subgraph-census` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md` |
 | `prop:defect` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md` |
-| `prop:carrier-spectral-chords` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md` |
+| `prop:carrier-spectral-chords` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `06_finite_extensions.md` |
 | `prop:census` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
 | `prop:native-rewrite` | prop | `05_disagreements.md` | `01_introduction.md`, `05_disagreements.md`, `07_scope.md` |
 | `prop:stationary` | prop | `05_disagreements.md` | `02_framework.md` |
@@ -145,9 +154,15 @@ argue by key.
 | `prop:ico-volume` | prop | `06_complementarities.md` | `01_introduction.md`, `06_complementarities.md` |
 | `prop:packing` | prop | `06_complementarities.md` | `01_introduction.md`, `06_complementarities.md` |
 | `prop:currencies` | prop | `06_complementarities.md` | `06_complementarities.md` |
-| `prop:resistance` | prop | `06_complementarities.md` | `01_introduction.md`, `06_complementarities.md` |
+| `prop:resistance` | prop | `06_complementarities.md` | `01_introduction.md`, `06_complementarities.md`, `06_finite_extensions.md` |
 | `prop:dual-cells` | prop | `06_complementarities.md` | `04_correspondences.md`, `06_complementarities.md` |
 | `prop:conjugation` | prop | `06_complementarities.md` | `06_complementarities.md` |
+| `prop:repair-first-entry` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
+| `prop:repair-distance-lumping` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
+| `prop:grounded-forest-precision` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
+| `prop:greedy-record-placement` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
+| `prop:planar-dual-covariance` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
+| `prop:fcc-spectral-geometry` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
 | `eq:repair` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `05_disagreements.md` |
 | `eq:energy` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `05_disagreements.md` |
 | `eq:vfe` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `07_scope.md` |
@@ -223,6 +238,11 @@ argue by key.
 | `{{CUBOCTAHEDRON_VERTICES}}` | `03_method.md`, `06_complementarities.md` |
 | `{{DIRECTED_GRADIENT_ADJOINT}}` | `05_disagreements.md` |
 | `{{DIRECTED_GRADIENT_DIRECT}}` | `05_disagreements.md` |
+| `{{DISTANCE_CLASS_SIZES}}` | `03_method.md`, `06_finite_extensions.md` |
+| `{{DISTANCE_STATIONARY_MASSES}}` | `06_finite_extensions.md` |
+| `{{DUAL_CARRIER_RESISTANCES}}` | `06_finite_extensions.md` |
+| `{{DUAL_IVM_RESISTANCES}}` | `06_finite_extensions.md` |
+| `{{DUAL_MATRIX_ENTRIES}}` | `06_finite_extensions.md` |
 | `{{DUAL_VOLUME_RATIO}}` | `06_complementarities.md`, `06_complementarities.md` |
 | `{{D_STABILITY_IMAG_UNSTABLE}}` | `05_disagreements.md` |
 | `{{D_STABILITY_LYAPUNOV_DETERMINANT}}` | `05_disagreements.md` |
@@ -234,12 +254,22 @@ argue by key.
 | `{{D_STABILITY_ROUTH_K4_THIRD}}` | `05_disagreements.md` |
 | `{{D_STABILITY_ROUTH_ONSET}}` | `05_disagreements.md` |
 | `{{D_STABILITY_SAMPLES}}` | `05_disagreements.md` |
+| `{{ENTRY_HAZARD}}` | `03_method.md`, `06_finite_extensions.md` |
+| `{{ENTRY_MEAN}}` | `06_finite_extensions.md` |
+| `{{ENTRY_PORT_MARGINAL}}` | `06_finite_extensions.md` |
+| `{{ENTRY_SUPPORT_RATIO}}` | `06_finite_extensions.md` |
+| `{{ENTRY_TV}}` | `06_finite_extensions.md` |
+| `{{ENTRY_VARIANCE}}` | `06_finite_extensions.md` |
 | `{{EP_CLOSED_FORM}}` | `06_complementarities.md` |
 | `{{EP_CLOSED_FORM_ERROR}}` | `06_complementarities.md` |
 | `{{EP_EXACT_GRADIENT}}` | `06_complementarities.md` |
 | `{{EP_GRADIENT_DISTANCE}}` | `06_complementarities.md` |
 | `{{EP_RELAXED}}` | `06_complementarities.md` |
 | `{{FAMILIES_TREE_RATIO}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{FCC_CHORD_FACTOR}}` | `03_method.md`, `06_finite_extensions.md` |
+| `{{FCC_DISTANCE_TWO_CHORDS}}` | `06_finite_extensions.md` |
+| `{{FCC_DISTANCE_TWO_RESISTANCES}}` | `06_finite_extensions.md` |
+| `{{FCC_KIRCHHOFF_INDEX}}` | `06_finite_extensions.md` |
 | `{{FEEDBACK_CONTROL_OCCUPATION}}` | `05_disagreements.md` |
 | `{{FEEDBACK_PATHS}}` | `05_disagreements.md` |
 | `{{FEEDBACK_PORT_ZERO_OCCUPATION}}` | `05_disagreements.md`, `07_scope.md` |
@@ -259,6 +289,12 @@ argue by key.
 | `{{FE_SURPRISAL}}` | `04_correspondences.md` |
 | `{{FE_VARIATIONAL}}` | `04_correspondences.md` |
 | `{{FE_VARIATIONAL_AT_POSTERIOR}}` | `04_correspondences.md`, `05_disagreements.md` |
+| `{{FOREST_BEST_TRIPLE}}` | `06_finite_extensions.md` |
+| `{{FOREST_ENTROPY_RATIO}}` | `06_finite_extensions.md` |
+| `{{FOREST_GREEDY_TRIPLE}}` | `06_finite_extensions.md` |
+| `{{FOREST_PAIRS_CHECKED}}` | `06_finite_extensions.md` |
+| `{{FOREST_TRIPLES_CHECKED}}` | `06_finite_extensions.md` |
+| `{{FOREST_WORST_TRIPLE}}` | `06_finite_extensions.md` |
 | `{{FOUR_CYCLE_VIOLATIONS}}` | `05_disagreements.md` |
 | `{{GMRF_BLANKET_SIZE}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md`, `05_disagreements.md` |
 | `{{GMRF_MARGINAL_VARIANCE}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md` |
@@ -372,7 +408,7 @@ argue by key.
 | `{{VORONOI_FACES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
 | `{{VORONOI_VERTICES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
 
-203 of the bound values are quoted by the prose. The cover is
+224 of the bound values are quoted by the prose. The cover is
 placed by `manuscript/config.yaml`; the accessibility registry that gives
 each figure its alternative text is `output/figures/figure_registry.json`,
 written by `scripts/make_figures.py`.

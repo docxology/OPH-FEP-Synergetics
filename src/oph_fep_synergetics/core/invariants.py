@@ -48,18 +48,21 @@ __all__ = [
 ]
 
 
-def laplacian_determinant(laplacian: Sequence[Sequence[int]]) -> int:
-    """Return the determinant of a Laplacian's grounded minor, exactly.
+def laplacian_determinant(
+    laplacian: Sequence[Sequence[int]], *, grounded: Sequence[int] = (0,)
+) -> int:
+    """Return the exact principal minor after deleting the grounded vertices.
 
-    The minor is taken over ``Fraction`` arithmetic, so the result is an exact
-    integer rather than a floating-point shadow of one. Every graph whose
-    adjacency matrix is available can be counted with this function, which is
-    why the carrier and the cuboctahedron are compared by the same code path.
+    Grounding a single vertex counts spanning trees. Grounding a set of
+    vertices counts spanning forests with exactly one grounded vertex in each
+    component. The empty minor has determinant one. The calculation uses
+    rational elimination throughout.
     """
-    size = len(laplacian) - 1
+    retained = tuple(vertex for vertex in range(len(laplacian)) if vertex not in grounded)
+    size = len(retained)
     matrix = [
-        [Fraction(int(laplacian[i][j])) for j in range(1, size + 1)]
-        for i in range(1, size + 1)
+        [Fraction(int(laplacian[i][j])) for j in retained]
+        for i in retained
     ]
     determinant = Fraction(1)
     for column in range(size):

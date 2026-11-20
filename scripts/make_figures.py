@@ -48,8 +48,11 @@ from oph_fep_synergetics.analysis.registry import (  # noqa: E402
 )
 from oph_fep_synergetics.core import (  # noqa: E402
     controls,
+    free_energy,
     invariants,
+    native_dynamics,
     network,
+    planar_duality,
     sheaf,
     symmetry,
 )
@@ -1056,7 +1059,7 @@ def cover_figure() -> Path:
         (shell_center[0], gold, "SYNERGETICS", "Cuboctahedral FCC shell",
          "Neighbourhood counts",
          (f"Carrier shells  ·  {carrier_shells}", f"FCC shells  ·  {lattice_shells}",
-          "Sizes in successive graph-distance shells")),
+          "Two variances at FCC distance two")),
     ):
         axis.text(cx, 7.53, label, ha="center", va="center", color=color,
                   fontsize=13, fontweight="bold")
@@ -1139,7 +1142,7 @@ def ga_triangle_figure() -> Path:
     examples = (
         (OPH_FEP, "OPH", "FEP", "spectral-gap", "Mean repair and Gaussian precision share a Laplacian."),
         (SYNERGETICS_OPH, "OPH", "Synergetics", "carrier-port-chart", "The oriented faces recover the carrier graph."),
-        (FEP_SYNERGETICS, "FEP", "Synergetics", "kl-lattice-metric", "Unit-covariance KL is half the squared Euclidean distance."),
+        (FEP_SYNERGETICS, "FEP", "Synergetics", "cuboctahedral-distance-split", "FCC pairs two steps apart can have different variances."),
     )
     for axis in (diagram, ledger):
         axis.set(xlim=(0.0, 1.0), ylim=(0.0, 1.0))
@@ -2365,6 +2368,151 @@ def shell_gauge_figure() -> Path:
     )
 
 
+def extended_claims_figure() -> Path:
+    """Show the checked repair, record, dual, and lattice comparisons."""
+    figure, axes = plt.subplots(2, 2, figsize=(11.6, 7.5))
+    repair_axis, records_axis, dual_axis, shell_axis = axes.ravel()
+
+    entry = native_dynamics.first_entry_census()
+    repair = native_dynamics.repair_distance_lumping_census()
+    mean_wait = int(Fraction(entry["mean_attempts"]))
+    steps = range(6 * mean_wait + 1)
+    transition = tuple(
+        tuple(Fraction(value, repair["attempts_per_state"]) for value in row)
+        for row in repair["attempt_count_matrix"]
+    )
+    mass = (Fraction(1), *(Fraction(0) for _ in transition[1:]))
+    trajectory = []
+    for _ in steps:
+        trajectory.append(mass)
+        mass = tuple(
+            sum(probability * chance for probability, chance in zip(mass, column, strict=True))
+            for column in zip(*transition, strict=True)
+        )
+
+    colours = ("#CBD5E1", BLUE, SKY, GREEN)
+    repair_axis.stackplot(
+        steps, *np.asarray(trajectory, dtype=float).T, colors=colours,
+        labels=("Doubled", "Distance 1", "Distance 2", "Distance 3"),
+    )
+    stationary_at = steps[-1] + mean_wait
+    bottom = 0.0
+    for value, colour in zip(repair["stationary_class_masses"], colours, strict=True):
+        height = float(Fraction(value))
+        repair_axis.bar(stationary_at, height, width=0.58 * mean_wait, bottom=bottom, color=colour)
+        bottom += height
+    repair_ticks = list(range(0, steps[-1] + 1, mean_wait))
+    repair_axis.set_xticks(
+        [*repair_ticks, stationary_at], labels=[*(str(step) for step in repair_ticks), "Stationary"]
+    )
+    repair_axis.set(
+        xlim=(0, stationary_at + 0.65 * mean_wait), ylim=(0, 1),
+        xlabel="Native attempts", ylabel="Probability",
+    )
+    repair_axis.set_title("A  Repair from a doubled load", loc="left", fontweight="bold")
+    repair_axis.set_yticks((0, 0.25, 0.5, 0.75, 1))
+    repair_axis.grid(False, axis="x")
+    repair_axis.legend(loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=4, fontsize=9)
+
+    record_census = free_energy.carrier_grounded_forest_census()
+    layouts = record_census["triple_layouts"]
+    optimum = record_census["best_triple_determinant"]
+    greedy = max(value for value, _ in record_census["greedy_triple_determinants"])
+    low = min(row[2] for row in layouts)
+    span = optimum - low
+    records_axis.set_xlim((low - 0.11 * span) / 1e6, (optimum + 0.55 * span) / 1e6)
+    records_axis.set_yticks(
+        range(len(layouts)),
+        labels=[f"{'–'.join(map(str, distances))}  ·  {count}" for distances, count, _, _ in layouts],
+    )
+    for y, (_, _, value, _) in enumerate(layouts):
+        colour, marker, suffix = GREY, "o", ""
+        if value == optimum:
+            colour, marker, suffix = BLUE, "o", "  optimum"
+        elif value == greedy:
+            colour, marker, suffix = VERMILLION, "D", "  best greedy"
+        records_axis.scatter(value / 1e6, y, s=65, marker=marker, color=colour, zorder=3)
+        records_axis.annotate(
+            f"{value:,}{suffix}", (value / 1e6, y), xytext=(8, 0),
+            textcoords="offset points", va="center", fontsize=10, color=INK,
+        )
+    records_axis.invert_yaxis()
+    records_axis.set(xlabel="Grounded determinant (millions)", ylabel="Distances · record sets")
+    records_axis.set_title("B  Which three records reduce volume most?", loc="left", fontweight="bold")
+    records_axis.grid(False, axis="y")
+
+    dual_census = planar_duality.planar_duality_census()
+    for y, key in enumerate(("carrier", "ivm")):
+        row = dual_census[key]
+        (primal,), (dual,) = row["primal_resistances"], row["dual_resistances"]
+        for start, width, colour in ((0, primal, BLUE), (primal, dual, VERMILLION)):
+            dual_axis.barh(y, float(width), left=float(start), height=0.49, color=colour, zorder=2)
+            dual_axis.text(
+                float(start + width / 2), y, str(width), va="center", ha="center",
+                color="white", fontsize=13, fontweight="bold", zorder=3,
+            )
+    dual_axis.set_yticks((0, 1), labels=("Icosahedron and\ndodecahedron", "FCC shell and\nVoronoi cell"))
+    dual_axis.set(xlim=(0, 1.02), ylim=(1.6, -0.6), xlabel="Variance across an edge")
+    dual_axis.set_xticks((0, 0.25, 0.5, 0.75, 1))
+    dual_axis.set_title("C  Primal and dual edge variances", loc="left", fontweight="bold")
+    dual_axis.grid(False, axis="y")
+    dual_axis.legend(
+        handles=[plt.Rectangle((0, 0), 1, 1, color=colour, label=label)
+                 for colour, label in ((BLUE, "Primal"), (VERMILLION, "Dual"))],
+        loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=2, fontsize=10,
+    )
+
+    shell = network.cuboctahedral_resistance_geometry()
+    classes = shell["pair_classes"]
+    full = [float(row[2]) for row in classes]
+    lowest = [float(row[3]) for row in classes]
+    rows = range(len(classes))
+    shell_axis.hlines(list(rows), lowest, full, color="#A2AFBD", linewidth=1.4)
+    shell_axis.scatter(full, list(rows), color=BLUE, s=62, label="Full variance", zorder=3)
+    shell_axis.scatter(
+        lowest, list(rows), color="white", edgecolor=VERMILLION, marker="D", s=64,
+        linewidth=1.6, label="Lowest modes", zorder=3,
+    )
+    for y, (_, _, variance, projected, _) in enumerate(classes):
+        for value, offset, align in ((projected, -7, "right"), (variance, 7, "left")):
+            shell_axis.annotate(
+                str(value), (float(value), y), xytext=(offset, 0), textcoords="offset points",
+                ha=align, va="center", fontsize=10,
+            )
+    shell_axis.set_yticks(
+        list(rows),
+        labels=[f"{distance}  ·  {chord}  ({count})" for distance, chord, _, _, count in classes],
+    )
+    shell_axis.set(xlim=(0, max(full) + 0.13), ylim=(len(classes) - 0.52, -0.48),
+                   xlabel="Unit-precision contrast variance", ylabel="Steps · chord² (pairs)")
+    shell_axis.grid(False, axis="y")
+    shell_axis.set_title("D  Cuboctahedral pair contrasts", loc="left", fontweight="bold")
+    shell_axis.legend(loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=2, fontsize=10)
+
+    pair_details = ", ".join(
+        f"graph distance {distance} and squared chord {chord}: {count} pairs "
+        f"with variances {variance} and {projected}"
+        for distance, chord, variance, projected, count in classes
+    )
+    dual_details = ", and ".join(
+        f"the {name} pair contributes {row['primal_resistances'][0]} and {row['dual_resistances'][0]}"
+        for name, row in dual_census.items()
+    )
+    return _save(
+        figure, "fig_extensions.png",
+        f"Panel A shows distance probabilities over {steps[-1]} native attempts from a doubled "
+        "load, with the stationary distribution shown as a separate bar. First binary entry "
+        "always occurs at distance one. The stationary law places positive mass on all three "
+        f"binary distances, with masses {_enumerated(repair['stationary_class_masses'][1:])}. "
+        f"Panel B compares the grounded determinants for all {record_census['triples_checked']} "
+        f"three-record placements by sorted pair distances. The largest determinant is {optimum:,}. "
+        f"Greedy extension of an optimal antipodal pair reaches {greedy:,}. "
+        f"Panel C shows matched primal and dual edge variances: {dual_details}, summing to one "
+        f"for each pair. Panel D compares full variance and lowest-mode variance by edge-length-two "
+        f"cuboctahedral pair class: {pair_details}.",
+    )
+
+
 def write_registry() -> Path:
     """Write the accessibility registry the renderer reads for figure alt text.
 
@@ -2418,6 +2566,7 @@ def main() -> int:
         sandwich_figure,
         schedule_figure,
         shell_gauge_figure,
+        extended_claims_figure,
     )
     unrendered = {
         name

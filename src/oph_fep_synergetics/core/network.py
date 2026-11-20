@@ -25,6 +25,7 @@ also uses the exact coordinates of the regular icosahedron.
 from __future__ import annotations
 
 import itertools
+from collections import Counter
 from fractions import Fraction
 from typing import Callable, Iterator, Mapping, Sequence
 
@@ -32,6 +33,7 @@ import numpy as np
 
 __all__ = [
     "carrier_resistance_geometry",
+    "cuboctahedral_resistance_geometry",
     "distance_distribution",
     "effective_resistance",
     "graph_distances",
@@ -186,7 +188,7 @@ def resistance_ladder(adjacency: Adjacency) -> tuple[tuple[int, Fraction, int], 
     ladder = []
     for step in sorted(classes):
         if len(classes[step]) != 1:
-            raise AssertionError("an edge-transitive carrier has one resistance per distance class")
+            raise AssertionError("this graph has more than one resistance in a distance class")
         ladder.append((step, classes[step].pop(), counts[step]))
     return tuple(ladder)
 
@@ -272,6 +274,71 @@ def carrier_resistance_geometry() -> dict[str, object]:
             chord * edge_resistance == edge_chord * resistance
             for _, resistance, chord, _ in shells
         ),
+    }
+
+
+def cuboctahedral_resistance_geometry() -> dict[str, object]:
+    """Compare chords and intrinsic contrast variances on the first IVM shell.
+
+    Use the exact integer embedding, with squared edge eight. The reported
+    squared chords use edge two, so their squares and coordinate Gram are
+    halved. Check the Laplacian projector formulas in integer arithmetic and
+    compare their full contrast variance with a separate grounded solve.
+    """
+    from ..geometry.lattice import cuboctahedron_adjacency, cuboctahedron_neighbors
+    from ..geometry.quadray import EMBEDDING
+
+    adjacency = cuboctahedron_adjacency()
+    xyz = np.asarray([site.as_tuple() for site in cuboctahedron_neighbors()]) @ np.asarray(EMBEDDING).T
+    laplacian = np.asarray(laplacian_matrix(adjacency), dtype=np.int64)
+    identity = np.eye(len(adjacency), dtype=np.int64)
+    eigenvalues = (0, 2, 4, 6)
+    spectrum = []
+    spectral_inverse = np.zeros_like(laplacian, dtype=object)
+    for eigenvalue in eigenvalues:
+        other_roots = [root for root in eigenvalues if root != eigenvalue]
+        numerator = identity
+        denominator = 1
+        for root in other_roots:
+            numerator = numerator @ (laplacian - root * identity)
+            denominator *= eigenvalue - root
+        if not np.array_equal(laplacian @ numerator, eigenvalue * numerator):
+            raise AssertionError("the cuboctahedral Laplacian must satisfy its spectral polynomial")
+        multiplicity = Fraction(int(np.trace(numerator)), denominator)
+        spectrum.append((eigenvalue, int(multiplicity)))
+        if eigenvalue:
+            spectral_inverse += numerator.astype(object) * Fraction(1, denominator * eigenvalue)
+
+    smallest = eigenvalues[1]
+    gram = xyz.T @ xyz
+    coordinate_norm_squared = Fraction(int(gram[0, 0]), 2)
+    if (
+        not np.array_equal(laplacian @ xyz, smallest * xyz)
+        or not np.array_equal(gram, gram[0, 0] * np.eye(xyz.shape[1], dtype=np.int64))
+        or coordinate_norm_squared <= 0
+        or spectrum[1][1] != xyz.shape[1]
+    ):
+        raise AssertionError("the shell coordinates must form a basis of the first positive eigenspace")
+    factor = smallest * coordinate_norm_squared
+
+    grounded = _grounded_inverse(adjacency)
+    graph_distance = graph_distances(adjacency)
+    classes = Counter()
+    for left, right, resistance in _pair_resistances(adjacency, grounded):
+        delta = xyz[left] - xyz[right]
+        squared_chord = Fraction(int(delta @ delta), 2)
+        from_spectrum = (spectral_inverse[left, left] + spectral_inverse[right, right]
+                         - 2 * spectral_inverse[left, right])
+        if from_spectrum != resistance:
+            raise AssertionError("spectral and grounded variances must agree on every pair")
+        classes[graph_distance[left][right], squared_chord, resistance, squared_chord / factor] += 1
+
+    return {
+        "spectrum": tuple(spectrum),
+        "chord_to_lowest_variance_factor": factor,
+        "ranks": (len(grounded), xyz.shape[1]),
+        "pair_classes": tuple((*group, count) for group, count in sorted(classes.items())),
+        "kirchhoff_index": sum(group[2] * count for group, count in classes.items()),
     }
 
 

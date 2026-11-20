@@ -163,10 +163,22 @@ identification that looks natural in prose fails as stated.
   from the table.
 - **No single programme supplies the exchange rate.** One lattice step has three
   exact costs in three number fields (`tetravolume-arithmetic`), which is why the
-  two three-way entries are complementarities rather than identifications.
+  two arithmetic comparisons are complementarities. The planar-dual result
+  below gives a separate three-way identity.
 
 The replicator potential is included as a comparison class: selection climbs a
 potential, so the repair language covers it without sharing its mechanism.
+
+## Exact extensions
+
+**Entries:** `repair-first-entry`, `repair-distance-lumping`,
+`grounded-forest-precision`, `greedy-record-placement`,
+`planar-dual-covariance`, `cuboctahedral-spectral-chords`,
+`cuboctahedral-distance-split`.
+
+The extensions distinguish a first-passage distribution from equilibrium,
+give an exact graph-distance reduction, compare record layouts using rooted
+forest counts, and test spectral geometry and planar duality on two solids.
 
 ## 5. Scope and limits
 

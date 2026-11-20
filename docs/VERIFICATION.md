@@ -14,7 +14,7 @@ contracts.
 .venv/bin/oph-fep-synergetics verify --kind <kind>
 ```
 
-Each of the 46 entries carries an executable probe. Its return value
+Each of the 53 entries carries an executable probe. Its return value
 `(passed, values)` records both the verdict and the quantities checked.
 
 Exit codes:
@@ -34,16 +34,17 @@ When combining filters, the probes must match every specified filter.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-425 tests. The suite runs offline from a fresh process and exercises the actual
+431 tests. The suite runs offline from a fresh process and exercises the actual
 scientific code paths.
 
 | file | what it pins down |
 | --- | --- |
 | `test_carrier.py` | 12/30/20, five-regular, the derived port chart, the exact spectrum and gap, the 78/66 shell, the isomorphism witness, and the rejection cases |
 | `test_repair.py` | conservation and the energy identity over all 4680 transitions, the odd-unit coin, the argument guards, the gated schedule reaching rest, and an ungated move that lowers nothing |
-| `test_native_dynamics.py` | ungated confluence and nontermination, gated normal forms, binary-chain stationarity, gap and ensemble relaxation, and exact equality of the two conditional-variance forms |
+| `test_native_dynamics.py` | ungated confluence and nontermination, gated normal forms, binary-chain stationarity, gap and ensemble relaxation, and exact equality of the conditional-variance forms, first binary entry and its distance quotient |
 | `test_sheaf.py` | laplacians, coboundaries, global sections, harmonic extension (including the fully-clamped case), record injectivity, diffusion, and every constructor guard |
-| `test_free_energy.py` | the KL closed forms, the Schur complement, the update-residual form of Bayesian surprise, the variational bound attained at the posterior, and the interior-free model |
+| `test_free_energy.py` | the KL closed forms, the Schur complement, the update-residual form of Bayesian surprise, the variational bound, rooted-forest enumeration for the record layouts, greedy clamping and the interior-free model |
+| `test_planar_duality.py` | complementary Gaussian edge covariances from centred pseudoinverses and the dual graphs against exact geometric incidence |
 | `test_controls.py` | the descent census, the Routh column in closed form, the Lyapunov pair and its determinant, the mediator threshold, the affine contrast as an exact rational, the orbits, the four-cycle trap, and the replicator potential |
 | `test_geometry.py` | the twelve moves and their metric, the gauge, the exact xyz round-trip over shell sites, the shell sequence, the exact volumes, the vector equilibrium, and the subdivision identities |
 | `test_geometry_guards.py` | the icosahedral adjacency matrix and every range guard |

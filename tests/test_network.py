@@ -10,6 +10,7 @@ from oph_fep_synergetics.core import icosahedral_carrier, reciprocal_spectrum_su
 from oph_fep_synergetics.core.carrier import geometric_carrier
 from oph_fep_synergetics.core.network import (
     carrier_resistance_geometry,
+    cuboctahedral_resistance_geometry,
     distance_distribution,
     effective_resistance,
     graph_distances,
@@ -20,7 +21,7 @@ from oph_fep_synergetics.core.network import (
     resistance_ladder,
     subgraph_census,
 )
-from oph_fep_synergetics.geometry import Surd5, cuboctahedron_adjacency
+from oph_fep_synergetics.geometry import Surd5, cuboctahedron_adjacency, cuboctahedron_neighbors, to_xyz
 
 
 def _adjacency() -> list[list[int]]:
@@ -148,6 +149,33 @@ def test_carrier_chords_recover_only_the_lowest_mode_contrast_variance():
         np.linalg.matrix_rank(inferred_full_gram),
         np.linalg.matrix_rank(chord_gram),
     ) == (11, 3)
+
+
+def test_fcc_shell_geometry_compares_two_distinct_distance_two_classes():
+    comparison = cuboctahedral_resistance_geometry()
+    assert comparison == {
+        "spectrum": ((0, 1), (2, 3), (4, 3), (6, 5)),
+        "chord_to_lowest_variance_factor": 32,
+        "ranks": (11, 3),
+        "pair_classes": (
+            (1, 4, Fraction(11, 24), Fraction(1, 8), 24),
+            (2, 8, Fraction(7, 12), Fraction(1, 4), 12),
+            (2, 12, Fraction(5, 8), Fraction(3, 8), 24),
+            (3, 16, Fraction(2, 3), Fraction(1, 2), 6),
+        ),
+        "kirchhoff_index": 37,
+    }
+    laplacian = np.asarray(laplacian_matrix(cuboctahedron_adjacency()))
+    eigenvalues, eigenvectors = np.linalg.eigh(laplacian)
+    lowest = np.isclose(eigenvalues, eigenvalues[1])
+    basis = eigenvectors[:, lowest]
+    covariance = basis @ basis.T / eigenvalues[1]
+    xyz = np.asarray([to_xyz(site) for site in cuboctahedron_neighbors()]) / np.sqrt(2)
+    delta_xyz = xyz[:, None, :] - xyz[None, :, :]
+    chord_squared = (delta_xyz * delta_xyz).sum(axis=2)
+    diagonal = covariance.diagonal()
+    variance = diagonal[:, None] + diagonal[None, :] - 2 * covariance
+    np.testing.assert_allclose(chord_squared, 32 * variance, atol=1e-12)
 
 
 def test_kirchhoff_index_is_twenty_eight_and_matches_the_spectrum():

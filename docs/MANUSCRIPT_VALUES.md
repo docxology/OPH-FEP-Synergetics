@@ -41,14 +41,14 @@ gives one; `Note` records what is measured rather than quoted.
 | `two_node.relaxation_min_radius_measured` | 0.840070783 |  | two_node_relaxation_orbit, measured in this package | minimum over the finite post-transient relaxation sample |
 | `two_node.relaxation_max_radius` | 1.05339122 |  | two_node_relaxation_orbit, measured in this package | maximum over the finite post-transient relaxation sample |
 | `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | estimated time to return near the anchor point of the sampled trajectory |
-| `registry.entries` | 46 | `46` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.isomorphisms` | 21 | `21` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.disagreements` | 15 | `15` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.entries` | 53 | `53` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.isomorphisms` | 26 | `26` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.disagreements` | 17 | `17` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.complementarities` | 10 | `10` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.oph_fep` | 27 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
-| `registry.fep_synergetics` | 3 |  | analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics |  |
+| `registry.oph_fep` | 31 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
+| `registry.fep_synergetics` | 5 |  | analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics |  |
 | `registry.synergetics_oph` | 14 |  | analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph |  |
-| `registry.three_way` | 2 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
+| `registry.three_way` | 3 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
 | `carrier.tree_number` | 5184000 | `5184000` | core/invariants.py, Kirchhoff: the exact reduced-Laplacian determinant |  |
 | `gmrf.marginal_variance` | 0.194444444 | `7/36` | core/invariants.py, the reciprocal spectrum summed exactly in the rationals |  |
 | `gmrf.blanket_size` | 5 | `five` | core/invariants.py: the Markov blanket of a port is its neighbours |  |
@@ -199,6 +199,27 @@ gives one; `Note` records what is measured rather than quoted.
 | `chord.embedding_rank` | 3 |  | probe:carrier-spectral-chords:ranks |  |
 | `ivm.coset_nearest_counts` | (1, 4, 6, 4) |  | probe:quadray-ivm:quadray_cosets |  |
 | `ivm.coset_squared_distances` | (0, 3, 4, 3) |  | probe:quadray-ivm:quadray_cosets |  |
+| `entry.hazard` | 1/6 |  | probe:repair-first-entry:hazard_per_attempt |  |
+| `entry.mean` | 6 |  | probe:repair-first-entry:mean_attempts |  |
+| `entry.variance` | 30 |  | probe:repair-first-entry:variance_attempts |  |
+| `entry.tv` | 6/11 |  | probe:repair-first-entry:entry_to_stationary_total_variation |  |
+| `entry.port_marginal` | 1/6 |  | probe:repair-first-entry:entry_one_port_occupancy |  |
+| `entry.support_ratio` | 11/5 |  | probe:repair-first-entry:entry_to_stationary_support_ratio |  |
+| `distance.class_sizes` | (12, 30, 30, 6) |  | probe:repair-distance-lumping:class_sizes |  |
+| `distance.stationary_masses` | (0, 5/11, 5/11, 1/11) |  | probe:repair-distance-lumping:stationary_class_masses |  |
+| `forest.pairs_checked` | 66 |  | probe:grounded-forest-precision:pairs_checked |  |
+| `forest.triples_checked` | 220 |  | probe:grounded-forest-precision:triples_checked |  |
+| `forest.best_triple` | 846720 |  | probe:greedy-record-placement:best_triple_determinant |  |
+| `forest.worst_triple` | 522720 |  | probe:greedy-record-placement:worst_triple_determinant |  |
+| `forest.greedy_triple` | 743040 |  | probe:greedy-record-placement:greedy_triple_determinant |  |
+| `forest.entropy_ratio` | 49/43 |  | probe:greedy-record-placement:optimum_to_greedy_ratio |  |
+| `dual.carrier_resistances` | (11/30, 19/30) |  | probe:planar-dual-covariance:carrier_resistances |  |
+| `dual.ivm_resistances` | (11/24, 13/24) |  | probe:planar-dual-covariance:ivm_resistances |  |
+| `dual.matrix_entries` | 1476 |  | probe:planar-dual-covariance:matrix_entries |  |
+| `fcc.chord_factor` | 32 |  | probe:cuboctahedral-spectral-chords:chord_to_lowest_variance_factor |  |
+| `fcc.kirchhoff_index` | 37 |  | probe:cuboctahedral-spectral-chords:kirchhoff_index |  |
+| `fcc.distance_two_chords` | (8, 12) |  | probe:cuboctahedral-distance-split:distance_two_chords |  |
+| `fcc.distance_two_resistances` | (7/12, 5/8) |  | probe:cuboctahedral-distance-split:distance_two_resistances |  |
 | `carrier.chart_0` | 1, 5, 7, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 0 |
 | `carrier.chart_1` | 0, 5, 7, 8, 9 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 1 |
 | `carrier.chart_2` | 3, 4, 6, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 2 |

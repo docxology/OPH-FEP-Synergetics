@@ -25,7 +25,7 @@ binds numerical results to computations or cited sources.
 ## What runs
 
 ```
-oph-fep-synergetics verify                 # all 46 correspondence probes
+oph-fep-synergetics verify                 # all 53 correspondence probes
 oph-fep-synergetics verify --json          # the same, as a machine-readable report
 oph-fep-synergetics verify --key pr01-obstruction
 oph-fep-synergetics verify --pair synergetics-oph   # one pairwise ledger
@@ -78,15 +78,15 @@ python3 -m venv .venv
 | | `geometry/lattice.py` | IVM shells, quadray classes of FCC sites and interstices, the cuboctahedral shell, Voronoi cell and packing density |
 | | `geometry/subdivision.py` | icosahedral subdivision and the dual count identities |
 | | `geometry/solids.py` | oriented faces, polyhedron volume, and the icosahedron's tetravolume against its closed form |
-| `analysis` | `analysis/registry.py` | the 46 registered correspondences, each with a pairwise or three-way scope and an executable probe |
+| `analysis` | `analysis/registry.py` | the 53 registered correspondences, each with a pairwise or three-way scope and an executable probe |
 | | `analysis/provenance.py` | source pins, licence terms and reuse policy |
 | `manuscript_variables` | `manuscript_variables/values.py` | every number the prose may quote, derived from the package where a derivation exists |
 
 ## The registry
 
-46 entries: **21 isomorphisms**, **15 disagreements**, **10 complementarities**,
-scoped to the pairs `oph-fep` (27), `synergetics-oph` (14), `fep-synergetics` (3)
-and `three-way` (2). All 46 probes pass. `verify --kind` narrows a run to one of
+53 entries: **26 isomorphisms**, **17 disagreements**, **10 complementarities**,
+scoped to the pairs `oph-fep` (31), `synergetics-oph` (14), `fep-synergetics` (5)
+and `three-way` (3). All 53 probes pass. `verify --kind` narrows a run to one of
 the three kinds and `--pair` to one of the four scopes. The full table, with the OPH / FEP /
 Synergetics reading of each entry and the values its probe asserts, is generated
 into [docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
@@ -230,7 +230,7 @@ Three disciplines hold the manuscript together, and each one is a test:
 
 ```
 data/sources.json                    pinned sources, licences, cited identifiers
-docs/CORRESPONDENCES.md              generated: the 46 entries and their probe values
+docs/CORRESPONDENCES.md              generated: the 53 entries and their probe values
 docs/MANUSCRIPT_VALUES.md            generated: every bound value
 docs/CONCORDANCE.md                  generated: where each claim is stated and each figure appears
 docs/PROVENANCE.md                   the pins and the reuse rules
@@ -239,11 +239,11 @@ docs/VERIFICATION.md                 the gates and how to run them
 data/ontology_concordance.json       structured terms, comparisons, evidence and limits
 manuscript/                          paper, bibliography and generated ontology supplement
 scripts/render_docs.py               regenerates the reference documents and ontology supplement
-scripts/make_figures.py              renders the twenty-three figures and their accessibility registry
+scripts/make_figures.py              renders the twenty-four figures and their accessibility registry
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (425 tests)
+tests/                               the suite (431 tests)
 ```
 
 ## Tests
@@ -252,7 +252,7 @@ tests/                               the suite (425 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-425 tests. The suite checks exact values rather than
+431 tests. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

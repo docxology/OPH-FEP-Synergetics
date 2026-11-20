@@ -278,6 +278,53 @@ _KISSING = _probe_values("kissing-twelve")
 _ICOSA = _probe_values("icosahedron-tetravolume")
 
 
+def _extension_values() -> tuple[BoundValue, ...]:
+    """Bind the quantities used in the finite extensions chapter."""
+    groups = (
+        ("repair-first-entry", {
+            "entry.hazard": "hazard_per_attempt",
+            "entry.mean": "mean_attempts",
+            "entry.variance": "variance_attempts",
+            "entry.tv": "entry_to_stationary_total_variation",
+            "entry.port_marginal": "entry_one_port_occupancy",
+            "entry.support_ratio": "entry_to_stationary_support_ratio",
+        }),
+        ("repair-distance-lumping", {
+            "distance.class_sizes": "class_sizes",
+            "distance.stationary_masses": "stationary_class_masses",
+        }),
+        ("grounded-forest-precision", {
+            "forest.pairs_checked": "pairs_checked",
+            "forest.triples_checked": "triples_checked",
+        }),
+        ("greedy-record-placement", {
+            "forest.best_triple": "best_triple_determinant",
+            "forest.worst_triple": "worst_triple_determinant",
+            "forest.greedy_triple": "greedy_triple_determinant",
+            "forest.entropy_ratio": "optimum_to_greedy_ratio",
+        }),
+        ("planar-dual-covariance", {
+            "dual.carrier_resistances": "carrier_resistances",
+            "dual.ivm_resistances": "ivm_resistances",
+            "dual.matrix_entries": "matrix_entries",
+        }),
+        ("cuboctahedral-spectral-chords", {
+            "fcc.chord_factor": "chord_to_lowest_variance_factor",
+            "fcc.kirchhoff_index": "kirchhoff_index",
+        }),
+        ("cuboctahedral-distance-split", {
+            "fcc.distance_two_chords": "distance_two_chords",
+            "fcc.distance_two_resistances": "distance_two_resistances",
+        }),
+    )
+    values = []
+    for key, bindings in groups:
+        evidence = _probe_values(key)
+        for name, field in bindings.items():
+            values.append(BoundValue(name, evidence[field], f"probe:{key}:{field}"))
+    return tuple(values)
+
+
 MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     BoundValue("carrier.ports", 12, "OPH carrier (book/44-appendix-a.md:45)", "twelve"),
     BoundValue("carrier.seams", 30, "OPH carrier (book/44-appendix-a.md:45)", "thirty"),
@@ -1431,6 +1478,7 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         _IVM_COSETS["minimum_squared_distances"],
         "probe:quadray-ivm:quadray_cosets",
     ),
+    *_extension_values(),
     *_chart_values(),
 )
 

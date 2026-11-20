@@ -98,6 +98,13 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `repair-is-conditioning` | isomorphism | `exact-on-domain` | `oph-fep` | binary repair conditions the uniform binary reference and minimises free energy over the fibre. Conditioning the uniform total-two reference fails in {{CONDITIONING_OFF_SHELL_FAILURES}} doubled-state/seam cases |
 | `binary-conditional-variance` | isomorphism | `exact-on-domain` | `oph-fep` | the binary repair Dirichlet form equals mean conditional variance over seam records |
 | `carrier-spectral-chords` | isomorphism | `exact` | `fep-synergetics` | squared chords equal {{CHORD_VARIANCE_FACTOR}} times the lowest-mode contrast variance, with different embedding ranks for the full variance and the chords |
+| `repair-first-entry` | isomorphism | `exact-on-domain` | `oph-fep` | doubled starts have a geometric first binary entry, with hazard {{ENTRY_HAZARD}}. Entry and stationarity have the same one-port marginals |
+| `repair-distance-lumping` | isomorphism | `exact-on-domain` | `oph-fep` | graph distance gives an exact Markov chain with class sizes {{DISTANCE_CLASS_SIZES}} |
+| `grounded-forest-precision` | isomorphism | `exact-on-domain` | `oph-fep` | grounded precision determinants count rooted forests and agree with contrast covariance minors on all record pairs and triples |
+| `greedy-record-placement` | disagreement | `obstructed` | `oph-fep` | the best record pair cannot extend to a best triple under the conditional entropy criterion |
+| `planar-dual-covariance` | isomorphism | `exact-on-domain` | `three-way` | matched primal and dual Gaussian edge covariances sum to the identity on both dual pairs |
+| `cuboctahedral-spectral-chords` | isomorphism | `exact-on-domain` | `fep-synergetics` | on the FCC shell, squared chords equal {{FCC_CHORD_FACTOR}} times the lowest-mode contribution |
+| `cuboctahedral-distance-split` | disagreement | `obstructed` | `fep-synergetics` | two pair types at the same graph distance have different full Gaussian contrast variances |
 
 : The {{REGISTRY_ENTRIES}} correspondences, in registry order:
 {{REGISTRY_ISOMORPHISMS}} isomorphisms, {{REGISTRY_DISAGREEMENTS}}

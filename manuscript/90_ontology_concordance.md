@@ -56,3 +56,17 @@ to inspect the values for a listed probe.
 | Tetravolume | **OPH.** The carrier solid has an algebraic volume in the chosen unit. **Synergetics.** Volume measured in units of the tetrahedron whose edge is the prime vector. | **Geometric comparison.** A shared unit permits comparison between volumes of different solids. The rhombic-dodecahedral Voronoi cell belongs to the IVM lattice. | `icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic`. [@quadmath; @fuller1975synergetics] |
 
 : Shells and geometry in the compared models. {#tbl:ontology-geometry}
+
+\clearpage
+
+## Exact reductions and geometric limits
+
+| Term | Meaning by programme | Relationship and scope | Evidence |
+|:-------------|:------------------------------|:------------------------------|:------------------------|
+| First binary entry | **OPH.** The first fair attempt that splits a doubled load into occupations at adjacent ports. **FEP.** A stopping-time law and an entrance distribution on the closed binary state space. | **Counterexample.** A uniform doubled start gives the same single-port marginals at entry as at stationarity. Their joint laws differ. | `repair-first-entry`. [@oph; @kemeny1976finite] |
+| Distance quotient | **OPH.** The separation of the loaded units projected to graph distance, with distance zero for a doubled load. **FEP.** A Markov reduction and a class-uniform lift, with a relative entropy identity on the binary block. **Synergetics.** The carrier intersection array counts inward and outward moves. | **Conditional identity.** The quotient uses uniform seam choice and fair repair on the load-two shell. Exact reconstruction of the full law also uses class uniformity. | `repair-distance-lumping`, `vertex-shells`. [@oph; @kemeny1976finite] |
+| Grounded precision | **OPH.** Fix selected carrier ports as records and retain the interior seam Laplacian. **FEP.** The determinant of the conditional precision controls conditional differential entropy at a fixed record budget. | **Conditional identity.** Each counted spanning forest has one record in each component. Greedy placement can miss the least uncertain triple. | `grounded-forest-precision`, `greedy-record-placement`. [@oph; @chaiken1982minors] |
+| Dual edge covariance | **OPH.** Each oriented carrier seam has a corresponding edge between its incident faces. **FEP.** Primal and dual Gaussian edge differences have complementary covariance projectors. **Synergetics.** The cuboctahedral neighbour shell and rhombic dodecahedral cell form a second dual pair. | **Conditional identity.** The projector sum uses unit edge precision and consistent edge orientations on the spherical complexes. | `planar-dual-covariance`, `dual-cells`. [@oph; @quadmath; @furrer2020resistors] |
+| Spectral chord | **OPH.** The carrier's slowest nonconstant mean-repair eigenspace recovers its Euclidean coordinates up to scale. **FEP.** Contrast variance from the lowest nonconstant modes is proportional to squared chord length in the tested models. **Synergetics.** The cuboctahedral shell has two chord lengths at graph distance two. | **Geometric comparison.** The proportionality uses a projected covariance and a specified edge scale. On the FCC shell, full variance splits the middle graph-distance class. | `carrier-spectral-chords`, `cuboctahedral-spectral-chords`, `cuboctahedral-distance-split`. [@quadmath; @klein1993resistance; @osting2023extremal] |
+
+: Exact reductions and geometric limits in the compared models. {#tbl:ontology-exact-extensions}

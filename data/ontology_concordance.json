@@ -260,6 +260,75 @@
           "pinned_sources": [{"id": "quadmath", "symbol": "integer_tetra_volume"}, {"id": "quadmath", "symbol": "volume ratios"}]
         }
       ]
+    },
+    {
+      "id": "exact-extensions",
+      "title": "Exact reductions and geometric limits",
+      "entries": [
+        {
+          "id": "first-binary-entry",
+          "term": "First binary entry",
+          "meanings": {
+            "oph": "The first fair attempt that splits a doubled load into occupations at adjacent ports.",
+            "fep": "A stopping-time law and an entrance distribution on the closed binary state space."
+          },
+          "relation": "counterexample",
+          "limit": "A uniform doubled start gives the same single-port marginals at entry as at stationarity. Their joint laws differ.",
+          "probes": ["repair-first-entry"],
+          "citations": ["oph", "kemeny1976finite"]
+        },
+        {
+          "id": "distance-quotient",
+          "term": "Distance quotient",
+          "meanings": {
+            "oph": "The separation of the loaded units projected to graph distance, with distance zero for a doubled load.",
+            "fep": "A Markov reduction and a class-uniform lift, with a relative entropy identity on the binary block.",
+            "synergetics": "The carrier intersection array counts inward and outward moves."
+          },
+          "relation": "conditional-identity",
+          "limit": "The quotient uses uniform seam choice and fair repair on the load-two shell. Exact reconstruction of the full law also uses class uniformity.",
+          "probes": ["repair-distance-lumping", "vertex-shells"],
+          "citations": ["oph", "kemeny1976finite"]
+        },
+        {
+          "id": "grounded-precision",
+          "term": "Grounded precision",
+          "meanings": {
+            "oph": "Fix selected carrier ports as records and retain the interior seam Laplacian.",
+            "fep": "The determinant of the conditional precision controls conditional differential entropy at a fixed record budget."
+          },
+          "relation": "conditional-identity",
+          "limit": "Each counted spanning forest has one record in each component. Greedy placement can miss the least uncertain triple.",
+          "probes": ["grounded-forest-precision", "greedy-record-placement"],
+          "citations": ["oph", "chaiken1982minors"]
+        },
+        {
+          "id": "dual-edge-covariance",
+          "term": "Dual edge covariance",
+          "meanings": {
+            "oph": "Each oriented carrier seam has a corresponding edge between its incident faces.",
+            "fep": "Primal and dual Gaussian edge differences have complementary covariance projectors.",
+            "synergetics": "The cuboctahedral neighbour shell and rhombic dodecahedral cell form a second dual pair."
+          },
+          "relation": "conditional-identity",
+          "limit": "The projector sum uses unit edge precision and consistent edge orientations on the spherical complexes.",
+          "probes": ["planar-dual-covariance", "dual-cells"],
+          "citations": ["oph", "quadmath", "furrer2020resistors"]
+        },
+        {
+          "id": "spectral-chord",
+          "term": "Spectral chord",
+          "meanings": {
+            "oph": "The carrier's slowest nonconstant mean-repair eigenspace recovers its Euclidean coordinates up to scale.",
+            "fep": "Contrast variance from the lowest nonconstant modes is proportional to squared chord length in the tested models.",
+            "synergetics": "The cuboctahedral shell has two chord lengths at graph distance two."
+          },
+          "relation": "geometric-comparison",
+          "limit": "The proportionality uses a projected covariance and a specified edge scale. On the FCC shell, full variance splits the middle graph-distance class.",
+          "probes": ["carrier-spectral-chords", "cuboctahedral-spectral-chords", "cuboctahedral-distance-split"],
+          "citations": ["quadmath", "klein1993resistance", "osting2023extremal"]
+        }
+      ]
     }
   ]
 }

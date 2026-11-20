@@ -37,6 +37,7 @@ EXPECTED_BUILDERS = (
     "scope_matrix_figure",
     "network_figure",
     "shell_gauge_figure",
+    "extended_claims_figure",
 )
 
 
@@ -57,6 +58,7 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         make_figures.registry_figure(),
         make_figures.descent_figure(),
         make_figures.ivm_figure(),
+        make_figures.extended_claims_figure(),
         make_figures.cover_figure(),
     ]
     for path in written:
@@ -70,6 +72,7 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         "fig:registry",
         "fig:descent",
         "fig:ivm",
+        "fig:extensions",
         "fig:cover",
     }
     for entry in payload["figures"]:
