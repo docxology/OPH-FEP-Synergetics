@@ -1,4 +1,4 @@
-# Graphical abstract: three pairwise ledgers in four panels {#sec:graphical-abstract}
+# Graphical abstract: claim scope and model evidence {#sec:graphical-abstract}
 
 \setcounter{page}{2}
 
@@ -21,13 +21,14 @@ Each edge shows the total for one pair. The ledger gives its claim kinds
 and a representative result. Run
 `oph-fep-synergetics verify --pair` with the scope name to check its entries.
 
-![Claim totals on the framework triangle, with representative results and counts by kind in the ledger. The ledger also names the three-way comparisons of tetravolumes, conjugation and planar dual covariance.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
+![Claim totals on the framework triangle, with representative results and counts by kind. The centre counts claims that use all three frameworks.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
 
 `carrier-port-chart` links OPH's port chart to the icosahedron's vertex set.
 `spectral-gap` links the mean repair operator to a Gaussian precision built
 from the same Laplacian. `kl-lattice-metric` expresses equal-covariance
 Gaussian divergence as a lattice cost. [@tbl:registry] gives the scope of
-each claim, and [@sec:correspondences] explains the identifications in detail.
+each claim. [@sec:three-way-limits] gives exact examples and counterexamples
+that use all three frameworks.
 
 \clearpage
 

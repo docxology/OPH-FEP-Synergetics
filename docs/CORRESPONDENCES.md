@@ -68,13 +68,21 @@ diagnostics below `1e-9` in magnitude are reported as such.
 | three-way | isomorphism | exact-on-domain | `planar-dual-covariance` | With corresponding edge orientations and unit precision, the primal and dual intrinsic Gaussian edge covariances sum to the identity. Exact projectors are checked for the carrier and its dodecahedral dual, and for the FCC shell and its Voronoi dual. In each pair the spanning-tree counts agree. |
 | fep-synergetics | isomorphism | exact-on-domain | `cuboctahedral-spectral-chords` | On the edge-length-two FCC first shell, squared chords equal 32 times the first positive Laplacian contribution to contrast variance in the centred unit-precision Gaussian. Polynomial projectors and grounded solves agree on the full variance of every pair. |
 | fep-synergetics | disagreement | obstructed | `cuboctahedral-distance-split` | On the FCC first shell, pairs two graph steps apart have squared chords 8 or 12 at edge length two. They have intrinsic Gaussian contrast variances 7/12 and 5/8, respectively. The full variance thus depends on more than graph distance on this shell. |
+| three-way | isomorphism | exact-on-domain | `repair-contrast-quotient` | The intrinsic Gaussian contrast variance of the loaded pair is a strongly lumpable record for fair, uniform binary seam repair on both the OPH icosahedron and the cuboctahedral FCC first shell. Its classes are the squared-chord classes and have stationary masses proportional to their sizes. |
+| three-way | disagreement | obstructed | `repair-distance-counterexample` | Graph distance is a Markov record for fair binary repair on the OPH carrier. On the FCC comparison graph the two distance-two classes have different fair repair probabilities of reaching adjacency in one attempt, 1/12 and 1/24, and different intrinsic contrast variances, 7/12 and 5/8. |
+| three-way | isomorphism | exact-on-domain | `reciprocal-dual-weights` | For both matched spherical graph pairs, the conductance-normalised intrinsic edge covariance projectors sum to identity exactly when the product of matched positive conductances is constant. Reciprocal and globally rescaled reciprocal weights pass a full exact covariance check. |
+| three-way | disagreement | obstructed | `copied-dual-weight-obstruction` | Copying a nonuniform positive conductance pattern to the dual destroys Gaussian edge covariance complementarity on both pairs. A single conductance changed to four suffices on each graph. |
+| three-way | isomorphism | exact-on-domain | `quadratic-even-field` | Evaluating trace-free quadratic forms at unit vertex directions identifies their five-dimensional coordinate space with the centred antipodally even fields on either shell. Pulling back the intrinsic Gaussian precision gives 48/5 on the carrier and separates diagonal and off-diagonal precisions of 6 and 8 on the FCC shell. |
+| three-way | disagreement | obstructed | `quadratic-isotropy-obstruction` | The carrier and FCC shell both have isotropic linear evaluation frames. Quadratic Gaussian coefficient covariance remains isotropic on the carrier but is anisotropic on the FCC shell: rotating a unit diagonal form into an off-diagonal one changes its variance from 1/6 to 1/8. |
+| three-way | disagreement | obstructed | `central-plane-screening` | No plane through the centre of the OPH carrier screens its strict halves in the seam Gaussian. All seven vertex-spanned central planes do so on the FCC shell. The carrier's fifteen vertex-spanned planes leave conditional mutual information (1/2) log(10/9) in the clamped unit intrinsic field. |
+| three-way | disagreement | obstructed | `repair-centroid-memory` | On both twelve-vertex shells, the stationary binary repair centroid has the same full lag covariance sequence as an isotropic sampled Ornstein–Uhlenbeck process, but its next-step law depends on the previous observed centroid even after conditioning on the current one. |
 
-Totals: 53/53 probes pass, 0 fail.
+Totals: 61/61 probes pass, 0 fail.
 
 By kind:
 
-- isomorphism: 26 passing, 0 failing
-- disagreement: 17 passing, 0 failing
+- isomorphism: 29 passing, 0 failing
+- disagreement: 22 passing, 0 failing
 - complementarity: 10 passing, 0 failing
 
 By pairwise scope:
@@ -82,7 +90,7 @@ By pairwise scope:
 - oph-fep: 31 passing, 0 failing
 - fep-synergetics: 5 passing, 0 failing
 - synergetics-oph: 14 passing, 0 failing
-- three-way: 3 passing, 0 failing
+- three-way: 11 passing, 0 failing
 
 ## `carrier-port-chart`
 
@@ -1390,4 +1398,136 @@ Probe values:
 - `pair_classes` = ((1, 4, 11/24, 24), (2, 8, 7/12, 12), (2, 12, 5/8, 24), (3, 16, 2/3, 6))
 - `distance_two_chords` = (8, 12)
 - `distance_two_resistances` = (7/12, 5/8)
+
+## `repair-contrast-quotient`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+The intrinsic Gaussian contrast variance of the loaded pair is a strongly lumpable record for fair, uniform binary seam repair on both the OPH icosahedron and the cuboctahedral FCC first shell. Its classes are the squared-chord classes and have stationary masses proportional to their sizes.
+
+- OPH: Fair binary repair is run with a uniform edge and a fair coin.
+- FEP: Unit intrinsic contrast variance gives a Markov record with an exact stationary measure.
+- Synergetics: The same local rule on the first IVM shell has four geometric pair classes.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; Kemeny and Snell (1976) for strong lumpability; native enumeration and hop comparison derived here
+
+Probe values:
+
+- `carrier` = attempts_per_state=60, classes=((1, 4, 11/30, 30), (2, 6 + 2 sqrt 5, 7/15, 30), (3, 10 + 2 sqrt 5, 1/2, 6)), attempt_count_matrix=((56, 4, 0), (4, 54, 2), (0, 10, 50)), contrast_lumpable=True, distance_lumpable=True, chord_partition_matches=True, all_rows_match_token_moves=True, class_uniform_lift=True, stationary_class_masses=(5/11, 5/11, 1/11), stationarity_verified=True, distance_two_adjacency_counts_match=True, distance_two_witnesses=(((0, 3), 6 + 2 sqrt 5, 7/15, 2, 1/15))
+- `cuboctahedron` = attempts_per_state=48, classes=((1, 4, 11/24, 24), (2, 8, 7/12, 12), (2, 12, 5/8, 24), (3, 16, 2/3, 6)), attempt_count_matrix=((44, 2, 2, 0), (4, 40, 4, 0), (2, 2, 42, 2), (0, 0, 8, 40)), contrast_lumpable=True, distance_lumpable=False, chord_partition_matches=True, all_rows_match_token_moves=True, class_uniform_lift=True, stationary_class_masses=(4/11, 2/11, 4/11, 1/11), stationarity_verified=True, distance_two_adjacency_counts_match=True, distance_two_witnesses=(((0, 4), 8, 7/12, 2, 1/12), ((0, 6), 12, 5/8, 1, 1/24))
+
+## `repair-distance-counterexample`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+Graph distance is a Markov record for fair binary repair on the OPH carrier. On the FCC comparison graph the two distance-two classes have different fair repair probabilities of reaching adjacency in one attempt, 1/12 and 1/24, and different intrinsic contrast variances, 7/12 and 5/8.
+
+- OPH: The native one-attempt moves follow the same fair edge protocol on both graphs.
+- FEP: The two distinguishable contrast variances repair the failed distance-only reduction.
+- Synergetics: Two kinds of cuboctahedral pairs are two steps apart and have different common-neighbour counts.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; exact hop and variance enumeration derived here
+
+Probe values:
+
+- `carrier_distance_lumpable` = True
+- `fcc_distance_lumpable` = False
+- `fcc_distance_two_witnesses` = (((0, 4), 8, 7/12, 2, 1/12), ((0, 6), 12, 5/8, 1, 1/24))
+- `stationary_adjacency_probability` = 1/18
+- `adjacency_probability_after_previous_adjacency` = 1/16
+
+## `reciprocal-dual-weights`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+For both matched spherical graph pairs, the conductance-normalised intrinsic edge covariance projectors sum to identity exactly when the product of matched positive conductances is constant. Reciprocal and globally rescaled reciprocal weights pass a full exact covariance check.
+
+- OPH: Opposite boundary incidences give signed edge coordinates for the carrier and its face dual.
+- FEP: Weighting edge differences by the square root of conductance makes their Gaussian covariance an orthogonal projector.
+- Synergetics: The first FCC shell and the rhombic dodecahedral Voronoi cell form the second matched graph pair.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; Furrer, Hungerbühler and Jantschgi (2020), weighted diagonal identity; full projector criterion and checks derived here
+
+Probe values:
+
+- `carrier` = edge_count=30, entries_checked=900, edge=(0, 1), primal_weight=4, primal_variance=44/63, reciprocal_dual_variance=19/63, copied_dual_variance=76/87, copied_variance_sum=2872/1827, reciprocal_raw_variance_sum=29/21, reciprocal_defect_entries=0, rescaled_reciprocal_defect_entries=0, copied_defect_entries=676, copied_cut_pairing_nonzeros=4, rank_one_checks_agree=True, weighted_tree_counts=(10886400, 2721600)
+- `ivm` = edge_count=24, entries_checked=576, edge=(0, 1), primal_weight=4, primal_variance=44/57, reciprocal_dual_variance=13/57, copied_dual_variance=52/63, copied_variance_sum=1912/1197, reciprocal_raw_variance_sum=21/19, reciprocal_defect_entries=0, rescaled_reciprocal_defect_entries=0, copied_defect_entries=484, copied_cut_pairing_nonzeros=4, rank_one_checks_agree=True, weighted_tree_counts=(787968, 196992)
+
+## `copied-dual-weight-obstruction`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+Copying a nonuniform positive conductance pattern to the dual destroys Gaussian edge covariance complementarity on both pairs. A single conductance changed to four suffices on each graph.
+
+- OPH: A single carrier seam has increased conductance in the test.
+- FEP: Copying that conductance onto its dual edge makes the sum of normalized diagonal variances exceed one.
+- Synergetics: The same obstruction occurs for the cuboctahedral shell and its Voronoi dual.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; nonuniform weight obstruction and exact witnesses derived here
+
+Probe values:
+
+- `carrier` = edge=(0, 1), primal_weight=4, copied_variance_sum=2872/1827, copied_defect_entries=676, copied_cut_pairing_nonzeros=4, reciprocal_raw_variance_sum=29/21
+- `ivm` = edge=(0, 1), primal_weight=4, copied_variance_sum=1912/1197, copied_defect_entries=484, copied_cut_pairing_nonzeros=4, reciprocal_raw_variance_sum=21/19
+
+## `quadratic-even-field`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+Evaluating trace-free quadratic forms at unit vertex directions identifies their five-dimensional coordinate space with the centred antipodally even fields on either shell. Pulling back the intrinsic Gaussian precision gives 48/5 on the carrier and separates diagonal and off-diagonal precisions of 6 and 8 on the FCC shell.
+
+- OPH: The antipodal pairs of the native icosahedral carrier define the even port fields.
+- FEP: The Laplacian quadratic pulls back to the Gaussian precision of the trace-free coefficients.
+- Synergetics: Quadratic evaluations at the unit directions of the first IVM shell provide the comparison.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; Delsarte, Goethals and Seidel (1977) for spherical designs; exact frames and precisions derived here
+
+Probe values:
+
+- `carrier` = linear_frame_isotropic=True, quadratic_modes_centered=True, frame_orthogonal=True, precision_orthogonal=True, edge_and_laplacian_precision_agree=True, laplacian_preserves_modes=True, frame=(8/5, 8/5, 8/5, 8/5, 8/5), laplacian_eigenvalues=(6, 6, 6, 6, 6), precision=(48/5, 48/5, 48/5, 48/5, 48/5), variance=(5/48, 5/48, 5/48, 5/48, 5/48)
+- `fcc` = linear_frame_isotropic=True, quadratic_modes_centered=True, frame_orthogonal=True, precision_orthogonal=True, edge_and_laplacian_precision_agree=True, laplacian_preserves_modes=True, frame=(1, 1, 2, 2, 2), laplacian_eigenvalues=(6, 6, 4, 4, 4), precision=(6, 6, 8, 8, 8), variance=(1/6, 1/6, 1/8, 1/8, 1/8)
+
+## `quadratic-isotropy-obstruction`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+The carrier and FCC shell both have isotropic linear evaluation frames. Quadratic Gaussian coefficient covariance remains isotropic on the carrier but is anisotropic on the FCC shell: rotating a unit diagonal form into an off-diagonal one changes its variance from 1/6 to 1/8.
+
+- OPH: The carrier retains equal variance across all normalized trace-free forms.
+- FEP: An isotropic linear frame does not fix rotational invariance for the covariance of quadratic coefficients.
+- Synergetics: The fourth moments of the cuboctahedral directions distinguish Frobenius-unit forms related by a rotation.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; exact quadratic covariance comparison derived here
+
+Probe values:
+
+- `carrier` = isotropic_linear_frame=True, diagonal_and_mixed_variances=(5/48, 5/48), rotated_variance_ratio=1
+- `fcc` = isotropic_linear_frame=True, diagonal_and_mixed_variances=(1/6, 1/8), rotated_variance_ratio=4/3
+
+## `central-plane-screening`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+No plane through the centre of the OPH carrier screens its strict halves in the seam Gaussian. All seven vertex-spanned central planes do so on the FCC shell. The carrier's fifteen vertex-spanned planes leave conditional mutual information (1/2) log(10/9) in the clamped unit intrinsic field.
+
+- OPH: The carrier's seam dependencies cross every vertex-spanned equator even when its ports are clamped.
+- FEP: A plane screens exactly when the conditional precision has no cross-block entries. An exact determinant ratio measures residual dependence.
+- Synergetics: Both coordinate and body-diagonal equators of the FCC first shell remove all cross-plane seams.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; Dempster (1972) for Gaussian precision zeros; plane and determinant censuses derived here
+
+Probe values:
+
+- `oph_isomorphism` = True
+- `icosahedron` = plane_classes=((4, 4, 4, 2, 10/9, 15)), vertex_spanned_planes=15, screening_planes=0, minimum_separator_size=5, minimum_separator_component_counts=(((1, 6), 12)), inverse_matches_seams=True, axis_plane_partition=((0, 3, 6, 9), (7, 8, 10, 11), (1, 2, 4, 5)), axis_plane_crossing_seams=((7, 1), (10, 4)), axis_plane_precision_determinants=(480, 480, 207360)
+- `cuboctahedron` = plane_classes=((4, 4, 4, 0, 1, 3), (6, 3, 3, 0, 1, 4)), vertex_spanned_planes=7, screening_planes=7, minimum_separator_size=4, minimum_separator_component_counts=(((1, 7), 12), ((4, 4), 3)), inverse_matches_seams=True, axis_plane_partition=((0, 4, 7, 11), (3, 5, 9, 10), (1, 2, 6, 8)), axis_plane_crossing_seams=(), axis_plane_precision_determinants=(192, 192, 36864)
+
+## `repair-centroid-memory`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+On both twelve-vertex shells, the stationary binary repair centroid has the same full lag covariance sequence as an isotropic sampled Ornstein–Uhlenbeck process, but its next-step law depends on the previous observed centroid even after conditioning on the current one.
+
+- OPH: The native transition counts give exact conditional mean retention and three-time event probabilities.
+- FEP: The matching linear Gaussian process reproduces equilibrium second-order statistics while missing memory in the observed process.
+- Synergetics: The geometric coordinate fields supply the slow modes on the carrier and the FCC shell. Opposite loaded pairs collapse to the same centroid.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); QuadMath src/quadmath/core/quadray.py, src/quadmath/lattice/omni_numbering.py and the polyhedra table in docs/manuscript/03_quadray_methods.md; Uhlenbeck and Ornstein (1930) for the Gaussian process; exact centroid comparison derived here
+
+Probe values:
+
+- `carrier` = attempts_per_state=60, graph_matches_reference=True, uniform_stationary=True, coordinate_eigenvalue=5 - 1 sqrt 5, coordinate_mode_verified=True, retention=11/12 + 1/60 sqrt 5, retention_parts=(11/12, 1/60), conditional_mean_verified=True, one_axis_variance=50/33 + 10/33 sqrt 5, stationary_variance_verified=True, target_centroid=(0, 2, 0), zero_fibre_size=6, zero_fibre_jump_counts=(0, 0, 0, 0, 1, 1), witness_matches_edge_moves=True, witness_matches_reversible_formula=True, next_target_given_zero=1/180, next_target_given_previous_target_and_zero=1/60, stationary_centroid_non_markov=True
+- `cuboctahedron` = attempts_per_state=48, graph_matches_reference=True, uniform_stationary=True, coordinate_eigenvalue=2, coordinate_mode_verified=True, retention=23/24, retention_parts=(23/24, 0), conditional_mean_verified=True, one_axis_variance=40/33, stationary_variance_verified=True, target_centroid=(0, 1, -1), zero_fibre_size=6, zero_fibre_jump_counts=(0, 0, 1, 1, 1, 1), witness_matches_edge_moves=True, witness_matches_reversible_formula=True, next_target_given_zero=1/72, next_target_given_previous_target_and_zero=1/48, stationary_centroid_non_markov=True
 

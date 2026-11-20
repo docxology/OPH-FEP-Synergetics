@@ -325,6 +325,69 @@ def _extension_values() -> tuple[BoundValue, ...]:
     return tuple(values)
 
 
+def _three_way_values() -> tuple[BoundValue, ...]:
+    """Bind the measured quantities quoted in the three-way chapter."""
+    distance_key = "repair-distance-counterexample"
+    distance = _probe_values(distance_key)
+    witnesses = distance["fcc_distance_two_witnesses"]
+    quotient_key = "repair-contrast-quotient"
+    quotient = _probe_values(quotient_key)["cuboctahedron"]
+    weight_key = "copied-dual-weight-obstruction"
+    weights = _probe_values(weight_key)
+    quadratics_key = "quadratic-even-field"
+    quadratics = _probe_values(quadratics_key)
+    rotated_key = "quadratic-isotropy-obstruction"
+    rotated = _probe_values(rotated_key)["fcc"]
+    screens_key = "central-plane-screening"
+    screens = _probe_values(screens_key)
+    memory_key = "repair-centroid-memory"
+    memory = _probe_values(memory_key)
+    probabilities = ("next_target_given_zero", "next_target_given_previous_target_and_zero")
+    groups = (
+        (distance_key, {
+            "fcc_middle_variances": tuple(row[2] for row in witnesses),
+            "fcc_common_neighbours": tuple(row[3] for row in witnesses),
+            "fcc_inward": tuple(row[4] for row in witnesses),
+            "fcc_stationary_inward": distance["stationary_adjacency_probability"],
+            "fcc_history_inward": distance["adjacency_probability_after_previous_adjacency"],
+        }),
+        (quotient_key, {
+            "fcc_attempts": quotient["attempts_per_state"],
+            "fcc_quotient": quotient["attempt_count_matrix"],
+            "fcc_stationary": quotient["stationary_class_masses"],
+        }),
+        (weight_key, {
+            "dual_changed_weight": weights["carrier"]["primal_weight"],
+            "dual_copied_sums": tuple(row["copied_variance_sum"] for row in weights.values()),
+        }),
+        (quadratics_key, {
+            "carrier_quadratic_frame": quadratics["carrier"]["frame"][0],
+            "fcc_quadratic_frame": (quadratics["fcc"]["frame"][0], quadratics["fcc"]["frame"][2]),
+            "carrier_quadratic_precision": quadratics["carrier"]["precision"][0],
+            "fcc_quadratic_precisions": (quadratics["fcc"]["precision"][0], quadratics["fcc"]["precision"][2]),
+            "fcc_quadratic_eigenvalues": (quadratics["fcc"]["laplacian_eigenvalues"][0],
+                                          quadratics["fcc"]["laplacian_eigenvalues"][2]),
+        }),
+        (rotated_key, {
+            "fcc_diagonal_variance": rotated["diagonal_and_mixed_variances"][0],
+            "fcc_off_diagonal_variance": rotated["diagonal_and_mixed_variances"][1],
+            "fcc_quadratic_variance_ratio": rotated["rotated_variance_ratio"],
+        }),
+        (screens_key, {
+            "carrier_planes": screens["icosahedron"]["vertex_spanned_planes"],
+            "carrier_cross_seams": screens["icosahedron"]["plane_classes"][0][3],
+            "carrier_screen_ratio": screens["icosahedron"]["plane_classes"][0][4],
+            "fcc_planes": screens["cuboctahedron"]["screening_planes"],
+        }),
+        (memory_key, {
+            "carrier_centroid_probs": tuple(memory["carrier"][key] for key in probabilities),
+            "fcc_centroid_probs": tuple(memory["cuboctahedron"][key] for key in probabilities),
+        }),
+    )
+    return tuple(BoundValue(f"three.{name}", value, f"probe:{probe}")
+                 for probe, bindings in groups for name, value in bindings.items())
+
+
 MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     BoundValue("carrier.ports", 12, "OPH carrier (book/44-appendix-a.md:45)", "twelve"),
     BoundValue("carrier.seams", 30, "OPH carrier (book/44-appendix-a.md:45)", "thirty"),
@@ -1479,6 +1542,7 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
         "probe:quadray-ivm:quadray_cosets",
     ),
     *_extension_values(),
+    *_three_way_values(),
     *_chart_values(),
 )
 

@@ -105,6 +105,14 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `planar-dual-covariance` | isomorphism | `exact-on-domain` | `three-way` | matched primal and dual Gaussian edge covariances sum to the identity on both dual pairs |
 | `cuboctahedral-spectral-chords` | isomorphism | `exact-on-domain` | `fep-synergetics` | on the FCC shell, squared chords equal {{FCC_CHORD_FACTOR}} times the lowest-mode contribution |
 | `cuboctahedral-distance-split` | disagreement | `obstructed` | `fep-synergetics` | two pair types at the same graph distance have different full Gaussian contrast variances |
+| `repair-contrast-quotient` | isomorphism | `exact-on-domain` | `three-way` | Gaussian contrast classes give an exact binary repair quotient on both shells |
+| `repair-distance-counterexample` | disagreement | `obstructed` | `three-way` | merging the FCC middle classes leaves different transition rates for the same distance record |
+| `reciprocal-dual-weights` | isomorphism | `exact-on-domain` | `three-way` | weighted dual projectors sum to identity at constant matched weight product |
+| `copied-dual-weight-obstruction` | disagreement | `obstructed` | `three-way` | copying a nonuniform conductance pattern onto a dual breaks complementarity |
+| `quadratic-even-field` | isomorphism | `exact-on-domain` | `three-way` | trace-free quadratics parameterise centred even fields |
+| `quadratic-isotropy-obstruction` | disagreement | `obstructed` | `three-way` | equal linear isotropy leaves different quadratic variances on the FCC shell |
+| `central-plane-screening` | disagreement | `obstructed` | `three-way` | cuboctahedral equators can screen while icosahedral equators leave dependence |
+| `repair-centroid-memory` | disagreement | `obstructed` | `three-way` | matching Gaussian lag covariances leaves non-Markov centroid probabilities |
 
 : The {{REGISTRY_ENTRIES}} correspondences, in registry order:
 {{REGISTRY_ISOMORPHISMS}} isomorphisms, {{REGISTRY_DISAGREEMENTS}}

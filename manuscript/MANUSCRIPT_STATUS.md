@@ -196,3 +196,17 @@ forest counts, and test spectral geometry and planar duality on two solids.
   (`reduction-criterion`, `pr01-obstruction`).
 
 See [docs/SCOPE.md](../docs/SCOPE.md) for the full statement.
+
+## Three-way correspondences and counterexamples
+
+The comparison applies the same fair binary repair law to the two
+twelve-vertex graphs. Exact covariance records preserve the dynamics after
+coarse-graining, while graph distance on the FCC shell and the observed
+centroid on either shell lose information about the next step. Three-time
+probabilities distinguish the stationary centroid from its Gaussian
+lag-covariance match. Matched planar-dual covariances require reciprocal
+conductances. The quadratic coefficient split and the central-plane census
+give separate geometric counterexamples to transfer of Gaussian isotropy
+and screening. The chapter and structured concordance specify each
+protocol and cite its executable probe. The two figures show the
+conditional-probability and geometry results directly.

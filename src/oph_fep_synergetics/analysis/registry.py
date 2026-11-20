@@ -38,15 +38,19 @@ import numpy as np
 
 from .. import geometry
 from ..core import carrier as carrier_module
+from ..core import centroid_dynamics
 from ..core import controls as control_module
 from ..core import free_energy as free_energy_module
+from ..core import geometric_screening
 from ..core import invariants as invariant_module
 from ..core import native_dynamics
 from ..core import network as network_module
 from ..core import planar_duality
+from ..core import quadratic_modes
 from ..core import repair as repair_module
 from ..core import sheaf as sheaf_module
 from ..core import symmetry as symmetry_module
+from ..core import weighted_duality
 from ..geometry.lattice import ivm_quadray_cosets
 
 ISOMORPHISM = "isomorphism"
@@ -2073,6 +2077,147 @@ def _probe_cuboctahedral_distance_split() -> tuple[bool, dict]:
                        (2, 12, "5/8", 24), (3, 16, "2/3", 6)), values
 
 
+def _probe_repair_contrast_quotient() -> tuple[bool, dict]:
+    values = native_dynamics.repair_contrast_lumping_census()
+    expected = {
+        "carrier": (60, ((56, 4, 0), (4, 54, 2), (0, 10, 50)), ("5/11", "5/11", "1/11")),
+        "cuboctahedron": (
+            48, ((44, 2, 2, 0), (4, 40, 4, 0), (2, 2, 42, 2), (0, 0, 8, 40)),
+            ("4/11", "2/11", "4/11", "1/11"),
+        ),
+    }
+    checks = ("contrast_lumpable", "chord_partition_matches", "all_rows_match_token_moves",
+              "class_uniform_lift", "stationarity_verified")
+    return all(
+        (row["attempts_per_state"], row["attempt_count_matrix"], row["stationary_class_masses"])
+        == expected[name] and all(row[key] for key in checks)
+        for name, row in values.items()
+    ), values
+
+
+def _probe_repair_distance_counterexample() -> tuple[bool, dict]:
+    cases = native_dynamics.repair_contrast_lumping_census()
+    carrier, fcc = cases["carrier"], cases["cuboctahedron"]
+    witness_rates = tuple(Fraction(row[-1]) for row in fcc["distance_two_witnesses"])
+    sizes = tuple(row[3] for row in fcc["classes"] if row[0] == 2)
+    weights = tuple(Fraction(size, sum(sizes)) for size in sizes)
+    stationary_rate = sum(weight * rate for weight, rate in zip(weights, witness_rates, strict=True))
+    history_rate = sum(
+        weight * rate**2 for weight, rate in zip(weights, witness_rates, strict=True)
+    ) / stationary_rate
+    values = {
+        "carrier_distance_lumpable": carrier["distance_lumpable"],
+        "fcc_distance_lumpable": fcc["distance_lumpable"],
+        "fcc_distance_two_witnesses": fcc["distance_two_witnesses"],
+        "stationary_adjacency_probability": stationary_rate,
+        "adjacency_probability_after_previous_adjacency": history_rate,
+    }
+    return (
+        carrier["distance_lumpable"] and not fcc["distance_lumpable"]
+        and fcc["distance_two_adjacency_counts_match"]
+        and tuple(row[1:] for row in fcc["distance_two_witnesses"])
+        == (("8", "7/12", 2, "1/12"), ("12", "5/8", 1, "1/24"))
+        and (stationary_rate, history_rate) == (Fraction(1, 18), Fraction(1, 16))
+    ), values
+
+
+def _probe_reciprocal_dual_weights() -> tuple[bool, dict]:
+    values = weighted_duality.weighted_planar_duality_census()
+    expected = {
+        "carrier": (900, Fraction(44, 63), Fraction(19, 63), (10886400, 2721600)),
+        "ivm": (576, Fraction(44, 57), Fraction(13, 57), (787968, 196992)),
+    }
+    return all(
+        (row["entries_checked"], row["primal_variance"], row["reciprocal_dual_variance"],
+         row["weighted_tree_counts"]) == expected[name]
+        and row["reciprocal_defect_entries"] == row["rescaled_reciprocal_defect_entries"] == 0
+        and row["rank_one_checks_agree"]
+        for name, row in values.items()
+    ), values
+
+
+def _probe_copied_dual_weight_obstruction() -> tuple[bool, dict]:
+    results = weighted_duality.weighted_planar_duality_census()
+    values = {name: {key: row[key] for key in (
+        "edge", "primal_weight", "copied_variance_sum", "copied_defect_entries",
+        "copied_cut_pairing_nonzeros", "reciprocal_raw_variance_sum",
+    )} for name, row in results.items()}
+    return (
+        (values["carrier"]["copied_variance_sum"], values["ivm"]["copied_variance_sum"])
+        == (Fraction(2872, 1827), Fraction(1912, 1197))
+        and (values["carrier"]["copied_defect_entries"], values["ivm"]["copied_defect_entries"])
+        == (676, 484)
+        and all(row["primal_weight"] == 4 and row["copied_cut_pairing_nonzeros"] == 4
+                for row in values.values())
+    ), values
+
+
+def _probe_quadratic_even_field() -> tuple[bool, dict]:
+    values = quadratic_modes.quadratic_mode_census()
+    expected = {
+        "carrier": ((Fraction(8, 5),) * 5, (6,) * 5, (Fraction(48, 5),) * 5),
+        "fcc": ((1, 1, 2, 2, 2), (6, 6, 4, 4, 4), (6, 6, 8, 8, 8)),
+    }
+    checks = ("linear_frame_isotropic", "quadratic_modes_centered", "frame_orthogonal",
+              "precision_orthogonal", "edge_and_laplacian_precision_agree",
+              "laplacian_preserves_modes")
+    return all(
+        (row["frame"], row["laplacian_eigenvalues"], row["precision"]) == expected[name]
+        and all(row[key] for key in checks)
+        for name, row in values.items()
+    ), values
+
+
+def _probe_quadratic_isotropy_obstruction() -> tuple[bool, dict]:
+    cases = quadratic_modes.quadratic_mode_census()
+    values = {
+        name: {
+            "isotropic_linear_frame": row["linear_frame_isotropic"],
+            "diagonal_and_mixed_variances": (row["variance"][0], row["variance"][2]),
+            "rotated_variance_ratio": row["variance"][0] / row["variance"][2],
+        }
+        for name, row in cases.items()
+    }
+    return values == {
+        "carrier": {"isotropic_linear_frame": True,
+                    "diagonal_and_mixed_variances": (Fraction(5, 48),) * 2,
+                    "rotated_variance_ratio": 1},
+        "fcc": {"isotropic_linear_frame": True,
+                "diagonal_and_mixed_variances": (Fraction(1, 6), Fraction(1, 8)),
+                "rotated_variance_ratio": Fraction(4, 3)},
+    }, values
+
+
+def _probe_central_plane_screening() -> tuple[bool, dict]:
+    values = geometric_screening.central_plane_blanket_census()
+    carrier, fcc = values["icosahedron"], values["cuboctahedron"]
+    return (
+        values["oph_isomorphism"] and carrier["inverse_matches_seams"] and fcc["inverse_matches_seams"]
+        and carrier["plane_classes"] == ((4, 4, 4, 2, "10/9", 15),)
+        and fcc["plane_classes"] == ((4, 4, 4, 0, "1", 3), (6, 3, 3, 0, "1", 4))
+        and (carrier["screening_planes"], fcc["screening_planes"]) == (0, 7)
+        and (carrier["minimum_separator_size"], fcc["minimum_separator_size"]) == (5, 4)
+    ), values
+
+
+def _probe_repair_centroid_memory() -> tuple[bool, dict]:
+    values = centroid_dynamics.centroid_gaussian_census()
+    expected = {
+        "carrier": ("11/12 + 1/60 sqrt 5", "50/33 + 10/33 sqrt 5", 6, "1/180", "1/60"),
+        "cuboctahedron": ("23/24", "40/33", 6, "1/72", "1/48"),
+    }
+    fields = ("retention", "one_axis_variance", "zero_fibre_size", "next_target_given_zero",
+              "next_target_given_previous_target_and_zero")
+    checks = ("graph_matches_reference", "uniform_stationary", "coordinate_mode_verified",
+              "conditional_mean_verified", "stationary_variance_verified",
+              "witness_matches_edge_moves", "witness_matches_reversible_formula",
+              "stationary_centroid_non_markov")
+    return all(
+        tuple(row[field] for field in fields) == expected[name] and all(row[key] for key in checks)
+        for name, row in values.items()
+    ), values
+
+
 CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="carrier-port-chart",
@@ -2709,6 +2854,102 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         status="obstructed",
         source=f"{_QUADRAY_SOURCE}; all-pairs resistance comparison derived here",
         probe=_probe_cuboctahedral_distance_split,
+    ),
+    Correspondence(
+        key="repair-contrast-quotient",
+        kind=ISOMORPHISM,
+        pair=THREE_WAY,
+        claim="The intrinsic Gaussian contrast variance of the loaded pair is a strongly lumpable record for fair, uniform binary seam repair on both the OPH icosahedron and the cuboctahedral FCC first shell. Its classes are the squared-chord classes and have stationary masses proportional to their sizes.",
+        oph="Fair binary repair is run with a uniform edge and a fair coin.",
+        fep="Unit intrinsic contrast variance gives a Markov record with an exact stationary measure.",
+        synergetics="The same local rule on the first IVM shell has four geometric pair classes.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; Kemeny and Snell (1976) for strong lumpability; native enumeration and hop comparison derived here",
+        probe=_probe_repair_contrast_quotient,
+    ),
+    Correspondence(
+        key="repair-distance-counterexample",
+        kind=DISAGREEMENT,
+        pair=THREE_WAY,
+        claim="Graph distance is a Markov record for fair binary repair on the OPH carrier. On the FCC comparison graph the two distance-two classes have different fair repair probabilities of reaching adjacency in one attempt, 1/12 and 1/24, and different intrinsic contrast variances, 7/12 and 5/8.",
+        oph="The native one-attempt moves follow the same fair edge protocol on both graphs.",
+        fep="The two distinguishable contrast variances repair the failed distance-only reduction.",
+        synergetics="Two kinds of cuboctahedral pairs are two steps apart and have different common-neighbour counts.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; exact hop and variance enumeration derived here",
+        probe=_probe_repair_distance_counterexample,
+    ),
+    Correspondence(
+        key="reciprocal-dual-weights",
+        kind=ISOMORPHISM,
+        pair=THREE_WAY,
+        claim="For both matched spherical graph pairs, the conductance-normalised intrinsic edge covariance projectors sum to identity exactly when the product of matched positive conductances is constant. Reciprocal and globally rescaled reciprocal weights pass a full exact covariance check.",
+        oph="Opposite boundary incidences give signed edge coordinates for the carrier and its face dual.",
+        fep="Weighting edge differences by the square root of conductance makes their Gaussian covariance an orthogonal projector.",
+        synergetics="The first FCC shell and the rhombic dodecahedral Voronoi cell form the second matched graph pair.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; Furrer, Hungerbühler and Jantschgi (2020), weighted diagonal identity; full projector criterion and checks derived here",
+        probe=_probe_reciprocal_dual_weights,
+    ),
+    Correspondence(
+        key="copied-dual-weight-obstruction",
+        kind=DISAGREEMENT,
+        pair=THREE_WAY,
+        claim="Copying a nonuniform positive conductance pattern to the dual destroys Gaussian edge covariance complementarity on both pairs. A single conductance changed to four suffices on each graph.",
+        oph="A single carrier seam has increased conductance in the test.",
+        fep="Copying that conductance onto its dual edge makes the sum of normalized diagonal variances exceed one.",
+        synergetics="The same obstruction occurs for the cuboctahedral shell and its Voronoi dual.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; nonuniform weight obstruction and exact witnesses derived here",
+        probe=_probe_copied_dual_weight_obstruction,
+    ),
+    Correspondence(
+        key="quadratic-even-field",
+        kind=ISOMORPHISM,
+        pair=THREE_WAY,
+        claim="Evaluating trace-free quadratic forms at unit vertex directions identifies their five-dimensional coordinate space with the centred antipodally even fields on either shell. Pulling back the intrinsic Gaussian precision gives 48/5 on the carrier and separates diagonal and off-diagonal precisions of 6 and 8 on the FCC shell.",
+        oph="The antipodal pairs of the native icosahedral carrier define the even port fields.",
+        fep="The Laplacian quadratic pulls back to the Gaussian precision of the trace-free coefficients.",
+        synergetics="Quadratic evaluations at the unit directions of the first IVM shell provide the comparison.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; Delsarte, Goethals and Seidel (1977) for spherical designs; exact frames and precisions derived here",
+        probe=_probe_quadratic_even_field,
+    ),
+    Correspondence(
+        key="quadratic-isotropy-obstruction",
+        kind=DISAGREEMENT,
+        pair=THREE_WAY,
+        claim="The carrier and FCC shell both have isotropic linear evaluation frames. Quadratic Gaussian coefficient covariance remains isotropic on the carrier but is anisotropic on the FCC shell: rotating a unit diagonal form into an off-diagonal one changes its variance from 1/6 to 1/8.",
+        oph="The carrier retains equal variance across all normalized trace-free forms.",
+        fep="An isotropic linear frame does not fix rotational invariance for the covariance of quadratic coefficients.",
+        synergetics="The fourth moments of the cuboctahedral directions distinguish Frobenius-unit forms related by a rotation.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; exact quadratic covariance comparison derived here",
+        probe=_probe_quadratic_isotropy_obstruction,
+    ),
+    Correspondence(
+        key="central-plane-screening",
+        kind=DISAGREEMENT,
+        pair=THREE_WAY,
+        claim="No plane through the centre of the OPH carrier screens its strict halves in the seam Gaussian. All seven vertex-spanned central planes do so on the FCC shell. The carrier's fifteen vertex-spanned planes leave conditional mutual information (1/2) log(10/9) in the clamped unit intrinsic field.",
+        oph="The carrier's seam dependencies cross every vertex-spanned equator even when its ports are clamped.",
+        fep="A plane screens exactly when the conditional precision has no cross-block entries. An exact determinant ratio measures residual dependence.",
+        synergetics="Both coordinate and body-diagonal equators of the FCC first shell remove all cross-plane seams.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; Dempster (1972) for Gaussian precision zeros; plane and determinant censuses derived here",
+        probe=_probe_central_plane_screening,
+    ),
+    Correspondence(
+        key="repair-centroid-memory",
+        kind=DISAGREEMENT,
+        pair=THREE_WAY,
+        claim="On both twelve-vertex shells, the stationary binary repair centroid has the same full lag covariance sequence as an isotropic sampled Ornstein–Uhlenbeck process, but its next-step law depends on the previous observed centroid even after conditioning on the current one.",
+        oph="The native transition counts give exact conditional mean retention and three-time event probabilities.",
+        fep="The matching linear Gaussian process reproduces equilibrium second-order statistics while missing memory in the observed process.",
+        synergetics="The geometric coordinate fields supply the slow modes on the carrier and the FCC shell. Opposite loaded pairs collapse to the same centroid.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; {_QUADRAY_SOURCE}; Uhlenbeck and Ornstein (1930) for the Gaussian process; exact centroid comparison derived here",
+        probe=_probe_repair_centroid_memory,
     ),
 )
 

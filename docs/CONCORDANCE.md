@@ -61,11 +61,19 @@ argue by key.
 | `repair-distance-lumping` | isomorphism | exact-on-domain | oph-fep | `06_finite_extensions.md` | yes |
 | `grounded-forest-precision` | isomorphism | exact-on-domain | oph-fep | `06_finite_extensions.md` | yes |
 | `greedy-record-placement` | disagreement | obstructed | oph-fep | `06_finite_extensions.md` | yes |
-| `planar-dual-covariance` | isomorphism | exact-on-domain | three-way | `06_finite_extensions.md` | yes |
+| `planar-dual-covariance` | isomorphism | exact-on-domain | three-way | `06_finite_extensions.md`, `07_three_way_limits.md` | yes |
 | `cuboctahedral-spectral-chords` | isomorphism | exact-on-domain | fep-synergetics | `06_finite_extensions.md` | yes |
 | `cuboctahedral-distance-split` | disagreement | obstructed | fep-synergetics | `06_finite_extensions.md` | yes |
+| `repair-contrast-quotient` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | **no** |
+| `repair-distance-counterexample` | disagreement | obstructed | three-way | `07_three_way_limits.md` | **no** |
+| `reciprocal-dual-weights` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | **no** |
+| `copied-dual-weight-obstruction` | disagreement | obstructed | three-way | `07_three_way_limits.md` | **no** |
+| `quadratic-even-field` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | **no** |
+| `quadratic-isotropy-obstruction` | disagreement | obstructed | three-way | `07_three_way_limits.md` | **no** |
+| `central-plane-screening` | disagreement | obstructed | three-way | `07_three_way_limits.md` | **no** |
+| `repair-centroid-memory` | disagreement | obstructed | three-way | `07_three_way_limits.md` | **no** |
 
-53 of 53 claims are named by at least one section's prose.
+61 of 61 claims are named by at least one section's prose.
 
 ## Sections
 
@@ -81,6 +89,7 @@ argue by key.
 | `06_complementarities.md` | `quadray-ivm`, `equilibrium-propagation`, `replicator-potential`, `kissing-twelve`, `effective-resistance`, `two-record-resistance`, `dual-cells`, `conjugation-norm` |
 | `06_finite_extensions.md` | `carrier-spectral-chords`, `repair-first-entry`, `repair-distance-lumping`, `grounded-forest-precision`, `greedy-record-placement`, `planar-dual-covariance`, `cuboctahedral-spectral-chords`, `cuboctahedral-distance-split` |
 | `07_scope.md` | `pr01-obstruction`, `reduction-criterion` |
+| `07_three_way_limits.md` | `planar-dual-covariance`, `repair-contrast-quotient`, `repair-distance-counterexample`, `reciprocal-dual-weights`, `copied-dual-weight-obstruction`, `quadratic-even-field`, `quadratic-isotropy-obstruction`, `central-plane-screening`, `repair-centroid-memory` |
 | `08_reproducibility.md` | *none* |
 | `99_references.md` | *none* |
 
@@ -90,6 +99,7 @@ argue by key.
 | --- | --- | --- |
 | `fig:blanket` | `05_disagreements.md` | `stationary-blanket` |
 | `fig:carrier` | `02_framework.md` | *package readings, no single claim* |
+| `fig:centroid-memory` | `07_three_way_limits.md` | *package readings, no single claim* |
 | `fig:conjugation` | `06_complementarities.md` | *package readings, no single claim* |
 | `fig:descent` | `05_disagreements.md` | `pr01-obstruction` |
 | `fig:dstability` | `05_disagreements.md` | *package readings, no single claim* |
@@ -110,6 +120,7 @@ argue by key.
 | `fig:scope-matrix` | `03_method.md` | *package readings, no single claim* |
 | `fig:shell-gauge` | `05_disagreements.md` | *package readings, no single claim* |
 | `fig:subdivision` | `06_complementarities.md` | *package readings, no single claim* |
+| `fig:three-way` | `07_three_way_limits.md` | *package readings, no single claim* |
 | `fig:vertex-shells` | `05_disagreements.md` | *package readings, no single claim* |
 
 ## Formal statements and equations
@@ -161,8 +172,8 @@ argue by key.
 | `prop:repair-distance-lumping` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
 | `prop:grounded-forest-precision` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
 | `prop:greedy-record-placement` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
-| `prop:planar-dual-covariance` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
-| `prop:fcc-spectral-geometry` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
+| `prop:planar-dual-covariance` | prop | `06_finite_extensions.md` | `06_finite_extensions.md`, `07_three_way_limits.md` |
+| `prop:fcc-spectral-geometry` | prop | `06_finite_extensions.md` | `06_finite_extensions.md`, `07_three_way_limits.md` |
 | `eq:repair` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `05_disagreements.md` |
 | `eq:energy` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `05_disagreements.md` |
 | `eq:vfe` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `07_scope.md` |
@@ -395,6 +406,30 @@ argue by key.
 | `{{SYMMETRY_ROTATIONS}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md` |
 | `{{TETRAVOLUME_GALOIS_NORM}}` | `03_method.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md` |
 | `{{TETRAVOLUME_INTEGRAL_SOLIDS}}` | `00_00_graphical_abstract.md` |
+| `{{THREE_CARRIER_CENTROID_PROBS}}` | `07_three_way_limits.md` |
+| `{{THREE_CARRIER_CROSS_SEAMS}}` | `07_three_way_limits.md` |
+| `{{THREE_CARRIER_PLANES}}` | `07_three_way_limits.md` |
+| `{{THREE_CARRIER_QUADRATIC_FRAME}}` | `07_three_way_limits.md` |
+| `{{THREE_CARRIER_QUADRATIC_PRECISION}}` | `07_three_way_limits.md` |
+| `{{THREE_CARRIER_SCREEN_RATIO}}` | `07_three_way_limits.md` |
+| `{{THREE_DUAL_CHANGED_WEIGHT}}` | `07_three_way_limits.md` |
+| `{{THREE_DUAL_COPIED_SUMS}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_ATTEMPTS}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_CENTROID_PROBS}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_COMMON_NEIGHBOURS}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_DIAGONAL_VARIANCE}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_HISTORY_INWARD}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_INWARD}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_MIDDLE_VARIANCES}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_OFF_DIAGONAL_VARIANCE}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_PLANES}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_QUADRATIC_EIGENVALUES}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_QUADRATIC_FRAME}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_QUADRATIC_PRECISIONS}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_QUADRATIC_VARIANCE_RATIO}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_QUOTIENT}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_STATIONARY}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_STATIONARY_INWARD}}` | `07_three_way_limits.md` |
 | `{{TWO_NODE_RELAXATION_MAX_RADIUS}}` | `05_disagreements.md` |
 | `{{TWO_NODE_RELAXATION_MIN_RADIUS}}` | `05_disagreements.md` |
 | `{{TWO_NODE_RELAXATION_MIN_RADIUS_MEASURED}}` | `05_disagreements.md`, `05_disagreements.md` |
@@ -408,7 +443,7 @@ argue by key.
 | `{{VORONOI_FACES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
 | `{{VORONOI_VERTICES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
 
-224 of the bound values are quoted by the prose. The cover is
+248 of the bound values are quoted by the prose. The cover is
 placed by `manuscript/config.yaml`; the accessibility registry that gives
 each figure its alternative text is `output/figures/figure_registry.json`,
 written by `scripts/make_figures.py`.

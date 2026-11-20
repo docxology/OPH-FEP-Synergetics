@@ -47,14 +47,18 @@ from oph_fep_synergetics.analysis.registry import (  # noqa: E402
     by_pair,
 )
 from oph_fep_synergetics.core import (  # noqa: E402
+    centroid_dynamics,
     controls,
     free_energy,
+    geometric_screening,
     invariants,
     native_dynamics,
     network,
     planar_duality,
+    quadratic_modes,
     sheaf,
     symmetry,
+    weighted_duality,
 )
 from oph_fep_synergetics.core.carrier import (  # noqa: E402
     OPH_ORIENTED_BASE_FACES,
@@ -1030,7 +1034,7 @@ def cover_figure() -> Path:
                 interpolation="bilinear", zorder=0)
     axis.text(0.52, 8.65, "Where the frameworks meet", va="center", color=paper,
               fontsize=29, fontweight="bold")
-    axis.text(0.54, 8.17, "The carrier links repair to inference. Close packing supplies a geometric comparison.",
+    axis.text(0.54, 8.17, "Compare repair, Gaussian inference and geometry on two twelve-vertex shells.",
               va="center", color=secondary, fontsize=15)
     for level in (7.86, 3.11, 1.53):
         axis.hlines(level, 0.52, 12.98, color="#89A9BB", linewidth=0.85, alpha=0.48)
@@ -1044,21 +1048,20 @@ def cover_figure() -> Path:
     contrast_rows = network.carrier_resistance_geometry()["shells"]
     resistance_alt = _cover_contrasts(figure, width, height, contrast_rows, blue, gold)
     edge_length = math.sqrt(float(contrast_rows[0][2]))
-    lattice_shells = ", ".join(str(size) for size in values["lattice.shell_sizes"][:3])
-    carrier_shells = ", ".join(str(size) for size in values["carrier.shell_sizes"][:3])
     for cx, color, label, title, finding, lines in (
         (carrier_center[0], teal, "OPH", "Icosahedral carrier",
          "Binary repair",
          ("Fair repair = uniform conditional law", "Dirichlet form = mean fibre variance",
-          f"{values['repair.variance_fibres']} two-state fibres checked")),
+          "A centroid can hide memory")),
         (6.75, blue, "FREE ENERGY PRINCIPLE", "Gaussian port contrasts",
          "Carrier chords",
          (f"Chord² = {values['chord.variance_factor']} × lowest-mode variance",
           f"For icosahedral edge length {edge_length:g}",
           f"Full variance needs {values['chord.full_rank']} dimensions")),
         (shell_center[0], gold, "SYNERGETICS", "Cuboctahedral FCC shell",
-         "Neighbourhood counts",
-         (f"Carrier shells  ·  {carrier_shells}", f"FCC shells  ·  {lattice_shells}",
+         "Geometric screens",
+         (f"{values['three.fcc_planes']} FCC equators screen both halves",
+          f"{values['three.carrier_planes']} carrier equators leave cross-seams",
           "Two variances at FCC distance two")),
     ):
         axis.text(cx, 7.53, label, ha="center", va="center", color=color,
@@ -1085,6 +1088,8 @@ def cover_figure() -> Path:
     total = sum(kinds.values())
     axis.text(0.54, 1.19, f"{total} executable claims", va="center", color=paper,
               fontsize=16.5, fontweight="bold")
+    axis.text(12.96, 1.19, f"{len(by_pair()[THREE_WAY])} three-way claims", ha="right",
+              va="center", color=secondary, fontsize=14)
     start = 0.54
     for kind, color, label in (
         ("isomorphism", "#8EC9F9", "isomorphisms"),
@@ -1113,10 +1118,12 @@ def cover_figure() -> Path:
         f"{resistance_alt}. Squared chords "
         f"equal {values['chord.variance_factor']} times the lowest-mode variance at edge length "
         f"{edge_length:g}. Fair binary repair resamples conditionally. Its Dirichlet form equals "
-        f"mean fibre variance, checked on {values['repair.variance_fibres']} two-state fibres. "
-        f"The carrier shell counts are {carrier_shells} and the FCC counts are {lattice_shells}. "
+        "mean fibre variance. The stationary centroid can hide memory. "
+        f"All {values['three.fcc_planes']} vertex-spanned FCC equators screen their halves. "
+        f"All {values['three.carrier_planes']} carrier equators leave cross-seams. "
         f"The {total} claims include {kinds['isomorphism']} isomorphisms, {kinds['disagreement']} "
-        f"disagreements and {kinds['complementarity']} complementarities."
+        f"disagreements and {kinds['complementarity']} complementarities. "
+        f"{len(by_pair()[THREE_WAY])} claims use all three frameworks."
     )
     return target
 
@@ -1190,15 +1197,18 @@ def ga_triangle_figure() -> Path:
         va="center", color=INK, fontsize=12,
     )
     ledger.text(0.02, 0.23, "Three-way claims", va="top", color=INK, fontsize=14, fontweight="bold")
-    ledger.text(0.02, 0.14, "\n".join(entry.key for entry in three), va="top",
-                color=BLUE, fontsize=11, linespacing=1.35)
+    ledger.text(0.02, 0.14, "Gaussian covariance can match a repair process with memory.",
+                va="top", color=BLUE, fontsize=12)
+    ledger.text(0.02, 0.07, "Repair quotients, conductance duality, quadratic fields and screens",
+                va="top", color=INK, fontsize=10.5)
     return _save(
         figure,
         "fig_ga_triangle.png",
         "A triangle connects Observer Patch Holography (OPH), the Free Energy Principle (FEP) "
         f"and Fuller's Synergetics. Its edge totals and centre account for all "
         f"{len(CORRESPONDENCES)} executable claims. " + " ".join(edge_descriptions)
-        + f" The {len(three)} three-way claims are {', '.join(entry.key for entry in three)}.",
+        + f" The centre counts {len(three)} three-way claims, including comparison of repair "
+        "quotients and centroid memory, weighted duality, quadratic fields and geometric screens.",
     )
 
 
@@ -2513,6 +2523,199 @@ def extended_claims_figure() -> Path:
     )
 
 
+def three_way_figure() -> Path:
+    """Compare the four paired tests using the exact census values."""
+    figure, axes = plt.subplots(2, 2, figsize=(10.2, 6.9))
+    repair_axis, dual_axis, mode_axis, plane_axis = axes.ravel()
+    carrier_name, fcc_name = "Carrier", "FCC shell"
+    shells = (carrier_name, fcc_name)
+
+    repair = native_dynamics.repair_contrast_lumping_census()
+    (carrier_pair,) = repair["carrier"]["distance_two_witnesses"]
+    fcc_pairs = repair["cuboctahedron"]["distance_two_witnesses"]
+    repair_rows = [
+        (carrier_name, carrier_pair, BLUE, "o"),
+        *((f"FCC · chord² {pair[1]}", pair, VERMILLION, "D") for pair in fcc_pairs),
+    ]
+    for y, (_, (_, _, _, _, probability), colour, marker) in enumerate(repair_rows):
+        value = float(Fraction(probability))
+        repair_axis.hlines(y, 0, value, color=colour, linewidth=1.7)
+        repair_axis.scatter(value, y, marker=marker, color=colour, s=64, zorder=3)
+        repair_axis.annotate(
+            probability, (value, y), xytext=(8, 0), textcoords="offset points",
+            va="center", fontsize=11, fontweight="bold",
+        )
+    repair_axis.set_yticks(range(len(repair_rows)), labels=[row[0] for row in repair_rows])
+    repair_axis.set_xticks((0, 0.025, 0.05, 0.075, 0.10),
+                           labels=("0", "2.5%", "5%", "7.5%", "10%"))
+    repair_axis.set(xlim=(0, 0.107), ylim=(len(repair_rows) - 0.5, -0.5),
+                    xlabel="Chance of adjacency in one attempt")
+    repair_axis.set_title("A  Repair from distance two", loc="left", fontweight="bold")
+    repair_axis.grid(False, axis="y")
+
+    duality = weighted_duality.weighted_planar_duality_census()
+    dual_rows = []
+    for name, key in zip(shells, ("carrier", "ivm"), strict=True):
+        row = duality[key]
+        for policy, field in (("reciprocal", "reciprocal_dual_variance"),
+                              ("copied", "copied_dual_variance")):
+            dual_rows.append((f"{name} · {policy}", row["primal_variance"], row[field]))
+    dual_positions = (0, 1, 2.35, 3.35)
+    for y, (_, primal, dual) in zip(dual_positions, dual_rows, strict=True):
+        segments = ((0, primal, BLUE, "white"), (primal, dual, ORANGE, INK))
+        for left, fraction, colour, ink in segments:
+            dual_axis.barh(y, float(fraction), left=float(left), height=0.58,
+                           color=colour, edgecolor="white", linewidth=0.5, zorder=2)
+            dual_axis.text(float(left + fraction / 2), y, str(fraction), ha="center",
+                           va="center", color=ink, fontsize=11, fontweight="bold", zorder=4)
+    dual_axis.axvline(1, color=INK, linewidth=1.15, linestyle="--", zorder=3)
+    dual_axis.set_yticks(dual_positions, labels=[row[0] for row in dual_rows])
+    dual_axis.set_xticks((0, 0.5, 1, 1.5))
+    dual_axis.set(xlim=(0, 1.65), ylim=(3.85, -0.5), xlabel="Normalised variance at the changed seam")
+    dual_axis.set_title("B  Weighted primal–dual balance", loc="left", fontweight="bold")
+    dual_axis.grid(False, axis="y")
+    dual_axis.legend(
+        handles=[plt.Rectangle((0, 0), 1, 1, color=colour, label=label)
+                 for colour, label in ((BLUE, "Primal"), (ORANGE, "Dual"))],
+        loc="upper center", bbox_to_anchor=(0.5, -0.23), ncol=2,
+    )
+
+    modes = quadratic_modes.quadratic_mode_census()
+    mode_values = [(modes[key]["variance"][0], modes[key]["variance"][2])
+                   for key in ("carrier", "fcc")]
+    for index, (label, colour, shift) in enumerate(
+        (("Diagonal", GREEN, -0.20), ("Off-diagonal", PURPLE, 0.20)),
+    ):
+        values = [row[index] for row in mode_values]
+        positions = [group + shift for group in range(len(shells))]
+        bars = mode_axis.bar(positions, [float(value) for value in values], width=0.34,
+                             color=colour, edgecolor=INK, linewidth=0.5, label=label)
+        mode_axis.bar_label(bars, labels=[str(value) for value in values], padding=3,
+                            fontsize=11, fontweight="bold")
+    mode_axis.set_xticks(range(len(shells)), labels=shells)
+    mode_axis.set_yticks((0, 0.05, 0.10, 0.15))
+    mode_axis.set(xlim=(-0.55, 1.55), ylim=(0, 0.194),
+                  ylabel="Variance of a unit coefficient")
+    mode_axis.set_title("C  Gaussian quadratic modes", loc="left", fontweight="bold")
+    mode_axis.grid(False, axis="x")
+    mode_axis.legend(loc="upper center", bbox_to_anchor=(0.5, -0.13), ncol=2)
+
+    planes = geometric_screening.central_plane_blanket_census()
+    plane_values = []
+    for y, key in enumerate(("icosahedron", "cuboctahedron")):
+        total = planes[key]["vertex_spanned_planes"]
+        screened = planes[key]["screening_planes"]
+        crossed = total - screened
+        plane_values.append((screened, crossed))
+        for left, count, colour, label in (
+            (0, screened, BLUE, "screened"),
+            (screened, crossed, VERMILLION, "crossed"),
+        ):
+            if count:
+                plane_axis.barh(y, count, left=left, color=colour, height=0.48)
+                plane_axis.annotate(
+                    f"{count} {label}", (left + count, y), xytext=(7, 0),
+                    textcoords="offset points", va="center", fontsize=11, fontweight="bold",
+                )
+    plane_axis.set_yticks(range(len(shells)), labels=shells)
+    plane_axis.set_xticks((0, 5, 10, 15))
+    plane_axis.set(xlim=(0, 22), ylim=(1.55, -0.55), xlabel="Vertex-spanned central planes")
+    plane_axis.set_title("D  Do central planes screen?", loc="left", fontweight="bold")
+    plane_axis.grid(False, axis="y")
+
+    repair_details = " and ".join(
+        f"chord squared {pair[1]} gives probability {pair[4]} and variance {pair[2]}"
+        for pair in fcc_pairs
+    )
+    dual_details = ". ".join(
+        f"{name} has primal variance {row['primal_variance']}, reciprocal dual "
+        f"variance {row['reciprocal_dual_variance']} and copied dual variance "
+        f"{row['copied_dual_variance']}, giving sums of one and {row['copied_variance_sum']}"
+        for name, row in ((carrier_name, duality["carrier"]), (fcc_name, duality["ivm"]))
+    )
+    mode_details = " and ".join(
+        f"{name} has {diagonal} and {mixed}"
+        for name, (diagonal, mixed) in zip(shells, mode_values, strict=True)
+    )
+    plane_details = " and ".join(
+        f"{name} has {screened} screening and {crossed} crossing planes"
+        for name, (screened, crossed) in zip(shells, plane_values, strict=True)
+    )
+    return _save(
+        figure, "fig_three_way.png",
+        "Panel A compares pairs at graph distance two. In one repair attempt the carrier "
+        f"pair reaches adjacency with probability {carrier_pair[4]} and has contrast variance "
+        f"{carrier_pair[2]}. On the FCC shell, {repair_details}, with edge length two. "
+        f"Panel B increases one primal conductance to {duality['carrier']['primal_weight']} "
+        f"and compares normalised variances. {dual_details}. "
+        "Panel C compares the variances of unit diagonal and off-diagonal trace-free "
+        f"quadratic coefficients, respectively. {mode_details}. "
+        "Panel D counts vertex-spanned central planes. Screening means no seam crosses "
+        f"between the strict halves. {plane_details}.",
+    )
+
+
+def centroid_memory_figure() -> Path:
+    """Show common lag covariances and the conditional return witness."""
+    figure, (lag_axis, return_axis) = plt.subplots(1, 2, figsize=(9.5, 3.65))
+    census = centroid_dynamics.centroid_gaussian_census()
+    shells = ("Carrier", "FCC shell")
+    rows = (census["carrier"], census["cuboctahedron"])
+    lags = np.arange(61)
+    for row, name, colour, linestyle in zip(
+        rows, shells, (BLUE, VERMILLION), ("-", "--"), strict=True,
+    ):
+        constant, radical = (float(Fraction(part)) for part in row["retention_parts"])
+        retention = constant + radical * math.sqrt(5)
+        lag_axis.plot(lags, retention**lags, color=colour, linestyle=linestyle,
+                      linewidth=2.2, label=name)
+    lag_axis.set(xlim=(0, 60), ylim=(0, 1.02), xlabel="Lag (repair attempts)",
+                 ylabel="Lag covariance / variance")
+    lag_axis.set_xticks((0, 15, 30, 45, 60))
+    lag_axis.set_yticks((0, 0.25, 0.5, 0.75, 1))
+    lag_axis.set_title("A  Shared repair and Gaussian covariance", loc="left", fontweight="bold")
+    lag_axis.legend(loc="upper right")
+
+    histories = (
+        ("At zero", "next_target_given_zero", SKY, -0.19),
+        ("At zero after target", "next_target_given_previous_target_and_zero", BLUE, 0.19),
+    )
+    for label, field, colour, shift in histories:
+        values = [row[field] for row in rows]
+        bars = return_axis.bar(
+            [index + shift for index in range(len(shells))],
+            [float(Fraction(value)) for value in values], width=0.32,
+            color=colour, edgecolor=INK, linewidth=0.5, label=label,
+        )
+        return_axis.bar_label(bars, labels=values, padding=3, fontsize=11, fontweight="bold")
+    return_axis.set_xticks(range(len(shells)), labels=shells)
+    return_axis.set_yticks((0, 0.01, 0.02), labels=("0", "1%", "2%"))
+    return_axis.set(xlim=(-0.55, 1.55), ylim=(0, 0.0255), ylabel="Probability in one attempt")
+    return_axis.set_title("B  Return to the target centroid", loc="left", fontweight="bold")
+    return_axis.grid(False, axis="x")
+    return_axis.legend(loc="upper center", bbox_to_anchor=(0.5, -0.16), ncol=2)
+
+    alt_shells = ("carrier", "FCC shell")
+    retention_details = " and ".join(
+        f"{row['retention']} for the {name}"
+        for name, row in zip(alt_shells, rows, strict=True)
+    )
+    return_details = " and ".join(
+        f"{row['next_target_given_zero']} and "
+        f"{row['next_target_given_previous_target_and_zero']} on the {name}"
+        for name, row in zip(alt_shells, rows, strict=True)
+    )
+    return _save(
+        figure, "fig_centroid_memory.png",
+        "Panel A shows common normalised lag covariance for stationary repair and the matched "
+        "sampled Ornstein–Uhlenbeck process. On each shell one curve shows both processes. "
+        f"The covariance is alpha to the power of the lag, with retention alpha {retention_details}. "
+        "Panel B shows the probability of returning to a nonzero target on the next attempt, "
+        "conditioning on a current centroid of zero alone or additionally on being at the "
+        f"target in the previous attempt. The probabilities are {return_details}, respectively.",
+    )
+
+
 def write_registry() -> Path:
     """Write the accessibility registry the renderer reads for figure alt text.
 
@@ -2567,6 +2770,8 @@ def main() -> int:
         schedule_figure,
         shell_gauge_figure,
         extended_claims_figure,
+        three_way_figure,
+        centroid_memory_figure,
     )
     unrendered = {
         name

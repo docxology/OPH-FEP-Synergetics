@@ -59,6 +59,8 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         make_figures.descent_figure(),
         make_figures.ivm_figure(),
         make_figures.extended_claims_figure(),
+        make_figures.three_way_figure(),
+        make_figures.centroid_memory_figure(),
         make_figures.cover_figure(),
     ]
     for path in written:
@@ -73,6 +75,8 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         "fig:descent",
         "fig:ivm",
         "fig:extensions",
+        "fig:three-way",
+        "fig:centroid-memory",
         "fig:cover",
     }
     for entry in payload["figures"]:
@@ -89,6 +93,8 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
     assert "full Gaussian contrast variance by graph distance" in cover["alt_text"]
     assert "lowest-mode variance" in cover["alt_text"]
     assert f"{len(make_figures.CORRESPONDENCES)} claims" in cover["alt_text"]
+    centroid = next(entry for entry in payload["figures"] if entry["label"] == "fig:centroid-memory")
+    assert all(value in centroid["alt"] for value in ("1/180", "1/60", "1/72", "1/48"))
     height, width, _ = make_figures.plt.imread(written[-1]).shape
     assert width > height
 

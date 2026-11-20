@@ -108,13 +108,13 @@ or manuscript sources and regenerate them with `scripts/render_docs.py`.
 ```
 .venv/bin/python -m pytest tests/ -q                  # the suite
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
-.venv/bin/oph-fep-synergetics verify                  # the registry, all 53 probes
+.venv/bin/oph-fep-synergetics verify                  # the registry, all 61 probes
 .venv/bin/oph-fep-synergetics verify --pair oph-fep   # one pairwise ledger
 .venv/bin/oph-fep-synergetics verify --kind disagreement   # one kind of claim
 .venv/bin/oph-fep-synergetics sources --vault-root /path/to/vault
 .venv/bin/python scripts/render_docs.py               # regenerate the reference docs and supplement
 .venv/bin/python scripts/render_docs.py --check       # fail when stale
-.venv/bin/python scripts/make_figures.py              # the twenty-four figures and their registry
+.venv/bin/python scripts/make_figures.py              # the twenty-six figures and their registry
 .venv/bin/python scripts/build.py --deliver           # the four manuscript steps, in order
 ```
 

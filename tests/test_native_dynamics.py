@@ -13,6 +13,7 @@ from oph_fep_synergetics.core.native_dynamics import (
     binary_ensemble_census,
     first_entry_census,
     native_rewrite_census,
+    repair_contrast_lumping_census,
     repair_distance_lumping_census,
 )
 
@@ -99,3 +100,54 @@ def test_repair_distance_lumping_is_exact_and_has_a_distinct_spectrum():
     rates = np.sort(np.linalg.eigvals(quotient))
     np.testing.assert_allclose(rates, [(25 - math.sqrt(3)) / 30, 5 / 6, (25 + math.sqrt(3)) / 30, 1])
     assert 1 - rates[-2] > (5 - math.sqrt(5)) / 60
+
+
+def test_carrier_contrast_variance_recovers_the_binary_distance_quotient():
+    carrier = repair_contrast_lumping_census()["carrier"]
+    distance_quotient = repair_distance_lumping_census()
+    assert carrier["attempts_per_state"] == 60
+    assert carrier["classes"] == (
+        (1, "4", "11/30", 30),
+        (2, "6 + 2 sqrt 5", "7/15", 30),
+        (3, "10 + 2 sqrt 5", "1/2", 6),
+    )
+    assert carrier["attempt_count_matrix"] == tuple(
+        row[1:] for row in distance_quotient["attempt_count_matrix"][1:]
+    )
+    assert carrier["stationary_class_masses"] == ("5/11", "5/11", "1/11")
+    assert carrier["distance_lumpable"] is True
+    assert carrier["contrast_lumpable"] is True
+    assert carrier["chord_partition_matches"] is True
+    assert carrier["all_rows_match_token_moves"] is True
+    assert carrier["class_uniform_lift"] is True
+    assert carrier["stationarity_verified"] is True
+    assert carrier["distance_two_adjacency_counts_match"] is True
+
+
+def test_fcc_repair_has_a_contrast_quotient_but_no_distance_quotient():
+    cuboctahedron = repair_contrast_lumping_census()["cuboctahedron"]
+    assert cuboctahedron["attempts_per_state"] == 48
+    assert cuboctahedron["classes"] == (
+        (1, "4", "11/24", 24),
+        (2, "8", "7/12", 12),
+        (2, "12", "5/8", 24),
+        (3, "16", "2/3", 6),
+    )
+    assert cuboctahedron["attempt_count_matrix"] == (
+        (44, 2, 2, 0),
+        (4, 40, 4, 0),
+        (2, 2, 42, 2),
+        (0, 0, 8, 40),
+    )
+    assert cuboctahedron["stationary_class_masses"] == ("4/11", "2/11", "4/11", "1/11")
+    assert cuboctahedron["distance_lumpable"] is False
+    assert cuboctahedron["contrast_lumpable"] is True
+    assert cuboctahedron["chord_partition_matches"] is True
+    assert cuboctahedron["all_rows_match_token_moves"] is True
+    assert cuboctahedron["class_uniform_lift"] is True
+    assert cuboctahedron["stationarity_verified"] is True
+    assert cuboctahedron["distance_two_adjacency_counts_match"] is True
+    assert tuple(row[1:] for row in cuboctahedron["distance_two_witnesses"]) == (
+        ("8", "7/12", 2, "1/12"),
+        ("12", "5/8", 1, "1/24"),
+    )

@@ -5,12 +5,22 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 from fractions import Fraction
 from functools import lru_cache
+from typing import Callable
 
 import numpy as np
 
+from ..geometry.exact import Surd5, exact_icosahedron_vertices
+from ..geometry.lattice import cuboctahedron_adjacency, cuboctahedron_neighbors
+from ..geometry.quadray import squared_distance
 from .carrier import icosahedral_carrier
 from .controls import repair_datum
-from .network import graph_distances, intersection_array
+from .network import (
+    Adjacency,
+    graph_distances,
+    graphs_are_isomorphic,
+    intersection_array,
+    pair_resistances,
+)
 from .repair import energy, is_broken, native_repair, shell_gap
 
 State = tuple[int, ...]
@@ -231,6 +241,124 @@ def repair_distance_lumping_census() -> dict[str, object]:
         "binary_eigenvalue_sum": str(eigenvalue_sum),
         "binary_eigenvalue_product": str(eigenvalue_product),
         "binary_eigenvalue_discriminant": str(eigenvalue_sum**2 - 4 * eigenvalue_product),
+    }
+
+
+def _contrast_lumping_case(
+    adjacency: Adjacency,
+    squared_chord: Callable[[int, int], Fraction | Surd5],
+) -> dict[str, object]:
+    """Compare the distance and Gaussian contrast-variance partitions."""
+    pairs_and_variances = pair_resistances(adjacency)
+    pairs = tuple((left, right) for left, right, _ in pairs_and_variances)
+    variances = tuple(variance for _, _, variance in pairs_and_variances)
+    chords = tuple(squared_chord(left, right) for left, right in pairs)
+    distances = graph_distances(adjacency)
+    pair_distances = tuple(distances[left][right] for left, right in pairs)
+    seams = tuple((left, right) for left, right in pairs if adjacency[left][right])
+    states = tuple(tuple(int(port in pair) for port in range(len(adjacency))) for pair in pairs)
+    counts = _attempt_counts(states, seams)
+    draws = 2 * len(seams)
+
+    variance_classes = sorted(set(variances))
+    class_indices = np.asarray([variance_classes.index(value) for value in variances])
+    membership = np.eye(len(variance_classes), dtype=np.int64)[class_indices]
+    sizes = membership.sum(axis=0)
+    projected = counts @ membership
+    representatives = [variances.index(value) for value in variance_classes]
+    quotient = projected[representatives]
+    distance_indices = np.asarray(pair_distances) - 1
+    distance_membership = np.eye(max(pair_distances), dtype=np.int64)[distance_indices]
+    distance_counts = counts @ distance_membership
+    distance_lumpable = all(
+        np.all(rows == rows[0])
+        for rows in (distance_counts[distance_indices == group]
+                     for group in range(distance_membership.shape[1]))
+    )
+
+    # Independently count occupied-to-empty moves. Each seam with one token
+    # contributes one move under one of its two coins. All other draws wait.
+    variance_index = dict(zip(pairs, class_indices, strict=True))
+    move_counts = np.zeros_like(projected)
+    for row, (left, right) in enumerate(pairs):
+        for mover, fixed in ((left, right), (right, left)):
+            for destination, edge in enumerate(adjacency[mover]):
+                if edge and destination != fixed:
+                    target = tuple(sorted((fixed, destination)))
+                    move_counts[row, variance_index[target]] += 1
+        move_counts[row, class_indices[row]] += draws - int(move_counts[row].sum())
+
+    witnesses = {}
+    adjacency_counts_match = True
+    for row, (left, right) in enumerate(pairs):
+        if pair_distances[row] != 2:
+            continue
+        common_neighbors = sum(
+            bool(first and second)
+            for first, second in zip(adjacency[left], adjacency[right], strict=True)
+        )
+        adjacent_attempts = int(distance_counts[row, 0])
+        adjacency_counts_match &= adjacent_attempts == 2 * common_neighbors
+        witnesses.setdefault(variances[row], (
+            (left, right), str(chords[row]), str(variances[row]), common_neighbors,
+            str(Fraction(adjacent_attempts, draws)),
+        ))
+
+    return {
+        "attempts_per_state": draws,
+        "classes": tuple(
+            (pair_distances[row], str(chords[row]), str(variances[row]), int(size))
+            for row, size in zip(representatives, sizes, strict=True)
+        ),
+        "attempt_count_matrix": tuple(tuple(row) for row in quotient.tolist()),
+        "contrast_lumpable": bool(np.array_equal(projected, membership @ quotient)),
+        "distance_lumpable": distance_lumpable,
+        "chord_partition_matches": (
+            len(set(zip(chords, variances, strict=True))) == len(set(chords)) == len(variance_classes)
+        ),
+        "all_rows_match_token_moves": bool(np.array_equal(projected, move_counts)),
+        "class_uniform_lift": bool(np.array_equal(
+            (membership.T @ counts) * sizes[class_indices],
+            sizes[:, None] * quotient[:, class_indices],
+        )),
+        "stationary_class_masses": tuple(str(Fraction(int(size), len(states))) for size in sizes),
+        "stationarity_verified": bool(np.array_equal(sizes @ quotient, draws * sizes)),
+        "distance_two_adjacency_counts_match": adjacency_counts_match,
+        "distance_two_witnesses": tuple(witnesses[variance] for variance in sorted(witnesses)),
+    }
+
+
+def repair_contrast_lumping_census() -> dict[str, dict[str, object]]:
+    """Test exact binary repair quotients on the carrier and the FCC first shell.
+
+    The same fair, uniform local rule is run on each graph. The shell is the
+    cuboctahedral graph of nearest neighbours of the FCC origin, with the
+    origin omitted. The Gaussian is the centred intrinsic Gaussian with the
+    unit graph Laplacian as precision, so contrast variances are resistances.
+    Chords use edge length two. Witness indices follow the respective exact
+    vertex constructors.
+    """
+    vertices = exact_icosahedron_vertices()
+
+    def carrier_chord(left: int, right: int) -> Surd5:
+        difference = (x - y for x, y in zip(vertices[left], vertices[right], strict=True))
+        return Surd5.of(sum(delta * delta for delta in difference))
+
+    carrier_adjacency = tuple(
+        tuple(int(carrier_chord(left, right) == 4) for right in range(len(vertices)))
+        for left in range(len(vertices))
+    )
+    oph_adjacency = icosahedral_carrier().adjacency_matrix().astype(int).tolist()
+    if not graphs_are_isomorphic(carrier_adjacency, oph_adjacency):
+        raise AssertionError("the exact icosahedron must realise the OPH carrier")
+
+    sites = cuboctahedron_neighbors()
+    return {
+        "carrier": _contrast_lumping_case(carrier_adjacency, carrier_chord),
+        "cuboctahedron": _contrast_lumping_case(
+            cuboctahedron_adjacency(),
+            lambda left, right: Fraction(squared_distance(sites[left], sites[right]), 2),
+        ),
     }
 
 

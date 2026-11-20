@@ -41,6 +41,7 @@ __all__ = [
     "intersection_array",
     "kirchhoff_index",
     "laplacian_matrix",
+    "pair_resistances",
     "resistance_ladder",
     "subgraph_census",
 ]
@@ -173,6 +174,11 @@ def effective_resistance(adjacency: Adjacency, source: int, target: int) -> Frac
     rational for an integer graph.
     """
     return _resistance_from_inverse(_grounded_inverse(adjacency), source, target)
+
+
+def pair_resistances(adjacency: Adjacency) -> tuple[tuple[int, int, Fraction], ...]:
+    """Return all indexed pair resistances from a single exact grounded inverse."""
+    return tuple(_pair_resistances(adjacency, _grounded_inverse(adjacency)))
 
 
 def resistance_ladder(adjacency: Adjacency) -> tuple[tuple[int, Fraction, int], ...]:

@@ -27,6 +27,8 @@ its probe.
 | the carrier's curvature | the angle defect at every vertex of the derived chart, summed against Gauss-Bonnet, plus the defect of the dual solid's face set |
 | the twelve-around-one families | compare the cuboctahedron and icosahedron as solids with distinct adjacency and volume. The cube's line graph independently realises the cuboctahedral graph. |
 | the quadratic field of the tetravolume | the Galois conjugation of $\sqrt{5}$ (fixing $\sqrt{2}$) as a probe, in exact field arithmetic: it fixes the counting invariants and moves the icosahedron's tetravolume, whose product with its conjugate is exactly 50 |
+| the transfer of binary repair to the FCC first shell | replay the same fair coin and uniform seam sampling on the cuboctahedral graph. Contrast variance gives an exact quotient on both graphs. The FCC graph-distance and both centroid processes retain observable memory under stationarity. |
+| geometric Gaussian comparisons | test reciprocal conductance duality on two spherical graph pairs, compare the pulled-back seam precision for unit-direction quadratics, and use scalar Gaussian precision and vertex cuts to test central-plane screening. |
 
 ## Cited but not implemented
 
@@ -100,7 +102,9 @@ carries it.
 
 ## Domain limits on the isomorphism claims
 
-Four entries carry the `exact-on-domain` status.
+The registry records the domain of each conditional identity. The following
+examples spell out the assumptions that make the Gaussian and repair identities
+hold.
 
 - `variational-equivalence` holds on the carrier with a Gaussian record prior.
   A clamped, nonquadratic seam gives a posterior mean different from the
@@ -118,6 +122,17 @@ Four entries carry the `exact-on-domain` status.
 - `binary-conditional-variance` uses the same binary reference and fair coin
   and samples seams uniformly. On this domain the Dirichlet form of the
   random-seam repair kernel is the seam average of the conditional variances.
+- `repair-contrast-quotient` applies to the two specified static graphs.
+  Its readout is full intrinsic Gaussian contrast variance at unit seam
+  precision. The FCC first shell excludes the central site.
+- `reciprocal-dual-weights` uses matched signed edge coordinates and the
+  conductance-normalised covariances of intrinsic Gaussian edge differences
+  on spherical dual pairs. The cut-and-cycle dimension argument uses the
+  spherical Euler characteristic.
+- `quadratic-even-field` uses unit vertex directions and the centred
+  Laplacian Gaussian. In the plane calculation, `central-plane-screening`
+  grounds the plane ports for the intrinsic comparison so the free half-field
+  coordinates carry a Dirichlet density.
 
 The general variational identity separates divergence from log evidence when
 the expectations are defined and the evidence is positive. The quadratic

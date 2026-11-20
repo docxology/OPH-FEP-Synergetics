@@ -329,6 +329,110 @@
           "citations": ["quadmath", "klein1993resistance", "osting2023extremal"]
         }
       ]
+    },
+    {
+      "id": "three-way-transfer",
+      "title": "Three-way correspondences and counterexamples",
+      "entries": [
+        {
+          "id": "contrast-record",
+          "term": "Contrast record",
+          "meanings": {
+            "oph": "A scalar readout of the occupied pair in fair binary seam repair.",
+            "fep": "The intrinsic variance of the difference between the two port fields groups states into an exact Markov quotient.",
+            "synergetics": "Squared chords distinguish the FCC pair orbits, including two orbits at distance two."
+          },
+          "relation": "conditional-identity",
+          "limit": "The same uniform-seam, fair-coin protocol applies to both graphs. FCC graph distance alone retains memory even under stationarity.",
+          "probes": [
+            "repair-contrast-quotient",
+            "repair-distance-counterexample"
+          ],
+          "citations": [
+            "oph",
+            "quadmath",
+            "kemeny1976finite"
+          ]
+        },
+        {
+          "id": "centroid-memory",
+          "term": "Centroid memory",
+          "meanings": {
+            "oph": "The local seam law evolves the occupied pair whose geometric centroid is observed.",
+            "fep": "A sampled isotropic Gaussian diffusion matches all lag covariances. Three-time probabilities distinguish the repair process.",
+            "synergetics": "Opposite loaded pairs collapse to the same centroid on both shells."
+          },
+          "relation": "counterexample",
+          "limit": "The result compares stationary second moments and exact three-time probabilities for the binary protocol on static graphs.",
+          "probes": [
+            "repair-centroid-memory"
+          ],
+          "citations": [
+            "oph",
+            "quadmath",
+            "uhlenbeck1930brownian"
+          ]
+        },
+        {
+          "id": "reciprocal-edge-precision",
+          "term": "Reciprocal edge precision",
+          "meanings": {
+            "oph": "Oriented carrier seams supply a matched edge basis for the carrier and its face dual.",
+            "fep": "Energy-normalised edge covariances give complementary projectors exactly at constant primal–dual conductance product.",
+            "synergetics": "The cuboctahedral first shell and the Voronoi cell furnish the second spherical dual pair."
+          },
+          "relation": "conditional-identity",
+          "limit": "Weights must be positive and edge signs matched. Copying even one nonuniform weight breaks complementarity.",
+          "probes": [
+            "reciprocal-dual-weights",
+            "copied-dual-weight-obstruction"
+          ],
+          "citations": [
+            "oph",
+            "quadmath",
+            "furrer2020resistors"
+          ]
+        },
+        {
+          "id": "quadratic-even-field",
+          "term": "Quadratic field",
+          "meanings": {
+            "oph": "The sampled trace-free quadratic spans the centred antipodally even port fields.",
+            "fep": "Pulling back the seam precision yields a Gaussian on the coefficients of the quadratic.",
+            "synergetics": "The cuboctahedral directions split the diagonal and off-diagonal quadratic variances."
+          },
+          "relation": "geometric-comparison",
+          "limit": "Use unit vertex directions and unit seam precision. Equal linear frame isotropy leaves different fourth moments.",
+          "probes": [
+            "quadratic-even-field",
+            "quadratic-isotropy-obstruction"
+          ],
+          "citations": [
+            "oph",
+            "quadmath",
+            "delsarte1977codes"
+          ]
+        },
+        {
+          "id": "central-plane-screen",
+          "term": "Central-plane screen",
+          "meanings": {
+            "oph": "Ports on a geometric plane are treated as fixed records on the carrier.",
+            "fep": "The strict half-fields are conditionally independent when the reduced precision has zero cross-block entries.",
+            "synergetics": "The FCC coordinate and body-diagonal equators cut all crossing seams. Carrier equators leave crossing seams."
+          },
+          "relation": "counterexample",
+          "limit": "The Gaussian is scalar with seam support. The conditional information values use the grounded unit Laplacian.",
+          "probes": [
+            "central-plane-screening"
+          ],
+          "citations": [
+            "oph",
+            "quadmath",
+            "dempster1972covariance"
+          ]
+        }
+      ]
     }
   ]
 }

@@ -14,7 +14,7 @@ contracts.
 .venv/bin/oph-fep-synergetics verify --kind <kind>
 ```
 
-Each of the 53 entries carries an executable probe. Its return value
+Each of the 61 entries carries an executable probe. Its return value
 `(passed, values)` records both the verdict and the quantities checked.
 
 Exit codes:
@@ -34,17 +34,21 @@ When combining filters, the probes must match every specified filter.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-431 tests. The suite runs offline from a fresh process and exercises the actual
+439 tests. The suite runs offline from a fresh process and exercises the actual
 scientific code paths.
 
 | file | what it pins down |
 | --- | --- |
 | `test_carrier.py` | 12/30/20, five-regular, the derived port chart, the exact spectrum and gap, the 78/66 shell, the isomorphism witness, and the rejection cases |
 | `test_repair.py` | conservation and the energy identity over all 4680 transitions, the odd-unit coin, the argument guards, the gated schedule reaching rest, and an ungated move that lowers nothing |
-| `test_native_dynamics.py` | ungated confluence and nontermination, gated normal forms, binary-chain stationarity, gap and ensemble relaxation, and exact equality of the conditional-variance forms, first binary entry and its distance quotient |
+| `test_native_dynamics.py` | ungated confluence and nontermination, gated normal forms, binary-chain stationarity, gap and ensemble relaxation, equality of the conditional-variance forms, first binary entry, and the distance and contrast-variance quotients |
 | `test_sheaf.py` | laplacians, coboundaries, global sections, harmonic extension (including the fully-clamped case), record injectivity, diffusion, and every constructor guard |
 | `test_free_energy.py` | the KL closed forms, the Schur complement, the update-residual form of Bayesian surprise, the variational bound, rooted-forest enumeration for the record layouts, greedy clamping and the interior-free model |
 | `test_planar_duality.py` | complementary Gaussian edge covariances from centred pseudoinverses and the dual graphs against exact geometric incidence |
+| `test_weighted_duality.py` | all exact entries under reciprocal conductances, a copied-weight defect, and a separate weighted projector and resistance check |
+| `test_quadratic_modes.py` | exact quadratic frame and precision factors, checked independently by rotating and evaluating explicit forms |
+| `test_geometric_screening.py` | exact central-plane and separator counts, and residual conditional information checked through covariance conditioning |
+| `test_centroid_dynamics.py` | full lag-covariance match and three-time event probabilities for the stationary centroid |
 | `test_controls.py` | the descent census, the Routh column in closed form, the Lyapunov pair and its determinant, the mediator threshold, the affine contrast as an exact rational, the orbits, the four-cycle trap, and the replicator potential |
 | `test_geometry.py` | the twelve moves and their metric, the gauge, the exact xyz round-trip over shell sites, the shell sequence, the exact volumes, the vector equilibrium, and the subdivision identities |
 | `test_geometry_guards.py` | the icosahedral adjacency matrix and every range guard |
@@ -61,7 +65,7 @@ scientific code paths.
 | `test_cli.py` | every subcommand, the JSON payloads, the exit codes, and the console-script declaration |
 | `test_public_api.py` | that every exported name resolves, and that no prefix of a pinned commit appears anywhere in the package |
 | `test_docs.py` | current generated documents and ontology supplement, registry mentions in the main prose, and working relative links in the guides |
-| `test_manuscript.py` | the twelve authored or generated sections the renderer discovers, token and citation coverage, an explicit label on each top-level heading, registry table order, and correspondence between figure links and the accessibility registry when artefacts exist |
+| `test_manuscript.py` | the authored and generated sections the renderer discovers, token and citation coverage, an explicit label on each top-level heading, registry table order, and correspondence between figure links and the accessibility registry when artefacts exist |
 | `test_figures.py` | that every figure builder exists and is orchestrated, and that a sample renders non-trivial PNGs plus a well-formed registry (skipped without the `figures` extra) |
 | `test_render_contract.py` | render diagnostics and the front matter, author attribution and ontology supplement in the tracked PDF |
 

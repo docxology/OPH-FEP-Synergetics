@@ -31,6 +31,12 @@ exact graph-distance reduction, and count rooted forests through conditional
 Gaussian precision. A greedy record choice misses every optimal triple.
 Planar dual edge covariances complement one another, and the FCC shell splits
 one graph-distance class into two different contrast variances.
+Across both graphs, contrast variance gives an exact Markov record of
+binary repair, while the observed centroid retains memory despite matching
+all lag covariances of a Gaussian process. The weighted dual identity
+requires reciprocal conductances. The two geometries also give different
+quadratic coefficient variances and different Gaussian screening by
+central planes.
 Cuboctahedral and icosahedral configurations attain the same kissing number
 with different contacts among the outer spheres. The cuboctahedral gauge
 determines lattice coordination shells, and equal-covariance Gaussian

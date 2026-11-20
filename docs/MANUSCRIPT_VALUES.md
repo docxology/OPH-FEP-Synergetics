@@ -41,14 +41,14 @@ gives one; `Note` records what is measured rather than quoted.
 | `two_node.relaxation_min_radius_measured` | 0.840070783 |  | two_node_relaxation_orbit, measured in this package | minimum over the finite post-transient relaxation sample |
 | `two_node.relaxation_max_radius` | 1.05339122 |  | two_node_relaxation_orbit, measured in this package | maximum over the finite post-transient relaxation sample |
 | `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | estimated time to return near the anchor point of the sampled trajectory |
-| `registry.entries` | 53 | `53` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.isomorphisms` | 26 | `26` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.disagreements` | 17 | `17` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.entries` | 61 | `61` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.isomorphisms` | 29 | `29` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.disagreements` | 22 | `22` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.complementarities` | 10 | `10` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.oph_fep` | 31 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
 | `registry.fep_synergetics` | 5 |  | analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics |  |
 | `registry.synergetics_oph` | 14 |  | analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph |  |
-| `registry.three_way` | 3 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
+| `registry.three_way` | 11 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
 | `carrier.tree_number` | 5184000 | `5184000` | core/invariants.py, Kirchhoff: the exact reduced-Laplacian determinant |  |
 | `gmrf.marginal_variance` | 0.194444444 | `7/36` | core/invariants.py, the reciprocal spectrum summed exactly in the rationals |  |
 | `gmrf.blanket_size` | 5 | `five` | core/invariants.py: the Markov blanket of a port is its neighbours |  |
@@ -220,6 +220,30 @@ gives one; `Note` records what is measured rather than quoted.
 | `fcc.kirchhoff_index` | 37 |  | probe:cuboctahedral-spectral-chords:kirchhoff_index |  |
 | `fcc.distance_two_chords` | (8, 12) |  | probe:cuboctahedral-distance-split:distance_two_chords |  |
 | `fcc.distance_two_resistances` | (7/12, 5/8) |  | probe:cuboctahedral-distance-split:distance_two_resistances |  |
+| `three.fcc_middle_variances` | (7/12, 5/8) |  | probe:repair-distance-counterexample |  |
+| `three.fcc_common_neighbours` | (2, 1) |  | probe:repair-distance-counterexample |  |
+| `three.fcc_inward` | (1/12, 1/24) |  | probe:repair-distance-counterexample |  |
+| `three.fcc_stationary_inward` | 1/18 |  | probe:repair-distance-counterexample |  |
+| `three.fcc_history_inward` | 1/16 |  | probe:repair-distance-counterexample |  |
+| `three.fcc_attempts` | 48 |  | probe:repair-contrast-quotient |  |
+| `three.fcc_quotient` | ((44, 2, 2, 0), (4, 40, 4, 0), (2, 2, 42, 2), (0, 0, 8, 40)) |  | probe:repair-contrast-quotient |  |
+| `three.fcc_stationary` | (4/11, 2/11, 4/11, 1/11) |  | probe:repair-contrast-quotient |  |
+| `three.dual_changed_weight` | 4 |  | probe:copied-dual-weight-obstruction |  |
+| `three.dual_copied_sums` | (2872/1827, 1912/1197) |  | probe:copied-dual-weight-obstruction |  |
+| `three.carrier_quadratic_frame` | 8/5 |  | probe:quadratic-even-field |  |
+| `three.fcc_quadratic_frame` | (1, 2) |  | probe:quadratic-even-field |  |
+| `three.carrier_quadratic_precision` | 48/5 |  | probe:quadratic-even-field |  |
+| `three.fcc_quadratic_precisions` | (6, 8) |  | probe:quadratic-even-field |  |
+| `three.fcc_quadratic_eigenvalues` | (6, 4) |  | probe:quadratic-even-field |  |
+| `three.fcc_diagonal_variance` | 1/6 |  | probe:quadratic-isotropy-obstruction |  |
+| `three.fcc_off_diagonal_variance` | 1/8 |  | probe:quadratic-isotropy-obstruction |  |
+| `three.fcc_quadratic_variance_ratio` | 4/3 |  | probe:quadratic-isotropy-obstruction |  |
+| `three.carrier_planes` | 15 |  | probe:central-plane-screening |  |
+| `three.carrier_cross_seams` | 2 |  | probe:central-plane-screening |  |
+| `three.carrier_screen_ratio` | 10/9 |  | probe:central-plane-screening |  |
+| `three.fcc_planes` | 7 |  | probe:central-plane-screening |  |
+| `three.carrier_centroid_probs` | (1/180, 1/60) |  | probe:repair-centroid-memory |  |
+| `three.fcc_centroid_probs` | (1/72, 1/48) |  | probe:repair-centroid-memory |  |
 | `carrier.chart_0` | 1, 5, 7, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 0 |
 | `carrier.chart_1` | 0, 5, 7, 8, 9 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 1 |
 | `carrier.chart_2` | 3, 4, 6, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 2 |
