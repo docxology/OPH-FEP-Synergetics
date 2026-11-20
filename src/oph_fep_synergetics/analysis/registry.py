@@ -2444,7 +2444,7 @@ def _probe_jitterbug_graph_obstruction() -> tuple[bool, dict]:
         ),
         "icosahedral_edges": golden["hull_edge_count"],
         "matching_edges": golden["matching_edge_count"],
-        "operation_parameter": golden["parameter"],
+        "operation_parameter": str(golden["parameter"]),
         "golden_lengths_agree": golden["bar_squared_length"] == golden["matching_squared_length"],
     }
     return (
