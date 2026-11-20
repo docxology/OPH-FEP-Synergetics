@@ -3,10 +3,10 @@
 ## What this manuscript is made of
 
 The manuscript uses the `docxology/template` rendering pipeline [@template].
-Pandoc produces LaTeX and resolves bibliographic citations against
+Pandoc produces LaTeX, and BibTeX processes
 [`references.bib`](references.bib). The `pandoc-crossref` and `formalism.lua`
-filters generate numbering and cross-references from stable labels. Numbers
-can change when statements move between editions.
+filters use stable labels to generate numbering and cross-references.
+Numbers can change when statements move between editions.
 
 Quoted numerical results are brace-delimited tokens resolved at build time.
 `manuscript_variables/values.py` binds each token to its computation or source.

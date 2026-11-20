@@ -17,8 +17,9 @@ supplies one in which they all do.
 ::: {#prop:quadray-ivm .proposition}
 The twelve quadray neighbour moves of [@eq:neighbours] are distinct, all have
 squared norm {{IVM_NEIGHBOR_SQUARED_DISTANCE}}, and their minimum pairwise squared
-distance is also {{IVM_NEIGHBOR_SQUARED_DISTANCE}}, so the twelve form a kissing
-configuration of radius $\sqrt{2}$. The coordination shells, enumerated, have
+distance is also {{IVM_NEIGHBOR_SQUARED_DISTANCE}}. They therefore serve as
+centres of twelve spheres of radius $\sqrt{2}$ that touch an equal sphere at
+the origin. The enumerated coordination shells have
 `{{IVM_SHELL_COUNTS}}` sites for $k = 0,\dots,4$ and cumulative counts
 `{{IVM_CUMULATIVE_COUNTS}}`. The tetravolume table `{{IVM_VOLUME_RATIOS}}` is
 derived exactly: each solid is the convex hull of an explicit integer vertex set
@@ -173,8 +174,8 @@ test, and sums signed tetrahedra in the field $\mathbb{Q}(\sqrt{5})$; dividing b
 the regular tetrahedron of the same edge gives the tetravolume as $\sqrt{2}$
 times `{{ICOSAHEDRON_TETRAVOLUME_OVER_SQRT2}}` exactly, with no rounding anywhere.
 The floating-point route applies the divergence theorem to the measured surface
-and divides by the same tetrahedron, and the two agree to the last digit, so the
-agreement is an identity rather than a tolerance chosen to make it hold.
+and divides by the same tetrahedron. It corroborates the field calculation at
+the numerical tolerance used by the probe.
 
 Two details of the computation are worth recording because they are corrections
 rather than conveniences. The first is that a face list is an *unordered* set of
@@ -185,10 +186,10 @@ convention is a convention: changing the unit tetrahedron rescales every entry i
 the table, and the claim made here is the ratio the convention defines and not an
 absolute volume.
 
-The oriented carrier faces bound the solid. Synergetics supplies the reference
-tetrahedron for computing its enclosed volume. This common unit makes the
-carrier's algebraic volume directly comparable with the integral entries in
-the lattice table [@sec:cuboctahedron].
+The oriented carrier faces bound the solid. Using the reference tetrahedron
+whose edge equals the prime vector makes the carrier's algebraic volume
+directly comparable with the integral lattice entries at that same edge
+scale [@sec:cuboctahedron].
 
 ## The IVM Voronoi cell determines the FCC packing density {#sec:packing}
 

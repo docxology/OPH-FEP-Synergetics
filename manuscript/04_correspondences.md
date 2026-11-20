@@ -102,14 +102,15 @@ $$ {#eq:ve}
 
 The probe uses two antipodal carrier records with prior precision
 {{FE_RECORD_PRIOR_PRECISION}} and repeats the checks on a four-node chain.
-It computes the settled interior of [@eq:ve] three ways that share no linear solve.
+It computes the posterior mean in [@eq:ve] in three ways that share no linear
+solve.
 The harmonic extension solves the interior block. The constrained minimiser
 solves one saddle-point (KKT) system for $\min \tfrac{1}{2}z^{\top}Lz$ subject to
 $z_o = o$ over all coordinates and a multiplier per record. The prior contributes
 a fixed term at fixed records, so the same constrained solution minimises the
 relative entropy of a mean shift at fixed joint precision. This is the
 constrained relative-entropy reading of OPH's premise A3.
-And the predictive-coding flow `perceive` reaches the same point in
+The predictive-coding flow `perceive` reaches the same point in
 {{VE_ITERATIONS}} iterations with residual {{VE_RESIDUAL}}, from every start
 tried. The probe also evaluates the free energy at the posterior directly, as
 energy minus entropy, and finds it equal to the surprisal: the divergence in
@@ -168,12 +169,12 @@ conditional distribution of $u$. Splitting the logarithm of $p/u$
 proves the identity. The probe checks it on a mixed state for every seam.
 The conditioning interpretation is recorded as OPH premise `PR-07` [@oph].
 
-The status is `exact-on-domain`, and the probe asserts the boundary. With the
-uniform law on all {{SHELL_TOTAL_TWO}} configurations as reference the identity
-fails at the doubled configurations, on the {{CONDITIONING_OFF_SHELL_FAILURES}}
-seams that meet a doubled port out of {{CONDITIONING_OFF_SHELL_CASES}} off-shell
-cases: the repair moves one unit across with certainty, and conditioning would
-spread the weight over three configurations.
+The probe also uses the uniform law on all {{SHELL_TOTAL_TWO}} total-two
+configurations as the reference. Of {{CONDITIONING_OFF_SHELL_CASES}}
+doubled-state/seam pairs, it finds {{CONDITIONING_OFF_SHELL_FAILURES}} failures,
+one for each pair whose seam is incident to its doubled port. Repair then
+moves one unit across with certainty, while conditioning spreads the weight
+over three configurations.
 
 In the FEP's vocabulary each native repair is a perception step whose recognition
 density is the exact posterior, with the uniform reference as prior and the
@@ -185,10 +186,11 @@ the binary shell while every step there is exact inference. Registered as
 
 ::: {#prop:binary-conditional-variance .proposition}
 Let $u$ be uniform on the binary load shell, $Y_e$ the datum preserved by seam
-$e$, and $P$ the native attempt operator with uniform seam selection and a fair
-coin. For every real observable $f$ on the shell,
+$e$, and $P_{\mathrm{bin}}$ the attempt operator on binary configurations with
+uniform seam selection and a fair coin. For every real observable $f$ on the
+shell,
 $$
-\langle f,(I-P)f\rangle_u
+\langle f,(I-P_{\mathrm{bin}})f\rangle_u
 = \frac{1}{\lvert E\rvert}\sum_{e\in E}\mathbb E_u[\operatorname{Var}_u(f\mid Y_e)].
 $$
 :::
@@ -263,14 +265,12 @@ constant global sections. Recording a chain node separates these sections.
 The empty record map sends all of them to the same value. Registered as
 `sheaf-agreement`.
 
-The sheaf formulation is the one that generalises. A scalar identity sheaf is
-the simplest case; the same construction with non-identity restrictions is how
-the FEP's precision structure would enter, and the harmonic-extension identity of
-[@prop:ve] is the same computation written in sheaf language
-[@hansen2019sheaves; @robinson2014topological]. The agreement reported here is
-therefore not a coincidence of two implementations but a statement that the
-carrier's Laplacian is the coboundary Laplacian of a sheaf, which is the bridge
-[@proposal2026] proposed.
+The carrier's Laplacian is the coboundary Laplacian of this scalar identity
+sheaf. With other restriction maps the same construction produces other
+precision operators. On the carrier, harmonic extension in [@prop:ve] solves
+the Dirichlet problem for the sheaf Laplacian
+[@hansen2019sheaves; @robinson2014topological]. This instantiates the bridge
+proposed in [@proposal2026].
 
 ## The carrier counts its own spanning trees {#sec:tree-number}
 

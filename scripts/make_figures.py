@@ -468,7 +468,7 @@ def dstability_figure() -> Path:
     left.set_xticklabels(["−6", "−2", "−0.5", "0", "0.25", "0.5"])
     left.set_xlabel("Real part (symlog scale)")
     left.set_ylabel("Imaginary part")
-    left.set_title("Eigenvalues of the scaled matrix", loc="left")
+    left.set_title(r"Eigenvalues of $D_kA$", loc="left")
     left.legend(
         handles=handles,
         loc="upper center",
@@ -511,11 +511,12 @@ def dstability_figure() -> Path:
     return _save(
         figure,
         "fig_dstability.png",
-        "Two panels. Left: the eigenvalues of the scaled matrix in the complex plane for "
+        "Two panels. Left: the eigenvalues of D sub k times A in the complex plane for "
         f"{len(samples)} couplings. The real axis uses a symmetric log scale to open the region "
         "near zero. Coupling is distinguished by colour and the positive-real-part samples use "
         "cross markers on the shaded side. "
-        "Right: the third Routh entry two times ten minus k squared over k plus two against the "
+        "Right: the third Routh entry, twice the quantity ten minus k squared divided by "
+        "the quantity k plus two, against the "
         f"coupling, crossing zero at {format_value(values['d_stability.routh_onset'])} and equal "
         f"to {format_value(values['d_stability.routh_k4_third'])} at k equal to four.",
     )
@@ -662,7 +663,7 @@ def blanket_figure() -> Path:
     right.set_ylim(-0.04 * max(marked), 1.13 * max(marked))
     right.set_xlabel("Solenoidal parameter $q$")
     right.set_ylabel(r"Entropy production $2q^2$")
-    right.set_title("The stationary density stays fixed", loc="left")
+    right.set_title("Entropy production varies at fixed density", loc="left")
     return _save(
         figure,
         "fig_blanket.png",
@@ -712,6 +713,10 @@ def orbit_figure() -> Path:
             zorder=2,
         )
     left.plot(samples[:, 0], samples[:, 1], color=BLUE, linewidth=1.8, zorder=3)
+    arrow_step = round(0.025 * period / sample_dt)
+    left.annotate("", xy=samples[2 * arrow_step], xytext=samples[arrow_step],
+                  arrowprops={"arrowstyle": "-|>", "color": BLUE, "lw": 1.6},
+                  zorder=4)
     left.scatter([0.0], [0.0], color=VERMILLION, s=67, marker="X", zorder=4)
     left.annotate(
         "Unstable\nfixed point",
@@ -739,7 +744,7 @@ def orbit_figure() -> Path:
         xytext=(0.0, arrow_y),
         arrowprops={"arrowstyle": "|-|", "color": INK, "lw": 1.1, "shrinkA": 0, "shrinkB": 0},
     )
-    top.text(period * 1.12, arrow_y, f"Orbit period estimate {period:.3f}", va="center",
+    top.text(period * 1.12, arrow_y, f"Full phase-plane return ≈ {period:.3f}", va="center",
              fontsize=10, color=INK)
     top.set_xlim(0.0, window)
     top.set_ylim(r_min - 0.16, r_max + 0.08)
@@ -763,9 +768,11 @@ def orbit_figure() -> Path:
         figure,
         "fig_orbit.png",
         "Three panels. Left: the relaxation orbit in the plane, a closed curve that neither "
-        f"escapes nor reaches the marked unstable fixed point at the origin. The shaded annulus "
+        "escapes nor reaches the marked unstable fixed point at the origin. An arrow shows the "
+        "direction of time. The shaded annulus "
         f"ranges from radius {r_min:.4f} to {r_max:.4f}. Top right: the continuous relaxation "
-        f"radius over five periods, with the estimated period of {period:.3f} marked. Bottom "
+        f"radius over five full phase-plane periods, with a return-time estimate of {period:.3f} "
+        "marked. The radius oscillates several times within each return. Bottom "
         f"right: samples of the synchronous clipped map by discrete iteration, showing a radius "
         f"floor of {sync_floor:g} after the transient.",
     )
@@ -838,7 +845,7 @@ def ivm_figure() -> Path:
     )
 
     _plot_tetravolumes(right, geometry.derived_volume_ratios())
-    right.set_title("Volumes in equal-edge tetrahedra", loc="left")
+    right.set_title("Volumes relative to the IVM unit tetrahedron", loc="left")
     return _save(
         figure,
         "fig_ivm.png",
@@ -968,17 +975,20 @@ def _cover_contrasts(figure: plt.Figure, width: float, height: float,
     chart.grid(False, axis="x")
     chart.set_xticks(steps)
     chart.set_yticks((1, 2, 3, 4))
-    chart.set(xlim=(0.85, 3.18), ylim=(0.75, 4.04))
+    chart.set(xlim=(0.85, 3.65), ylim=(0.75, 4.04))
     chart.set_title("Relative to adjacent pairs", color="#DCE8F3", fontsize=13, pad=8)
-    chart.set_xlabel("Steps between ports", color="#DCE8F3", fontsize=13, labelpad=6)
-    for numbers, color, marker, style in (
-        (squared_chords, gold, "D", "-"),
-        (resistance, blue, "o", "--"),
+    chart.set_xlabel("Graph distance (seams)", color="#DCE8F3", fontsize=13, labelpad=6)
+    for numbers, color, marker, style, fill, size in (
+        (squared_chords, gold, "D", "-", "none", 8.5),
+        (resistance, blue, "o", "--", blue, 5.2),
     ):
         relative = [float(number / numbers[0]) for number in numbers]
         chart.plot(steps, relative, linewidth=2.1, color=color, linestyle=style,
-                   marker=marker, markersize=7.5, markeredgecolor="#0C1A2A",
-                   markeredgewidth=0.9)
+                   marker=marker, markersize=size, markerfacecolor=fill,
+                   markeredgecolor=color, markeredgewidth=1.2)
+        chart.annotate(f"{relative[-1]:.2f}×", (steps[-1], relative[-1]),
+                       textcoords="offset points", xytext=(7, 0),
+                       va="center", color=color, fontsize=11.5)
     return _enumerated(resistance)
 
 
@@ -1061,8 +1071,8 @@ def cover_figure() -> Path:
         (carrier_center[0], 3.77, paper, f"{carrier.port_count} ports  ·  {carrier.seam_count} seams"),
         (carrier_center[0], 3.43, secondary,
          f"Load two  ·  {values['shell.total_two']} states, {values['shell.transitions']:,} attempts"),
-        (6.75, 3.78, gold, "◆  Squared chord"),
-        (6.75, 3.43, blue, "●  Full Gaussian variance"),
+        (6.75, 3.78, gold, "◇  Squared chord"),
+        (6.75, 3.43, blue, "●  Gaussian contrast variance"),
         (shell_center[0], 3.77, paper, f"{len(sites)} FCC sites  ·  {len(shell_edges)} edges"),
         (shell_center[0], 3.43, secondary,
          f"{len(shell_faces['triangles'])} triangles  ·  {len(shell_faces['squares'])} squares"),
@@ -1096,7 +1106,8 @@ def cover_figure() -> Path:
         f"The cuboctahedral FCC shell has {len(sites)} sites and {len(shell_edges)} edges. "
         "Solid and dashed lines show foreground and rear edges. A centre chart compares squared "
         "icosahedral chords with full Gaussian contrast variance by graph distance, both divided "
-        f"by their adjacent-pair value. Full variances are {resistance_alt}. Squared chords "
+        f"by their adjacent-pair value. Squared chords rise faster. Full intrinsic variances are "
+        f"{resistance_alt}. Squared chords "
         f"equal {values['chord.variance_factor']} times the lowest-mode variance at edge length "
         f"{edge_length:g}. Fair binary repair resamples conditionally. Its Dirichlet form equals "
         f"mean fibre variance, checked on {values['repair.variance_fibres']} two-state fibres. "
@@ -1354,12 +1365,12 @@ def ga_descent_figure() -> Path:
     ]
     right.scatter(
         [k for k, _ in ordinary], [level for _, level in ordinary],
-        color=BLUE, s=38, zorder=4, label="One shell",
+        color=BLUE, s=38, zorder=4, label="Unique to one shown shell",
     )
     right.scatter(
         [k for k, _ in shared], [level for _, level in shared],
         facecolor="white", edgecolor=VERMILLION, marker="D", s=45,
-        linewidth=1.65, zorder=5, label="Shared level",
+        linewidth=1.65, zorder=5, label="Shared by shown shells",
     )
     right.plot(
         k_values,
@@ -1386,7 +1397,8 @@ def ga_descent_figure() -> Path:
             for label, value in zip(labels, values)
         ) + f" Path multiplicities are {_enumerated(multiplicities)}. "
         f"Right: distinct Gaussian KL values for each of the first {len(k_values)} IVM shells. "
-        f"Vertical lines span each shell's range. Shared levels are {_enumerated(shared_levels)} "
+        f"Vertical lines span each shell's range. Levels shared among the displayed shells are "
+        f"{_enumerated(shared_levels)} "
         "nats, shown as open diamonds connected by dotted guides across shells. "
         "A dashed curve joins the shell maxima at four k squared.",
     )
@@ -1840,7 +1852,9 @@ def network_figure() -> Path:
         "fig_network.png",
         f"Four panels. A compares the full Gaussian contrast variance at the carrier's graph "
         f"distances, {_enumerated(str(entry[1]) for entry in pair_shells)}, with smaller hatched "
-        "bars for the lowest-mode contribution. The axis gives pair counts and the title gives "
+        f"bars for the lowest-mode contribution, approximately "
+        f"{_enumerated(f'{float(value):.3f}' for value in lowest)}. The axis gives pair counts "
+        "and the title gives "
         f"the Kirchhoff index {kirchhoff}. B labels the numbered carrier ports by graph distance "
         "from port zero using different marker shapes and colours. Its legend gives each shell "
         "count and the intersection array. C places the counts of triangles, induced five-cycles, "
@@ -2164,7 +2178,7 @@ def schedule_figure() -> Path:
                   textcoords="offset points", xytext=(12, 5), fontsize=10.5,
                   color=VERMILLION)
     axis.annotate(
-        f"Step {steps_list[-1]}: {exact_values[-1]}\n≈ {contrasts[-1]:.5f}",
+        f"Step {steps_list[-1]} ≈ {contrasts[-1]:.5f}",
         (steps_list[-1], contrasts[-1]),
         ha="right",
         va="bottom",
@@ -2295,7 +2309,7 @@ def shell_gauge_figure() -> Path:
     lows = np.array([float(per_shell[k][0]) for k in shell_range])
     highs = np.array([float(per_shell[k][-1]) for k in shell_range])
     right.bar(ks, highs - lows, bottom=lows, width=0.46, color=SKY, alpha=0.30, zorder=1,
-              label="range of $F$ on shell")
+              label="Min–max span")
     single_x, single_y, shared_x, shared_y = [], [], [], []
     for k in shell_range:
         for level in per_shell[k]:
@@ -2305,9 +2319,9 @@ def shell_gauge_figure() -> Path:
             else:
                 single_x.append(k)
                 single_y.append(float(level))
-    right.scatter(single_x, single_y, s=6, color=BLUE, zorder=3, label="On one shell")
+    right.scatter(single_x, single_y, s=6, color=BLUE, zorder=3, label="Unique to one shown shell")
     right.plot(shared_x, shared_y, linestyle="none", marker="_", markersize=8,
-               markeredgewidth=1.15, color=ORANGE, zorder=4, label="Shared by shells")
+               markeredgewidth=1.15, color=VERMILLION, zorder=4, label="Shared by shown shells")
     curve = np.linspace(ks.min() - 0.3, ks.max() + 0.3, 100)
     right.plot(
         curve, 2.0 * curve**2, color=VERMILLION, linewidth=1.6, zorder=2,
@@ -2342,7 +2356,8 @@ def shell_gauge_figure() -> Path:
         f"{4 * demo_k**2:g} and {max(shared_levels):g}, so a shell is a polyhedral surface and a "
         "divergence level is a sphere that crosses several shells. Right: for shells one to "
         "twelve, a vertical bar from the smallest to the largest divergence on the shell, a mark "
-        "for every distinct level with shared levels shown by horizontal ticks, and the "
+        "for every distinct level with horizontal ticks marking levels shared among the "
+        "displayed shells, and the "
         f"curves two k squared and four k squared; the maximum four k squared is attained at "
         f"exactly {vertex_counts[0]} sites on every shell, the twelve vertices. An upper bound "
         f"on divergence bounds the shell index. A horizontal dashed line links the shells "

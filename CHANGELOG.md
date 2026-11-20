@@ -3,7 +3,13 @@
 ## Unreleased
 
 - Add Bernhard Mueller as second author with affiliations to Pragma Research
-  and the Active Inference Institute.
+  and the Active Inference Institute. Record his ORCID in the manuscript,
+  citation and Zenodo metadata.
+- Add a structured ontology concordance and render its term comparisons,
+  domains and evidence references as a manuscript supplement.
+- Expand the cover into a graphical abstract and revise the manuscript figures
+  and README diagram. Compare squared chords with Gaussian variance on the
+  cover using adjacent port pairs as the common reference.
 - Track the verified `uv.lock` and install its development and figure
   dependencies in CI on both supported Python versions exercised there.
 - Add a README overview with one executable example for each pair of programs.
@@ -92,6 +98,15 @@ Corrections (a claim was wrong):
 
 Additions:
 
+- `binary-conditional-variance` checks the Dirichlet form of uniform-seam
+  repair against the mean conditional variance on all 66 binary states.
+- `carrier-spectral-chords` compares exact icosahedral chords with the first
+  positive Laplacian eigenspace contribution to Gaussian contrast variance.
+  The probe reports both embedding ranks and the comparison with full
+  effective resistance.
+- Extend the equal-Schur chain control to interior posterior divergences and
+  verify quadray residue classes for FCC sites and tetrahedral and octahedral
+  interstices.
 - `repair-is-conditioning`, a registered OPH-FEP identity between the native
   law and a free-energy functional: on the binary shell each native repair is
   the uniform reference conditioned on the datum the repair leaves visible, and

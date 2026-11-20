@@ -88,19 +88,20 @@ or manuscript sources and regenerate them with `scripts/render_docs.py`.
     routes that share no code path (an interior solve and a KKT solve; surprisal
     plus divergence and energy minus entropy; an enumeration and a closed form).
     A literal such as `"integral": False` is not evidence.
-15. **Say which object a word names.** "Shell" is OPH's load shell (a level set
-    of total load) or the lattice's coordination shell (a level set of the
-    cuboctahedral gauge); the carrier Laplacian is the mean-repair generator, not
-    the native repair energy; conditional dependence lives on the seams. Every
-    claim string and prose sentence uses the precise term.
+15. **Say which object a word names.** OPH's load shell fixes total load. The
+    lattice coordination shell fixes the cuboctahedral gauge. The carrier
+    Laplacian determines the mean repair update. The native repair energy is
+    half the sum of squared port loads. The proper Gaussian model places its
+    conditional dependencies on the seams. Use the relevant term in every
+    claim and caption.
 16. **The front matter is placed on purpose, and the tests check the page
     positions.** Page 1 is the cover, pages 2 to 5 are the four panels of
     `manuscript/00_00_graphical_abstract.md` (one panel per page, held in place
     by `\floatplacement{figure}{H}`), and the contents page is re-emitted by
     `\ophContentsPage` at the end of that file because `preamble.md` keeps the
     renderer's automatic `\tableofcontents` from landing between the cover and
-    the panels. Changing the margin, the panel figure height fraction or a
-    panel's length without re-rendering moves a panel off its page.
+    the panels. Regenerate and check the PDF after changing the margin, the
+    panel figure height fraction or a panel's length.
 
 ## Commands
 
@@ -142,6 +143,9 @@ requires an interpreter that passes the template's bytecode audit.
   source.
 - The manuscript renders. The PDF has no unresolved reference placeholders,
   and its LaTeX log has no overfull boxes or undefined references or citations.
+  Check the cover and changed figure pages at page size. The tagged PDF draws
+  its alternative descriptions from the figure registry and the cover
+  configuration.
 - The test count in `README.md` and `docs/VERIFICATION.md` matches the collected
   count; `test_docs.py` fails when it does not.
 
@@ -159,9 +163,8 @@ requires an interpreter that passes the template's bytecode audit.
   owns the counters, and a hand number cannot survive an edit above it.
 - Do not edit anything under `output/`: regenerate the figures, the resolved
   tokens and the PDF with the scripts and the template pipeline.
-- Do not push anywhere except the published remote,
-  [docxology/OPH-FEP-Synergetics](https://github.com/docxology/OPH-FEP-Synergetics);
-  pushes are made by the maintainer through the project's governed publication
-  route (in the author's environment: the vault's `plan push` / `github-apply`
-  route, or a `with-repo` lease for the first branch onto an empty remote).
-  Never force-push.
+- Publish only to the configured
+  [docxology/OPH-FEP-Synergetics](https://github.com/docxology/OPH-FEP-Synergetics)
+  remote through the maintainer's approved workflow. In GitVault, follow the
+  owned-project publication procedure in the vault's operations guide. Verify
+  the published commit and its required checks. Never force-push.

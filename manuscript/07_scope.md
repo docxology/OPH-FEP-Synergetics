@@ -50,8 +50,9 @@ reproduces all three exactly ([@tbl:reproduced]).
 : The source quantities and the protocols that determine them. [@sec:pr01] and
 [@sec:mediator] report the values with their controls. {#tbl:reproduced}
 
-The status `not-reproduced` stays in the vocabulary for a quantity whose protocol
-no source states. No entry of the registry carries it.
+The status `not-reproduced` is reserved for a reported result whose derivation
+the package has yet to reproduce. The current ledger contains reproduced
+checks for all its entries.
 
 ## What the comparisons establish
 

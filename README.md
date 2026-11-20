@@ -9,16 +9,18 @@ constructions can be used together.
   icosahedral carrier with a native integer repair law.
 - **The Free Energy Principle** (FEP) — variational inference and the
   conditional-independence structure of a Markov blanket.
-- **Fuller's Synergetics** — quadray coordinates, the isotropic vector matrix,
-  the cuboctahedral vector equilibrium, and rational tetravolumes.
+- **Fuller's Synergetics** — the isotropic vector matrix, its cuboctahedral
+  coordination shell, and tetravolumes computed from quadray coordinates.
 
 ![Three pairwise comparisons. Harmonic extension and variational inference give the same posterior mean. The kissing arrangements share twelve central contacts and differ in outer contacts. A coordination shell spans multiple Gaussian divergence levels.](docs/overview.svg)
 
-Each edge shows one example from the [executable correspondence ledger](docs/CORRESPONDENCES.md).
+The diagram shows one example for each pair in the
+[executable correspondence ledger](docs/CORRESPONDENCES.md).
 
 [*Observers, Blankets, and Screens*](output/pdf/OPH-FEP-Synergetics_combined.pdf)
-is the paper by Daniel Ari Friedman and Bernhard Mueller. Its numerical
-results are bound to computations or cited sources in the manuscript build.
+is the paper by Daniel Ari Friedman and
+[Bernhard Mueller](https://orcid.org/0009-0002-5638-6240). The manuscript build
+binds numerical results to computations or cited sources.
 
 ## What runs
 
@@ -65,18 +67,18 @@ python3 -m venv .venv
 | --- | --- | --- |
 | `core` | `core/carrier.py` | OPH's twelve-port carrier, its port chart, Laplacian, spectrum and load shell |
 | | `core/repair.py` | the native seam-repair law, its conservation law and its exact energy decrease |
-| | `core/native_dynamics.py` | ungated and gated rewrite relations, the binary attempt kernel, and ensemble relaxation |
+| | `core/native_dynamics.py` | ungated and gated rewrite relations, the binary attempt kernel, ensemble relaxation and the conditional-variance identity |
 | | `core/sheaf.py` | cellular sheaves, agreement energy, harmonic extension, record injectivity, cohomology dimensions |
 | | `core/free_energy.py` | the linear-Gaussian free-energy dictionary and the three named surprises |
 | | `core/controls.py` | the obstruction and dynamics controls: descent census, D-stability, mediators, orbits, free-energy forms |
 | | `core/invariants.py` | the Laplacian's counting identities: spanning trees, reciprocal spectrum, GMRF precision, Markov blankets |
 | | `core/symmetry.py` | the carrier's automorphism group, orientation classes, orbit counts and equivariance |
-| | `core/network.py` | the carrier as a resistive network: exact effective resistances, the Kirchhoff index, shells around a port, and the subgraph census |
+| | `core/network.py` | exact resistances, Kirchhoff index, distance shells, the subgraph census, and the first-eigenspace comparison with icosahedral chords |
 | `geometry` | `geometry/quadray.py` | quadray coordinates, the A3/IVM embedding and exact tetravolumes |
-| | `geometry/lattice.py` | IVM shells, the cuboctahedral vector equilibrium, Voronoi cell and packing density, Goldberg/geodesic counts |
+| | `geometry/lattice.py` | IVM shells, quadray classes of FCC sites and interstices, the cuboctahedral shell, Voronoi cell and packing density |
 | | `geometry/subdivision.py` | icosahedral subdivision and the dual count identities |
 | | `geometry/solids.py` | oriented faces, polyhedron volume, and the icosahedron's tetravolume against its closed form |
-| `analysis` | `analysis/registry.py` | the 46 registered correspondences, each with a pairwise scope and an executable probe |
+| `analysis` | `analysis/registry.py` | the 46 registered correspondences, each with a pairwise or three-way scope and an executable probe |
 | | `analysis/provenance.py` | source pins, licence terms and reuse policy |
 | `manuscript_variables` | `manuscript_variables/values.py` | every number the prose may quote, derived from the package where a derivation exists |
 
@@ -96,19 +98,21 @@ Selected results follow.
 | OPH's carrier port chart is derived from its oriented faces | exact | 12 ports, 30 seams and 20 faces. Each port has five neighbours, and the graph triangles recover the face vertex sets. | OPH’s oriented faces, with the adjacency derived here |
 | The icosahedral Laplacian determines the mean port relaxation gap | exact | `lambda_1 = 5 - sqrt(5)`. With uniform seam selection and a fair coin, the mean repair operator is `I - L / (2\|E\|)`, with gap `(5 - sqrt(5)) / 60`. The same `L` supplies the blocks of the Gaussian model. | [Agreement and Surprise][agreement-and-surprise], §6.2, for the mean gap |
 | The native repair law conserves load and changes `sum(x^2)/2` by `-(d^2 - (\|d\| mod 2)) / 4` | exact | checked on all 4680 transitions on the shell of total load two | [OPH][oph-source], native repair law |
-| On the binary shell each native repair is exact Bayesian conditioning and a variational step | exact on that domain | in all 3960 cases the repair's law is the uniform reference conditioned on the datum the repair leaves visible; it minimises `F[q] = E_q[ln q - ln pi(s, o)]` over the fibre with minimum the surprisal `log 33` or `log 66`; off the shell the identity fails on the 60 seams that meet a doubled port | [Agreement and Surprise][agreement-and-surprise], §§6.2 and 7.3; [OPH synthesis][oph-synthesis] |
+| On the binary shell each native repair is exact Bayesian conditioning and a variational step | exact on that domain | all 3,960 cases agree with the uniform binary reference conditioned on the preserved seam record. The minimum variational free energy on the fibre is the datum's surprisal, `log 33` or `log 66`. The uniform full-shell reference gives 60 failures across doubled-state and incident-seam pairs. | [Agreement and Surprise][agreement-and-surprise], §§6.2 and 7.3, and the [OPH synthesis][oph-synthesis] |
+| The binary repair Dirichlet form equals the mean conditional variance | exact on that domain | the two forms have identical coefficients on all 66 states. The probe checks all 30 seams and 300 two-state fibres under uniform seam choice and fair repair. | Exact finite-shell comparison using conditional-expectation operators |
 | The mean of the native law is one step of the carrier Laplacian | exact | averaging the integer rule over the 60 seam-and-coin draws gives `x - L x / 60` in exact rationals on all 78 configurations | [OPH][oph-source], native fields; exact enumeration here |
 | Patch agreement is the global-section condition of a cellular sheaf, and the sheaf Laplacian is the carrier Laplacian | exact | `carrier_sheaf(carrier).laplacian() == carrier.laplacian()` | [Agreement and Surprise][agreement-and-surprise], §7.2 |
 | On the linear-Gaussian carrier, constrained relative-entropy minimisation and predictive-coding perception give the posterior mean | exact on that domain | harmonic extension, a separate KKT solve and perception flow agree. With a proper record prior, variational free energy equals normalised surprisal at the posterior. An asymmetric seam separates its energy minimum from its posterior mean. | [Agreement and Surprise][agreement-and-surprise], Theorem 7, items 2–3; carrier, chain and asymmetric spring checks here |
 | **PR-01**. Ungated repair is confluent and can cycle. The broken-seam gate terminates and admits multiple reachable normal forms. | **obstructed** | 78 states, no ungated normal forms, 66 gated normal forms and 5 reachable from each doubled state. The binary attempt kernel separately has the same computed gap as the mean port operator. Individual binary paths preserve load energy and ensemble relative entropy is nonincreasing. | [OPH][oph-source], PR-01; exhaustive reachability and kernel checks here |
-| **Three distinct values at fixed records** | **obstructed** | minimum interface energy, the unnormalised record potential and normalised surprisal differ. The interior determinant cancels in the normalised probability. | [Agreement and Surprise][agreement-and-surprise], Theorem 7, item 3; equal-Schur chain control here |
+| **Three distinct values at fixed records** | **obstructed** | minimum interface energy, the unnormalised record potential and normalised surprisal differ. Two chains with equal normalised record densities give interior posterior divergences of 1/3 and 0 under the same record change. | [Agreement and Surprise][agreement-and-surprise], Theorem 7, item 3, and the equal-Schur chain control here |
 | Two-record Gaussian marginals are determined by effective resistance and the record prior | exact | all 66 carrier pairs satisfy the Schur identity; seam, distance-two and antipodal resistance are 11/30, 7/15 and 1/2 | Schur elimination and an independent rational network solve |
+| Icosahedral chords recover the lowest-mode contribution to Gaussian contrast variance | exact | at edge length two and unit intrinsic precision, squared chords equal 40 times the contribution from the first positive Laplacian eigenspace. The full variance and the chords have embedding ranks 11 and 3, respectively. | Exact spectral comparison of the carrier and its regular-icosahedral embedding |
 | **Eliminating an interior mediator is not free** | **obstructed** | the reduced precision is `(1/3) v v^T + epsilon I`; a sum of pairwise semidefinite terms reproduces it iff `epsilon >= 1/3` | [Agreement and Surprise][agreement-and-surprise], Proposition 8; rank-one construction here |
 | **Distinct drifts preserve the same stationary blanket** | **obstructed** | with a zero precision entry the internal drift is `2q eta + (q - 1) b - 2 mu`, which varies with `q` at fixed stationary covariance | [Agreement and Surprise][agreement-and-surprise], Proposition 11; Da Costa et al.’s stationary blanket example |
-| **Agreement can exist and be unreachable** | **obstructed** | The fixed-point census finds only the unstable origin. The sampled relaxation orbit has a minimum radius of about `0.8401` and an estimated period of `7.575`. The source reports a lower bound of `0.84` and a period of `7.58`. | [Agreement and Surprise][agreement-and-surprise], Proposition 15 |
+| **Agreement can exist and be unreachable** | **obstructed** | The clipped map has a unique fixed point at the origin and an exact synchronous cycle on the clipping boundary. The continuous relaxation has an unstable origin, a measured post-transient minimum radius of about `0.8401`, and an estimated period of `7.575`. The source reports a lower bound of `0.84` and a period of `7.58`. | [Agreement and Surprise][agreement-and-surprise], Proposition 15 |
 | **D-stability is not free** | **obstructed** | Lyapunov form `P = (1/3)[[11,4,-8],[4,5,-2],[-8,-2,9]]`, `det P = 115/27`; at `k = 4` the Routh first column is `(1, 6, -2, 24)` and the scaled matrix has two right-half-plane roots | [Agreement and Surprise][agreement-and-surprise], §4.1 and Proposition 10; general Routh column here |
 | **Finite phases are path functions** | **obstructed** | full and half-damped iteration share every answer, yet their centered contrasts after twelve steps differ by exactly `921633999 / 40000000000` | [Agreement and Surprise][agreement-and-surprise], Proposition 6 and §4.4; exact contrast here |
-| Quadray geometry supplies the exact integer side of the correspondence | exact | 12 neighbour moves at squared distance 8, shells `10k^2 + 2`, rational volumes `1, 3, 4, 6, 20, 96` | QuadMath conventions; lattice counts and volumes derived here |
+| Quadray coordinates give exact IVM geometry | exact | 12 neighbour moves at squared distance 8, shells `10k^2 + 2`, and rational volumes `1, 3, 4, 6, 20, 96`. The coordinate sum modulo four classifies FCC sites and tetrahedral and octahedral interstices. | QuadMath conventions and the lattice and volume derivations here |
 | Equilibrium propagation supplies the parameter gradient the repair law does not define | exact | the two-settle contrast is `(theta - target) / (1 + beta)` exactly and tends to the exact gradient | [Agreement and Surprise][agreement-and-surprise], Theorem 21; Scellier and Bengio |
 | The carrier's reduced Laplacian counts its spanning trees | exact | The grounded determinant equals `5184000`, also the product of the nonzero eigenvalues divided by `12`. In the Gaussian model with one pinned port, the integral is proportional to `5184000^(-1/2)`. | Kirchhoff’s matrix-tree theorem and the grounded Gaussian integral |
 | A proper Gaussian with precision `L + I/n` has the seam graph's conditional dependencies | exact | seam precision is `-1` and each port's blanket is its five neighbours. The centered intrinsic field separately gives port variance `7/36` | Carrier Gaussian precisions and intrinsic variance calculated here |

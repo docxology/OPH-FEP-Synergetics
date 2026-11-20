@@ -10,11 +10,12 @@ its probe.
 | --- | --- |
 | OPH's twelve-port carrier | adjacency is derived from OPH's `ORIENTED_BASE_FACES`. The 20 graph triangles recover the face vertex sets. |
 | OPH's native seam law | reimplemented on exact Python integers; conservation and the energy identity are checked on every one of the 4680 shell transitions |
+| binary repair as inference | fair repair resamples the uniform binary reference conditioned on the preserved seam record. Uniformly sampled seams give a repair Dirichlet form equal to the mean conditional variance. |
 | PR-01 | the obstruction is reproduced exhaustively: 120 strict descents, 600 zero-descent mismatch-one moves, 3960 no-ops |
 | patch agreement as a sheaf condition | a cellular sheaf over the carrier whose Laplacian is asserted equal to the carrier Laplacian |
 | the free-energy dictionary | on the carrier with a Gaussian record prior, and on a chain control: harmonic extension, a separate KKT solve, Schur complement, three surprises, and two routes to variational free energy |
 | obstruction and dynamics controls | the D-stability family, the mediator reduction, the reduction criterion, the two-node orbits, the solenoidal family, the four-cycle trap, the replicator potential |
-| QuadMath's conventions | quadray gauge and embedding, the twelve neighbour moves, the coordination shells against their closed-form cuboctahedral gauge, and the tetravolume table derived exactly from explicit vertex sets |
+| QuadMath's conventions | the quadray gauge and embedding, twelve neighbour moves, coordination shells compared with the closed-form cuboctahedral gauge, quadray residue classes for the FCC sites and two kinds of interstices, and the tetravolume table derived from explicit vertex sets |
 | icosahedral subdivision | geodesic and Goldberg counts, duality, and the equality with the IVM shell sequence |
 | the carrier's counting identities | the reduced Laplacian determinant in exact rationals (the spanning-tree number), its cross-check against the spectral product, the graph sheaf's two cohomology dimensions, and the surface's Betti numbers with its Euler characteristic |
 | the carrier's symmetry | the automorphism group by exhaustive search, closure under composition, the orbit decomposition of ports, seams and faces, classification by preservation of face orientation, eigenspace irreducibility, and equivariance of each shell transition |
@@ -22,6 +23,7 @@ its probe.
 | the information cost of a lattice displacement | equal-covariance Gaussian divergence at unit covariance gives 4 nats for one IVM neighbour displacement and `4k^2` nats from the origin along a neighbour direction. The value uses the declared embedding and covariance scale. |
 | the carrier's solid and the twelve-around-one cell | the icosahedron's tetravolume computed exactly in `sqrt 2 * Q(sqrt 5)` and by floating-point measurement, the two kissing arrangements compared exactly, and the Voronoi cell's counts, exact tetravolume and packing density |
 | the carrier as a network | exact effective resistances as rationals from a grounded solve, their distance-class ladder, the Kirchhoff index, the distance distribution and intersection array around a port, and the subgraph census |
+| Gaussian port contrasts and icosahedral chords | on the edge-length-two carrier, squared chord length is 40 times the contrast variance contributed by the first positive Laplacian eigenspace at unit intrinsic precision. Full contrast variance has a higher embedding dimension. |
 | the carrier's curvature | the angle defect at every vertex of the derived chart, summed against Gauss-Bonnet, plus the defect of the dual solid's face set |
 | the twelve-around-one families | compare the cuboctahedron and icosahedron as solids with distinct adjacency and volume. The cube's line graph independently realises the cuboctahedral graph. |
 | the quadratic field of the tetravolume | the Galois conjugation of $\sqrt{5}$ (fixing $\sqrt{2}$) as a probe, in exact field arithmetic: it fixes the counting invariants and moves the icosahedron's tetravolume, whose product with its conjugate is exactly 50 |
@@ -72,8 +74,9 @@ carries it.
    record potential and normalised record surprisal have different meanings.
    The interior Gaussian determinant contributes to the raw potential and
    cancels in the normalised probability. The `free-energy-name-collision`
-   probe reports all three values and repeats the comparison on chains with
-   identical Schur complements.
+   probe reports all three values. Two chains with equal Schur complements
+   and the same record prior give equal normalised record densities and
+   different interior posterior divergences under the same record change.
 2. **Respect OPH's premise discipline.** On the total-load-two shell the ungated
    native rule is confluent without termination. Gating at broken seams gives
    termination with several normal forms reachable from each doubled state.
@@ -97,7 +100,7 @@ carries it.
 
 ## Domain limits on the isomorphism claims
 
-The three `exact-on-domain` entries say so in their status:
+Four entries carry the `exact-on-domain` status.
 
 - `variational-equivalence` holds on the carrier with a Gaussian record prior.
   A clamped, nonquadratic seam gives a posterior mean different from the
@@ -108,10 +111,13 @@ The three `exact-on-domain` entries say so in their status:
   equal magnitude, outside that centred quadratic formula. The
   `two-record-resistance` probe verifies the Schur complement for every carrier
   record pair against a rational network solve.
-- `repair-is-conditioning` holds on the binary shell with the uniform reference.
-  Its probe asserts the failure off the shell: with the uniform law on all 78
-  configurations as reference, the repairs of the sixty seams that meet a
-  doubled port are no conditional law of it.
+- `repair-is-conditioning` holds on the binary shell with the uniform reference
+  and a fair coin on the selected seam. The probe verifies 60 failures across
+  doubled-state and incident-seam pairs when the reference is uniform on all
+  78 configurations.
+- `binary-conditional-variance` uses the same binary reference and fair coin
+  and samples seams uniformly. On this domain the Dirichlet form of the
+  random-seam repair kernel is the seam average of the conditional variances.
 
 The general variational identity separates divergence from log evidence when
 the expectations are defined and the evidence is positive. The quadratic

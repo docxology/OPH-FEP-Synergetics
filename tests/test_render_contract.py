@@ -162,6 +162,7 @@ def test_the_rendered_pdf_keeps_the_front_matter_and_ontology_supplement():
     assert first_author < second_author
     assert "Active Inference Institute" in cover[first_author:second_author]
     assert "Pragma Research, Active Inference Institute" in cover[second_author:]
+    assert "0009-0002-5638-6240" in cover[second_author:]
     supplement_page = next(
         index for index, page in enumerate(pages)
         if re.search(r"(?m)^\s*\d+\s+Ontology concordance\s*$", page)

@@ -29,10 +29,10 @@ counterexample to an identification.
 
 | Status | Meaning |
 |:-------|:--------|
-| `exact` | an exact identity with a probe that checks exact arithmetic or tests a numerical evaluation against the closed form |
-| `exact-on-domain` | the identification holds on a stated domain and the probe includes an outside-domain control |
-| `obstructed` | the identification fails, and the probe exhibits the failure precisely |
-| `not-reproduced` | the source states a quantity its text does not determine; recorded, never invented |
+| `exact` | the probe decides the claim on the declared finite object |
+| `exact-on-domain` | the probe supports the identity on the explicitly named domain |
+| `obstructed` | the probe exhibits the failure described by the claim |
+| `not-reproduced` | the source states a result whose derivation this package has yet to reproduce |
 
 : The status vocabulary. It is closed: a new status requires a new definition.
 {#tbl:status}
@@ -95,7 +95,7 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `twelve-around-one-families` | disagreement | `obstructed` | `synergetics-oph` | the phrase covers solids with {{CARRIER_TREE_NUMBER}} and ${{CUBOCTAHEDRON_SPANNING_TREES}} = {{CUBOCTAHEDRON_SPANNING_TREES_ROOT}}^2$ spanning trees |
 | `dual-cells` | complementarity | `exact` | `synergetics-oph` | the cell and the cuboctahedron, ${{VORONOI_VERTICES}}/{{VORONOI_FACES}}/{{VORONOI_EDGES}}$ against ${{CUBOCTAHEDRON_VERTICES}}/{{CUBOCTAHEDRON_FACES}}/{{CUBOCTAHEDRON_EDGES}}$, volumes {{PACKING_CELL_TETRAVOLUME}} and {{CUBOCTAHEDRON_TETRAVOLUME}} |
 | `conjugation-norm` | complementarity | `exact` | `three-way` | conjugation fixes the integer counts and moves the volume, whose norm is {{TETRAVOLUME_GALOIS_NORM}} |
-| `repair-is-conditioning` | isomorphism | `exact-on-domain` | `oph-fep` | on the binary shell each native repair is the uniform reference conditioned on its visible datum and minimises a free energy over the fibre; off the shell it fails on {{CONDITIONING_OFF_SHELL_FAILURES}} seams |
+| `repair-is-conditioning` | isomorphism | `exact-on-domain` | `oph-fep` | binary repair conditions the uniform binary reference and minimises free energy over the fibre. Conditioning the uniform total-two reference fails in {{CONDITIONING_OFF_SHELL_FAILURES}} doubled-state/seam cases |
 | `binary-conditional-variance` | isomorphism | `exact-on-domain` | `oph-fep` | the binary repair Dirichlet form equals mean conditional variance over seam records |
 | `carrier-spectral-chords` | isomorphism | `exact` | `fep-synergetics` | squared chords equal {{CHORD_VARIANCE_FACTOR}} times the lowest-mode contrast variance, with different embedding ranks for the full variance and the chords |
 
@@ -146,10 +146,10 @@ reimplemented and the source is cited by symbol: the neighbour moves, the
 embedding, the shell formula and the tetravolume convention. This paper quotes no
 QuadMath prose.
 
-The provenance record documents two corrections. The carrier attribution now
-identifies the software containing the oriented face list, and the QuadMath pin
-records the commit examined for the current derivations. A later checkout can
-move while the cited reading remains valid. See `docs/PROVENANCE.md`.
+The provenance record identifies the OPH software containing the oriented face
+list and the QuadMath revision examined for the lattice derivations. The
+recorded revision gives readers the version to consult if a later checkout
+moves. See `docs/PROVENANCE.md`.
 
 ## What a matching value establishes
 

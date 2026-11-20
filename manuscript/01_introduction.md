@@ -95,11 +95,12 @@ a Gaussian precision constructed on that graph. In [@sec:stationary], an
 explicit control tests how much a stationary blanket constrains the drift
 [@aguilera2022particular].
 
-Synergetics has a small technical literature that states its conventions
-carefully [@edmondson1987fuller], and the geodesic subdivision it motivates is the
-Goldberg construction [@goldberg1937multisymmetric] on the regular icosahedron
-[@coxeter1973regular], the same construction that classifies icosahedral virus
-shells [@caspar1962physical].
+Edmondson describes Synergetics' geometric conventions
+[@edmondson1987fuller]. The class-I geodesic subdivision of the icosahedron
+and its Goldberg dual exchange vertex and face counts
+[@goldberg1937multisymmetric; @coxeter1973regular]. The subdivision is the
+frequency-squared case of the triangulations used by Caspar and Klug
+[@caspar1962physical].
 
 The isotropic vector matrix used here is the face-centred cubic lattice,
 which is isometric up to scale to the root lattice $A_3$

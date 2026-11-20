@@ -5,8 +5,8 @@
 
   <rect width="960" height="323" rx="16" fill="#0a1726"/>
   <g font-family="DejaVu Sans, system-ui, sans-serif">
-    <text x="25" y="45" fill="#f4f7fa" font-size="28" font-weight="700">Across the finite models</text>
-    <text x="26" y="72" fill="#bacbd9" font-size="16">Three pairwise comparisons from the executable registry</text>
+    <text x="25" y="45" fill="#f4f7fa" font-size="28" font-weight="700">Three finite-model comparisons</text>
+    <text x="26" y="72" fill="#bacbd9" font-size="16">Examples from the executable registry</text>
     <path d="M24 92h912" stroke="#52687a"/>
 
     <rect x="24" y="111" width="296" height="189" rx="10" fill="#102538"/>
@@ -34,7 +34,7 @@
     <path d="M42 266h260" stroke="#547089" opacity=".6"/>
 
     <g fill="#d8e4ee" font-size="14">
-      <text x="350" y="195">12 touch the central sphere</text>
+      <text x="350" y="195">12 outer spheres touch the central one</text>
       <text x="368" y="222">Icosahedral</text>
       <text x="607" y="222" text-anchor="end">Outer gaps</text>
       <text x="368" y="250">Cuboctahedral</text>
@@ -47,10 +47,10 @@
 
     <g fill="#d8e4ee" font-size="14">
       <text x="658" y="195">A fixed lattice coordination shell</text>
-      <text x="658" y="255" fill="#ffd2a1" font-weight="700">Multiple divergence values</text>
+      <text x="658" y="255" fill="#ffd2a1">KL grows with squared displacement</text>
       <text x="658" y="281" fill="#bacbd9">Gaussian model with unit covariance</text>
     </g>
-    <path d="M660 217h236" stroke="#ffd2a1" stroke-width="1.5" opacity=".65"/>
+    <path d="M660 217h253m-5-4 5 4-5 4" fill="none" stroke="#ffd2a1" stroke-width="1.5" opacity=".7"/>
     <path d="M669 217v13m105-13v13m113-13v13" stroke="#ffd2a1" stroke-width="1.6"/>
     <g fill="#ffd2a1">
       <circle cx="669" cy="231" r="3.5"/>

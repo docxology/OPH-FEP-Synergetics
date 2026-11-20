@@ -144,9 +144,9 @@ probes, the suite and the CLI need nothing from it.
 
 ## Licence of this project
 
-MIT, with the third-party citations above retained. See [LICENSE](../LICENSE).
-The MIT licence covers the code and the manuscript prose in `manuscript/`; the third-party
-cited works keep their own terms.
+The [MIT licence](../LICENSE) covers this project's code and manuscript prose.
+Third-party works retain their own terms and receive attribution in the
+manuscript.
 
 ## Editorial log
 
