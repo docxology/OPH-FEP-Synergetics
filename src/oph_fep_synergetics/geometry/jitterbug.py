@@ -24,6 +24,7 @@ Edge = tuple[int, int]
 Triangle = tuple[int, int, int]
 
 ICOSAHEDRON_PARAMETER = PHI_EXACT - 1
+SPHERE_CONTACT_PARAMETER_SQUARED = Fraction(1, 3)
 
 _SIGNS = (-1, 1)
 _JOINT_LABELS = tuple(product(range(3), _SIGNS, _SIGNS))
@@ -196,4 +197,120 @@ def jitterbug_census() -> dict[str, dict[str, object]]:
         "contracted": jitterbug_snapshot(Fraction(3, 5)),
         "overlap_control": jitterbug_snapshot(Fraction(1, 2)),
         "octahedron": jitterbug_snapshot(0),
+    }
+
+
+def _component_sizes(vertex_count: int, edges: tuple[Edge, ...]) -> tuple[int, ...]:
+    adjacent: list[set[int]] = [set() for _ in range(vertex_count)]
+    for left, right in edges:
+        adjacent[left].add(right)
+        adjacent[right].add(left)
+    unreached = set(range(vertex_count))
+    sizes = []
+    while unreached:
+        frontier = [unreached.pop()]
+        size = 0
+        while frontier:
+            size += 1
+            new = adjacent[frontier.pop()] & unreached
+            unreached.difference_update(new)
+            frontier.extend(new)
+        sizes.append(size)
+    return tuple(sorted(sizes))
+
+
+def _labelled_chord_coefficients() -> dict[Edge, tuple[int, int, int]]:
+    """Derive each chord's coefficients in the basis 1, t, t squared."""
+    initial, final = jitterbug_vertices(0), jitterbug_vertices(1)
+    coefficients = {}
+    for left, right in combinations(range(len(initial)), 2):
+        base = tuple(int(x - y) for x, y in zip(initial[left], initial[right], strict=True))
+        at_one = tuple(int(x - y) for x, y in zip(final[left], final[right], strict=True))
+        slope = tuple(x - y for x, y in zip(at_one, base, strict=True))
+        coefficients[left, right] = (
+            sum(x * x for x in base),
+            2 * sum(x * y for x, y in zip(base, slope, strict=True)),
+            sum(x * x for x in slope),
+        )
+    return coefficients
+
+
+def _sphere_threshold_gap_sign(coefficients: tuple[int, int, int]) -> int:
+    """Sign of chord squared minus radius squared at t = sqrt(1/3)."""
+    constant, linear, quadratic = coefficients
+    # After substitution the gap is rational + linear * sqrt(1/3).
+    rational = constant - 1 + (quadratic - 1) * SPHERE_CONTACT_PARAMETER_SQUARED
+    rational_sign = (rational > 0) - (rational < 0)
+    linear_sign = (linear > 0) - (linear < 0)
+    if not rational_sign or not linear_sign or rational_sign == linear_sign:
+        return rational_sign or linear_sign
+    difference = rational * rational - linear * linear * SPHERE_CONTACT_PARAMETER_SQUARED
+    return rational_sign * ((difference > 0) - (difference < 0))
+
+
+def jitterbug_contraction_census() -> dict[str, object]:
+    """Compare nearest-pair connectivity, sphere contacts and joint coalescence."""
+    coefficients = _labelled_chord_coefficients()
+    threshold_gaps = {edge: _sphere_threshold_gap_sign(row) for edge, row in coefficients.items()}
+    checkpoints = {}
+    landmarks = jitterbug_census()
+    for name, snapshot in landmarks.items():
+        parameter = snapshot["parameter"]
+        shortest = snapshot["shortest_pairs"]
+        vertex_count = snapshot["vertex_count"]
+        joint_to_vertex = snapshot["joint_to_vertex"]
+        measured_classes = {
+            tuple(sorted((joint_to_vertex[a], joint_to_vertex[b]))):
+                constant + linear * parameter + quadratic * parameter * parameter
+            for (a, b), (constant, linear, quadratic) in coefficients.items()
+            if joint_to_vertex[a] != joint_to_vertex[b]
+        }
+        checkpoints[name] = {
+            "parameter": str(parameter),
+            "shortest_edge_count": len(shortest),
+            "shortest_component_sizes": _component_sizes(vertex_count, shortest),
+            "outer_contacts": snapshot["contact_pair_count"],
+            "outer_overlaps": snapshot["overlap_pair_count"],
+            "hull_edge_count": snapshot["hull_edge_count"],
+            "class_formula_matches": (
+                dict(Counter(measured_classes.values())) == dict(snapshot["pair_squared_length_counts"])
+            ),
+        }
+
+    # Quotient the labelled nearest and hull graphs from the open branch.
+    # The matching becomes loops. The rigid bars instead give double edges
+    # between octahedral sites and remain after suppressing loops.
+    octahedron = landmarks["octahedron"]
+    contracted = landmarks["contracted"]
+    coalesced = octahedron["joint_to_vertex"]
+
+    def project_edges(edges: tuple[Edge, ...]) -> tuple[Edge, ...]:
+        return tuple(sorted({
+            tuple(sorted((coalesced[a], coalesced[b])))
+            for a, b in edges if coalesced[a] != coalesced[b]
+        }))
+
+    limit_of_nearest = project_edges(contracted["shortest_pairs"])
+    vertices_at_limit = octahedron["vertex_count"]
+    nearest_after_collapse = octahedron["shortest_pairs"]
+    return {
+        "checkpoints": checkpoints,
+        "squared_chord_class_counts": tuple(sorted(Counter(coefficients.values()).items())),
+        "bar_polynomial_matches": tuple(
+            edge for edge, row in coefficients.items() if row == (2, -2, 2)
+        ) == jitterbug_rigid_edges(),
+        "matching_polynomial_matches": tuple(
+            edge for edge, row in coefficients.items() if row == (0, 0, 4)
+        ) == jitterbug_matching_edges(),
+        "sphere_contact_threshold_squared": str(SPHERE_CONTACT_PARAMETER_SQUARED),
+        "threshold_contact_edges": tuple(edge for edge, sign in threshold_gaps.items() if sign == 0),
+        "threshold_overlap_edges": tuple(edge for edge, sign in threshold_gaps.items() if sign < 0),
+        "coalescence": {
+            "nearest_quotient_edge_count": len(limit_of_nearest),
+            "nearest_quotient_component_sizes": _component_sizes(vertices_at_limit, limit_of_nearest),
+            "octahedral_nearest_edge_count": len(nearest_after_collapse),
+            "octahedral_nearest_component_sizes": _component_sizes(vertices_at_limit, nearest_after_collapse),
+            "bar_quotient_matches_octahedron": project_edges(contracted["bar_edges"]) == nearest_after_collapse,
+            "hull_quotient_matches_octahedron": project_edges(contracted["hull_edges"]) == nearest_after_collapse,
+        },
     }

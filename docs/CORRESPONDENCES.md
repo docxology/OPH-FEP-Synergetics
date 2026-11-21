@@ -89,14 +89,19 @@ diagnostics below `1e-9` in magnitude are reported as such.
 | synergetics-oph | isomorphism | exact-on-domain | `jitterbug-rigid-motion` | A fixed-bar Jitterbug branch carries the cuboctahedral joints through a regular icosahedral hull with the OPH carrier incidence and reaches an octahedral limit with doubled bars. |
 | synergetics-oph | disagreement | obstructed | `jitterbug-graph-obstruction` | On the open contraction branch the convex hull includes six short diagonals in addition to the fixed 24 bars. The shortest-pair graph equals the carrier hull only at the regular icosahedral pose. |
 | three-way | isomorphism | exact-on-domain | `jitterbug-weighted-precision` | Adding a common conductance on the Jitterbug short matching yields an exact Gaussian precision spectrum and local contrast law. From zero to unit conductance the matching variance decreases from 7/12 to 11/30 and the centred determinant grows by 125/8. |
-| three-way | isomorphism | exact-on-domain | `jitterbug-coordinate-closure` | On the cuboctahedron-to-regular-icosahedron branch, the moving coordinate space is Laplacian-invariant exactly when the short matching has common weight 1/t minus t. This preserves Gaussian Markov lag covariances at each fixed pose under weighted fair repair. |
+| three-way | isomorphism | exact-on-domain | `jitterbug-coordinate-closure` | At every pose with distinct joints on the contraction branch, the moving coordinate space is Laplacian-invariant exactly when the designated matching has common weight 1/t minus t. This preserves Gaussian Markov lag covariances at each fixed pose under weighted fair repair. |
+| three-way | disagreement | obstructed | `jitterbug-nearest-only-obstruction` | Past the icosahedron the hull stays connected but nearest-only seams give six isolated dimers. Contracting that graph and rebuilding the metric graph at the octahedral limit give different results. |
+| three-way | disagreement | obstructed | `jitterbug-weight-policy-obstruction` | Unit hull conductances lose coordinate lag closure past the icosahedron. Inverse-square length weighting also fails generically, despite recovering closure at the half-ratio pose. |
+| three-way | isomorphism | exact-on-domain | `jitterbug-octahedral-gaussian-limit` | Infinite tuned matching conductance forces equality within each coalescing pair. In common site-value coordinates, the limiting centred Gaussian precision is twice the unit octahedral Laplacian. |
+| three-way | disagreement | obstructed | `jitterbug-pair-load-memory` | Identifying coincident geometry and Gaussian field values does not yield a Markov chain of binary pair loads at finite matching weight. The projected process retains memory even at stationarity. |
+| three-way | isomorphism | exact-on-domain | `jitterbug-averaged-repair-limit` | On the accelerated clock proportional to total attempt weight, infinitely fast matching repair yields a two-capacity octahedral generator with mean operator minus half the unit Laplacian. Its coordinate lag correlation decays at rate two. |
 
-Totals: 75/75 probes pass, 0 fail.
+Totals: 80/80 probes pass, 0 fail.
 
 By kind:
 
-- isomorphism: 37 passing, 0 failing
-- disagreement: 28 passing, 0 failing
+- isomorphism: 39 passing, 0 failing
+- disagreement: 31 passing, 0 failing
 - complementarity: 10 passing, 0 failing
 
 By pairwise scope:
@@ -104,7 +109,7 @@ By pairwise scope:
 - oph-fep: 31 passing, 0 failing
 - fep-synergetics: 5 passing, 0 failing
 - synergetics-oph: 16 passing, 0 failing
-- three-way: 23 passing, 0 failing
+- three-way: 28 passing, 0 failing
 
 ## `carrier-port-chart`
 
@@ -1850,15 +1855,112 @@ Probe values:
 
 **isomorphism** / **exact-on-domain** / **three-way** / probe PASS
 
-On the cuboctahedron-to-regular-icosahedron branch, the moving coordinate space is Laplacian-invariant exactly when the short matching has common weight 1/t minus t. This preserves Gaussian Markov lag covariances at each fixed pose under weighted fair repair.
+At every pose with distinct joints on the contraction branch, the moving coordinate space is Laplacian-invariant exactly when the designated matching has common weight 1/t minus t. This preserves Gaussian Markov lag covariances at each fixed pose under weighted fair repair.
 
 - OPH: Seam sampling is proportional to the specified weights and uses the same fair binary update.
 - FEP: The unique invariant coordinate space gives the Gaussian lag match and a lowest-mode chord factor.
-- Synergetics: The joint coordinate ratio runs from the vector equilibrium to the golden-ratio landmark.
+- Synergetics: The joint coordinate ratio runs from the vector equilibrium through the golden-ratio landmark and approaches the coalesced limit.
 - Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Stachel (1994) for geometric motion; exact covariance closure and matrix witnesses derived here
 
 Probe values:
 
-- `coordinate_samples` = (case=cuboctahedron, t=1, closing_weight=0, tuned_weight=0, coordinate_covariance_closes=True, lag_two_defect=0, coordinate_eigenvalue=2, unit_rod_chord_factor=8, matrix_lag_defect_matches=True, matrix_coordinate_mode_matches=True, matrix_chord_factor_matches=True, case=interior-rods, t=3/4, closing_weight=0, tuned_weight=7/12, coordinate_covariance_closes=False, lag_two_defect=49/360000, coordinate_eigenvalue=None, unit_rod_chord_factor=None, matrix_lag_defect_matches=True, case=interior-tuned, t=3/4, closing_weight=7/12, tuned_weight=7/12, coordinate_covariance_closes=True, lag_two_defect=0, coordinate_eigenvalue=5/2, unit_rod_chord_factor=125/13, matrix_lag_defect_matches=True, matrix_coordinate_mode_matches=True, matrix_chord_factor_matches=True, case=interior-hull, t=3/4, closing_weight=1, tuned_weight=7/12, coordinate_covariance_closes=False, lag_two_defect=1/22500, coordinate_eigenvalue=None, unit_rod_chord_factor=None, matrix_lag_defect_matches=True, case=icosahedral-rods, t=-1/2 + 1/2 sqrt 5, closing_weight=0, tuned_weight=1, coordinate_covariance_closes=False, lag_two_defect=1/2880, coordinate_eigenvalue=None, unit_rod_chord_factor=None, matrix_lag_defect_matches=True, case=icosahedron, t=-1/2 + 1/2 sqrt 5, closing_weight=1, tuned_weight=1, coordinate_covariance_closes=True, lag_two_defect=0, coordinate_eigenvalue=5 - 1 sqrt 5, unit_rod_chord_factor=10, matrix_lag_defect_matches=True, matrix_coordinate_mode_matches=True, matrix_chord_factor_matches=True)
+- `coordinate_samples` = (case=cuboctahedron, t=1, closing_weight=0, tuned_weight=0, coordinate_covariance_closes=True, lag_one_retention=23/24, unit_rod_twice_centroid_variance=20/33, lag_two_defect=0, coordinate_eigenvalue=2, unit_rod_chord_factor=8, matrix_lag_defect_matches=True, matrix_lag_one_matches=True, matrix_centroid_variance_matches=True, matrix_coordinate_mode_matches=True, matrix_chord_factor_matches=True, case=interior-rods, t=3/4, closing_weight=0, tuned_weight=7/12, coordinate_covariance_closes=False, lag_one_retention=287/300, unit_rod_twice_centroid_variance=250/429, lag_two_defect=49/360000, coordinate_eigenvalue=None, unit_rod_chord_factor=None, matrix_lag_defect_matches=True, matrix_lag_one_matches=True, matrix_centroid_variance_matches=True, case=interior-tuned, t=3/4, closing_weight=7/12, tuned_weight=7/12, coordinate_covariance_closes=True, lag_one_retention=21/22, unit_rod_twice_centroid_variance=250/429, lag_two_defect=0, coordinate_eigenvalue=5/2, unit_rod_chord_factor=125/13, matrix_lag_defect_matches=True, matrix_lag_one_matches=True, matrix_centroid_variance_matches=True, matrix_coordinate_mode_matches=True, matrix_chord_factor_matches=True, case=interior-hull, t=3/4, closing_weight=1, tuned_weight=7/12, coordinate_covariance_closes=False, lag_one_retention=143/150, unit_rod_twice_centroid_variance=250/429, lag_two_defect=1/22500, coordinate_eigenvalue=None, unit_rod_chord_factor=None, matrix_lag_defect_matches=True, matrix_lag_one_matches=True, matrix_centroid_variance_matches=True, case=icosahedral-rods, t=-1/2 + 1/2 sqrt 5, closing_weight=0, tuned_weight=1, coordinate_covariance_closes=False, lag_one_retention=11/12 + 1/60 sqrt 5, unit_rod_twice_centroid_variance=25/66 + 5/66 sqrt 5, lag_two_defect=1/2880, coordinate_eigenvalue=None, unit_rod_chord_factor=None, matrix_lag_defect_matches=True, matrix_lag_one_matches=True, matrix_centroid_variance_matches=True, case=icosahedron, t=-1/2 + 1/2 sqrt 5, closing_weight=1, tuned_weight=1, coordinate_covariance_closes=True, lag_one_retention=11/12 + 1/60 sqrt 5, unit_rod_twice_centroid_variance=25/66 + 5/66 sqrt 5, lag_two_defect=0, coordinate_eigenvalue=5 - 1 sqrt 5, unit_rod_chord_factor=10, matrix_lag_defect_matches=True, matrix_lag_one_matches=True, matrix_centroid_variance_matches=True, matrix_coordinate_mode_matches=True, matrix_chord_factor_matches=True)
 - `chord_factors` = (32, 40)
+
+## `jitterbug-nearest-only-obstruction`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+Past the icosahedron the hull stays connected but nearest-only seams give six isolated dimers. Contracting that graph and rebuilding the metric graph at the octahedral limit give different results.
+
+- OPH: Nearest-only binary repair preserves each dimer load independently.
+- FEP: A single global centering condition leaves five precision null directions.
+- Synergetics: The short matching coalesces, while new nearest pairs on the distinct octahedral sites are the doubled-bar positions.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Fuller (1975), fig. 460.08; Kusner et al. (2018), §5.5 for the sphere protocol; exact threshold and graph witnesses derived here
+
+Probe values:
+
+- `contracted_edge_counts` = (30, 6)
+- `nearest_component_sizes` = (2, 2, 2, 2, 2, 2)
+- `centred_nullity` = 5
+- `metric_first_vs_collapse_first_edges` = (0, 12)
+- `sphere_contact_threshold_squared` = 1/3
+- `threshold_contact_count` = 6
+- `sphere_overlap_counts` = (0, 6)
+- `matching_conserves_pair_loads` = True
+
+## `jitterbug-weight-policy-obstruction`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+Unit hull conductances lose coordinate lag closure past the icosahedron. Inverse-square length weighting also fails generically, despite recovering closure at the half-ratio pose.
+
+- OPH: The edge selection rule changes the covariance of weighted fair repair.
+- FEP: A nonzero normalised lag-two defect rejects a same-readout Gaussian Markov description.
+- Synergetics: The closing diagonal length shrinks at a different rate from the inverse of the unique tuned conductance.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Stachel (1994) for the branch; exact matrix counterexamples derived here
+
+Probe values:
+
+- `half_pose_weight` = 3/2
+- `half_pose_retention` = 21/22
+- `unit_hull_half_defect` = 1/22500
+- `inverse_square_third_defect` = 1/32400
+- `inverse_square_third_weight` = 7/2
+
+## `jitterbug-octahedral-gaussian-limit`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+Infinite tuned matching conductance forces equality within each coalescing pair. In common site-value coordinates, the limiting centred Gaussian precision is twice the unit octahedral Laplacian.
+
+- OPH: The two bars between adjacent pairs add as parallel conductances.
+- FEP: Hard equality gives an octahedral Gaussian with computable adjacent and opposite contrasts.
+- Synergetics: Each of the twelve octahedral edges is the location of two physical bars at the limit.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Fuller (1975), fig. 460.08; Bolin and Wallin (2021) for Gaussian constraints; limit calculated here
+
+Probe values:
+
+- `site_count` = 6
+- `bar_multiplicities` = (2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)
+- `pair_mean_spectrum` = ((0, 1), (8, 3), (12, 2))
+- `octahedral_full_contrasts` = (5/24, 1/4)
+- `octahedral_unit_bar_chord_factor` = 8
+- `matching_variance_over_t` = 1
+
+## `jitterbug-pair-load-memory`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+Identifying coincident geometry and Gaussian field values does not yield a Markov chain of binary pair loads at finite matching weight. The projected process retains memory even at stationarity.
+
+- OPH: Conditional seam moves depend on the occupied labelled joint within a pair.
+- FEP: A static hard-equality Gaussian reduction cannot justify finite-rate lumping of a separate repair kernel.
+- Synergetics: Coalescence identifies positions while persistent bars retain their labelled endpoints.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Fuller (1975), fig. 460.08 for geometry; stationary two-step witness derived here
+
+Probe values:
+
+- `witness_probabilities_half_pose` = (0, 1/33)
+- `stationary_return_probabilities_half_pose` = (1/132, 1/66)
+- `stationary_return_bias_factor` = 2
+
+## `jitterbug-averaged-repair-limit`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+On the accelerated clock proportional to total attempt weight, infinitely fast matching repair yields a two-capacity octahedral generator with mean operator minus half the unit Laplacian. Its coordinate lag correlation decays at rate two.
+
+- OPH: Fast fair repair mixes uniformly within each pair-count fibre while bars transfer tokens across pairs.
+- FEP: The limiting linear autocovariances match those of a Gaussian Markov process on the same modes.
+- Synergetics: Coalescing joint pairs become the six octahedral sites, with two bar attempts per quotient edge.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Stachel (1994) for the limit geometry; Giardinà et al. (2009), §3.2 for partial exclusion; averaging and lag laws derived here
+
+Probe values:
+
+- `microstate_count` = 66
+- `pair_load_count` = 21
+- `positive_rates` = (1/4, 1/2, 1)
+- `centred_count_covariance` = 10/33
+- `mass_clock_decay_rate` = 2
 

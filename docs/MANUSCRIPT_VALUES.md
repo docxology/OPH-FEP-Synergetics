@@ -41,14 +41,14 @@ gives one; `Note` records what is measured rather than quoted.
 | `two_node.relaxation_min_radius_measured` | 0.840070783 |  | two_node_relaxation_orbit, measured in this package | minimum over the finite post-transient relaxation sample |
 | `two_node.relaxation_max_radius` | 1.05339122 |  | two_node_relaxation_orbit, measured in this package | maximum over the finite post-transient relaxation sample |
 | `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | estimated time to return near the anchor point of the sampled trajectory |
-| `registry.entries` | 75 | `75` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.isomorphisms` | 37 | `37` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.disagreements` | 28 | `28` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.entries` | 80 | `80` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.isomorphisms` | 39 | `39` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.disagreements` | 31 | `31` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.complementarities` | 10 | `10` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.oph_fep` | 31 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
 | `registry.fep_synergetics` | 5 |  | analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics |  |
 | `registry.synergetics_oph` | 16 |  | analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph |  |
-| `registry.three_way` | 23 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
+| `registry.three_way` | 28 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
 | `carrier.tree_number` | 5184000 | `5184000` | core/invariants.py, Kirchhoff: the exact reduced-Laplacian determinant |  |
 | `gmrf.marginal_variance` | 0.194444444 | `7/36` | core/invariants.py, the reciprocal spectrum summed exactly in the rationals |  |
 | `gmrf.blanket_size` | 5 | `five` | core/invariants.py: the Markov blanket of a port is its neighbours |  |
@@ -274,6 +274,21 @@ gives one; `Note` records what is measured rather than quoted.
 | `jitterbug.precision_ratio` | 125/8 |  | probe:jitterbug-weighted-precision:precision_ratio |  |
 | `jitterbug.even_diagonal_eigenvalue` | 6 |  | probe:jitterbug-weighted-precision:even_diagonal_eigenvalue |  |
 | `jitterbug.chord_factors` | (32, 40) |  | probe:jitterbug-coordinate-closure:chord_factors |  |
+| `jitterbug.contracted_edge_counts` | (30, 6) |  | probe:jitterbug-nearest-only-obstruction:contracted_edge_counts |  |
+| `jitterbug.centred_nullity` | 5 |  | probe:jitterbug-nearest-only-obstruction:centred_nullity |  |
+| `jitterbug.metric_first_vs_collapse_first_edges` | (0, 12) |  | probe:jitterbug-nearest-only-obstruction:metric_first_vs_collapse_first_edges |  |
+| `jitterbug.sphere_contact_threshold_squared` | 1/3 |  | probe:jitterbug-nearest-only-obstruction:sphere_contact_threshold_squared |  |
+| `jitterbug.half_pose_weight` | 3/2 |  | probe:jitterbug-weight-policy-obstruction:half_pose_weight |  |
+| `jitterbug.half_pose_retention` | 21/22 |  | probe:jitterbug-weight-policy-obstruction:half_pose_retention |  |
+| `jitterbug.unit_hull_half_defect` | 1/22500 |  | probe:jitterbug-weight-policy-obstruction:unit_hull_half_defect |  |
+| `jitterbug.inverse_square_third_defect` | 1/32400 |  | probe:jitterbug-weight-policy-obstruction:inverse_square_third_defect |  |
+| `jitterbug.octahedral_full_contrasts` | (5/24, 1/4) |  | probe:jitterbug-octahedral-gaussian-limit:octahedral_full_contrasts |  |
+| `jitterbug.octahedral_unit_bar_chord_factor` | 8 |  | probe:jitterbug-octahedral-gaussian-limit:octahedral_unit_bar_chord_factor |  |
+| `jitterbug.stationary_return_probabilities_half_pose` | (1/132, 1/66) |  | probe:jitterbug-pair-load-memory:stationary_return_probabilities_half_pose |  |
+| `jitterbug.microstate_count` | 66 |  | probe:jitterbug-averaged-repair-limit:microstate_count |  |
+| `jitterbug.pair_load_count` | 21 |  | probe:jitterbug-averaged-repair-limit:pair_load_count |  |
+| `jitterbug.mass_clock_decay_rate` | 2 |  | probe:jitterbug-averaged-repair-limit:mass_clock_decay_rate |  |
+| `jitterbug.centred_count_covariance` | 10/33 |  | probe:jitterbug-averaged-repair-limit:centred_count_covariance |  |
 | `carrier.chart_0` | 1, 5, 7, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 0 |
 | `carrier.chart_1` | 0, 5, 7, 8, 9 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 1 |
 | `carrier.chart_2` | 3, 4, 6, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 2 |

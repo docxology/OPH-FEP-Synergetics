@@ -389,6 +389,18 @@ def _jitterbug_values() -> tuple[BoundValue, ...]:
         ("jitterbug-graph-obstruction", ("icosahedral_edges", "matching_edges")),
         ("jitterbug-weighted-precision", ("matching_variances", "precision_ratio", "even_diagonal_eigenvalue")),
         ("jitterbug-coordinate-closure", ("chord_factors",)),
+        ("jitterbug-nearest-only-obstruction", (
+            "contracted_edge_counts", "centred_nullity", "metric_first_vs_collapse_first_edges",
+            "sphere_contact_threshold_squared",
+        )),
+        ("jitterbug-weight-policy-obstruction", (
+            "half_pose_weight", "half_pose_retention", "unit_hull_half_defect", "inverse_square_third_defect",
+        )),
+        ("jitterbug-octahedral-gaussian-limit", ("octahedral_full_contrasts", "octahedral_unit_bar_chord_factor")),
+        ("jitterbug-pair-load-memory", ("stationary_return_probabilities_half_pose",)),
+        ("jitterbug-averaged-repair-limit", (
+            "microstate_count", "pair_load_count", "mass_clock_decay_rate", "centred_count_covariance",
+        )),
     )
     entries = []
     for probe, fields in groups:

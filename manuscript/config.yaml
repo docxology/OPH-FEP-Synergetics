@@ -96,7 +96,7 @@ project_config:
     status_vocabulary: ["exact", "exact-on-domain", "obstructed", "not-reproduced"]
     kinds: ["isomorphism", "disagreement", "complementarity"]
     pairs: ["oph-fep", "fep-synergetics", "synergetics-oph", "three-way"]
-    entry_count: 75
+    entry_count: 80
   sources:
     - "Observer Patch Holography"
     - "FEP_Formal"

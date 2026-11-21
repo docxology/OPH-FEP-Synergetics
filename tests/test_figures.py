@@ -105,7 +105,7 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
     centroid = next(entry for entry in payload["figures"] if entry["label"] == "fig:centroid-memory")
     assert all(value in centroid["alt"] for value in ("1/180", "1/60", "1/72", "1/48"))
     poster = next(entry for entry in payload["figures"] if entry["label"] == "fig:ga-jitterbug")
-    assert all(value in poster["alt"] for value in ("24 fixed bars", "30 equal hull edges", "7/12 to 11/30"))
+    assert all(value in poster["alt"].lower() for value in ("nearest", "octahedral", "gaussian", "repair"))
     standalone = tmp_path / "OPH-FEP-Synergetics_Jitterbug_Poster.pdf"
     assert standalone.stat().st_size > 10_000
     assert standalone.read_bytes().startswith(b"%PDF-")

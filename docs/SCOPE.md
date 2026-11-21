@@ -30,7 +30,7 @@ its probe.
 | the transfer of binary repair to the FCC first shell | replay the same fair coin and uniform seam sampling on the cuboctahedral graph. Contrast variance gives an exact quotient on both graphs. The FCC graph-distance and both centroid processes retain observable memory under stationarity. |
 | geometric Gaussian comparisons | test reciprocal conductance duality on two spherical graph pairs, compare the pulled-back seam precision for unit-direction quadratics, and use scalar Gaussian precision and vertex cuts to test central-plane screening. |
 | transfer to larger graphs and cellulations | compare two-token repair on a four-cube, complete bipartite graphs and periodic FCC. Test covariance closure by Laplacian invariance, toroidal harmonic covariance, quadratic precision on nearest-neighbour root shells and screening on larger FCC boundaries. |
-| Fuller’s Jitterbug | track the rigid triangles from the vector equilibrium through the regular icosahedron to the octahedral joint coincidences. Compare the bar and hull graphs, then test a specified weighted Gaussian and fair-repair model on their common joint labels. |
+| Fuller’s Jitterbug | track the fixed bars through the regular icosahedron to octahedral joint coincidences. Compare hull, bar and nearest-pair graphs, then test conductance policies, the constrained Gaussian and the accelerated limit of fair binary repair. |
 
 ## Cited but not implemented
 
@@ -142,10 +142,17 @@ hold.
 - `linear-lag-closure` concerns stationary second moments of a fixed binary
   load under positive seam-sampling weights and fair coins. A Gaussian match
   of all lag covariances can coexist with observed non-Markov repair.
-- `jitterbug-coordinate-closure` concerns a weighted seam model on distinct
-  joints from the cuboctahedron to the regular icosahedron. The conductance
-  assigned to each short diagonal is a model parameter. The geometry also
-  describes the octahedral joint coincidences on the longer branch.
+- `jitterbug-coordinate-closure` concerns stationary second moments on distinct
+  joints along the contraction branch, with unit bars and a common tuned
+  matching conductance. The unit-hull and inverse-square examples in
+  `jitterbug-weight-policy-obstruction` show where other rules lose lag closure.
+- `jitterbug-octahedral-gaussian-limit` uses common pair values for a centred
+  scalar Gaussian with unit bars and infinite matching conductance. This
+  static reduction adds two parallel bars per octahedral edge.
+- `jitterbug-averaged-repair-limit` uses fair repair of two binary loads and
+  accelerates the clock by total attempt weight. Fast matching repair mixes
+  within each pair-count fibre. The finite-weight stationary obstruction is
+  recorded separately in `jitterbug-pair-load-memory`.
 - `centered-gaussian-screen-obstruction` compares a grounded Gaussian with
   the same free field conditioned on an exact or noisy global sum. Screening
   under ordinary clamping alone does not carry to the constrained field.

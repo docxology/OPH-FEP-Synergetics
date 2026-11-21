@@ -235,11 +235,18 @@ the first shell and compares grounded, noisy-sum and exact-sum conditioning.
 ## Fuller's Jitterbug and the carrier graph
 
 **Entries:** `jitterbug-rigid-motion`, `jitterbug-graph-obstruction`,
-`jitterbug-weighted-precision`, `jitterbug-coordinate-closure`.
+`jitterbug-weighted-precision`, `jitterbug-coordinate-closure`,
+`jitterbug-nearest-only-obstruction`, `jitterbug-weight-policy-obstruction`,
+`jitterbug-octahedral-gaussian-limit`, `jitterbug-pair-load-memory`,
+`jitterbug-averaged-repair-limit`.
 
 The coordinate path keeps the eight triangles rigid. The hull already
 has triangulated openings on the contracting branch before the short
 diagonals reach the bar length. The Gaussian comparison distinguishes
 bar-only precision from adding conductance to the short matching.
 The latter gives a unique weight law for the moving linear coordinate
-modes and a finite counterexample when the weight is held fixed.
+modes. Past regularity, nearest-only seams disconnect the graph and
+standard weight policies can break lag closure. At coalescence, the
+hard-constraint Gaussian adds the parallel bar conductances, while
+finite-weight pair counts retain memory. Averaging fast matching repair
+on the accelerated clock gives an octahedral occupancy generator.

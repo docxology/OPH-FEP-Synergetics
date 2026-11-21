@@ -10,6 +10,7 @@ from oph_fep_synergetics.core.network import graphs_are_isomorphic
 from oph_fep_synergetics.geometry.jitterbug import (
     ICOSAHEDRON_PARAMETER,
     jitterbug_census,
+    jitterbug_contraction_census,
     jitterbug_matching_edges,
     jitterbug_rigid_edges,
     jitterbug_rigid_triangles,
@@ -100,3 +101,41 @@ def test_jitterbug_octahedral_limit_retains_labels_and_doubles_each_bar():
     assert collapsed["bar_multiplicities"] == (2,) * 12
     collapsed["vertex_count"] = 0
     assert jitterbug_snapshot(0)["vertex_count"] == 6
+
+
+def test_nearest_jitterbug_graph_breaks_into_six_pairs_after_icosahedral_pose():
+    census = jitterbug_contraction_census()
+    assert census["squared_chord_class_counts"] == (
+        ((0, 0, 4), 6), ((2, -2, 2), 24), ((2, 2, 2), 24), ((4, 0, 0), 6), ((4, 0, 4), 6),
+    )
+    assert census["bar_polynomial_matches"]
+    assert census["matching_polynomial_matches"]
+    checkpoints = census["checkpoints"]
+    assert all(row["class_formula_matches"] for row in checkpoints.values())
+    assert tuple((row["shortest_edge_count"], row["shortest_component_sizes"])
+                 for row in checkpoints.values()) == (
+        (24, (12,)), (24, (12,)), (30, (12,)), (6, (2,) * 6), (6, (2,) * 6), (12, (6,)),
+    )
+    assert checkpoints["contracted"]["hull_edge_count"] == checkpoints["overlap_control"]["hull_edge_count"] == 30
+
+
+def test_sphere_contact_threshold_has_six_exact_contacts_without_overlap():
+    census = jitterbug_contraction_census()
+    assert census["sphere_contact_threshold_squared"] == "1/3"
+    assert census["threshold_contact_edges"] == jitterbug_matching_edges()
+    assert census["threshold_overlap_edges"] == ()
+    assert tuple((row["outer_contacts"], row["outer_overlaps"])
+                 for row in census["checkpoints"].values()) == (
+        (24, 0), (0, 0), (0, 0), (0, 0), (0, 6), (0, 0),
+    )
+
+
+def test_shortest_pairs_and_joint_coalescence_do_not_commute():
+    assert jitterbug_contraction_census()["coalescence"] == {
+        "nearest_quotient_edge_count": 0,
+        "nearest_quotient_component_sizes": (1,) * 6,
+        "octahedral_nearest_edge_count": 12,
+        "octahedral_nearest_component_sizes": (6,),
+        "bar_quotient_matches_octahedron": True,
+        "hull_quotient_matches_octahedron": True,
+    }

@@ -42,7 +42,7 @@ from ..core import centroid_dynamics
 from ..core import constraint_screening, contrast_quotients
 from ..core import controls as control_module
 from ..core import free_energy as free_energy_module
-from ..core import geometric_screening, jitterbug_inference
+from ..core import geometric_screening, jitterbug_inference, jitterbug_repair
 from ..core import invariants as invariant_module
 from ..core import native_dynamics
 from ..core import network as network_module
@@ -2494,6 +2494,113 @@ def _probe_jitterbug_coordinate_closure() -> tuple[bool, dict]:
     ), values
 
 
+def _probe_jitterbug_nearest_only() -> tuple[bool, dict]:
+    evidence = jitterbug.jitterbug_contraction_census()
+    rows = evidence["checkpoints"]
+    contracted = rows["contracted"]
+    components = contracted["shortest_component_sizes"]
+    quotient = evidence["coalescence"]
+    values = {
+        "contracted_edge_counts": (contracted["hull_edge_count"], contracted["shortest_edge_count"]),
+        "nearest_component_sizes": components,
+        "centred_nullity": len(components) - 1,
+        "metric_first_vs_collapse_first_edges": (quotient["nearest_quotient_edge_count"],
+                                                  quotient["octahedral_nearest_edge_count"]),
+        "sphere_contact_threshold_squared": evidence["sphere_contact_threshold_squared"],
+        "threshold_contact_count": len(evidence["threshold_contact_edges"]),
+        "sphere_overlap_counts": (contracted["outer_overlaps"], rows["overlap_control"]["outer_overlaps"]),
+        "matching_conserves_pair_loads": jitterbug_repair.jitterbug_pair_repair_census()["matching_conserves_pair_loads"],
+    }
+    return (
+        values["contracted_edge_counts"] == (30, 6) and components == (2,) * 6
+        and values["centred_nullity"] == 5 and values["metric_first_vs_collapse_first_edges"] == (0, 12)
+        and values["sphere_contact_threshold_squared"] == "1/3" and values["threshold_contact_count"] == 6
+        and values["sphere_overlap_counts"] == (0, 6) and not evidence["threshold_overlap_edges"]
+        and evidence["bar_polynomial_matches"] and evidence["matching_polynomial_matches"]
+        and all(row["class_formula_matches"] for row in rows.values())
+        and values["matching_conserves_pair_loads"]
+    ), values
+
+
+def _probe_jitterbug_weight_policy() -> tuple[bool, dict]:
+    rows = {row["case"]: row for row in jitterbug_inference.jitterbug_contraction_census()["continuation_samples"]}
+    half_tuned, half_hull = rows["half-tuned"], rows["half-unit"]
+    half_inverse_square, third_inverse_square = rows["half-inverse-square"], rows["third-inverse-square"]
+    values = {
+        "half_pose_weight": half_tuned["tuned_weight"],
+        "half_pose_retention": half_tuned["lag_one_retention"],
+        "unit_hull_half_defect": half_hull["lag_two_defect"],
+        "inverse_square_third_defect": third_inverse_square["lag_two_defect"],
+        "inverse_square_third_weight": third_inverse_square["closing_weight"],
+    }
+    return (
+        all(row["matrix_lag_defect_matches"] for row in rows.values())
+        and half_tuned["matrix_coordinate_mode_matches"] and half_tuned["matrix_chord_factor_matches"]
+        and half_tuned["coordinate_covariance_closes"] and half_tuned["lag_two_defect"] == 0
+        and half_inverse_square["coordinate_covariance_closes"] and half_inverse_square["closing_weight"] == Fraction(3, 2)
+        and not half_hull["coordinate_covariance_closes"] and not third_inverse_square["coordinate_covariance_closes"]
+        and values == {
+            "half_pose_weight": Fraction(3, 2), "half_pose_retention": Fraction(21, 22),
+            "unit_hull_half_defect": Fraction(1, 22500), "inverse_square_third_defect": Fraction(1, 32400),
+            "inverse_square_third_weight": Fraction(7, 2),
+        }
+    ), values
+
+
+def _probe_jitterbug_octahedral_gaussian() -> tuple[bool, dict]:
+    evidence = jitterbug_inference.jitterbug_contraction_census()
+    quotient = evidence["octahedral_quotient"]
+    limit = evidence["tuned_limit"]
+    values = {
+        "site_count": quotient["sites"],
+        "bar_multiplicities": quotient["bar_multiplicities"],
+        "pair_mean_spectrum": quotient["pair_mean_spectrum"],
+        "octahedral_full_contrasts": (quotient["adjacent_variance"], quotient["opposite_variance"]),
+        "octahedral_unit_bar_chord_factor": quotient["unit_rod_chord_factor"],
+        "matching_variance_over_t": limit["closing_variance_over_t"],
+    }
+    return (
+        values["site_count"] == 6 and values["bar_multiplicities"] == (2,) * 12
+        and all(quotient[key] for key in ("matrix_spectrum_matches", "matrix_hard_quotient_matches", "matrix_chord_factor_matches"))
+        and all(row["matrix_pair_mean_variances_match"] for row in evidence["continuation_samples"])
+        and values["pair_mean_spectrum"] == ((0, 1), (8, 3), (12, 2))
+        and values["octahedral_full_contrasts"] == (Fraction(5, 24), Fraction(1, 4))
+        and values["octahedral_unit_bar_chord_factor"] == limit["unit_rod_chord_factor"] == 8
+        and (quotient["adjacent_coordinate_variance"], quotient["opposite_coordinate_variance"])
+        == (Fraction(1, 8), Fraction(1, 4))
+        and values["matching_variance_over_t"] == 1
+    ), values
+
+
+def _probe_jitterbug_pair_load_memory() -> tuple[bool, dict]:
+    row = jitterbug_repair.jitterbug_pair_repair_census()
+    values = {key: row[key] for key in (
+        "witness_probabilities_half_pose", "stationary_return_probabilities_half_pose", "stationary_return_bias_factor",
+    )}
+    return (
+        row["matching_conserves_pair_loads"] and row["repair_reversible"] and row["witness_coin_counts"] == (0, 2)
+        and values["witness_probabilities_half_pose"] == (0, Fraction(1, 33))
+        and values["stationary_return_probabilities_half_pose"] == (Fraction(1, 132), Fraction(1, 66))
+        and values["stationary_return_bias_factor"] == 2
+    ), values
+
+
+def _probe_jitterbug_averaged_repair() -> tuple[bool, dict]:
+    row = jitterbug_repair.jitterbug_pair_repair_census()
+    limit = jitterbug_inference.jitterbug_contraction_census()["tuned_limit"]
+    values = {key: row[key] for key in ("microstate_count", "pair_load_count", "positive_rates",
+                                         "centred_count_covariance")}
+    values["mass_clock_decay_rate"] = limit["mass_clock_covariance_decay_rate"]
+    return (
+        all(row[key] for key in ("fast_fibres_connected", "fibre_sizes_match", "averaged_rates_match", "detailed_balance",
+                                  "mean_matches_oct_laplacian", "isotropic_centred_count_covariance"))
+        and row["fibre_sizes"] == (1, 4) and limit["retention_loss_over_t"] == Fraction(1, 3)
+        and limit["attempt_mass_times_t"] == 6
+        and values == {"microstate_count": 66, "pair_load_count": 21, "centred_count_covariance": Fraction(10, 33),
+                       "positive_rates": (Fraction(1, 4), Fraction(1, 2), Fraction(1)), "mass_clock_decay_rate": 2}
+    ), values
+
+
 CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="carrier-port-chart",
@@ -3387,13 +3494,63 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         key="jitterbug-coordinate-closure",
         kind=ISOMORPHISM,
         pair=THREE_WAY,
-        claim="On the cuboctahedron-to-regular-icosahedron branch, the moving coordinate space is Laplacian-invariant exactly when the short matching has common weight 1/t minus t. This preserves Gaussian Markov lag covariances at each fixed pose under weighted fair repair.",
+        claim="At every pose with distinct joints on the contraction branch, the moving coordinate space is Laplacian-invariant exactly when the designated matching has common weight 1/t minus t. This preserves Gaussian Markov lag covariances at each fixed pose under weighted fair repair.",
         oph="Seam sampling is proportional to the specified weights and uses the same fair binary update.",
         fep="The unique invariant coordinate space gives the Gaussian lag match and a lowest-mode chord factor.",
-        synergetics="The joint coordinate ratio runs from the vector equilibrium to the golden-ratio landmark.",
+        synergetics="The joint coordinate ratio runs from the vector equilibrium through the golden-ratio landmark and approaches the coalesced limit.",
         status="exact-on-domain",
         source=f"{_CARRIER_SOURCE}; Stachel (1994) for geometric motion; exact covariance closure and matrix witnesses derived here",
         probe=_probe_jitterbug_coordinate_closure,
+    ),
+    Correspondence(
+        key="jitterbug-nearest-only-obstruction", kind=DISAGREEMENT, pair=THREE_WAY,
+        claim="Past the icosahedron the hull stays connected but nearest-only seams give six isolated dimers. Contracting that graph and rebuilding the metric graph at the octahedral limit give different results.",
+        oph="Nearest-only binary repair preserves each dimer load independently.",
+        fep="A single global centering condition leaves five precision null directions.",
+        synergetics="The short matching coalesces, while new nearest pairs on the distinct octahedral sites are the doubled-bar positions.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; Fuller (1975), fig. 460.08; Kusner et al. (2018), §5.5 for the sphere protocol; exact threshold and graph witnesses derived here",
+        probe=_probe_jitterbug_nearest_only,
+    ),
+    Correspondence(
+        key="jitterbug-weight-policy-obstruction", kind=DISAGREEMENT, pair=THREE_WAY,
+        claim="Unit hull conductances lose coordinate lag closure past the icosahedron. Inverse-square length weighting also fails generically, despite recovering closure at the half-ratio pose.",
+        oph="The edge selection rule changes the covariance of weighted fair repair.",
+        fep="A nonzero normalised lag-two defect rejects a same-readout Gaussian Markov description.",
+        synergetics="The closing diagonal length shrinks at a different rate from the inverse of the unique tuned conductance.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; Stachel (1994) for the branch; exact matrix counterexamples derived here",
+        probe=_probe_jitterbug_weight_policy,
+    ),
+    Correspondence(
+        key="jitterbug-octahedral-gaussian-limit", kind=ISOMORPHISM, pair=THREE_WAY,
+        claim="Infinite tuned matching conductance forces equality within each coalescing pair. In common site-value coordinates, the limiting centred Gaussian precision is twice the unit octahedral Laplacian.",
+        oph="The two bars between adjacent pairs add as parallel conductances.",
+        fep="Hard equality gives an octahedral Gaussian with computable adjacent and opposite contrasts.",
+        synergetics="Each of the twelve octahedral edges is the location of two physical bars at the limit.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; Fuller (1975), fig. 460.08; Bolin and Wallin (2021) for Gaussian constraints; limit calculated here",
+        probe=_probe_jitterbug_octahedral_gaussian,
+    ),
+    Correspondence(
+        key="jitterbug-pair-load-memory", kind=DISAGREEMENT, pair=THREE_WAY,
+        claim="Identifying coincident geometry and Gaussian field values does not yield a Markov chain of binary pair loads at finite matching weight. The projected process retains memory even at stationarity.",
+        oph="Conditional seam moves depend on the occupied labelled joint within a pair.",
+        fep="A static hard-equality Gaussian reduction cannot justify finite-rate lumping of a separate repair kernel.",
+        synergetics="Coalescence identifies positions while persistent bars retain their labelled endpoints.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; Fuller (1975), fig. 460.08 for geometry; stationary two-step witness derived here",
+        probe=_probe_jitterbug_pair_load_memory,
+    ),
+    Correspondence(
+        key="jitterbug-averaged-repair-limit", kind=ISOMORPHISM, pair=THREE_WAY,
+        claim="On the accelerated clock proportional to total attempt weight, infinitely fast matching repair yields a two-capacity octahedral generator with mean operator minus half the unit Laplacian. Its coordinate lag correlation decays at rate two.",
+        oph="Fast fair repair mixes uniformly within each pair-count fibre while bars transfer tokens across pairs.",
+        fep="The limiting linear autocovariances match those of a Gaussian Markov process on the same modes.",
+        synergetics="Coalescing joint pairs become the six octahedral sites, with two bar attempts per quotient edge.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; Stachel (1994) for the limit geometry; Giardinà et al. (2009), §3.2 for partial exclusion; averaging and lag laws derived here",
+        probe=_probe_jitterbug_averaged_repair,
     ),
 )
 

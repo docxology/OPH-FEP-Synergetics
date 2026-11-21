@@ -25,7 +25,7 @@ binds numerical results to computations or cited sources.
 ## What runs
 
 ```
-oph-fep-synergetics verify                 # all 75 correspondence probes
+oph-fep-synergetics verify                 # all 80 correspondence probes
 oph-fep-synergetics verify --json          # the same, as a machine-readable report
 oph-fep-synergetics verify --key pr01-obstruction
 oph-fep-synergetics verify --pair synergetics-oph   # one pairwise ledger
@@ -83,20 +83,21 @@ python3 -m venv .venv
 | | `core/surface_duality.py` | harmonic covariance and nonreciprocal weights on a square torus |
 | | `core/constraint_screening.py` | constrained Gaussian half-fields on larger FCC boundaries |
 | | `core/jitterbug_inference.py` | exact weighted matching contrasts and coordinate lag closure |
+| | `core/jitterbug_repair.py` | stationary pair-load memory and the accelerated octahedral repair limit |
 | `geometry` | `geometry/quadray.py` | quadray coordinates, the A3/IVM embedding and exact tetravolumes |
 | | `geometry/lattice.py` | IVM shells, quadray classes of FCC sites and interstices, the cuboctahedral shell, Voronoi cell and packing density |
 | | `geometry/subdivision.py` | icosahedral subdivision and the dual count identities |
 | | `geometry/solids.py` | oriented faces, polyhedron volume, and the icosahedron's tetravolume against its closed form |
 | | `geometry/jitterbug.py` | fixed-bar Jitterbug coordinates and exact hull, bar and nearest-pair comparisons |
-| `analysis` | `analysis/registry.py` | the 75 registered correspondences, each with a pairwise or three-way scope and an executable probe |
+| `analysis` | `analysis/registry.py` | the 80 registered correspondences, each with a pairwise or three-way scope and an executable probe |
 | | `analysis/provenance.py` | source pins, licence terms and reuse policy |
 | `manuscript_variables` | `manuscript_variables/values.py` | every number the prose may quote, derived from the package where a derivation exists |
 
 ## The registry
 
-75 entries: **37 isomorphisms**, **28 disagreements**, **10 complementarities**,
+80 entries: **39 isomorphisms**, **31 disagreements**, **10 complementarities**,
 scoped to the pairs `oph-fep` (31), `synergetics-oph` (16), `fep-synergetics` (5)
-and `three-way` (23). All 75 probes pass. `verify --kind` narrows a run to one of
+and `three-way` (28). All 80 probes pass. `verify --kind` narrows a run to one of
 the three kinds and `--pair` to one of the four scopes. The full table, with the OPH / FEP /
 Synergetics reading of each entry and the values its probe asserts, is generated
 into [docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
@@ -113,9 +114,13 @@ periodic FCC, a weighted twenty-four-cell, harmonic covariance on a torus
 and plane screening under global constraints.
 
 The [Jitterbug chapter](manuscript/07_jitterbug.md) reconstructs Fuller's
-fixed-bar path through the cuboctahedron and regular icosahedron.
-Its explicit conductance model shows how the Gaussian contrast and
-repair covariance change as the hull acquires extra seams.
+fixed-bar path from the cuboctahedron through the regular icosahedron to
+octahedral joint coalescence. The nearest-only graph separates into dimers
+after regularity. A unique conductance law preserves Gaussian covariance
+closure at fixed poses. The hard Gaussian constraint gives an octahedral
+precision, while finite-rate pair repair retains memory. Fast within-pair
+mixing yields a separate octahedral occupancy process on the accelerated
+clock.
 
 Selected results follow.
 
@@ -259,7 +264,7 @@ Three disciplines hold the manuscript together, and each one is a test:
 
 ```
 data/sources.json                    pinned sources, licences, cited identifiers
-docs/CORRESPONDENCES.md              generated: the 75 entries and their probe values
+docs/CORRESPONDENCES.md              generated: the 80 entries and their probe values
 docs/MANUSCRIPT_VALUES.md            generated: every bound value
 docs/CONCORDANCE.md                  generated: where each claim is stated and each figure appears
 docs/PROVENANCE.md                   the pins and the reuse rules
@@ -272,7 +277,7 @@ scripts/make_figures.py              renders the thirty figures, standalone post
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (460 tests)
+tests/                               the suite (468 tests)
 ```
 
 ## Tests
@@ -281,7 +286,7 @@ tests/                               the suite (460 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-460 tests. The suite checks exact values rather than
+468 tests. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

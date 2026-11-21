@@ -161,6 +161,7 @@ def test_the_rendered_pdf_keeps_the_front_matter_and_ontology_supplement():
     poster_page = pages[5]
     assert "Jitterbug and the OPH carrier" in poster_page
     assert "geometric hull diagonals" in " ".join(poster_page.split())
+    assert "accelerated clock" in " ".join(poster_page.split())
     cover = " ".join(pages[0].split())
     first_author = cover.index("Daniel Ari Friedman")
     second_author = cover.index("Bernhard Mueller")

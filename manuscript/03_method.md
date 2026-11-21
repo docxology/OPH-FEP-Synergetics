@@ -127,6 +127,11 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `jitterbug-graph-obstruction` | disagreement | `obstructed` | `synergetics-oph` | the icosahedral hull adds geometric seams to the fixed linkage |
 | `jitterbug-weighted-precision` | isomorphism | `exact-on-domain` | `three-way` | weighting the short diagonals yields an exact Gaussian determinant and contrast family |
 | `jitterbug-coordinate-closure` | isomorphism | `exact-on-domain` | `three-way` | a unique matching conductance preserves the moving coordinate modes |
+| `jitterbug-nearest-only-obstruction` | disagreement | `obstructed` | `three-way` | shortest-edge repair splits into dimers. Coalescence and graph construction depend on their order |
+| `jitterbug-weight-policy-obstruction` | disagreement | `obstructed` | `three-way` | unit hull and inverse-square weights can each break Gaussian lag closure |
+| `jitterbug-octahedral-gaussian-limit` | isomorphism | `exact-on-domain` | `three-way` | hard Gaussian equality within pairs adds the parallel bars in the octahedral precision |
+| `jitterbug-pair-load-memory` | disagreement | `obstructed` | `three-way` | pair totals retain memory under stationary repair at finite matching weight |
+| `jitterbug-averaged-repair-limit` | isomorphism | `exact-on-domain` | `three-way` | rapid within-pair repair yields a two-capacity octahedral generator on the accelerated clock |
 
 : The {{REGISTRY_ENTRIES}} correspondences, in registry order:
 {{REGISTRY_ISOMORPHISMS}} isomorphisms, {{REGISTRY_DISAGREEMENTS}}

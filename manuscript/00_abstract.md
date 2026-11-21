@@ -42,11 +42,13 @@ distance quotient for fair binary repair on regular graphs. Equal variance
 fails as a Markov record on a periodic FCC graph. Reciprocal duality leaves a
 harmonic projector on a torus, and a sum constraint can couple half-fields
 across a grounded geometric separator.
-Fuller's Jitterbug connects the cuboctahedral and icosahedral joint
-configurations with fixed-length bars. The icosahedral hull adds a
-matching of short diagonals. In the weighted seam model, a unique
-conductance on that matching preserves Gaussian lag covariance as
-the coordinates move between the landmarks.
+Fuller's fixed-bar Jitterbug passes through the regular icosahedral
+carrier to paired octahedral sites. Past regularity, the hull stays
+connected while nearest-only seams split into dimers. A unique matching
+conductance still preserves Gaussian lag covariance at each distinct
+pose. At coalescence the Gaussian gives a doubled octahedral precision,
+while finite-weight repair retains pair-load memory and yields a
+Markov quotient only in the accelerated limit studied here.
 Cuboctahedral and icosahedral configurations attain the same kissing number
 with different contacts among the outer spheres. The cuboctahedral gauge
 determines lattice coordination shells, and equal-covariance Gaussian

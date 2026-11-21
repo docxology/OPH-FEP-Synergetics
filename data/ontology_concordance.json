@@ -564,8 +564,8 @@
           "id": "jitterbug-branch",
           "term": "Jitterbug branch",
           "meanings": {
-            "oph": "The regular icosahedral landmark realises the carrier incidence.",
-            "synergetics": "Rigid triangles of the vector equilibrium follow a continuous fixed-bar motion to an octahedral limit."
+            "oph": "The regular icosahedral hull realises the carrier.",
+            "synergetics": "Rigid triangles preserve bar length from the vector equilibrium to the octahedron."
           },
           "relation": "geometric-comparison",
           "limit": "The branch describes joint locations at fixed bar length. The central-sphere contact protocol uses a different rescaling.",
@@ -584,8 +584,8 @@
           "id": "jitterbug-hull-diagonal",
           "term": "Hull diagonal",
           "meanings": {
-            "oph": "At regularity the carrier seam graph includes both the retained bars and the six short diagonals.",
-            "synergetics": "The skew regions of the contracting hull split across a perfect matching of short diagonals."
+            "oph": "The carrier seams include the bars and six short diagonals.",
+            "synergetics": "The diagonals split the skew regions and form a perfect matching."
           },
           "relation": "counterexample",
           "limit": "Hull, bar and nearest-pair graphs encode different data. The matching becomes equal in length to the bars only at the golden-ratio landmark.",
@@ -602,12 +602,12 @@
           "id": "jitterbug-matching-conductance",
           "term": "Matching conductance",
           "meanings": {
-            "oph": "Fair repair samples a seam with probability proportional to its specified conductance.",
-            "fep": "An explicit weight on the matching changes Gaussian contrast and the centred precision determinant.",
-            "synergetics": "The joint-coordinate ratio determines the unique weight preserving the moving coordinate space."
+            "oph": "Fair repair samples seams in proportion to weight.",
+            "fep": "Weights set Gaussian contrasts and the precision determinant.",
+            "synergetics": "The coordinate ratio fixes the weight that preserves the coordinate modes."
           },
           "relation": "conditional-identity",
-          "limit": "The lag match is a statement about stationary second moments on a fixed weighted graph for each shape.",
+          "limit": "The unique tuning applies to each fixed pose with distinct joints on the contraction branch. It matches stationary second moments of the coordinates.",
           "probes": [
             "jitterbug-weighted-precision",
             "jitterbug-coordinate-closure"
@@ -617,6 +617,71 @@
             "fuller1979synergetics2",
             "stachel1994heureka"
           ]
+        },
+        {
+          "id": "jitterbug-nearest-only",
+          "term": "Nearest-only seams",
+          "meanings": {
+            "oph": "Nearest-only repair conserves each dimer load.",
+            "fep": "Global centering leaves five precision null modes.",
+            "synergetics": "Past regularity, nearest joints form six disjoint pairs."
+          },
+          "relation": "counterexample",
+          "limit": "Contracting the nearest graph removes its internal dimer edges. Rebuilding nearest neighbours on the distinct endpoint sites gives the octahedral graph.",
+          "probes": ["jitterbug-nearest-only-obstruction"],
+          "citations": ["oph", "fuller1975synergetics"]
+        },
+        {
+          "id": "jitterbug-weight-policy",
+          "term": "Conductance rule",
+          "meanings": {
+            "oph": "Weights set fair repair sampling probabilities.",
+            "fep": "A lag-two defect rules out Gaussian Markov closure.",
+            "synergetics": "Short diagonal lengths define inverse-square weights."
+          },
+          "relation": "counterexample",
+          "limit": "Past regularity, the unit hull fails. Inverse-square weights close only at the half-ratio pose.",
+          "probes": ["jitterbug-weight-policy-obstruction"],
+          "citations": ["oph", "stachel1994heureka"]
+        },
+        {
+          "id": "jitterbug-gaussian-limit",
+          "term": "Hard equality of pair values",
+          "meanings": {
+            "oph": "Two bars supply parallel conductance.",
+            "fep": "Infinite matching weight gives site precision twice the unit octahedral Laplacian.",
+            "synergetics": "Each octahedral site contains a joint pair."
+          },
+          "relation": "conditional-identity",
+          "limit": "The model uses unit bars and a centred scalar field. The reduced coordinates are the common pair values.",
+          "probes": ["jitterbug-octahedral-gaussian-limit"],
+          "citations": ["fuller1975synergetics", "bolin2021sparse"]
+        },
+        {
+          "id": "jitterbug-pair-load",
+          "term": "Observed pair load",
+          "meanings": {
+            "oph": "Which label carries a token affects the next repair.",
+            "fep": "A stationary three-time witness detects count memory.",
+            "synergetics": "Coalesced joints keep distinct bar labels."
+          },
+          "relation": "counterexample",
+          "limit": "The witness uses finite matching weight and fair binary repair at the half-ratio pose.",
+          "probes": ["jitterbug-pair-load-memory"],
+          "citations": ["oph", "fuller1975synergetics"]
+        },
+        {
+          "id": "jitterbug-fast-repair",
+          "term": "Averaged pair repair",
+          "meanings": {
+            "oph": "Fast within-pair mixing gives capacity-two transfer.",
+            "fep": "Linear lag covariances match Gaussian Markov decay.",
+            "synergetics": "Two bars occupy each quotient edge."
+          },
+          "relation": "conditional-identity",
+          "limit": "Scale the clock by total attempt weight before sending the matching weight to infinity.",
+          "probes": ["jitterbug-averaged-repair-limit"],
+          "citations": ["oph", "stachel1994heureka", "giardina2009duality"]
         }
       ]
     }
