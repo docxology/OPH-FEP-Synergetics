@@ -11,7 +11,7 @@ argue by key.
 
 | key | kind | status | pair | named in prose (outside the registry table) | outlined in |
 | --- | --- | --- | --- | --- | --- |
-| `carrier-port-chart` | isomorphism | exact | synergetics-oph | `00_00_graphical_abstract.md`, `02_framework.md` | yes |
+| `carrier-port-chart` | isomorphism | exact | synergetics-oph | `02_framework.md` | yes |
 | `spectral-gap` | isomorphism | exact | oph-fep | `00_00_graphical_abstract.md`, `02_framework.md` | yes |
 | `shell-counts` | isomorphism | exact | oph-fep | `02_framework.md` | yes |
 | `native-repair-law` | isomorphism | exact | oph-fep | `04_correspondences.md` | yes |
@@ -25,7 +25,7 @@ argue by key.
 | `icosahedral-symmetry` | isomorphism | exact | synergetics-oph | `04_correspondences.md` | yes |
 | `eigenspace-irreducibility` | isomorphism | exact | synergetics-oph | `04_correspondences.md` | yes |
 | `law-equivariance` | isomorphism | exact | synergetics-oph | `04_correspondences.md` | yes |
-| `kl-lattice-metric` | isomorphism | exact | fep-synergetics | `00_00_graphical_abstract.md`, `02_framework.md` | yes |
+| `kl-lattice-metric` | isomorphism | exact | fep-synergetics | `02_framework.md` | yes |
 | `pr01-obstruction` | disagreement | obstructed | oph-fep | `05_disagreements.md`, `07_scope.md` | yes |
 | `free-energy-name-collision` | disagreement | obstructed | oph-fep | `05_disagreements.md` | yes |
 | `mediator-obstruction` | disagreement | obstructed | oph-fep | `05_disagreements.md` | yes |
@@ -63,7 +63,7 @@ argue by key.
 | `greedy-record-placement` | disagreement | obstructed | oph-fep | `06_finite_extensions.md` | yes |
 | `planar-dual-covariance` | isomorphism | exact-on-domain | three-way | `06_finite_extensions.md`, `07_three_way_limits.md` | yes |
 | `cuboctahedral-spectral-chords` | isomorphism | exact-on-domain | fep-synergetics | `06_finite_extensions.md` | yes |
-| `cuboctahedral-distance-split` | disagreement | obstructed | fep-synergetics | `06_finite_extensions.md` | yes |
+| `cuboctahedral-distance-split` | disagreement | obstructed | fep-synergetics | `00_00_graphical_abstract.md`, `06_finite_extensions.md` | yes |
 | `repair-contrast-quotient` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | yes |
 | `repair-distance-counterexample` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
 | `reciprocal-dual-weights` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md`, `07_transfer_criteria.md` | yes |
@@ -82,7 +82,7 @@ argue by key.
 | `root-shell-quadratic-precision` | isomorphism | exact-on-domain | three-way | `07_transfer_criteria.md` | yes |
 | `fcc-plane-screen-transfer` | isomorphism | exact-on-domain | three-way | `07_transfer_criteria.md` | yes |
 | `centered-gaussian-screen-obstruction` | disagreement | obstructed | three-way | `07_transfer_criteria.md` | yes |
-| `jitterbug-rigid-motion` | isomorphism | exact-on-domain | synergetics-oph | `02_framework.md`, `07_jitterbug.md` | yes |
+| `jitterbug-rigid-motion` | isomorphism | exact-on-domain | synergetics-oph | `00_00_graphical_abstract.md`, `02_framework.md`, `07_jitterbug.md` | yes |
 | `jitterbug-graph-obstruction` | disagreement | obstructed | synergetics-oph | `07_jitterbug.md` | yes |
 | `jitterbug-weighted-precision` | isomorphism | exact-on-domain | three-way | `07_jitterbug.md` | yes |
 | `jitterbug-coordinate-closure` | isomorphism | exact-on-domain | three-way | `07_jitterbug.md` | yes |
@@ -93,7 +93,7 @@ argue by key.
 
 | section | claims its prose names |
 | --- | --- |
-| `00_00_graphical_abstract.md` | `carrier-port-chart`, `spectral-gap`, `kl-lattice-metric` |
+| `00_00_graphical_abstract.md` | `spectral-gap`, `cuboctahedral-distance-split`, `jitterbug-rigid-motion` |
 | `00_abstract.md` | *none* |
 | `01_introduction.md` | `quadray-ivm`, `subgraph-census`, `binary-conditional-variance`, `carrier-spectral-chords` |
 | `02_framework.md` | `carrier-port-chart`, `spectral-gap`, `shell-counts`, `variational-equivalence`, `sheaf-agreement`, `gmrf-independence`, `sheaf-cohomology`, `kl-lattice-metric`, `cuboctahedron-vs-icosahedron`, `kissing-twelve`, `icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic`, `repair-is-conditioning`, `jitterbug-rigid-motion` |
@@ -123,6 +123,7 @@ argue by key.
 | `fig:families` | `05_disagreements.md` | *package readings, no single claim* |
 | `fig:ga-carrier` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
 | `fig:ga-descent` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
+| `fig:ga-jitterbug` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
 | `fig:ga-synergetics` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
 | `fig:ga-triangle` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
 | `fig:geometry-transfer` | `07_transfer_criteria.md` | `copied-surface-weight-obstruction` |

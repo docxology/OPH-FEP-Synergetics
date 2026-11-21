@@ -101,7 +101,7 @@ LITERAL_ALLOWLIST = tuple(
     for pattern in (
         r"\[@[^\]\n]*\]",                    # bracketed citations including source locators
         r"@[\w:-]+",                          # inline citations and cross-references
-        r"width=\d+%",                        # figure layout
+        r"(?:width|height)=\d+%",              # figure layout
         r"\\setcounter\{page\}\{\d+\}",       # page plumbing
         r"\bPR-01\b",                         # OPH's own premise label
         r"\bA3\b",                            # the root lattice's name
@@ -233,7 +233,7 @@ def test_figure_links_match_the_accessibility_registry():
     for path in SECTIONS:
         for match in FIGURE_LINK.finditer(path.read_text(encoding="utf-8")):
             links[match.group(2)] = match.group(1)
-    assert len(links) == 28, sorted(links)
+    assert len(links) == 29, sorted(links)
     registry = PROJECT / "output" / "figures" / "figure_registry.json"
     if not registry.is_file():  # the figures are generated artefacts
         return

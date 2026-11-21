@@ -12,24 +12,23 @@ complementarities across `oph-fep` ({{REGISTRY_OPH_FEP}}),
 ({{REGISTRY_FEP_SYNERGETICS}}) and `three-way` ({{REGISTRY_THREE_WAY}}).
 
 The panels map the claims, show the carrier and its Gaussian reading,
-compare native repair attempts with Gaussian costs on lattice shells, and
-explain how tetravolumes are measured.
+compare native repair attempts with Gaussian costs on lattice shells, measure
+tetravolumes, and trace the carrier back to Fuller's Jitterbug.
 
 ## Panel 1 — scope of the executable claims {#sec:ga-triangle}
 
-Each edge shows the total for one pair. The ledger gives its claim kinds
-and a representative result. Run
+Each edge shows the total for one pair. For each claim, specify the finite
+model, derive a comparison and check it with the executable probe. Run
 `oph-fep-synergetics verify --pair` with the scope name to check its entries.
 
-![Claim totals on the framework triangle, with representative results and counts by kind. The centre counts claims that use all three frameworks.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
+![Pairwise claim totals and representative results. The guide below the triangle gives the workflow from model to probe. The centre counts claims that use all three frameworks.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
 
-`carrier-port-chart` links OPH's port chart to the icosahedron's vertex set.
-`spectral-gap` links the mean repair operator to a Gaussian precision built
-from the same Laplacian. `kl-lattice-metric` expresses equal-covariance
-Gaussian divergence as a lattice cost. [@tbl:registry] gives the scope of
-each claim. [@sec:transfer-criteria] tests which results transfer to
-other finite graphs, lattice shells and cellulations. [@sec:jitterbug]
-follows the fixed bars through the regular carrier hull.
+`spectral-gap` connects the mean repair and intrinsic Gaussian readings of
+the same Laplacian. `jitterbug-rigid-motion` reaches the regular carrier hull
+along a fixed-bar branch. `cuboctahedral-distance-split` shows that pairs at
+the same distance on the FCC first shell can have different contrast variances.
+[@tbl:registry] gives the scope of each claim. [@sec:transfer-criteria] checks
+analogous results on other finite graphs, lattice shells and cellulations.
 
 \clearpage
 
@@ -42,7 +41,7 @@ two ports are conditionally dependent given the rest exactly when they share a
 seam. The graph also determines the spanning-tree count and the agreement
 sheaf's cohomology dimensions ([@prop:sheaf]; [@prop:cohomology]).
 
-![The icosahedral carrier, with solid foreground seams and dashed rear seams. The ledger groups graph and sheaf invariants, symmetries, and the intrinsic and proper Gaussian quantities.](../output/figures/fig_ga_carrier.png){#fig:ga-carrier width=100%}
+![An icosahedral port and its Markov blanket. A dark diamond marks the target, and blue circles and seams mark its neighbours. Solid and dashed lines distinguish the front and rear of the carrier. The ledger gives graph, sheaf, symmetry and Gaussian quantities.](../output/figures/fig_ga_carrier.png){#fig:ga-carrier width=100%}
 
 The reduced Laplacian has determinant {{CARRIER_TREE_NUMBER}}. By the
 matrix-tree theorem, it equals the carrier's spanning-tree count. The count
@@ -74,7 +73,7 @@ Native repair acts on a configuration, a seam and a coin outcome. Of the
 leave the state unchanged. The repair rule commutes with the carrier
 symmetries, so the census is invariant under their action.
 
-![Left: counts and shares of native repair attempts, with the path multiplicities below. Right: distinct unit-covariance Gaussian costs, their ranges on each coordination shell, and the dashed curve of shell maxima. Open diamonds connected by dotted guides mark costs shared by shells.](../output/figures/fig_ga_descent.png){#fig:ga-descent width=100%}
+![Native repair attempts by outcome, with a seam transition that lowers the load energy. The adjacent chart gives unit-covariance Gaussian costs on coordination shells. Open diamonds and dotted guides mark shared costs, and the dashed curve joins the shell maxima.](../output/figures/fig_ga_descent.png){#fig:ga-descent width=100%}
 
 Gaussian divergence at unit covariance is half the squared distance between
 the means. One lattice step has squared length {{KL_STEP_SQUARED_DISTANCE}}
@@ -96,7 +95,7 @@ nearest-neighbour distance. Its selected solids have integer tetravolumes
 tetrahedra of its own edge length, has tetravolume
 $(5/2)(3\sqrt{2} + \sqrt{10}) \approx {{ICOSAHEDRON_TETRAVOLUME}}$.
 
-![Left: exact IVM tetravolumes and the carrier icosahedron's approximate tetravolume on a logarithmic axis. Right: the IVM Voronoi cell with its incidence counts, exact tetravolume and packing density.](../output/figures/fig_ga_synergetics.png){#fig:ga-synergetics width=100%}
+![Exact IVM tetravolumes and the carrier icosahedron's approximate tetravolume on a logarithmic axis. The Voronoi cell highlights a face triangle with dotted segments to the cell centre, showing one tetrahedron in the volume calculation.](../output/figures/fig_ga_synergetics.png){#fig:ga-synergetics width=100%}
 
 The IVM Voronoi cell is a rhombic dodecahedron with {{VORONOI_VERTICES}}
 vertices, {{VORONOI_FACES}} faces and {{VORONOI_EDGES}} edges. Triangulating
@@ -111,6 +110,12 @@ $\mathbb{Q}(\sqrt{5})$, with square $175 + 75\sqrt{5} \approx
 {{KL_ONE_STEP}} nats for a lattice step and the quadratic surd
 {{CARRIER_SHELL_GAP}} for the normalised repair gap, it illustrates distinct
 units and number systems in the three comparisons.
+
+\clearpage
+
+## Panel 5 — Fuller's Jitterbug and the OPH carrier {#sec:ga-jitterbug}
+
+![Fuller's hinged triangles move from the cuboctahedral coordination shell to the regular icosahedral OPH carrier hull and on to the octahedral limit. The pose diagrams separate fixed bars from the geometric hull diagonals. Holding the icosahedral pose fixed, the model compares the variance of a port difference with and without unit conductance on those diagonals. See [@sec:jitterbug] for the derivation and the weighted covariance result.](../output/figures/fig_ga_jitterbug.png){#fig:ga-jitterbug height=82%}
 
 \floatplacement{figure}{tbp}
 

@@ -13,7 +13,7 @@ paper:
   cover:
     # Page 1 summarises the carrier, lattice geometry and executable comparisons.
     image: "../output/figures/fig_cover.png"
-    alt: "Three columns show the numbered icosahedral carrier, Gaussian port contrasts and the cuboctahedral FCC shell. The centre chart divides full intrinsic Gaussian contrast variance and squared chord length by their respective adjacent-port values. Squared chords rise faster with graph distance. Equal variance can hide different repair moves. The FCC planes screen grounded fields at every shell frequency, while a global sum couples both halves. A stacked bar shows the three registry claim kinds and a separate count gives the twenty-three three-way claims."
+    alt: "The numbered icosahedral carrier and cuboctahedral FCC shell flank a chart of squared chord length and full intrinsic Gaussian contrast variance by graph distance, each divided by its adjacent-port value. Squared chords rise faster. Distance fixes the next distance-class law for fair binary repair on the carrier. Axis and body-diagonal planes separate the FCC halves and fixing on-plane sites screens the grounded fields. The registry ledger includes three-way claims within its total."
 
 # Layout. The front-matter bound is a shade tighter than the ordinary one on
 # purpose: the first figure in the document is panel 1 of the graphical

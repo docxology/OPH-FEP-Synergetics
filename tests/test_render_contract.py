@@ -39,6 +39,7 @@ def test_panel_pages_are_read_in_physical_order():
         "1.2 Panel 2 — the carrier",
         "1.3 Panel 3 — the dynamics",
         "1.4 Panel 4 — the accounting",
+        "1.5 Panel 5 — Fuller's Jitterbug and the OPH carrier\nFigure 5: poster",
         "Contents\n1 Graphical abstract 2",
     )
     assert check_render.panel_page_map(pages) == {
@@ -46,8 +47,9 @@ def test_panel_pages_are_read_in_physical_order():
         "Panel 2": 3,
         "Panel 3": 4,
         "Panel 4": 5,
+        "Panel 5": 6,
     }
-    assert check_render.contents_page(pages) == 6
+    assert check_render.contents_page(pages) == 7
 
 
 def test_a_panel_that_moves_is_reported_by_page():
@@ -137,10 +139,10 @@ def test_standalone_pdf_rejects_printed_reference_markers(tmp_path, monkeypatch)
     pdf.touch()
     pages = [
         "Observers, Blankets, and Screens",
-        *(f"Panel {index}\nFigure {index}: panel" for index in range(1, 5)),
+        *(f"Panel {index}\nFigure {index}: panel" for index in range(1, 6)),
         "Contents",
         "See Proposition ?? and [@def:missing]. Citation [?]. Is this punctuation??",
-        "\n".join(f"Figure {index}: caption" for index in range(5, 16)),
+        "\n".join(f"Figure {index}: caption" for index in range(6, 17)),
     ]
     monkeypatch.setattr(check_render, "pdf_text", lambda _: pages)
     monkeypatch.setattr(check_render, "text_left_margin", lambda *_: 36.0)
@@ -156,6 +158,9 @@ def test_the_rendered_pdf_keeps_the_front_matter_and_ontology_supplement():
     passed, lines = check_render.check(PDF, log=None)
     assert passed, "\n".join(lines)
     pages = check_render.pdf_text(PDF)
+    poster_page = pages[5]
+    assert "Jitterbug and the OPH carrier" in poster_page
+    assert "geometric hull diagonals" in " ".join(poster_page.split())
     cover = " ".join(pages[0].split())
     first_author = cover.index("Daniel Ari Friedman")
     second_author = cover.index("Bernhard Mueller")

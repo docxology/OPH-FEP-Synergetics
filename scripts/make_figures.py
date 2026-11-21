@@ -59,7 +59,7 @@ from oph_fep_synergetics.core import (  # noqa: E402
     network,
     planar_duality,
     quadratic_modes,
-    root_shells,
+    repair,
     root_shells,
     sheaf,
     surface_duality,
@@ -989,7 +989,7 @@ def _cover_contrasts(figure: plt.Figure, width: float, height: float,
     chart.set_xticks(steps)
     chart.set_yticks((1, 2, 3, 4))
     chart.set(xlim=(0.85, 3.65), ylim=(0.75, 4.04))
-    chart.set_title("Relative to adjacent pairs", color="#DCE8F3", fontsize=13, pad=8)
+    chart.set_title("Adjacent-pair value = 1", color="#DCE8F3", fontsize=14, pad=9)
     chart.set_xlabel("Graph distance (seams)", color="#DCE8F3", fontsize=13, labelpad=6)
     for numbers, color, marker, style, fill, size in (
         (squared_chords, gold, "D", "-", "none", 8.5),
@@ -1038,10 +1038,10 @@ def cover_figure() -> Path:
         field += glow[..., None] * color
     axis.imshow(field.astype(np.uint8), origin="lower", extent=(0, width, 0, height),
                 interpolation="bilinear", zorder=0)
-    axis.text(0.52, 8.65, "What transfers across frameworks", va="center", color=paper,
-              fontsize=29, fontweight="bold")
-    axis.text(0.54, 8.17, "Test repair, Gaussian inference and geometry beyond the two twelve-vertex shells.",
-              va="center", color=secondary, fontsize=15)
+    axis.text(0.52, 8.65, "Geometry, repair and Gaussian inference", va="center", color=paper,
+              fontsize=28, fontweight="bold")
+    axis.text(0.54, 8.17, "Two shells anchor the models. Transfer tests compare results across graphs.",
+              va="center", color=secondary, fontsize=14.5)
     for level in (7.86, 3.11, 1.53):
         axis.hlines(level, 0.52, 12.98, color="#89A9BB", linewidth=0.85, alpha=0.48)
     axis.vlines((4.59, 8.91), 1.76, 7.56, color="#89A9BB", linewidth=0.7, alpha=0.38)
@@ -1056,24 +1056,24 @@ def cover_figure() -> Path:
     edge_length = math.sqrt(float(contrast_rows[0][2]))
     for cx, color, label, title, finding, lines in (
         (carrier_center[0], teal, "OPH", "Icosahedral carrier",
-         "Binary repair",
-         ("Fair repair = uniform conditional law", "Dirichlet form = mean fibre variance",
-          "Equal variance can hide different moves")),
+         "Fair binary repair",
+         ("Uniform resampling on a seam", "given its total and outside loads.",
+          "Distance fixes the next-class law.")),
         (6.75, blue, "FREE ENERGY PRINCIPLE", "Gaussian port contrasts",
-         "Carrier chords",
+         "Gaussian contrast",
          (f"Chord² = {values['chord.variance_factor']} × lowest-mode variance",
-          f"For icosahedral edge length {edge_length:g}",
-          f"Full variance needs {values['chord.full_rank']} dimensions")),
+          f"At carrier edge length {edge_length:g}.",
+          f"Full covariance rank: {values['chord.full_rank']}.")),
         (shell_center[0], gold, "SYNERGETICS", "Cuboctahedral FCC shell",
-         "FCC plane screens",
-         ("Planes cut seams at every frequency",
-          "Grounded fields screen across the cut",
-          "A global sum couples the halves")),
+         "FCC plane screening",
+         ("Axis and diagonal planes separate halves.",
+          "Fixing on-plane sites screens them.",
+          "Conditioning on a global sum couples them.")),
     ):
         axis.text(cx, 7.53, label, ha="center", va="center", color=color,
                   fontsize=13, fontweight="bold")
         axis.text(cx, 7.11, title, ha="center", va="center", color=paper,
-                  fontsize=19, fontweight="bold")
+                  fontsize=18.5, fontweight="bold")
         axis.text(cx, 2.83, finding, ha="center", va="center", color=color,
                   fontsize=16, fontweight="bold")
         for y_value, line in zip((2.44, 2.11, 1.78), lines, strict=True):
@@ -1084,7 +1084,7 @@ def cover_figure() -> Path:
         (carrier_center[0], 3.43, secondary,
          f"Load two  ·  {values['shell.total_two']} states, {values['shell.transitions']:,} attempts"),
         (6.75, 3.78, gold, "◇  Squared chord"),
-        (6.75, 3.43, blue, "●  Gaussian contrast variance"),
+        (6.75, 3.43, blue, "●  Full Gaussian contrast variance"),
         (shell_center[0], 3.77, paper, f"{len(sites)} FCC sites  ·  {len(shell_edges)} edges"),
         (shell_center[0], 3.43, secondary,
          f"{len(shell_faces['triangles'])} triangles  ·  {len(shell_faces['squares'])} squares"),
@@ -1094,7 +1094,7 @@ def cover_figure() -> Path:
     total = sum(kinds.values())
     axis.text(0.54, 1.19, f"{total} executable claims", va="center", color=paper,
               fontsize=16.5, fontweight="bold")
-    axis.text(12.96, 1.19, f"{len(by_pair()[THREE_WAY])} three-way claims", ha="right",
+    axis.text(12.96, 1.19, f"including {len(by_pair()[THREE_WAY])} three-way claims", ha="right",
               va="center", color=secondary, fontsize=14)
     start = 0.54
     for kind, color, label in (
@@ -1105,7 +1105,8 @@ def cover_figure() -> Path:
         count = kinds[kind]
         span = 12.42 * count / total
         axis.broken_barh([(start, span - 0.04)], (0.42, 0.15), facecolors=color, edgecolors="none")
-        axis.text(start, 0.80, f"{count} {label}", va="center", color=color, fontsize=13)
+        x, align = (12.96, "right") if kind == "complementarity" else (start, "left")
+        axis.text(x, 0.80, f"{count} {label}", ha=align, va="center", color=color, fontsize=13)
         start += span
 
     filename = "fig_cover.png"
@@ -1123,10 +1124,11 @@ def cover_figure() -> Path:
         f"by their adjacent-pair value. Squared chords rise faster. Full intrinsic variances are "
         f"{resistance_alt}. Squared chords "
         f"equal {values['chord.variance_factor']} times the lowest-mode variance at edge length "
-        f"{edge_length:g}. Fair binary repair resamples conditionally. Its Dirichlet form equals "
-        "mean fibre variance. Equal contrast variance can hide different repair moves. "
-        "Coordinate and signed body-diagonal planes screen the grounded FCC field at every "
-        "shell frequency. A global sum couples the two halves. "
+        f"{edge_length:g}. On the binary carrier shell, fair repair resamples the selected seam "
+        "uniformly given its total and all outside loads. With uniform seam sampling, occupied-port "
+        "distance fixes the next distance distribution. Coordinate and signed body-diagonal planes "
+        "separate the strict FCC halves at every positive shell frequency. Fixing the plane sites "
+        "screens the grounded field. A global sum couples the halves. "
         f"The {total} claims include {kinds['isomorphism']} isomorphisms, {kinds['disagreement']} "
         f"disagreements and {kinds['complementarity']} complementarities. "
         f"{len(by_pair()[THREE_WAY])} claims use all three frameworks."
@@ -1153,14 +1155,14 @@ def ga_triangle_figure() -> Path:
     entries_by_key = by_key()
     vertices = {"OPH": (0.50, 0.78), "FEP": (0.17, 0.24), "Synergetics": (0.83, 0.24)}
     examples = (
-        (OPH_FEP, "OPH", "FEP", "spectral-gap", "Mean repair and Gaussian precision share a Laplacian."),
+        (OPH_FEP, "OPH", "FEP", "spectral-gap", "Mean repair and intrinsic precision share a Laplacian."),
         (SYNERGETICS_OPH, "OPH", "Synergetics", "jitterbug-rigid-motion", "The Jitterbug reaches the regular carrier hull."),
-        (FEP_SYNERGETICS, "FEP", "Synergetics", "cuboctahedral-distance-split", "FCC pairs two steps apart can have different variances."),
+        (FEP_SYNERGETICS, "FEP", "Synergetics", "cuboctahedral-distance-split", "First-shell pairs two steps apart can differ in variance."),
     )
     for axis in (diagram, ledger):
         axis.set(xlim=(0.0, 1.0), ylim=(0.0, 1.0))
         axis.set_axis_off()
-    diagram.text(0.5, 0.99, "Where the claims sit", ha="center", va="top",
+    diagram.text(0.5, 0.99, "Scope of each check", ha="center", va="top",
                  fontsize=15, color=INK, fontweight="bold")
     edge_descriptions = []
     for index, (pair, first, second, key, result) in enumerate(examples):
@@ -1199,11 +1201,13 @@ def ga_triangle_figure() -> Path:
         fontsize=13, color=INK, fontweight="bold",
     )
     diagram.text(
-        0.5, 0.06, f"{len(CORRESPONDENCES)} executable claims", ha="center",
-        va="center", color=INK, fontsize=12,
+        0.5, 0.085, f"{len(CORRESPONDENCES)} executable claims", ha="center",
+        va="center", color=INK, fontsize=12, fontweight="bold",
     )
+    diagram.text(0.5, 0.015, "Specify the model  →  Derive  →  Check", ha="center",
+                 va="center", color=BLUE, fontsize=11)
     ledger.text(0.02, 0.23, "Three-way claims", va="top", color=INK, fontsize=14, fontweight="bold")
-    ledger.text(0.02, 0.14, "Equal variance can hide different repair rates.",
+    ledger.text(0.02, 0.14, "Equal variance can hide distinct repair rates on periodic FCC.",
                 va="top", color=BLUE, fontsize=12)
     ledger.text(0.02, 0.07, "Transfer tests on periodic lattices, root shells and a torus",
                 va="top", color=INK, fontsize=10.5)
@@ -1213,15 +1217,18 @@ def ga_triangle_figure() -> Path:
         "A triangle connects Observer Patch Holography (OPH), the Free Energy Principle (FEP) "
         f"and Fuller's Synergetics. Its edge totals and centre account for all "
         f"{len(CORRESPONDENCES)} executable claims. " + " ".join(edge_descriptions)
-        + f" The centre counts {len(three)} three-way claims, including transfer tests for "
-        "repair records, Gaussian covariance and screening on periodic lattices, root shells and a torus.",
+        + f" The centre counts {len(three)} three-way claims. For instance, on a periodic FCC graph, "
+        "equal variance can conceal different repair probabilities. The workflow specifies the model, "
+        "derives a comparison and checks it against the probe.",
     )
 
 
 def ga_carrier_figure() -> Path:
-    """The carrier graph beside the OPH-facing and FEP-facing invariant ledger."""
+    """Show one Markov blanket and the carrier's invariant ledger."""
     carrier, view = _carrier_view()
     flat = view[:, :2]
+    target = 0
+    neighbours = invariants.markov_blanket(carrier, target)
     figure, (left, right) = plt.subplots(
         1, 2, figsize=(11.0, 5.2), gridspec_kw={"width_ratios": (0.92, 1)}
     )
@@ -1236,39 +1243,43 @@ def ga_carrier_figure() -> Path:
 
     for edge in carrier.edges:
         foreground = edge in front_edges
+        blanket_edge = target in edge
         left.plot(
-            *flat[list(edge)].T, color=BLUE if foreground else GREY,
-            linewidth=1.7 if foreground else 1, linestyle="-" if foreground else "--",
-            alpha=1.0 if foreground else 0.6, zorder=2 if foreground else 1.5,
+            *flat[list(edge)].T, color=BLUE if blanket_edge else GREY,
+            linewidth=2.3 if blanket_edge else 1.1, linestyle="-" if foreground else "--",
+            alpha=1.0 if blanket_edge else 0.62, zorder=2.5 if blanket_edge else 2,
         )
-    left.scatter(
-        flat[:, 0],
-        flat[:, 1],
-        s=335,
-        color="white",
-        edgecolor=INK,
-        linewidth=1.2,
-        zorder=3,
+    groups = (
+        ((target,), "D", INK, INK, "Target port"),
+        (neighbours, "o", "#D8EEFA", BLUE, "Markov blanket"),
+        (tuple(port for port in range(carrier.port_count) if port not in (target, *neighbours)),
+         "o", "white", GREY, "Other ports"),
     )
-    for port in range(carrier.port_count):
+    handles = []
+    for members, marker, face, edge, label in groups:
+        handles.append(left.scatter(
+            *flat[list(members)].T, s=290 if marker == "D" else 335,
+            marker=marker, color=face, edgecolor=edge, linewidth=1.45, label=label, zorder=3,
+        ))
+    for port, (x, y) in enumerate(flat):
         left.text(
-            flat[port, 0],
-            flat[port, 1],
-            str(port),
+            x, y, str(port),
             ha="center",
             va="center",
             fontsize=11,
             fontweight="bold",
-            color=INK,
+            color="white" if port == target else INK,
             zorder=4,
         )
     left.set_aspect("equal")
     left.set_axis_off()
-    left.set_title("Icosahedral carrier", fontsize=15, fontweight="bold")
+    left.set_title(f"Carrier blanket of port {target}", fontsize=15, fontweight="bold")
     left.text(
         0.5, -0.03, f"{carrier.port_count} ports  ·  {carrier.seam_count} seams",
         transform=left.transAxes, ha="center", va="top", color=INK, fontsize=12,
     )
+    left.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, -0.09),
+                ncol=3, fontsize=9.5, markerscale=0.55, handletextpad=0.4, columnspacing=1.25)
     left.margins(0.12)
 
     cohomology = sheaf.cohomology_dimensions(sheaf.carrier_sheaf(carrier))
@@ -1300,7 +1311,7 @@ def ga_carrier_figure() -> Path:
             (r"Centred intrinsic variance $(L^+)_{ii}$", str(marginal)),
             ("Proper Gaussian blanket size", blanket_text),
             ("Precision on a seam", precision_text.replace("-", "\u2212")),
-            ("Ordered seam pairs", str(len(precision))),
+            ("Ordered seam pairs", f"{len(precision)} = 2 × {carrier.seam_count}"),
         )),
     )
     right.set_axis_off()
@@ -1318,8 +1329,10 @@ def ga_carrier_figure() -> Path:
         figure,
         "fig_ga_carrier.png",
         f"The spectral projection of the icosahedral carrier shows {carrier.port_count} numbered "
-        f"ports and {carrier.seam_count} seams. Pale faces and solid seams mark the front. "
-        f"Rear seams are dashed. The carrier has {tree_number:,} spanning trees and the agreement "
+        f"ports and {carrier.seam_count} seams. The target port {target} is a dark diamond, "
+        f"and its neighbours {_enumerated(neighbours)} form the proper Gaussian's Markov blanket. "
+        "Their seams to the target are highlighted. Solid seams mark the front and rear seams "
+        f"are dashed. The carrier has {tree_number:,} spanning trees and the agreement "
         f"sheaf has dimensions {cohomology['h0']} and {cohomology['h1']} for H0 and H1. Its "
         f"{len(group)} automorphisms include {len(rotations)} rotations and "
         f"{len(orientation_reversing)} orientation-reversing symmetries. The centred intrinsic "
@@ -1330,8 +1343,13 @@ def ga_carrier_figure() -> Path:
 
 def ga_descent_figure() -> Path:
     """Compare native-law outcomes and unit-covariance Gaussian divergence levels."""
+    carrier = icosahedral_carrier()
+    start, end = carrier.edges[0]
+    loads = tuple(2 if port == start else 0 for port in range(carrier.port_count))
+    example = repair.native_repair(loads, (start, end), coin=0)
+    before = (example.before[start], example.before[end])
+    after = (example.after[start], example.after[end])
     census = controls.gated_descent_census()
-    multiplicities = controls.path_multiplicity_values()
     figure, (left, right) = plt.subplots(
         1, 2, figsize=(11.5, 4.8), gridspec_kw={"width_ratios": (0.92, 1.08)}
     )
@@ -1359,7 +1377,7 @@ def ga_descent_figure() -> Path:
     left.grid(False, axis="y")
     left.set_xlabel("Share of enumerated attempts", fontsize=11)
     left.text(
-        0.0, -0.24, "Path multiplicities: " + ", ".join(map(str, multiplicities)),
+        0.0, -0.24, f"Seam loads {before} → {after}\nLoad energy falls by {example.energy_decrease}.",
         transform=left.transAxes, ha="left", va="top", color=INK, fontsize=10.5,
     )
 
@@ -1374,6 +1392,10 @@ def ga_descent_figure() -> Path:
         right.hlines(
             level, min(shells), max(shells), color=VERMILLION, linestyle=":", linewidth=1.6,
             zorder=2,
+        )
+        right.annotate(
+            f"{level:g}", (max(shells), level), xytext=(9, 0), textcoords="offset points",
+            va="center", fontsize=10.5, color=INK,
         )
     ordinary = [
         (k, level) for k, levels in levels_by_shell.items()
@@ -1401,7 +1423,7 @@ def ga_descent_figure() -> Path:
         zorder=3,
     )
     right.set_xticks(k_values)
-    right.set_xlim(min(k_values) - 0.35, max(k_values) + 0.35)
+    right.set_xlim(min(k_values) - 0.35, max(k_values) + 0.68)
     right.set_ylim(0, max(maxima) * 1.08)
     right.set_xlabel("IVM coordination shell $k$", fontsize=11)
     right.set_ylabel("Gaussian KL (nats)", fontsize=11)
@@ -1414,7 +1436,8 @@ def ga_descent_figure() -> Path:
         f"Left: shares of {total:,} native repair attempts. " + " ".join(
             f"{label}: {value:,} attempts, {value / total:.1%}."
             for label, value in zip(labels, values)
-        ) + f" Path multiplicities are {_enumerated(multiplicities)}. "
+        ) + f" In one strict descent, seam loads {before} become {after}, reducing load "
+        f"energy by {example.energy_decrease}. "
         f"Right: distinct Gaussian KL values for each of the first {len(k_values)} IVM shells. "
         f"Vertical lines span each shell's range. Levels shared among the displayed shells are "
         f"{_enumerated(shared_levels)} "
@@ -1448,6 +1471,7 @@ def ga_synergetics_figure() -> Path:
     view /= max(np.linalg.norm(view, axis=1))
     flat = view[:, :2]
     front_edges = set()
+    front_faces = []
     for face in faces:
         polygon = view[list(face)]
         a, b, c = polygon[:3]
@@ -1455,6 +1479,7 @@ def ga_synergetics_figure() -> Path:
         if normal[2] * (normal @ polygon.mean(axis=0)) > 0:
             right.fill(*polygon[:, :2].T, color=SKY, alpha=0.20, linewidth=0, zorder=1)
             front_edges.update(tuple(sorted((vertex, face[i - 1]))) for i, vertex in enumerate(face))
+            front_faces.append((abs(normal[2]), face))
     for edge in edges:
         foreground = edge in front_edges
         right.plot(
@@ -1462,7 +1487,17 @@ def ga_synergetics_figure() -> Path:
             linewidth=1.6 if foreground else 1, linestyle="-" if foreground else "--",
             alpha=1.0 if foreground else 0.56, zorder=2 if foreground else 1.5,
         )
-    right.scatter(*flat.T, s=33, facecolor="white", edgecolor=BLUE, zorder=3)
+    front_vertices = sorted({vertex for edge in front_edges for vertex in edge})
+    rear_vertices = sorted(set(range(len(flat))) - set(front_vertices))
+    right.scatter(*flat[rear_vertices].T, s=24, facecolor="white", edgecolor=GREY, alpha=0.55, zorder=2)
+    right.scatter(*flat[front_vertices].T, s=33, facecolor="white", edgecolor=BLUE, zorder=3)
+    _, example_face = max(front_faces, key=lambda item: item[0])
+    triangle = flat[list(example_face[:3])]
+    right.fill(*triangle.T, color=ORANGE, alpha=0.45, linewidth=0, zorder=1.5)
+    right.plot(*triangle[[0, 2]].T, color=VERMILLION, linewidth=1.5, zorder=2.5)
+    for x, y in triangle:
+        right.plot((0, x), (0, y), color=VERMILLION, linestyle=":", linewidth=1.3, zorder=2.5)
+    right.scatter(0, 0, s=34, marker="D", facecolor=VERMILLION, edgecolor=INK, zorder=4)
     right.set(xlim=(-1.55, 1.55), ylim=(-1.66, 1.13), aspect="equal")
     right.set_anchor("N")
     right.set_axis_off()
@@ -1486,6 +1521,8 @@ def ga_synergetics_figure() -> Path:
         + ", ".join(f"{name.replace('_', ' ')} {value}" for name, value in ivm_volumes.items())
         + f". A diamond labels the carrier icosahedron at approximately {ico_volume:.4f}. "
         + "Right: a rhombic dodecahedron represents the IVM Voronoi cell, with rear edges dashed. "
+        + "An amber triangle on one face connects to the diamond at the cell centre by dotted "
+        + "segments to show one tetrahedron in the volume sum. "
         + "The cell has "
         + ", ".join(f"{value} {name}" for name, value in zip(cell_labels, cell_values))
         + f", exact tetravolume {cell_volume} and packing density {float(density['density']):.6f}, "
@@ -3096,6 +3133,28 @@ def jitterbug_figure() -> Path:
     )
 
 
+def jitterbug_poster_figure() -> Path:
+    """Write the manuscript image and a standalone vector poster."""
+    if __package__:
+        from .jitterbug_poster import draw_jitterbug_poster
+    else:
+        from jitterbug_poster import draw_jitterbug_poster
+
+    figure, alt = draw_jitterbug_poster(_rotation(math.radians(45), math.radians(35)))
+    FIGURES.mkdir(parents=True, exist_ok=True)
+    target = FIGURES / "fig_ga_jitterbug.png"
+    figure.savefig(target, dpi=300)
+    with matplotlib.rc_context({"pdf.fonttype": 42}):
+        figure.savefig(
+            FIGURES / "OPH-FEP-Synergetics_Jitterbug_Poster.pdf",
+            metadata={"Title": "Fuller's Jitterbug: From an FCC shell to the OPH carrier",
+                      "Author": "Daniel Ari Friedman, Bernhard Mueller", "CreationDate": None},
+        )
+    plt.close(figure)
+    ALT_TEXT[target.name] = alt
+    return target
+
+
 def write_registry() -> Path:
     """Write the accessibility registry the renderer reads for figure alt text.
 
@@ -3140,6 +3199,7 @@ def main() -> int:
         ga_carrier_figure,
         ga_descent_figure,
         ga_synergetics_figure,
+        jitterbug_poster_figure,
         pair_triangles_figure,
         scope_matrix_figure,
         network_figure,

@@ -8,9 +8,10 @@ render [docs/MANUSCRIPT_VALUES.md](../docs/MANUSCRIPT_VALUES.md).
 Each section names the registry entries it rests on. A section may not claim
 more than its entries' statuses.
 
-The rendered edition adds a cover page (page 1) and a four-panel graphical
-abstract (pages 2 to 5) written in `00_00_graphical_abstract.md`, with the
-contents page re-emitted after the panels. The registry carries a pairwise scope
+The rendered edition has a cover (page 1) and five graphical abstract panels
+(pages 2 to 6) written in `00_00_graphical_abstract.md`. The final panel is a
+standalone-style guide to the Jitterbug for OPH readers. The contents begins on
+page 7. The registry carries a pairwise scope
 per entry, and `oph-fep-synergetics verify --pair` executes one scope at a time;
 `--kind` narrows a run to the identifications, the obstructions or the
 complementarities. `fig:network` draws the carrier's network readings — the

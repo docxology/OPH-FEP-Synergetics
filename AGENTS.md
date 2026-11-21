@@ -95,7 +95,7 @@ or manuscript sources and regenerate them with `scripts/render_docs.py`.
     conditional dependencies on the seams. Use the relevant term in every
     claim and caption.
 16. **The front matter is placed on purpose, and the tests check the page
-    positions.** Page 1 is the cover, pages 2 to 5 are the four panels of
+    positions.** Page 1 is the cover, pages 2 to 6 are the five panels of
     `manuscript/00_00_graphical_abstract.md` (one panel per page, held in place
     by `\floatplacement{figure}{H}`), and the contents page is re-emitted by
     `\ophContentsPage` at the end of that file because `preamble.md` keeps the
@@ -114,7 +114,7 @@ or manuscript sources and regenerate them with `scripts/render_docs.py`.
 .venv/bin/oph-fep-synergetics sources --vault-root /path/to/vault
 .venv/bin/python scripts/render_docs.py               # regenerate the reference docs and supplement
 .venv/bin/python scripts/render_docs.py --check       # fail when stale
-.venv/bin/python scripts/make_figures.py              # the twenty-nine figures and their registry
+.venv/bin/python scripts/make_figures.py              # the thirty figures, standalone poster and registry
 .venv/bin/python scripts/build.py --deliver           # the four manuscript steps, in order
 ```
 

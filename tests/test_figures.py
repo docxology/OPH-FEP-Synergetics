@@ -33,6 +33,7 @@ EXPECTED_BUILDERS = (
     "ga_carrier_figure",
     "ga_descent_figure",
     "ga_synergetics_figure",
+    "jitterbug_poster_figure",
     "pair_triangles_figure",
     "scope_matrix_figure",
     "network_figure",
@@ -64,6 +65,7 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         make_figures.repair_transfer_figure(),
         make_figures.geometry_transfer_figure(),
         make_figures.jitterbug_figure(),
+        make_figures.jitterbug_poster_figure(),
         make_figures.cover_figure(),
     ]
     for path in written:
@@ -83,6 +85,7 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         "fig:repair-transfer",
         "fig:geometry-transfer",
         "fig:jitterbug",
+        "fig:ga-jitterbug",
         "fig:cover",
     }
     for entry in payload["figures"]:
@@ -101,6 +104,11 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
     assert f"{len(make_figures.CORRESPONDENCES)} claims" in cover["alt_text"]
     centroid = next(entry for entry in payload["figures"] if entry["label"] == "fig:centroid-memory")
     assert all(value in centroid["alt"] for value in ("1/180", "1/60", "1/72", "1/48"))
+    poster = next(entry for entry in payload["figures"] if entry["label"] == "fig:ga-jitterbug")
+    assert all(value in poster["alt"] for value in ("24 fixed bars", "30 equal hull edges", "7/12 to 11/30"))
+    standalone = tmp_path / "OPH-FEP-Synergetics_Jitterbug_Poster.pdf"
+    assert standalone.stat().st_size > 10_000
+    assert standalone.read_bytes().startswith(b"%PDF-")
     height, width, _ = make_figures.plt.imread(written[-1]).shape
     assert width > height
 

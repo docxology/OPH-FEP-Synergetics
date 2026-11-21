@@ -3,7 +3,7 @@
 
 The manuscript makes five promises that only a rendered artefact can keep:
 
-1. page 1 is the cover, pages 2 to 5 are the four panels of the graphical
+1. page 1 is the cover, pages 2 to 6 are the five panels of the graphical
    abstract, and the contents page follows the front matter;
 2. each panel page carries its own figure caption, so a panel cannot float away
    from the figure it describes;
@@ -39,10 +39,10 @@ DEFAULT_PDF = PROJECT / "output" / "pdf" / "OPH-FEP-Synergetics_combined.pdf"
 DEFAULT_LOG = PROJECT / "output" / "pdf" / "_combined_manuscript.log"
 
 #: The panels of the graphical abstract, in the order they must occupy pages.
-PANELS = ("Panel 1", "Panel 2", "Panel 3", "Panel 4")
+PANELS = ("Panel 1", "Panel 2", "Panel 3", "Panel 4", "Panel 5")
 
-#: The physical pages the four panels must occupy.
-PANEL_PAGES = (2, 3, 4, 5)
+#: The physical pages the five panels must occupy.
+PANEL_PAGES = tuple(range(2, 2 + len(PANELS)))
 
 OVERFULL = re.compile(r"Overfull \\[hv]box")
 UNDEFINED_CITATION = re.compile(r"Citation [`'][^']+'[^\n]*undefined|There were undefined citations")
@@ -194,7 +194,7 @@ def check(
         )
 
     contents = contents_page(pages)
-    contents_ok = contents is not None and contents > PANEL_PAGES[-1]
+    contents_ok = contents == PANEL_PAGES[-1] + 1
     lines.append(
         f"contents after the panels: {'ok (page %d)' % contents if contents_ok else 'FAIL'}"
     )

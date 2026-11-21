@@ -232,10 +232,13 @@ template interpreter to resolve the manuscript bindings, and writes the PDF
 in this project's `output/pdf/`.
 
 The cover connects the carrier and FCC shell to the computed port contrasts,
-binary repair identity and executable claim counts. Its source is
-`output/figures/fig_cover.png`. Pages 2 to 5 each hold one graphical abstract
-panel and its caption, fixed in place with `\floatplacement{figure}{H}`.
-The contents follows the panels because `preamble.md` defers the automatic
+binary repair identity and executable claim counts. Pages 2 to 5 cover claim
+scope, the OPH carrier, repair and lattice costs, and tetravolumes. Page 6 is a
+Jitterbug poster that follows Fuller's linkage to the regular icosahedral
+carrier and distinguishes the bars from the seams in the inference model.
+The build also writes a standalone vector copy at
+`output/figures/OPH-FEP-Synergetics_Jitterbug_Poster.pdf`.
+The contents starts on page 7 because `preamble.md` defers the automatic
 `\tableofcontents` to the end of `00_00_graphical_abstract.md`. The 0.5 in
 margins accommodate the reference tables.
 
@@ -265,7 +268,7 @@ docs/VERIFICATION.md                 the gates and how to run them
 data/ontology_concordance.json       structured terms, comparisons, evidence and limits
 manuscript/                          paper, bibliography and generated ontology supplement
 scripts/render_docs.py               regenerates the reference documents and ontology supplement
-scripts/make_figures.py              renders the twenty-nine figures and their accessibility registry
+scripts/make_figures.py              renders the thirty figures, standalone poster and accessibility registry
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package

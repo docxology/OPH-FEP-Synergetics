@@ -142,8 +142,9 @@ suite rather than in LaTeX, so a defect is reported by `pytest`:
 | `test_render_contract.py` | PDF front matter, panel captions, registry keys, printed reference placeholders and the 0.6 in left-margin limit, plus LaTeX log diagnostics |
 
 The [tracked PDF](../output/pdf/OPH-FEP-Synergetics_combined.pdf) places the
-cover on page 1, the four graphical-abstract panels and their captions on
-pages 2 to 5, and the contents on page 6. Its measured left text margin is
+cover on page 1, the five graphical abstract panels and their captions on
+pages 2 to 6, and the contents on page 7. Page 6 is the Jitterbug poster.
+Its measured left text margin is
 0.500 in. The render check reports the current page and caption counts and
 looks for every live registry key in the extracted text.
 

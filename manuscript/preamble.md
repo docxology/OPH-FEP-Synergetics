@@ -30,15 +30,15 @@ when that order changes.
 \usepackage{etoolbox}
 \AtBeginEnvironment{longtable}{\small}
 
-% Page 1 is the cover and pages 2 to 5 are the four panels of the graphical
+% Page 1 is the cover and pages 2 to 6 are the five panels of the graphical
 % abstract, so the contents page belongs after that front matter rather than
 % immediately after the cover. The combined renderer emits \tableofcontents
 % directly after the title page; the original macro is kept here and re-emitted
-% by 00_00_graphical_abstract.md once the four panels are placed.
+% by 00_00_graphical_abstract.md once the five panels are placed.
 \let\ophContentsPage\tableofcontents
 \renewcommand{\tableofcontents}{\relax}
 
-% The four panels are placed exactly where they are written, so that the front
+% The five panels are placed exactly where they are written, so that the front
 % pages are exactly the panels; the body keeps the ordinary float placement,
 % which the end of the front matter restores.
 \floatplacement{figure}{H}
