@@ -43,7 +43,8 @@ its probe.
   this scope.
 - **Fuller's full synergetic apparatus.** Only the pieces the correspondence
   needs are here: quadray coordinates, the IVM, the vector-equilibrium shell,
-  the volume ratios, and the subdivision counts.
+  volume ratios, subdivision counts, and the fixed-bar Jitterbug branch
+  through octahedral coalescence.
 - **OPH's transactional and integer consensus contracts.** OPH's consensus
   theorems hold for those contracts, not for the native law. This package tests
   the native law, which is the one the carrier actually runs.

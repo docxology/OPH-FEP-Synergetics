@@ -75,7 +75,9 @@ or manuscript sources and regenerate them with `scripts/render_docs.py`.
     Cross-references follow the labels when statement numbers change.
 11. **Citations are exact in both directions.** Every `[@key]` resolves in
     `manuscript/references.bib`, and every entry there is cited somewhere. A
-    test asserts the two sets are equal.
+    test asserts the two sets are equal. Authored sections also refer to every
+    numbered figure, table, equation and formal statement. The generated
+    concordance reports the source sections for these references.
 12. **Every top-level heading carries a `{#sec:…}` label.** The render
     annotates a heading that lacks one and writes the annotation back into the
     source, so keeping the labels explicit is what makes a render idempotent.
@@ -114,9 +116,13 @@ or manuscript sources and regenerate them with `scripts/render_docs.py`.
 .venv/bin/oph-fep-synergetics sources --vault-root /path/to/vault
 .venv/bin/python scripts/render_docs.py               # regenerate the reference docs and supplement
 .venv/bin/python scripts/render_docs.py --check       # fail when stale
-.venv/bin/python scripts/make_figures.py              # the thirty figures, standalone poster and registry
-.venv/bin/python scripts/build.py --deliver           # the four manuscript steps, in order
+.venv/bin/python scripts/make_figures.py              # thirty figures, vector Jitterbug poster and registry
+.venv/bin/python scripts/build.py --template-root /path/to/template
 ```
+
+The render check needs Poppler's `pdftotext`. Add `--deliver` to copy the
+checked combined PDF to `~/Downloads/`. The standalone poster is generated
+in `output/figures/`.
 
 The manuscript renders through the `docxology/template` checkout, whose
 pipeline owns Pandoc and LaTeX:
@@ -143,9 +149,9 @@ requires an interpreter that passes the template's bytecode audit.
   source.
 - The manuscript renders. The PDF has no unresolved reference placeholders,
   and its LaTeX log has no overfull boxes or undefined references or citations.
-  Check the cover and changed figure pages at page size. The tagged PDF draws
-  its alternative descriptions from the figure registry and the cover
-  configuration.
+  The printed figure captions match the numbered manuscript inventory.
+  Check the cover and changed figure pages at page size. The tagged PDF uses
+  the alternative descriptions in the figure registry and cover configuration.
 - The test count in `README.md` and `docs/VERIFICATION.md` matches the collected
   count; `test_docs.py` fails when it does not.
 

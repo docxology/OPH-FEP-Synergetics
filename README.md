@@ -28,6 +28,7 @@ binds numerical results to computations or cited sources.
 oph-fep-synergetics verify                 # all 80 correspondence probes
 oph-fep-synergetics verify --json          # the same, as a machine-readable report
 oph-fep-synergetics verify --key pr01-obstruction
+oph-fep-synergetics verify --key jitterbug-octahedral-gaussian-limit --key jitterbug-averaged-repair-limit
 oph-fep-synergetics verify --pair synergetics-oph   # one pairwise ledger
 oph-fep-synergetics verify --kind disagreement       # one kind of claim
 oph-fep-synergetics sources                # pins, licences and reuse policy
@@ -213,8 +214,8 @@ This project is released under the MIT licence; see [LICENSE](LICENSE).
 ## The manuscript
 
 The Pandoc and LaTeX pipeline from `docxology/template` builds the paper
-from `manuscript/`. Run the build from this repository after installing the
-figure and test extras.
+from `manuscript/`. Install the figure and test extras and put Poppler's
+`pdftotext` on your path for the PDF checks.
 
 The [ontology concordance](manuscript/90_ontology_concordance.md) compares
 the meanings of shared terms across the three programmes and links each
@@ -228,26 +229,33 @@ contains the stable identifiers and source references used to generate it.
 The script generates figures and numerical bindings, renders the manuscript,
 and checks the PDF and its log. It selects the template checkout from
 `--template-root`, `$TEMPLATE_ROOT`, or the sibling `template/` directory.
-An optional `--deliver` also copies the verified PDF to `~/Downloads/` and
-prints both SHA-256 digests.
+An optional `--deliver` also copies the checked combined manuscript PDF
+to `~/Downloads/` and prints both SHA-256 digests. The standalone poster
+is written alongside the figure images.
 
 `projects/working/OPH-FEP-Synergetics` in the template checkout must point to
 the checkout you want to build. The script checks that link, uses the
 template interpreter to resolve the manuscript bindings, and writes the PDF
 in this project's `output/pdf/`.
 
-The cover connects the carrier and FCC shell to the computed port contrasts,
-binary repair identity and executable claim counts. Pages 2 to 5 cover claim
-scope, the OPH carrier, repair and lattice costs, and tetravolumes. Page 6 is a
-Jitterbug poster that follows Fuller's linkage to the regular icosahedral
-carrier and distinguishes the bars from the seams in the inference model.
-The build also writes a standalone vector copy at
-`output/figures/OPH-FEP-Synergetics_Jitterbug_Poster.pdf`.
+The cover compares carrier port contrasts and highlights graph-distance
+repair and grounded FCC screening. Pages 2 to 5 cover claim scope, the OPH
+carrier, repair and lattice costs, and tetravolumes. The Jitterbug poster
+on page 6 follows the linkage past the regular icosahedron to the paired
+octahedral sites. It shows nearest-pair disconnection, the tuned conductance
+rule, and how Gaussian equality and averaged binary repair behave at the
+endpoint.
+
+To regenerate the figures without invoking LaTeX, run
+`.venv/bin/python scripts/make_figures.py`. It writes the poster as
+`output/figures/fig_ga_jitterbug.png` for the manuscript and as a standalone
+vector PDF at `output/figures/OPH-FEP-Synergetics_Jitterbug_Poster.pdf`.
+
 The contents starts on page 7 because `preamble.md` defers the automatic
 `\tableofcontents` to the end of `00_00_graphical_abstract.md`. The 0.5 in
 margins accommodate the reference tables.
 
-Three disciplines hold the manuscript together, and each one is a test:
+The manuscript checks cover four contracts.
 
 - **Numerical results have bindings.** The prose quotes computed or sourced
   results as `{{TOKEN}}`. The build checks that every token resolves and the
@@ -259,6 +267,10 @@ Three disciplines hold the manuscript together, and each one is a test:
 - **Every citation resolves.** Pandoc's `--natbib` resolves `[@key]` against
   `manuscript/references.bib`. A test asserts that the cited keys and the
   bibliography are the same set: no undefined citation, and no uncited entry.
+- **Numbered material is used in the manuscript.** Authored sections refer
+  to every numbered figure, table, equation and formal statement. The
+  [generated concordance](docs/CONCORDANCE.md) lists that coverage. The
+  render check also reads the printed figure captions back from the PDF.
 
 ## Layout
 
@@ -266,18 +278,18 @@ Three disciplines hold the manuscript together, and each one is a test:
 data/sources.json                    pinned sources, licences, cited identifiers
 docs/CORRESPONDENCES.md              generated: the 80 entries and their probe values
 docs/MANUSCRIPT_VALUES.md            generated: every bound value
-docs/CONCORDANCE.md                  generated: where each claim is stated and each figure appears
+docs/CONCORDANCE.md                  generated: claims, references and bound values quoted in figure captions
 docs/PROVENANCE.md                   the pins and the reuse rules
 docs/SCOPE.md                        what is reimplemented, what is cited, what is out
 docs/VERIFICATION.md                 the gates and how to run them
 data/ontology_concordance.json       structured terms, comparisons, evidence and limits
 manuscript/                          paper, bibliography and generated ontology supplement
 scripts/render_docs.py               regenerates the reference documents and ontology supplement
-scripts/make_figures.py              renders the thirty figures, standalone poster and accessibility registry
+scripts/make_figures.py              renders the thirty figures, standalone vector poster and accessibility registry
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (468 tests)
+tests/                               the suite (471 tests)
 ```
 
 ## Tests
@@ -286,7 +298,7 @@ tests/                               the suite (468 tests)
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-468 tests. The suite checks exact values rather than
+471 tests. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

@@ -62,7 +62,13 @@ arithmetic from numerical corroboration at a stated tolerance.
    modes [@prop:quadray-ivm; @prop:kl; @prop:carrier-spectral-chords].
    We also compute exact volumes for the carrier and the close-packing
    Voronoi cell [@prop:ico-volume; @prop:packing].
-5. **Executable provenance.** The registry links each comparison to its
+5. **Transfer and limits.** We compare binary repair on the carrier and FCC
+   shell, where matching Gaussian lag covariances can coexist with observable
+   memory [@sec:three-way-limits]. We derive transfer conditions for larger graphs
+   and cellulations [@sec:transfer-criteria]. On the Jitterbug branch, the
+   constrained Gaussian and accelerated repair lead to different limits at the
+   same octahedral pose [@sec:jitterbug].
+6. **Executable provenance.** The registry links each comparison to its
    probe. The source register records software commits and the identifiers
    used in each reimplementation [@sec:reproducibility].
 

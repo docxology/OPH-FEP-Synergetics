@@ -25,7 +25,7 @@ Named values let readers inspect the evidence behind a verdict and identify
 which result moved when an implementation changes. The proof or derivation in
 the text states the mathematical domain. The probe tests specific instances or
 exhausts a declared finite domain. A passing obstruction probe reproduces the
-counterexample to an identification.
+counterexample to an identification. [@tbl:status] defines the four statuses.
 
 | Status | Meaning |
 |:-------|:--------|
@@ -146,7 +146,8 @@ The registry is the source of truth for the paper. The prose in
 [@sec:correspondences], [@sec:disagreements] and [@sec:complementarities] says
 what the probes found; it does not add claims the probes do not carry.
 [@fig:scope-matrix] summarizes the same {{REGISTRY_ENTRIES}} entries by
-scope, kind and evidence status. [@tbl:registry] lists individual entries.
+scope, kind and evidence status. [@fig:ga-triangle] locates examples on the
+edges between the programmes. [@tbl:registry] lists individual entries.
 
 ![Correspondence counts by scope. Each row aligns counts by claim kind with
 counts by evidence status and a shared scope total. The matrix labels zeros

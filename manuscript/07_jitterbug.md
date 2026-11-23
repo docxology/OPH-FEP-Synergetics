@@ -10,7 +10,9 @@ rescaling so that the attached triangles remain rigid
 [@verheyen1989jitterbug; @stachel1994heureka, pp. 447–449]. We use a
 centred coordinate chart for the same branch. The locations of the
 joints, the bars, and the edges of the convex hull give three
-different ways to read the assembly.
+different ways to read the assembly. [@fig:jitterbug] compares the bars and
+hull across poses at a common bar length. [@tbl:ontology-jitterbug-linkage]
+states the scope of the geometric, Gaussian and repair comparisons.
 
 ## One linkage, three landmark shapes {#sec:jitterbug-rigid-path}
 
@@ -196,7 +198,8 @@ At the same pose the unit-weight hull defect is
 defect is {{JITTERBUG_INVERSE_SQUARE_THIRD_DEFECT}}.
 :::
 
-Keep the bars at unit conductance. From the chord ratio, weighting
+The two alternatives in [@prop:jitterbug-weight-policy-obstruction] keep
+the bars at unit conductance. From the chord ratio, weighting
 diagonals by inverse squared length relative to the bars gives
 $w_{\mathrm{length}}=(1+t^2-t)/(2t^2)$. Its difference from the tuned
 weight factors as $(2t-1)(t^2+t-1)/(2t^2)$. A unit hull meets the tuning
@@ -246,7 +249,8 @@ current split load is given and when the previous double load is
 also given, respectively.
 :::
 
-Choose adjoining pairs such that the two bars between them share an
+To obtain the return witness in [@prop:jitterbug-pair-load-memory], choose
+adjoining pairs such that the two bars between them share an
 endpoint in the first pair. Given one token in each pair, only half
 of the compatible label states can move to double occupancy in that
 first pair. Their transition probability is $1/(2W)$, where
@@ -268,8 +272,9 @@ $-L_{\mathrm{oct}}/2$, and the normalised coordinate covariance
 decays exponentially at rate {{JITTERBUG_MASS_CLOCK_DECAY_RATE}}.
 :::
 
-On the accelerated clock, within-pair attempts dominate and mix the
-label arrangements uniformly at each fixed vector of pair totals.
+On the clock in [@prop:jitterbug-averaged-repair-limit], within-pair attempts
+dominate and mix the label arrangements uniformly at each fixed vector of
+pair totals.
 Let $Q_B$ and $Q_M$ be the sums of fair single-seam update operators
 minus the identity on the bars and matching, respectively. Then the
 per-attempt operator is $P=I+(Q_B+wQ_M)/W$. The orthogonal projection
@@ -310,5 +315,10 @@ commute. Keeping $k/W$ fixed
 instead gives $\exp(-2s)$, the same decay as the averaged octahedral
 coordinate modes. This separates a geometric endpoint, a static
 precision limit and a limit of repair dynamics.
+[@fig:ga-jitterbug] puts the geometric endpoint alongside the two model limits.
 
-![Fuller's Jitterbug at a common bar length. The solid bars keep their incidences, and the added hull diagonals are drawn separately. Beyond the regular icosahedron the diagonals are shorter than the bars. The lower plots compare the geometric length ratio, tuned conductance and the inverse-square length policy.](../output/figures/fig_jitterbug.png){#fig:jitterbug width=100%}
+![Fuller's Jitterbug at a common bar length. The bars keep their incidences,
+and dashed lines mark the hull diagonals. Beyond the regular icosahedron the
+diagonals are shorter than the bars. The lower plots show the length ratio
+and compare the conductance that preserves coordinate lag covariance with
+inverse-square weighting and the dotted unit baseline.](../output/figures/fig_jitterbug.png){#fig:jitterbug width=100%}

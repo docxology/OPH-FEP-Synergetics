@@ -780,9 +780,9 @@ def orbit_figure() -> Path:
     return _save(
         figure,
         "fig_orbit.png",
-        "Three panels. Left: the relaxation orbit in the plane, a closed curve that neither "
-        "escapes nor reaches the marked unstable fixed point at the origin. An arrow shows the "
-        "direction of time. The shaded annulus "
+        "Three panels. Left: the sampled continuous relaxation traces a loop around the marked "
+        "unstable fixed point at the origin. An arrow shows the direction of time. The shaded "
+        "annulus for the sampled radii "
         f"ranges from radius {r_min:.4f} to {r_max:.4f}. Top right: the continuous relaxation "
         f"radius over five full phase-plane periods, with a return-time estimate of {period:.3f} "
         "marked. The radius oscillates several times within each return. Bottom "
@@ -1310,7 +1310,7 @@ def ga_carrier_figure() -> Path:
         (0.42, "Gaussian field", (
             (r"Centred intrinsic variance $(L^+)_{ii}$", str(marginal)),
             ("Proper Gaussian blanket size", blanket_text),
-            ("Precision on a seam", precision_text.replace("-", "\u2212")),
+            ("Proper Gaussian seam precision", precision_text.replace("-", "\u2212")),
             ("Ordered seam pairs", f"{len(precision)} = 2 × {carrier.seam_count}"),
         )),
     )
@@ -1433,12 +1433,12 @@ def ga_descent_figure() -> Path:
     return _save(
         figure,
         "fig_ga_descent.png",
-        f"Left: shares of {total:,} native repair attempts. " + " ".join(
+        f"Left: shares of {total:,} enumerated native repair attempts. " + " ".join(
             f"{label}: {value:,} attempts, {value / total:.1%}."
             for label, value in zip(labels, values)
         ) + f" In one strict descent, seam loads {before} become {after}, reducing load "
         f"energy by {example.energy_decrease}. "
-        f"Right: distinct Gaussian KL values for each of the first {len(k_values)} IVM shells. "
+        f"Right: distinct unit-covariance Gaussian KL values for each of the first {len(k_values)} IVM shells. "
         f"Vertical lines span each shell's range. Levels shared among the displayed shells are "
         f"{_enumerated(shared_levels)} "
         "nats, shown as open diamonds connected by dotted guides across shells. "
@@ -1517,9 +1517,11 @@ def ga_synergetics_figure() -> Path:
     return _save(
         figure,
         "fig_ga_synergetics.png",
-        "Left: integer tetravolumes on a logarithmic axis: "
+        "Left: integer tetravolumes on a logarithmic axis, measured in regular tetrahedra "
+        "whose edge is the IVM nearest-neighbour distance: "
         + ", ".join(f"{name.replace('_', ' ')} {value}" for name, value in ivm_volumes.items())
-        + f". A diamond labels the carrier icosahedron at approximately {ico_volume:.4f}. "
+        + f". A diamond labels the carrier icosahedron at approximately {ico_volume:.4f} "
+        + "tetrahedron volumes at its own edge length. "
         + "Right: a rhombic dodecahedron represents the IVM Voronoi cell, with rear edges dashed. "
         + "An amber triangle on one face connects to the diamond at the cell centre by dotted "
         + "segments to show one tetrahedron in the volume sum. "
@@ -1613,23 +1615,24 @@ def pair_triangles_figure() -> Path:
         descriptions.append(f"{first} and {second}: {len(entries)} claims, {kinds_text}, "
                             f"with status counts of {', '.join(status_phrases)}.")
     three = grouped[THREE_WAY]
-    if three:
-        figure.text(
-            0.50,
-            0.012,
-            f"{len(three)} three-way claims: " + " and ".join(entry.key for entry in three),
-            ha="center",
-            va="bottom",
-            fontsize=11,
-            color=INK,
+    three_kinds = Counter(entry.kind for entry in three)
+    three_counts = [
+        f"{three_kinds[kind]} {plural}"
+        for kind, plural in (
+            ("isomorphism", "isomorphisms"),
+            ("disagreement", "disagreements"),
+            ("complementarity", "complementarities"),
         )
+    ]
+    figure.text(0.50, 0.033, "  ·  ".join([f"{len(three)} three-way claims", *three_counts]),
+                ha="center", va="bottom", fontsize=11, color=INK)
     return _save(
         figure,
         "fig_pair_triangles.png",
         "Three triangles highlight the edge for each pair and display its claim total. Counts by "
         "kind and status are listed below each triangle, with zeros shown for claim kinds. "
         + " ".join(descriptions)
-        + f" The {len(three)} three-way claims are {', '.join(entry.key for entry in three)}.",
+        + f" The footer reports {len(three)} three-way claims, with {_enumerated(three_counts)}.",
     )
 
 
@@ -1924,20 +1927,20 @@ def vertex_shells_figure() -> Path:
     """The carrier's shells around a port against the IVM's lattice shells."""
     adjacency = [[int(value) for value in row] for row in icosahedral_carrier().adjacency_matrix()]
     carrier_shells = network.distance_distribution(adjacency)
-    radii = (1, 2, 3)
+    indices = (1, 2, 3)
     carrier_counts = carrier_shells[1:4]
-    lattice_counts = tuple(lattice.shell_count(k) for k in radii)
+    lattice_counts = tuple(lattice.shell_count(k) for k in indices)
     outward, homing = network.intersection_array(adjacency)
     figure, axis = plt.subplots(figsize=(8.8, 3.7))
-    axis.hlines(radii, carrier_counts, lattice_counts, color=GREY, alpha=0.6,
+    axis.hlines(indices, carrier_counts, lattice_counts, color=GREY, alpha=0.6,
                 linewidth=1.5, zorder=2)
     for counts, marker, colour, alignment, offset, label in (
         (carrier_counts, "o", BLUE, "right", -8, "Carrier ports at graph distance $k$"),
         (lattice_counts, "s", GREEN, "left", 8, "IVM lattice sites on shell $k$"),
     ):
-        axis.scatter(counts, radii, marker=marker, color=colour, s=85,
+        axis.scatter(counts, indices, marker=marker, color=colour, s=85,
                      edgecolor="white", linewidth=0.7, label=label, zorder=3)
-        for k, count in zip(radii, counts):
+        for k, count in zip(indices, counts, strict=True):
             axis.annotate(str(count), (count, k), textcoords="offset points",
                           xytext=(offset, 0), ha=alignment, va="center",
                           fontsize=12, color=INK)
@@ -1945,8 +1948,8 @@ def vertex_shells_figure() -> Path:
     axis.set_xticks([1, 2, 5, 10, 20, 50, 100], ["1", "2", "5", "10", "20", "50", "100"])
     axis.xaxis.set_minor_locator(matplotlib.ticker.NullLocator())
     axis.set_xlim(0.7, max(lattice_counts) * 1.7)
-    axis.set_yticks(radii, [f"$k={k}$" for k in radii], fontsize=11)
-    axis.set_ylim(max(radii) + 0.51, min(radii) - 0.51)
+    axis.set_yticks(indices, [f"$k={k}$" for k in indices], fontsize=11)
+    axis.set_ylim(max(indices) + 0.51, min(indices) - 0.51)
     axis.set_xlabel("Number of ports or sites (log scale)")
     axis.grid(False, axis="y")
     axis.set_title(f"Carrier intersection array  ·  $b={outward}$, $c={homing}$",
@@ -1960,7 +1963,7 @@ def vertex_shells_figure() -> Path:
         "count axis. Connected circles and squares show the two counts within each row. The "
         f"carrier's ports number {carrier_counts[0]}, {carrier_counts[1]} and {carrier_counts[2]} at "
         "graph distances one, two and three. The IVM lattice's shells hold "
-        f"{lattice_counts[0]}, {lattice_counts[1]} and {lattice_counts[2]} sites at the same radii, "
+        f"{lattice_counts[0]}, {lattice_counts[1]} and {lattice_counts[2]} sites at the same indices, "
         "and all three pairs differ. The "
         f"carrier is distance-regular with intersection array b = {outward}, c = {homing}, and "
         f"diameter {len(carrier_shells) - 1}.",
@@ -2126,8 +2129,8 @@ def families_figure() -> Path:
         f"icosahedron: degree {cubo_degree} against {ico_degree}, edges {cubo_edges} against "
         f"{ico_edges}, triangles {cubo_triangles} against {ico_triangles}, and squares "
         f"{cubo_squares} against zero. The tetravolumes are {cubo_volume} and approximately "
-        f"{ico_volume:.5g}. Right: the spanning trees the same "
-        f"determinant counts, {ico_trees} for the carrier against {cubo_trees} for the "
+        f"{ico_volume:.5g}, each in tetrahedral units at its own edge length. Right: the "
+        f"spanning-tree counts are {ico_trees} for the carrier and {cubo_trees} for the "
         f"cuboctahedron, which is {cubo_root} squared, on a logarithmic axis. Their ratio "
         f"from carrier to cuboctahedron is {tree_ratio}.",
     )
@@ -2626,13 +2629,13 @@ def three_way_figure() -> Path:
     modes = quadratic_modes.quadratic_mode_census()
     mode_values = [(modes[key]["variance"][0], modes[key]["variance"][2])
                    for key in ("carrier", "fcc")]
-    for index, (label, colour, shift) in enumerate(
-        (("Diagonal", GREEN, -0.20), ("Off-diagonal", PURPLE, 0.20)),
+    for index, (label, colour, shift, hatch) in enumerate(
+        (("Diagonal", GREEN, -0.20, ""), ("Off-diagonal", PURPLE, 0.20, "/")),
     ):
         values = [row[index] for row in mode_values]
         positions = [group + shift for group in range(len(shells))]
         bars = mode_axis.bar(positions, [float(value) for value in values], width=0.34,
-                             color=colour, edgecolor=INK, linewidth=0.5, label=label)
+                             color=colour, edgecolor=INK, linewidth=0.5, label=label, hatch=hatch)
         mode_axis.bar_label(bars, labels=[str(value) for value in values], padding=3,
                             fontsize=11, fontweight="bold")
     mode_axis.set_xticks(range(len(shells)), labels=shells)
@@ -2691,7 +2694,7 @@ def three_way_figure() -> Path:
         f"{carrier_pair[2]}. On the FCC shell, {repair_details}, with edge length two. "
         f"Panel B increases one primal conductance to {duality['carrier']['primal_weight']} "
         f"and compares normalised variances. {dual_details}. "
-        "Panel C compares the variances of unit diagonal and off-diagonal trace-free "
+        "Panel C compares the variances of unit diagonal and hatched off-diagonal trace-free "
         f"quadratic coefficients, respectively. {mode_details}. "
         "Panel D counts vertex-spanned central planes. Screening means no seam crosses "
         f"between the strict halves. {plane_details}.",
@@ -2946,7 +2949,8 @@ def geometry_transfer_figure() -> Path:
     for label, key, colour, shift in plane_cases:
         values = [squared_correlations[frequency][key] for frequency in frequencies]
         bars = sum_axis.bar([frequency + shift for frequency in frequencies], list(map(float, values)),
-                            width=0.32, color=colour, edgecolor=INK, linewidth=0.5, label=label)
+                            width=0.32, color=colour, edgecolor=INK, linewidth=0.5, label=label,
+                            hatch="/" if key == "diagonal" else "")
         sum_axis.bar_label(bars, labels=[f"{float(value):.1%}" for value in values],
                            padding=3, fontsize=10, fontweight="bold")
     shell_labels = [f"{frequency} · {screening[f'frequency_{frequency}_axis']['site_count']} sites"
@@ -2986,7 +2990,7 @@ def geometry_transfer_figure() -> Path:
     )
     screening_details = ". ".join(
         f"Frequency {frequency} has axis and diagonal squared correlations "
-        f"{_enumerated(squared_correlations[frequency][key] for _, key, _, _ in plane_cases)}"
+        f"{_enumerated(squared_correlations[frequency][key] for _, key, _, _ in plane_cases)}, respectively"
         for frequency in frequencies
     )
     record_details = ". ".join(
@@ -3000,11 +3004,13 @@ def geometry_transfer_figure() -> Path:
         "Panel A shows primal, dual and remainder diagonals at the same torus edge. "
         f"The weighted cases set the selected primal conductance to {torus['changed_weight']}. "
         f"{torus_details}. The remainder trace is {torus['unit']['remainder_trace']} in every case. "
-        "Panel B shows the ratio of diagonal to mixed quadratic coefficient variance. "
-        f"For dimensions {_enumerated(dimensions)} the ratios are {_enumerated(variance_ratios)}, "
-        "respectively. The modes agree at dimension four. Panel C shows how conditioning "
+        "Panel B shows the ratio of variances for unit diagonal and mixed trace-free quadratic "
+        "coefficients. "
+        f"For D root shells in dimensions {_enumerated(dimensions)} the ratios are "
+        f"{_enumerated(variance_ratios)}, respectively. The ratio is one for the D4 root shell. "
+        "Panel C shows how conditioning "
         "on a global sum with unit noise induces dependence across an FCC separating plane. "
-        f"{screening_details}, respectively. Panel D shows the share of boundary sites on "
+        f"The diagonal-plane bars are hatched. {screening_details}. Panel D shows the share of boundary sites on "
         f"each separating plane. {record_details}.",
     )
 
@@ -3131,7 +3137,9 @@ def jitterbug_figure() -> Path:
         f"In the regular and post-icosahedral views, {len(added)} dashed orange lines show diagonal "
         "edges added by the convex hull of the joints. "
         "The short diagonal divided by the fixed bar length falls from square root of two at t=1 "
-        "to one at t=1/phi and then to zero at t=0. The added matching conductance w equals "
+        "to one at t=1/phi and then to zero at t=0. With unit conductance on the bars, the "
+        "tuned matching conductance gives Gaussian Markov coordinate lag covariances for the "
+        "weighted repair. The tuned conductance w equals "
         f"1/t minus t and takes the values {_enumerated(weights)} at t=1, 1/phi, 1/2 and 1/4, "
         "respectively. It diverges as t approaches zero. The dashed inverse-square candidate "
         "coincides with the tuned weight at t=1/phi and t=1/2, while the dotted unit candidate "

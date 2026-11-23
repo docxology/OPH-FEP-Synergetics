@@ -12,7 +12,8 @@ three vocabularies at once.
 The carrier of [@def:carrier] is a graph. To draw it, to count its shells, and to
 state the volume of the polyhedra it bounds, a graph is not enough: a metric is
 needed, and the choice of metric decides which numbers come out exact. Synergetics
-supplies one in which they all do.
+supplies one in which they all do. [@tbl:ontology-geometry] distinguishes the
+shell, contact, volume and symmetry terms used in this comparison.
 
 ::: {#prop:quadray-ivm .proposition}
 The twelve quadray neighbour moves of [@eq:neighbours] are distinct, all have
@@ -86,6 +87,8 @@ of one is the face count of the other, and both are the IVM shell count of
 [@eq:shell].
 :::
 
+[@fig:subdivision] plots both sequences against frequency.
+
 ![Three appearances of one sequence. The geodesic vertex count `10f^2 + 2`, the
 Goldberg face count, and the IVM shell count are the same function of the
 frequency, while the geodesic face count and the Goldberg vertex count are
@@ -108,8 +111,8 @@ derivatives of the energy at free and nudged equilibria
 [@scellier2017equilibrium]. In the small-nudge limit the contrast gives the
 loss gradient under the method's equilibrium assumptions. Some predictive
 coding models also approximate back-propagation under stated assumptions
-[@whittington2017approximation; @millidge2022predictive]. This probe uses a
-scalar energy with closed-form equilibria.
+[@whittington2017approximation; @millidge2022predictive]. The
+`equilibrium-propagation` probe uses a scalar energy with closed-form equilibria.
 
 ::: {#prop:ep .proposition}
 At perturbation $\beta$, the closed-form contrast is {{EP_CLOSED_FORM}} and the
@@ -220,6 +223,7 @@ The inscribed ball has radius $\sqrt{2}$, half the prime vector, and
 tetravolume $\pi\sqrt{2}$. Their ratio is
 $\pi\sqrt{2}/6 = \pi/(3\sqrt{2}) = {{PACKING_DENSITY}}$.
 This is the computed density of the face-centred cubic (FCC) packing.
+[@fig:ga-synergetics] shows one tetrahedron contributing to the cell volume.
 Optimality among lattice packings and among all congruent-sphere packings
 comes from the cited theorems [@gauss1840seeber; @hales2005kepler; @hales2017formal].
 
@@ -289,8 +293,9 @@ For each neighbour $v$, the Voronoi half-space is
 $v\cdot x\le\lVert v\rVert^{2}/2$. The normals are therefore proportional to
 the cuboctahedron's vertices, all at the same distance from the origin. The
 polar of the cell is their convex hull with a common rescaling. Polarity
-exchanges faces and vertices and preserves edge incidence. The probe also
-checks that the cube's line graph is isomorphic to the cuboctahedral graph
+exchanges faces and vertices and preserves edge incidence.
+
+`dual-cells` also checks that the cube's line graph is isomorphic to the cuboctahedral graph
 by constructing a vertex correspondence. The volumes under the stated
 scales have ratio {{DUAL_VOLUME_RATIO}}.
 
@@ -313,7 +318,8 @@ cannot see it; a volume in the same field is not an integer, and the symmetry
 moves it to a value that no solid of the table has. The product of the two is an
 integer, {{TETRAVOLUME_GALOIS_NORM}}, so the conjugation is a check rather than a
 curiosity: a transcription error in either volume would break a product that is
-exactly rational. Registered as `conjugation-norm`.
+exactly rational. [@fig:conjugation] compares the fixed counts and the two volume
+values. Registered as `conjugation-norm`.
 
 ![Left: the counting invariants on a logarithmic axis that
 conjugating the square root of five fixes: the spanning-tree number

@@ -6,6 +6,8 @@ to other finite graphs and cellulations. The hypotheses below identify
 which conclusions transfer. The larger close-packed examples use the
 $D_3$ lattice of the IVM [@fuller1975synergetics]. The higher-dimensional
 root shells and periodic square cellulation are mathematical comparison models.
+[@tbl:ontology-transfer-beyond-shells] lists the assumptions under which
+each transfer result holds.
 
 ## Distance regularity, resistance and repair {#sec:transfer-distance}
 
@@ -133,7 +135,8 @@ lag-one covariance by {{TRANSFER_24CELL_LAG_DEFECT}}. The defect has rank
 one, as follows from the rank-one Laplacian update and its nonzero
 components inside and outside the coordinate space. A native enumeration
 of two occupied ports and a separate weighted vertex calculation agree
-on the entire lag-two defect matrix.
+on the entire lag-two defect matrix. [@fig:repair-transfer] compares this
+defect with the distance and resistance tests on the other graphs.
 
 ![Repair transfer to the cube, bipartite and periodic FCC graphs, and the twenty-four-cell. The periodic FCC witness has two one-step rates {{TRANSFER_PERIODIC_FCC_JUMPS}} from the same variance class. The weighted twenty-four-cell has a nonzero two-lag defect {{TRANSFER_24CELL_LAG_DEFECT}}.](../output/figures/fig_repair_transfer.png){#fig:repair-transfer width=100%}
 
@@ -279,5 +282,13 @@ The `centered-gaussian-screen-obstruction` probe checks
 the second, unit sum noise gives determinant ratios
 {{TRANSFER_FCC_SECOND_SUM_RATIOS}} for the two plane families. Grounding
 records without a sum constraint leaves their half-fields independent.
+[@fig:geometry-transfer] shows how dependence under a noisy global sum
+and the recorded share of boundary sites vary with plane and frequency.
 
-![Transfer in the Gaussian geometry models. The torus remainder at the strengthened edge is {{TRANSFER_TORUS_RECIPROCAL_RESIDUAL}} under reciprocal weights and {{TRANSFER_TORUS_COPIED_RESIDUAL}} under copied weights. Root shell variances coincide at the twenty-four-cell. The FCC sum constraint reintroduces cross-plane dependence despite the grounded plane cuts.](../output/figures/fig_geometry_transfer.png){#fig:geometry-transfer width=100%}
+![Transfer in the Gaussian geometry models. A shows the torus remainder at the
+strengthened edge, {{TRANSFER_TORUS_RECIPROCAL_RESIDUAL}} under reciprocal
+weights and {{TRANSFER_TORUS_COPIED_RESIDUAL}} under copied weights. B compares
+diagonal and mixed trace-free quadratic coefficient variances, which coincide
+on the twenty-four-cell ($D_4$). C measures cross-plane dependence when
+conditioning on a noisy global sum after grounding the plane sites. D gives the
+fraction of sites recorded by each plane family and boundary frequency.](../output/figures/fig_geometry_transfer.png){#fig:geometry-transfer width=100%}

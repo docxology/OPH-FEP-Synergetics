@@ -39,7 +39,7 @@ argue by key.
 | `four-cycle-local-minimum` | disagreement | obstructed | oph-fep | `05_disagreements.md` | yes |
 | `cuboctahedron-vs-icosahedron` | disagreement | obstructed | synergetics-oph | `02_framework.md`, `05_disagreements.md` | yes |
 | `shell-vs-free-energy` | disagreement | obstructed | fep-synergetics | `05_disagreements.md` | yes |
-| `quadray-ivm` | complementarity | exact | synergetics-oph | `01_introduction.md`, `06_complementarities.md` | yes |
+| `quadray-ivm` | complementarity | exact | synergetics-oph | `06_complementarities.md` | yes |
 | `equilibrium-propagation` | complementarity | exact | oph-fep | `06_complementarities.md` | yes |
 | `replicator-potential` | complementarity | exact | oph-fep | `06_complementarities.md` | yes |
 | `kissing-twelve` | complementarity | exact | synergetics-oph | `02_framework.md`, `06_complementarities.md` | yes |
@@ -49,29 +49,29 @@ argue by key.
 | `effective-resistance` | complementarity | exact | oph-fep | `06_complementarities.md` | yes |
 | `two-record-resistance` | isomorphism | exact | oph-fep | `06_complementarities.md` | yes |
 | `vertex-shells` | disagreement | obstructed | synergetics-oph | `05_disagreements.md` | yes |
-| `subgraph-census` | isomorphism | exact | synergetics-oph | `01_introduction.md`, `04_correspondences.md` | yes |
+| `subgraph-census` | isomorphism | exact | synergetics-oph | `04_correspondences.md` | yes |
 | `angle-defect` | isomorphism | exact | synergetics-oph | `04_correspondences.md` | yes |
 | `twelve-around-one-families` | disagreement | obstructed | synergetics-oph | `05_disagreements.md` | yes |
-| `dual-cells` | complementarity | exact | synergetics-oph | `04_correspondences.md`, `06_complementarities.md` | yes |
+| `dual-cells` | complementarity | exact | synergetics-oph | `06_complementarities.md` | yes |
 | `conjugation-norm` | complementarity | exact | three-way | `06_complementarities.md` | yes |
 | `repair-is-conditioning` | isomorphism | exact-on-domain | oph-fep | `02_framework.md`, `04_correspondences.md` | yes |
-| `binary-conditional-variance` | isomorphism | exact-on-domain | oph-fep | `01_introduction.md`, `04_correspondences.md` | yes |
-| `carrier-spectral-chords` | isomorphism | exact | fep-synergetics | `01_introduction.md`, `04_correspondences.md`, `06_finite_extensions.md` | yes |
+| `binary-conditional-variance` | isomorphism | exact-on-domain | oph-fep | `04_correspondences.md` | yes |
+| `carrier-spectral-chords` | isomorphism | exact | fep-synergetics | `04_correspondences.md` | yes |
 | `repair-first-entry` | isomorphism | exact-on-domain | oph-fep | `06_finite_extensions.md` | yes |
 | `repair-distance-lumping` | isomorphism | exact-on-domain | oph-fep | `06_finite_extensions.md` | yes |
 | `grounded-forest-precision` | isomorphism | exact-on-domain | oph-fep | `06_finite_extensions.md` | yes |
 | `greedy-record-placement` | disagreement | obstructed | oph-fep | `06_finite_extensions.md` | yes |
-| `planar-dual-covariance` | isomorphism | exact-on-domain | three-way | `06_finite_extensions.md`, `07_three_way_limits.md` | yes |
+| `planar-dual-covariance` | isomorphism | exact-on-domain | three-way | `06_finite_extensions.md` | yes |
 | `cuboctahedral-spectral-chords` | isomorphism | exact-on-domain | fep-synergetics | `06_finite_extensions.md` | yes |
 | `cuboctahedral-distance-split` | disagreement | obstructed | fep-synergetics | `00_00_graphical_abstract.md`, `06_finite_extensions.md` | yes |
 | `repair-contrast-quotient` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | yes |
 | `repair-distance-counterexample` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
-| `reciprocal-dual-weights` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md`, `07_transfer_criteria.md` | yes |
+| `reciprocal-dual-weights` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | yes |
 | `copied-dual-weight-obstruction` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
 | `quadratic-even-field` | isomorphism | exact-on-domain | three-way | `07_three_way_limits.md` | yes |
 | `quadratic-isotropy-obstruction` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
 | `central-plane-screening` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
-| `repair-centroid-memory` | disagreement | obstructed | three-way | `07_three_way_limits.md`, `07_transfer_criteria.md` | yes |
+| `repair-centroid-memory` | disagreement | obstructed | three-way | `07_three_way_limits.md` | yes |
 | `distance-regular-repair` | isomorphism | exact-on-domain | three-way | `07_transfer_criteria.md` | yes |
 | `bipartite-contrast-collision` | disagreement | obstructed | three-way | `07_transfer_criteria.md` | yes |
 | `periodic-fcc-contrast-collision` | disagreement | obstructed | three-way | `07_transfer_criteria.md` | yes |
@@ -100,120 +100,161 @@ argue by key.
 | --- | --- |
 | `00_00_graphical_abstract.md` | `spectral-gap`, `cuboctahedral-distance-split`, `jitterbug-rigid-motion` |
 | `00_abstract.md` | *none* |
-| `01_introduction.md` | `quadray-ivm`, `subgraph-census`, `binary-conditional-variance`, `carrier-spectral-chords` |
+| `01_introduction.md` | *none* |
 | `02_framework.md` | `carrier-port-chart`, `spectral-gap`, `shell-counts`, `variational-equivalence`, `sheaf-agreement`, `gmrf-independence`, `sheaf-cohomology`, `kl-lattice-metric`, `cuboctahedron-vs-icosahedron`, `kissing-twelve`, `icosahedron-tetravolume`, `packing-density`, `tetravolume-arithmetic`, `repair-is-conditioning`, `jitterbug-rigid-motion` |
 | `03_method.md` | *none* |
-| `04_correspondences.md` | `native-repair-law`, `free-energy-dictionary`, `sheaf-agreement`, `certificate-species`, `tree-number`, `icosahedral-symmetry`, `eigenspace-irreducibility`, `law-equivariance`, `subgraph-census`, `angle-defect`, `dual-cells`, `repair-is-conditioning`, `binary-conditional-variance`, `carrier-spectral-chords` |
+| `04_correspondences.md` | `native-repair-law`, `free-energy-dictionary`, `sheaf-agreement`, `certificate-species`, `tree-number`, `icosahedral-symmetry`, `eigenspace-irreducibility`, `law-equivariance`, `subgraph-census`, `angle-defect`, `repair-is-conditioning`, `binary-conditional-variance`, `carrier-spectral-chords` |
 | `05_disagreements.md` | `pr01-obstruction`, `free-energy-name-collision`, `mediator-obstruction`, `stationary-blanket`, `solenoidal-freedom`, `d-stability`, `schedule-path`, `reduction-criterion`, `existence-without-reachability`, `directed-gradient`, `four-cycle-local-minimum`, `cuboctahedron-vs-icosahedron`, `shell-vs-free-energy`, `vertex-shells`, `twelve-around-one-families` |
 | `06_complementarities.md` | `quadray-ivm`, `equilibrium-propagation`, `replicator-potential`, `kissing-twelve`, `effective-resistance`, `two-record-resistance`, `dual-cells`, `conjugation-norm` |
-| `06_finite_extensions.md` | `carrier-spectral-chords`, `repair-first-entry`, `repair-distance-lumping`, `grounded-forest-precision`, `greedy-record-placement`, `planar-dual-covariance`, `cuboctahedral-spectral-chords`, `cuboctahedral-distance-split` |
+| `06_finite_extensions.md` | `repair-first-entry`, `repair-distance-lumping`, `grounded-forest-precision`, `greedy-record-placement`, `planar-dual-covariance`, `cuboctahedral-spectral-chords`, `cuboctahedral-distance-split` |
 | `07_jitterbug.md` | `jitterbug-rigid-motion`, `jitterbug-graph-obstruction`, `jitterbug-weighted-precision`, `jitterbug-coordinate-closure`, `jitterbug-nearest-only-obstruction`, `jitterbug-weight-policy-obstruction`, `jitterbug-octahedral-gaussian-limit`, `jitterbug-pair-load-memory`, `jitterbug-averaged-repair-limit` |
 | `07_scope.md` | `pr01-obstruction`, `reduction-criterion` |
-| `07_three_way_limits.md` | `planar-dual-covariance`, `repair-contrast-quotient`, `repair-distance-counterexample`, `reciprocal-dual-weights`, `copied-dual-weight-obstruction`, `quadratic-even-field`, `quadratic-isotropy-obstruction`, `central-plane-screening`, `repair-centroid-memory` |
-| `07_transfer_criteria.md` | `reciprocal-dual-weights`, `repair-centroid-memory`, `distance-regular-repair`, `bipartite-contrast-collision`, `periodic-fcc-contrast-collision`, `linear-lag-closure`, `single-seam-lag-obstruction`, `surface-harmonic-covariance`, `copied-surface-weight-obstruction`, `root-shell-quadratic-precision`, `fcc-plane-screen-transfer`, `centered-gaussian-screen-obstruction` |
+| `07_three_way_limits.md` | `repair-contrast-quotient`, `repair-distance-counterexample`, `reciprocal-dual-weights`, `copied-dual-weight-obstruction`, `quadratic-even-field`, `quadratic-isotropy-obstruction`, `central-plane-screening`, `repair-centroid-memory` |
+| `07_transfer_criteria.md` | `distance-regular-repair`, `bipartite-contrast-collision`, `periodic-fcc-contrast-collision`, `linear-lag-closure`, `single-seam-lag-obstruction`, `surface-harmonic-covariance`, `copied-surface-weight-obstruction`, `root-shell-quadratic-precision`, `fcc-plane-screen-transfer`, `centered-gaussian-screen-obstruction` |
 | `08_reproducibility.md` | *none* |
 | `99_references.md` | *none* |
 
 ## Figures
 
-| figure | included by | claims whose values it draws |
+| figure | declared in | cited by | probe sources of values quoted in the caption |
+| --- | --- | --- | --- |
+| `fig:blanket` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | `stationary-blanket` |
+| `fig:carrier` | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md) | *none* |
+| `fig:centroid-memory` | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | `repair-centroid-memory` |
+| `fig:conjugation` | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) | *none* |
+| `fig:descent` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | `pr01-obstruction` |
+| `fig:dstability` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | `d-stability` |
+| `fig:extensions` | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | *none* |
+| `fig:families` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | *none* |
+| `fig:ga-carrier` | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md) | [`02_framework.md`](../manuscript/02_framework.md) | *none* |
+| `fig:ga-descent` | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | *none* |
+| `fig:ga-jitterbug` | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | *none* |
+| `fig:ga-synergetics` | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) | *none* |
+| `fig:ga-triangle` | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md) | [`03_method.md`](../manuscript/03_method.md) | *none* |
+| `fig:geometry-transfer` | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | `copied-surface-weight-obstruction` |
+| `fig:ivm` | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) | *none* |
+| `fig:jitterbug` | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | *none* |
+| `fig:mediator` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | `mediator-obstruction`, `reduction-criterion` |
+| `fig:network` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) | *none* |
+| `fig:orbit` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | *none* |
+| `fig:pair-triangles` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) | *none* |
+| `fig:registry` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) | *none* |
+| `fig:repair-transfer` | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | `periodic-fcc-contrast-collision`, `single-seam-lag-obstruction` |
+| `fig:sandwich` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) | `free-energy-dictionary`, `free-energy-name-collision` |
+| `fig:schedule` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | *none* |
+| `fig:scope-matrix` | [`03_method.md`](../manuscript/03_method.md) | [`03_method.md`](../manuscript/03_method.md) | *none* |
+| `fig:shell-gauge` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | `shell-vs-free-energy` |
+| `fig:subdivision` | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) | *none* |
+| `fig:three-way` | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | `central-plane-screening`, `copied-dual-weight-obstruction`, `quadratic-isotropy-obstruction`, `repair-distance-counterexample` |
+| `fig:vertex-shells` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | *none* |
+
+## Tables
+
+| table | declared in | cited by |
 | --- | --- | --- |
-| `fig:blanket` | `05_disagreements.md` | `stationary-blanket` |
-| `fig:carrier` | `02_framework.md` | *package readings, no single claim* |
-| `fig:centroid-memory` | `07_three_way_limits.md` | `repair-centroid-memory` |
-| `fig:conjugation` | `06_complementarities.md` | *package readings, no single claim* |
-| `fig:descent` | `05_disagreements.md` | `pr01-obstruction` |
-| `fig:dstability` | `05_disagreements.md` | *package readings, no single claim* |
-| `fig:extensions` | `06_finite_extensions.md` | *package readings, no single claim* |
-| `fig:families` | `05_disagreements.md` | *package readings, no single claim* |
-| `fig:ga-carrier` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
-| `fig:ga-descent` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
-| `fig:ga-jitterbug` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
-| `fig:ga-synergetics` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
-| `fig:ga-triangle` | `00_00_graphical_abstract.md` | *package readings, no single claim* |
-| `fig:geometry-transfer` | `07_transfer_criteria.md` | `copied-surface-weight-obstruction` |
-| `fig:ivm` | `06_complementarities.md` | *package readings, no single claim* |
-| `fig:jitterbug` | `07_jitterbug.md` | *package readings, no single claim* |
-| `fig:mediator` | `05_disagreements.md` | `mediator-obstruction`, `reduction-criterion` |
-| `fig:network` | `04_correspondences.md` | *package readings, no single claim* |
-| `fig:orbit` | `05_disagreements.md` | *package readings, no single claim* |
-| `fig:pair-triangles` | `04_correspondences.md` | *package readings, no single claim* |
-| `fig:registry` | `04_correspondences.md` | *package readings, no single claim* |
-| `fig:repair-transfer` | `07_transfer_criteria.md` | `periodic-fcc-contrast-collision`, `single-seam-lag-obstruction` |
-| `fig:sandwich` | `04_correspondences.md` | `free-energy-dictionary`, `free-energy-name-collision` |
-| `fig:schedule` | `05_disagreements.md` | *package readings, no single claim* |
-| `fig:scope-matrix` | `03_method.md` | *package readings, no single claim* |
-| `fig:shell-gauge` | `05_disagreements.md` | *package readings, no single claim* |
-| `fig:subdivision` | `06_complementarities.md` | *package readings, no single claim* |
-| `fig:three-way` | `07_three_way_limits.md` | `central-plane-screening`, `copied-dual-weight-obstruction`, `quadratic-isotropy-obstruction`, `repair-distance-counterexample` |
-| `fig:vertex-shells` | `05_disagreements.md` | *package readings, no single claim* |
+| `tbl:adjacency` | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md) |
+| `tbl:vocabulary` | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md) |
+| `tbl:status` | [`03_method.md`](../manuscript/03_method.md) | [`03_method.md`](../manuscript/03_method.md) |
+| `tbl:registry` | [`03_method.md`](../manuscript/03_method.md) | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md), [`03_method.md`](../manuscript/03_method.md) |
+| `tbl:surprises` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) |
+| `tbl:reproduced` | [`07_scope.md`](../manuscript/07_scope.md) | [`07_scope.md`](../manuscript/07_scope.md) |
+| `tbl:surfaces` | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) |
+| `tbl:pins` | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) |
+| `tbl:commands` | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) |
+| `tbl:ontology-interfaces` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`02_framework.md`](../manuscript/02_framework.md) |
+| `tbl:ontology-dynamics` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) |
+| `tbl:ontology-geometry` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `tbl:ontology-exact-extensions` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
+| `tbl:ontology-three-way-transfer` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) |
+| `tbl:ontology-transfer-beyond-shells` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `tbl:ontology-jitterbug-linkage` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
 
 ## Formal statements and equations
 
 | label | kind | stated in | cited by |
 | --- | --- | --- | --- |
-| `def:carrier` | def | `02_framework.md` | `06_complementarities.md` |
-| `def:shell` | def | `02_framework.md` | `04_correspondences.md` |
-| `def:coordination` | def | `02_framework.md` | `02_framework.md`, `05_disagreements.md`, `07_scope.md` |
-| `def:correspondence` | def | `03_method.md` | `01_introduction.md` |
-| `def:dstability` | def | `05_disagreements.md` | `05_disagreements.md` |
-| `prop:carrier` | prop | `02_framework.md` | `01_introduction.md`, `04_correspondences.md` |
-| `prop:spectrum` | prop | `02_framework.md` | `01_introduction.md`, `04_correspondences.md`, `05_disagreements.md` |
-| `prop:descent` | prop | `02_framework.md` | `05_disagreements.md` |
-| `prop:ivm` | prop | `02_framework.md` | `01_introduction.md` |
-| `prop:ve` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `07_scope.md` |
-| `prop:conditioning` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `07_scope.md` |
-| `prop:binary-conditional-variance` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md` |
-| `prop:sheaf` | prop | `04_correspondences.md` | `00_00_graphical_abstract.md` |
-| `prop:tree` | prop | `04_correspondences.md` | `01_introduction.md`, `05_disagreements.md` |
-| `prop:cohomology` | prop | `04_correspondences.md` | `00_00_graphical_abstract.md`, `01_introduction.md`, `04_correspondences.md` |
-| `prop:symmetry` | prop | `04_correspondences.md` | `01_introduction.md`, `02_framework.md`, `04_correspondences.md`, `07_scope.md` |
-| `prop:kl` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `05_disagreements.md` |
-| `prop:subgraph-census` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md` |
-| `prop:defect` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md` |
-| `prop:carrier-spectral-chords` | prop | `04_correspondences.md` | `01_introduction.md`, `04_correspondences.md`, `06_finite_extensions.md` |
-| `prop:census` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
-| `prop:native-rewrite` | prop | `05_disagreements.md` | `01_introduction.md`, `05_disagreements.md`, `07_scope.md` |
-| `prop:stationary` | prop | `05_disagreements.md` | `02_framework.md` |
-| `prop:solenoid` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
-| `prop:dstability` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
-| `prop:mediator` | prop | `05_disagreements.md` | `01_introduction.md`, `07_scope.md` |
-| `prop:existence` | prop | `05_disagreements.md` | `01_introduction.md`, `03_method.md` |
-| `prop:cuboctahedron` | prop | `05_disagreements.md` | `05_disagreements.md` |
-| `prop:shell-energy` | prop | `05_disagreements.md` | `02_framework.md`, `05_disagreements.md` |
-| `prop:vertex-shells` | prop | `05_disagreements.md` | `05_disagreements.md` |
-| `prop:families` | prop | `05_disagreements.md` | `05_disagreements.md` |
-| `prop:quadray-ivm` | prop | `06_complementarities.md` | `01_introduction.md`, `06_complementarities.md` |
-| `prop:subdivision` | prop | `06_complementarities.md` | `06_complementarities.md` |
-| `prop:ep` | prop | `06_complementarities.md` | `06_complementarities.md` |
-| `prop:replicator` | prop | `06_complementarities.md` | `06_complementarities.md` |
-| `prop:ico-volume` | prop | `06_complementarities.md` | `01_introduction.md`, `06_complementarities.md` |
-| `prop:packing` | prop | `06_complementarities.md` | `01_introduction.md`, `06_complementarities.md` |
-| `prop:currencies` | prop | `06_complementarities.md` | `06_complementarities.md` |
-| `prop:resistance` | prop | `06_complementarities.md` | `01_introduction.md`, `06_complementarities.md`, `06_finite_extensions.md` |
-| `prop:dual-cells` | prop | `06_complementarities.md` | `04_correspondences.md`, `06_complementarities.md` |
-| `prop:conjugation` | prop | `06_complementarities.md` | `06_complementarities.md` |
-| `prop:repair-first-entry` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
-| `prop:repair-distance-lumping` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
-| `prop:grounded-forest-precision` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
-| `prop:greedy-record-placement` | prop | `06_finite_extensions.md` | `06_finite_extensions.md` |
-| `prop:planar-dual-covariance` | prop | `06_finite_extensions.md` | `06_finite_extensions.md`, `07_three_way_limits.md` |
-| `prop:fcc-spectral-geometry` | prop | `06_finite_extensions.md` | `06_finite_extensions.md`, `07_three_way_limits.md` |
-| `eq:repair` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `05_disagreements.md` |
-| `eq:energy` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `05_disagreements.md` |
-| `eq:vfe` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `07_scope.md` |
-| `eq:gaussian` | eq | `02_framework.md` | `02_framework.md`, `04_correspondences.md`, `05_disagreements.md`, `06_complementarities.md` |
-| `eq:blanket` | eq | `02_framework.md` | `02_framework.md`, `05_disagreements.md` |
-| `eq:quadray` | eq | `02_framework.md` | `02_framework.md` |
-| `eq:neighbours` | eq | `02_framework.md` | `02_framework.md`, `06_complementarities.md` |
-| `eq:shell` | eq | `02_framework.md` | `05_disagreements.md`, `06_complementarities.md` |
-| `eq:gamma` | eq | `04_correspondences.md` | `05_disagreements.md` |
-| `eq:chain` | eq | `04_correspondences.md` | `04_correspondences.md` |
-| `eq:ve` | eq | `04_correspondences.md` | `04_correspondences.md` |
-| `eq:fibre-vfe` | eq | `04_correspondences.md` | `04_correspondences.md` |
-| `eq:tree` | eq | `04_correspondences.md` | `04_correspondences.md`, `05_disagreements.md` |
-| `eq:kl` | eq | `04_correspondences.md` | `04_correspondences.md` |
-| `eq:routh` | eq | `05_disagreements.md` | `05_disagreements.md` |
+| `def:carrier` | def | [`02_framework.md`](../manuscript/02_framework.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `def:shell` | def | [`02_framework.md`](../manuscript/02_framework.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) |
+| `def:coordination` | def | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`05_disagreements.md`](../manuscript/05_disagreements.md), [`07_scope.md`](../manuscript/07_scope.md) |
+| `def:correspondence` | def | [`03_method.md`](../manuscript/03_method.md) | [`01_introduction.md`](../manuscript/01_introduction.md) |
+| `def:dstability` | def | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `prop:carrier` | prop | [`02_framework.md`](../manuscript/02_framework.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md) |
+| `prop:spectrum` | prop | [`02_framework.md`](../manuscript/02_framework.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `prop:descent` | prop | [`02_framework.md`](../manuscript/02_framework.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `prop:ivm` | prop | [`02_framework.md`](../manuscript/02_framework.md) | [`01_introduction.md`](../manuscript/01_introduction.md) |
+| `prop:ve` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`07_scope.md`](../manuscript/07_scope.md) |
+| `prop:conditioning` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`07_scope.md`](../manuscript/07_scope.md) |
+| `prop:binary-conditional-variance` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md) |
+| `prop:sheaf` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md) |
+| `prop:tree` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `prop:cohomology` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md), [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md) |
+| `prop:symmetry` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`02_framework.md`](../manuscript/02_framework.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`07_scope.md`](../manuscript/07_scope.md) |
+| `prop:kl` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `prop:subgraph-census` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md) |
+| `prop:defect` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md) |
+| `prop:carrier-spectral-chords` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
+| `prop:census` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`07_scope.md`](../manuscript/07_scope.md) |
+| `prop:native-rewrite` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`05_disagreements.md`](../manuscript/05_disagreements.md), [`07_scope.md`](../manuscript/07_scope.md) |
+| `prop:stationary` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`02_framework.md`](../manuscript/02_framework.md) |
+| `prop:solenoid` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`07_scope.md`](../manuscript/07_scope.md) |
+| `prop:dstability` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`07_scope.md`](../manuscript/07_scope.md) |
+| `prop:mediator` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`07_scope.md`](../manuscript/07_scope.md) |
+| `prop:existence` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`03_method.md`](../manuscript/03_method.md) |
+| `prop:cuboctahedron` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `prop:shell-energy` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`02_framework.md`](../manuscript/02_framework.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `prop:vertex-shells` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `prop:families` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `prop:quadray-ivm` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `prop:subdivision` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `prop:ep` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `prop:replicator` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `prop:ico-volume` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `prop:packing` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `prop:currencies` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `prop:resistance` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`06_complementarities.md`](../manuscript/06_complementarities.md), [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
+| `prop:dual-cells` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `prop:conjugation` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `prop:repair-first-entry` | prop | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
+| `prop:repair-distance-lumping` | prop | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
+| `prop:grounded-forest-precision` | prop | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
+| `prop:greedy-record-placement` | prop | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
+| `prop:planar-dual-covariance` | prop | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md), [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) |
+| `prop:fcc-spectral-geometry` | prop | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md), [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) |
+| `prop:jitterbug-rigid-motion` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
+| `prop:jitterbug-graph-obstruction` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
+| `prop:jitterbug-weighted-precision` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
+| `prop:jitterbug-coordinate-closure` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
+| `prop:jitterbug-nearest-only-obstruction` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
+| `prop:jitterbug-weight-policy-obstruction` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
+| `prop:jitterbug-octahedral-gaussian-limit` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
+| `prop:jitterbug-pair-load-memory` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
+| `prop:jitterbug-averaged-repair-limit` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
+| `prop:repair-contrast-record` | prop | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) |
+| `prop:repair-centroid-memory` | prop | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:reciprocal-dual-weights` | prop | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:quadratic-mode-transfer` | prop | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) |
+| `prop:central-plane-blanket` | prop | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:distance-regular-repair` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:resistance-collision` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:lag-closure-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md), [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:surface-harmonic-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:root-quadratic-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:sum-constraint-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `eq:repair` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `eq:energy` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `eq:vfe` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`07_scope.md`](../manuscript/07_scope.md) |
+| `eq:gaussian` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`05_disagreements.md`](../manuscript/05_disagreements.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `eq:blanket` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `eq:quadray` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md) |
+| `eq:neighbours` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `eq:shell` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
+| `eq:gamma` | eq | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `eq:chain` | eq | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) |
+| `eq:ve` | eq | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) |
+| `eq:fibre-vfe` | eq | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) |
+| `eq:tree` | eq | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `eq:kl` | eq | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) |
+| `eq:routh` | eq | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
 
 ## Values
 
@@ -221,7 +262,7 @@ argue by key.
 | --- | --- |
 | `{{BLANKET_CROSS_DRIFT}}` | `05_disagreements.md` |
 | `{{BLANKET_DRIFT}}` | `05_disagreements.md` |
-| `{{BLANKET_Q}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{BLANKET_Q}}` | `05_disagreements.md` |
 | `{{CARRIER_CHART_0}}` | `02_framework.md` |
 | `{{CARRIER_CHART_1}}` | `02_framework.md` |
 | `{{CARRIER_CHART_10}}` | `02_framework.md` |
@@ -234,22 +275,22 @@ argue by key.
 | `{{CARRIER_CHART_7}}` | `02_framework.md` |
 | `{{CARRIER_CHART_8}}` | `02_framework.md` |
 | `{{CARRIER_CHART_9}}` | `02_framework.md` |
-| `{{CARRIER_DEFECT_PER_PORT}}` | `04_correspondences.md`, `04_correspondences.md` |
-| `{{CARRIER_DEGREE}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `02_framework.md`, `04_correspondences.md`, `05_disagreements.md`, `06_complementarities.md` |
-| `{{CARRIER_DIAMETER}}` | `05_disagreements.md`, `05_disagreements.md` |
-| `{{CARRIER_FACES}}` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `{{CARRIER_DEFECT_PER_PORT}}` | `04_correspondences.md` |
+| `{{CARRIER_DEGREE}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md`, `05_disagreements.md`, `06_complementarities.md` |
+| `{{CARRIER_DIAMETER}}` | `05_disagreements.md` |
+| `{{CARRIER_FACES}}` | `02_framework.md`, `04_correspondences.md` |
 | `{{CARRIER_HAMILTONIAN_CYCLES}}` | `03_method.md`, `04_correspondences.md` |
-| `{{CARRIER_INTERSECTION_ARRAY}}` | `03_method.md`, `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{CARRIER_INTERSECTION_ARRAY}}` | `03_method.md`, `05_disagreements.md` |
 | `{{CARRIER_LAMBDA1}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md` |
 | `{{CARRIER_PENTAGONS}}` | `03_method.md`, `04_correspondences.md` |
 | `{{CARRIER_PERFECT_MATCHINGS}}` | `03_method.md`, `04_correspondences.md` |
-| `{{CARRIER_PORTS}}` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `06_complementarities.md`, `07_scope.md` |
-| `{{CARRIER_SEAMS}}` | `02_framework.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{CARRIER_PORTS}}` | `02_framework.md`, `04_correspondences.md`, `06_complementarities.md`, `07_scope.md` |
+| `{{CARRIER_SEAMS}}` | `02_framework.md`, `04_correspondences.md`, `05_disagreements.md` |
 | `{{CARRIER_SHELL_GAP}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md`, `06_complementarities.md` |
-| `{{CARRIER_SHELL_SIZES}}` | `03_method.md`, `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
-| `{{CARRIER_TOTAL_DEFECT}}` | `04_correspondences.md`, `04_correspondences.md` |
-| `{{CARRIER_TREE_NUMBER}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md`, `06_complementarities.md`, `06_complementarities.md` |
-| `{{CARRIER_TRIANGLES}}` | `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `06_complementarities.md` |
+| `{{CARRIER_SHELL_SIZES}}` | `03_method.md`, `05_disagreements.md` |
+| `{{CARRIER_TOTAL_DEFECT}}` | `04_correspondences.md` |
+| `{{CARRIER_TREE_NUMBER}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md`, `05_disagreements.md`, `06_complementarities.md` |
+| `{{CARRIER_TRIANGLES}}` | `03_method.md`, `04_correspondences.md`, `06_complementarities.md` |
 | `{{CERTIFICATE_INFINITY_NORM}}` | `04_correspondences.md` |
 | `{{CERTIFICATE_SECOND_EIGENVALUE}}` | `04_correspondences.md` |
 | `{{CHORD_EMBEDDING_RANK}}` | `04_correspondences.md` |
@@ -262,15 +303,15 @@ argue by key.
 | `{{CONDITIONING_ONE_UNIT_CASES}}` | `04_correspondences.md` |
 | `{{CONDITIONING_SURPRISAL_ONE_UNIT}}` | `04_correspondences.md` |
 | `{{CONDITIONING_SURPRISAL_SETTLED}}` | `04_correspondences.md` |
-| `{{CUBOCTAHEDRON_DEGREE}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{CUBOCTAHEDRON_DEGREE}}` | `05_disagreements.md` |
 | `{{CUBOCTAHEDRON_EDGES}}` | `03_method.md`, `05_disagreements.md`, `06_complementarities.md` |
 | `{{CUBOCTAHEDRON_FACES}}` | `03_method.md`, `06_complementarities.md` |
 | `{{CUBOCTAHEDRON_MATCHINGS}}` | `05_disagreements.md` |
-| `{{CUBOCTAHEDRON_SPANNING_TREES}}` | `03_method.md`, `05_disagreements.md`, `05_disagreements.md` |
-| `{{CUBOCTAHEDRON_SPANNING_TREES_ROOT}}` | `03_method.md`, `05_disagreements.md`, `05_disagreements.md` |
-| `{{CUBOCTAHEDRON_SQUARES}}` | `05_disagreements.md`, `05_disagreements.md` |
-| `{{CUBOCTAHEDRON_TETRAVOLUME}}` | `03_method.md`, `03_method.md`, `05_disagreements.md`, `05_disagreements.md`, `06_complementarities.md` |
-| `{{CUBOCTAHEDRON_TRIANGLES}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{CUBOCTAHEDRON_SPANNING_TREES}}` | `03_method.md`, `05_disagreements.md` |
+| `{{CUBOCTAHEDRON_SPANNING_TREES_ROOT}}` | `03_method.md`, `05_disagreements.md` |
+| `{{CUBOCTAHEDRON_SQUARES}}` | `05_disagreements.md` |
+| `{{CUBOCTAHEDRON_TETRAVOLUME}}` | `03_method.md`, `05_disagreements.md`, `06_complementarities.md` |
+| `{{CUBOCTAHEDRON_TRIANGLES}}` | `05_disagreements.md` |
 | `{{CUBOCTAHEDRON_VERTICES}}` | `03_method.md`, `06_complementarities.md` |
 | `{{DIRECTED_GRADIENT_ADJOINT}}` | `05_disagreements.md` |
 | `{{DIRECTED_GRADIENT_DIRECT}}` | `05_disagreements.md` |
@@ -279,7 +320,7 @@ argue by key.
 | `{{DUAL_CARRIER_RESISTANCES}}` | `06_finite_extensions.md` |
 | `{{DUAL_IVM_RESISTANCES}}` | `06_finite_extensions.md` |
 | `{{DUAL_MATRIX_ENTRIES}}` | `06_finite_extensions.md` |
-| `{{DUAL_VOLUME_RATIO}}` | `06_complementarities.md`, `06_complementarities.md` |
+| `{{DUAL_VOLUME_RATIO}}` | `06_complementarities.md` |
 | `{{D_STABILITY_IMAG_UNSTABLE}}` | `05_disagreements.md` |
 | `{{D_STABILITY_LYAPUNOV_DETERMINANT}}` | `05_disagreements.md` |
 | `{{D_STABILITY_LYAPUNOV_RESIDUAL}}` | `05_disagreements.md` |
@@ -301,7 +342,7 @@ argue by key.
 | `{{EP_EXACT_GRADIENT}}` | `06_complementarities.md` |
 | `{{EP_GRADIENT_DISTANCE}}` | `06_complementarities.md` |
 | `{{EP_RELAXED}}` | `06_complementarities.md` |
-| `{{FAMILIES_TREE_RATIO}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{FAMILIES_TREE_RATIO}}` | `05_disagreements.md` |
 | `{{FCC_CHORD_FACTOR}}` | `03_method.md`, `06_finite_extensions.md` |
 | `{{FCC_DISTANCE_TWO_CHORDS}}` | `06_finite_extensions.md` |
 | `{{FCC_DISTANCE_TWO_RESISTANCES}}` | `06_finite_extensions.md` |
@@ -310,7 +351,7 @@ argue by key.
 | `{{FEEDBACK_PATHS}}` | `05_disagreements.md` |
 | `{{FEEDBACK_PORT_ZERO_OCCUPATION}}` | `05_disagreements.md`, `07_scope.md` |
 | `{{FEP_FORMAL_TOPICS}}` | `03_method.md` |
-| `{{FE_BAYESIAN}}` | `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `{{FE_BAYESIAN}}` | `04_correspondences.md` |
 | `{{FE_CHAIN_CONTRAST_RECORDS}}` | `05_disagreements.md` |
 | `{{FE_CHAIN_RECORD_CHANGE_DIVERGENCES}}` | `05_disagreements.md` |
 | `{{FE_DIFFERENCE}}` | `05_disagreements.md` |
@@ -320,8 +361,8 @@ argue by key.
 | `{{FE_NUMERICAL}}` | `04_correspondences.md` |
 | `{{FE_RECORD_POTENTIAL}}` | `04_correspondences.md`, `05_disagreements.md` |
 | `{{FE_RECORD_PRIOR_PRECISION}}` | `04_correspondences.md` |
-| `{{FE_SANDWICH_LOWER}}` | `04_correspondences.md`, `04_correspondences.md` |
-| `{{FE_SANDWICH_UPPER}}` | `04_correspondences.md`, `04_correspondences.md` |
+| `{{FE_SANDWICH_LOWER}}` | `04_correspondences.md` |
+| `{{FE_SANDWICH_UPPER}}` | `04_correspondences.md` |
 | `{{FE_SURPRISAL}}` | `04_correspondences.md` |
 | `{{FE_VARIATIONAL}}` | `04_correspondences.md` |
 | `{{FE_VARIATIONAL_AT_POSTERIOR}}` | `04_correspondences.md`, `05_disagreements.md` |
@@ -338,24 +379,24 @@ argue by key.
 | `{{GMRF_ORDERED_PAIRS}}` | `04_correspondences.md` |
 | `{{GMRF_PAIRWISE_PRECISION}}` | `00_00_graphical_abstract.md`, `04_correspondences.md` |
 | `{{GMRF_RECIPROCAL_SPECTRUM_SUM}}` | `06_complementarities.md` |
-| `{{ICOSAHEDRON_DEGREE}}` | `05_disagreements.md`, `05_disagreements.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{ICOSAHEDRON_DEGREE}}` | `05_disagreements.md`, `06_complementarities.md` |
 | `{{ICOSAHEDRON_FACES_REORIENTED}}` | `06_complementarities.md` |
-| `{{ICOSAHEDRON_TETRAVOLUME}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `05_disagreements.md`, `05_disagreements.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md` |
-| `{{ICOSAHEDRON_TETRAVOLUME_CONJUGATE}}` | `06_complementarities.md`, `06_complementarities.md` |
-| `{{ICOSAHEDRON_TETRAVOLUME_OVER_SQRT2}}` | `06_complementarities.md`, `06_complementarities.md` |
+| `{{ICOSAHEDRON_TETRAVOLUME}}` | `00_00_graphical_abstract.md`, `03_method.md`, `05_disagreements.md`, `06_complementarities.md` |
+| `{{ICOSAHEDRON_TETRAVOLUME_CONJUGATE}}` | `06_complementarities.md` |
+| `{{ICOSAHEDRON_TETRAVOLUME_OVER_SQRT2}}` | `06_complementarities.md` |
 | `{{ICOSAHEDRON_TETRAVOLUME_SQUARED}}` | `00_00_graphical_abstract.md`, `06_complementarities.md` |
 | `{{IVM_COSET_NEAREST_COUNTS}}` | `06_complementarities.md` |
 | `{{IVM_COSET_SQUARED_DISTANCES}}` | `06_complementarities.md` |
 | `{{IVM_CUMULATIVE_COUNTS}}` | `02_framework.md`, `06_complementarities.md` |
-| `{{IVM_NEIGHBOR_MOVES}}` | `02_framework.md`, `02_framework.md`, `05_disagreements.md`, `06_complementarities.md` |
-| `{{IVM_NEIGHBOR_SQUARED_DISTANCE}}` | `02_framework.md`, `02_framework.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{IVM_NEIGHBOR_MOVES}}` | `02_framework.md`, `05_disagreements.md`, `06_complementarities.md` |
+| `{{IVM_NEIGHBOR_SQUARED_DISTANCE}}` | `02_framework.md`, `06_complementarities.md` |
 | `{{IVM_SHELL_COUNTS}}` | `06_complementarities.md` |
-| `{{IVM_VOLUME_RATIOS}}` | `02_framework.md`, `02_framework.md`, `06_complementarities.md` |
+| `{{IVM_VOLUME_RATIOS}}` | `02_framework.md`, `06_complementarities.md` |
 | `{{JITTERBUG_CENTRED_COUNT_COVARIANCE}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_CENTRED_NULLITY}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_CHORD_FACTORS}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_CONTRACTED_EDGE_COUNTS}}` | `07_jitterbug.md` |
-| `{{JITTERBUG_EVEN_DIAGONAL_EIGENVALUE}}` | `07_jitterbug.md`, `07_jitterbug.md` |
+| `{{JITTERBUG_EVEN_DIAGONAL_EIGENVALUE}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_HALF_POSE_RETENTION}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_HALF_POSE_WEIGHT}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_ICOSAHEDRAL_EDGES}}` | `07_jitterbug.md` |
@@ -382,16 +423,16 @@ argue by key.
 | `{{KL_NORM_SPHERE_2}}` | `04_correspondences.md` |
 | `{{KL_NORM_SPHERE_3}}` | `04_correspondences.md` |
 | `{{KL_NORM_SPHERE_4}}` | `04_correspondences.md` |
-| `{{KL_ONE_STEP}}` | `00_00_graphical_abstract.md`, `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md`, `06_complementarities.md` |
+| `{{KL_ONE_STEP}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md`, `06_complementarities.md` |
 | `{{KL_STEP_SQUARED_DISTANCE}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md` |
-| `{{LATTICE_SHELL_SIZES}}` | `03_method.md`, `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md` |
-| `{{MEDIATOR_EPSILON_BELOW}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{LATTICE_SHELL_SIZES}}` | `03_method.md`, `05_disagreements.md` |
+| `{{MEDIATOR_EPSILON_BELOW}}` | `05_disagreements.md` |
 | `{{MEDIATOR_MARGIN_AT}}` | `05_disagreements.md` |
-| `{{MEDIATOR_MARGIN_BELOW}}` | `05_disagreements.md`, `05_disagreements.md` |
-| `{{MEDIATOR_THRESHOLD}}` | `05_disagreements.md`, `05_disagreements.md`, `05_disagreements.md`, `07_scope.md` |
+| `{{MEDIATOR_MARGIN_BELOW}}` | `05_disagreements.md` |
+| `{{MEDIATOR_THRESHOLD}}` | `05_disagreements.md`, `07_scope.md` |
 | `{{PACKING_BALL_TETRAVOLUME}}` | `00_00_graphical_abstract.md`, `06_complementarities.md` |
-| `{{PACKING_CELL_TETRAVOLUME}}` | `00_00_graphical_abstract.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md` |
-| `{{PACKING_DENSITY}}` | `00_00_graphical_abstract.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{PACKING_CELL_TETRAVOLUME}}` | `00_00_graphical_abstract.md`, `03_method.md`, `06_complementarities.md` |
+| `{{PACKING_DENSITY}}` | `00_00_graphical_abstract.md`, `06_complementarities.md` |
 | `{{PAPER_FIVE_SURPRISES}}` | `04_correspondences.md` |
 | `{{PR01_COIN_ONE_CURRENT}}` | `05_disagreements.md` |
 | `{{PR01_COIN_ONE_DECREASE}}` | `05_disagreements.md` |
@@ -408,15 +449,15 @@ argue by key.
 | `{{REDUCTION_RESPONSE_DISTANCE}}` | `05_disagreements.md` |
 | `{{REDUCTION_SAME_OBSERVATION}}` | `05_disagreements.md` |
 | `{{REDUCTION_SECOND_AFTER}}` | `05_disagreements.md` |
-| `{{REDUCTION_WORST_CASE}}` | `05_disagreements.md`, `05_disagreements.md` |
-| `{{REGISTRY_COMPLEMENTARITIES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
-| `{{REGISTRY_DISAGREEMENTS}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `05_disagreements.md` |
-| `{{REGISTRY_ENTRIES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `07_scope.md`, `08_reproducibility.md` |
-| `{{REGISTRY_FEP_SYNERGETICS}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `08_reproducibility.md` |
-| `{{REGISTRY_ISOMORPHISMS}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `03_method.md`, `04_correspondences.md` |
-| `{{REGISTRY_OPH_FEP}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `08_reproducibility.md` |
-| `{{REGISTRY_SYNERGETICS_OPH}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `08_reproducibility.md` |
-| `{{REGISTRY_THREE_WAY}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `08_reproducibility.md` |
+| `{{REDUCTION_WORST_CASE}}` | `05_disagreements.md` |
+| `{{REGISTRY_COMPLEMENTARITIES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `06_complementarities.md` |
+| `{{REGISTRY_DISAGREEMENTS}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `05_disagreements.md` |
+| `{{REGISTRY_ENTRIES}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `07_scope.md` |
+| `{{REGISTRY_FEP_SYNERGETICS}}` | `00_00_graphical_abstract.md`, `03_method.md` |
+| `{{REGISTRY_ISOMORPHISMS}}` | `00_00_graphical_abstract.md`, `00_abstract.md`, `03_method.md`, `04_correspondences.md` |
+| `{{REGISTRY_OPH_FEP}}` | `00_00_graphical_abstract.md`, `03_method.md` |
+| `{{REGISTRY_SYNERGETICS_OPH}}` | `00_00_graphical_abstract.md`, `03_method.md` |
+| `{{REGISTRY_THREE_WAY}}` | `00_00_graphical_abstract.md`, `03_method.md` |
 | `{{REPAIR_VARIANCE_FIBRES}}` | `04_correspondences.md` |
 | `{{REPAIR_VARIANCE_INDICATOR}}` | `04_correspondences.md` |
 | `{{REPLICATOR_FIELD_NORM}}` | `06_complementarities.md` |
@@ -424,55 +465,55 @@ argue by key.
 | `{{RESISTANCE_ADJACENT}}` | `03_method.md`, `06_complementarities.md` |
 | `{{RESISTANCE_ANTIPODAL}}` | `03_method.md`, `06_complementarities.md` |
 | `{{RESISTANCE_DISTANCE_TWO}}` | `03_method.md`, `06_complementarities.md` |
-| `{{RESISTANCE_KIRCHHOFF_INDEX}}` | `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{RESISTANCE_KIRCHHOFF_INDEX}}` | `03_method.md`, `06_complementarities.md` |
 | `{{RESISTANCE_PAIR_COUNTS}}` | `06_complementarities.md` |
-| `{{SCHEDULE_AFFINE_CONTRAST}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{SCHEDULE_AFFINE_CONTRAST}}` | `05_disagreements.md` |
 | `{{SHEAF_COBOUNDARY_RANK}}` | `00_00_graphical_abstract.md`, `04_correspondences.md` |
-| `{{SHEAF_EULER_CHARACTERISTIC}}` | `00_00_graphical_abstract.md`, `04_correspondences.md`, `04_correspondences.md` |
-| `{{SHEAF_FACE_COBOUNDARY_RANK}}` | `04_correspondences.md`, `04_correspondences.md` |
-| `{{SHEAF_H0}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md` |
-| `{{SHEAF_H1}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `06_complementarities.md` |
+| `{{SHEAF_EULER_CHARACTERISTIC}}` | `00_00_graphical_abstract.md`, `04_correspondences.md` |
+| `{{SHEAF_FACE_COBOUNDARY_RANK}}` | `04_correspondences.md` |
+| `{{SHEAF_H0}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md` |
+| `{{SHEAF_H1}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md`, `06_complementarities.md` |
 | `{{SHEAF_SURFACE_BETTI}}` | `03_method.md`, `04_correspondences.md` |
-| `{{SHEAF_SURFACE_EULER_CHARACTERISTIC}}` | `00_00_graphical_abstract.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md` |
-| `{{SHELL_BINARY}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `{{SHEAF_SURFACE_EULER_CHARACTERISTIC}}` | `00_00_graphical_abstract.md`, `04_correspondences.md` |
+| `{{SHELL_BINARY}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md` |
 | `{{SHELL_FREE_ENERGY_LEVEL_COUNTS}}` | `00_00_graphical_abstract.md`, `05_disagreements.md` |
-| `{{SHELL_GAUGE_CHECKED_THROUGH}}` | `02_framework.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{SHELL_GAUGE_CHECKED_THROUGH}}` | `02_framework.md`, `05_disagreements.md` |
 | `{{SHELL_MULTIPLICITIES}}` | `05_disagreements.md` |
-| `{{SHELL_NOOP}}` | `00_00_graphical_abstract.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{SHELL_NOOP}}` | `00_00_graphical_abstract.md`, `05_disagreements.md` |
 | `{{SHELL_SHARED_FREE_ENERGY_LEVELS}}` | `00_00_graphical_abstract.md`, `03_method.md`, `05_disagreements.md` |
-| `{{SHELL_STRICT_DESCENT}}` | `00_00_graphical_abstract.md`, `05_disagreements.md`, `05_disagreements.md` |
-| `{{SHELL_TOTAL_TWO}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `07_scope.md` |
-| `{{SHELL_TRANSITIONS}}` | `00_00_graphical_abstract.md`, `04_correspondences.md`, `05_disagreements.md`, `05_disagreements.md` |
-| `{{SHELL_ZERO_DESCENT}}` | `00_00_graphical_abstract.md`, `05_disagreements.md`, `05_disagreements.md` |
+| `{{SHELL_STRICT_DESCENT}}` | `00_00_graphical_abstract.md`, `05_disagreements.md` |
+| `{{SHELL_TOTAL_TWO}}` | `00_00_graphical_abstract.md`, `02_framework.md`, `04_correspondences.md`, `05_disagreements.md`, `07_scope.md` |
+| `{{SHELL_TRANSITIONS}}` | `00_00_graphical_abstract.md`, `04_correspondences.md`, `05_disagreements.md` |
+| `{{SHELL_ZERO_DESCENT}}` | `00_00_graphical_abstract.md`, `05_disagreements.md` |
 | `{{SOLENOIDAL_ENTROPY_PRODUCTION}}` | `05_disagreements.md` |
 | `{{SOLENOIDAL_Q_GRID}}` | `05_disagreements.md` |
 | `{{SPECTRAL_LAMBDA_MAX}}` | `04_correspondences.md` |
-| `{{SYMMETRY_CONFIGURATIONS}}` | `00_00_graphical_abstract.md`, `04_correspondences.md`, `04_correspondences.md` |
-| `{{SYMMETRY_EIGENSPACE_DIMENSIONS}}` | `03_method.md`, `04_correspondences.md`, `04_correspondences.md` |
-| `{{SYMMETRY_GROUP_ORDER}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md`, `04_correspondences.md`, `05_disagreements.md`, `06_complementarities.md` |
-| `{{SYMMETRY_ORBITS}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md`, `04_correspondences.md` |
+| `{{SYMMETRY_CONFIGURATIONS}}` | `00_00_graphical_abstract.md`, `04_correspondences.md` |
+| `{{SYMMETRY_EIGENSPACE_DIMENSIONS}}` | `03_method.md`, `04_correspondences.md` |
+| `{{SYMMETRY_GROUP_ORDER}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md`, `05_disagreements.md`, `06_complementarities.md` |
+| `{{SYMMETRY_ORBITS}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md` |
 | `{{SYMMETRY_OUTCOME_MULTISETS}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md` |
 | `{{SYMMETRY_REFLECTIONS}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md` |
 | `{{SYMMETRY_ROTATIONS}}` | `00_00_graphical_abstract.md`, `03_method.md`, `04_correspondences.md` |
-| `{{TETRAVOLUME_GALOIS_NORM}}` | `03_method.md`, `06_complementarities.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{TETRAVOLUME_GALOIS_NORM}}` | `03_method.md`, `06_complementarities.md` |
 | `{{TETRAVOLUME_INTEGRAL_SOLIDS}}` | `00_00_graphical_abstract.md` |
-| `{{THREE_CARRIER_CENTROID_PROBS}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
+| `{{THREE_CARRIER_CENTROID_PROBS}}` | `07_three_way_limits.md` |
 | `{{THREE_CARRIER_CROSS_SEAMS}}` | `07_three_way_limits.md` |
-| `{{THREE_CARRIER_PLANES}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
+| `{{THREE_CARRIER_PLANES}}` | `07_three_way_limits.md` |
 | `{{THREE_CARRIER_QUADRATIC_FRAME}}` | `07_three_way_limits.md` |
 | `{{THREE_CARRIER_QUADRATIC_PRECISION}}` | `07_three_way_limits.md` |
 | `{{THREE_CARRIER_SCREEN_RATIO}}` | `07_three_way_limits.md` |
 | `{{THREE_DUAL_CHANGED_WEIGHT}}` | `07_three_way_limits.md` |
-| `{{THREE_DUAL_COPIED_SUMS}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
+| `{{THREE_DUAL_COPIED_SUMS}}` | `07_three_way_limits.md` |
 | `{{THREE_FCC_ATTEMPTS}}` | `07_three_way_limits.md` |
-| `{{THREE_FCC_CENTROID_PROBS}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
+| `{{THREE_FCC_CENTROID_PROBS}}` | `07_three_way_limits.md` |
 | `{{THREE_FCC_COMMON_NEIGHBOURS}}` | `07_three_way_limits.md` |
-| `{{THREE_FCC_DIAGONAL_VARIANCE}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
+| `{{THREE_FCC_DIAGONAL_VARIANCE}}` | `07_three_way_limits.md` |
 | `{{THREE_FCC_HISTORY_INWARD}}` | `07_three_way_limits.md` |
-| `{{THREE_FCC_INWARD}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
+| `{{THREE_FCC_INWARD}}` | `07_three_way_limits.md` |
 | `{{THREE_FCC_MIDDLE_VARIANCES}}` | `07_three_way_limits.md` |
-| `{{THREE_FCC_OFF_DIAGONAL_VARIANCE}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
-| `{{THREE_FCC_PLANES}}` | `07_three_way_limits.md`, `07_three_way_limits.md` |
+| `{{THREE_FCC_OFF_DIAGONAL_VARIANCE}}` | `07_three_way_limits.md` |
+| `{{THREE_FCC_PLANES}}` | `07_three_way_limits.md` |
 | `{{THREE_FCC_QUADRATIC_EIGENVALUES}}` | `07_three_way_limits.md` |
 | `{{THREE_FCC_QUADRATIC_FRAME}}` | `07_three_way_limits.md` |
 | `{{THREE_FCC_QUADRATIC_PRECISIONS}}` | `07_three_way_limits.md` |
@@ -480,7 +521,7 @@ argue by key.
 | `{{THREE_FCC_QUOTIENT}}` | `07_three_way_limits.md` |
 | `{{THREE_FCC_STATIONARY}}` | `07_three_way_limits.md` |
 | `{{THREE_FCC_STATIONARY_INWARD}}` | `07_three_way_limits.md` |
-| `{{TRANSFER_24CELL_LAG_DEFECT}}` | `07_transfer_criteria.md`, `07_transfer_criteria.md` |
+| `{{TRANSFER_24CELL_LAG_DEFECT}}` | `07_transfer_criteria.md` |
 | `{{TRANSFER_24CELL_QUADRATIC_VARIANCE}}` | `07_transfer_criteria.md` |
 | `{{TRANSFER_24CELL_UNIT_LAG}}` | `07_transfer_criteria.md` |
 | `{{TRANSFER_24CELL_WEIGHT}}` | `07_transfer_criteria.md` |
@@ -492,26 +533,26 @@ argue by key.
 | `{{TRANSFER_PERIODIC_FCC_DEGREE}}` | `07_transfer_criteria.md` |
 | `{{TRANSFER_PERIODIC_FCC_DISPLACEMENTS}}` | `07_transfer_criteria.md` |
 | `{{TRANSFER_PERIODIC_FCC_HISTORY}}` | `07_transfer_criteria.md` |
-| `{{TRANSFER_PERIODIC_FCC_JUMPS}}` | `07_transfer_criteria.md`, `07_transfer_criteria.md` |
+| `{{TRANSFER_PERIODIC_FCC_JUMPS}}` | `07_transfer_criteria.md` |
 | `{{TRANSFER_PERIODIC_FCC_TARGET}}` | `07_transfer_criteria.md` |
 | `{{TRANSFER_PERIODIC_FCC_VERTICES}}` | `07_transfer_criteria.md` |
 | `{{TRANSFER_ROOT_DIMENSIONS}}` | `07_transfer_criteria.md` |
 | `{{TRANSFER_TORUS_CELLS}}` | `07_transfer_criteria.md` |
-| `{{TRANSFER_TORUS_COPIED_RESIDUAL}}` | `07_transfer_criteria.md`, `07_transfer_criteria.md` |
-| `{{TRANSFER_TORUS_RECIPROCAL_RESIDUAL}}` | `07_transfer_criteria.md`, `07_transfer_criteria.md` |
+| `{{TRANSFER_TORUS_COPIED_RESIDUAL}}` | `07_transfer_criteria.md` |
+| `{{TRANSFER_TORUS_RECIPROCAL_RESIDUAL}}` | `07_transfer_criteria.md` |
 | `{{TRANSFER_TORUS_UNIT_RESIDUAL}}` | `07_transfer_criteria.md` |
 | `{{TWO_NODE_RELAXATION_MAX_RADIUS}}` | `05_disagreements.md` |
 | `{{TWO_NODE_RELAXATION_MIN_RADIUS}}` | `05_disagreements.md` |
-| `{{TWO_NODE_RELAXATION_MIN_RADIUS_MEASURED}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{TWO_NODE_RELAXATION_MIN_RADIUS_MEASURED}}` | `05_disagreements.md` |
 | `{{TWO_NODE_RELAXATION_PERIOD}}` | `05_disagreements.md` |
-| `{{TWO_NODE_RELAXATION_PERIOD_MEASURED}}` | `05_disagreements.md`, `05_disagreements.md` |
+| `{{TWO_NODE_RELAXATION_PERIOD_MEASURED}}` | `05_disagreements.md` |
 | `{{TWO_NODE_SYNC_MIN_RADIUS}}` | `05_disagreements.md` |
 | `{{VE_EXCESS_RESIDUAL}}` | `04_correspondences.md` |
 | `{{VE_ITERATIONS}}` | `04_correspondences.md` |
 | `{{VE_RESIDUAL}}` | `04_correspondences.md` |
-| `{{VORONOI_EDGES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md` |
-| `{{VORONOI_FACES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
-| `{{VORONOI_VERTICES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `03_method.md`, `06_complementarities.md`, `06_complementarities.md` |
+| `{{VORONOI_EDGES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `06_complementarities.md` |
+| `{{VORONOI_FACES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `06_complementarities.md` |
+| `{{VORONOI_VERTICES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `06_complementarities.md` |
 
 293 of the bound values are quoted by the prose. The cover is
 placed by `manuscript/config.yaml`; the accessibility registry that gives

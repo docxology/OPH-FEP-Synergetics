@@ -55,7 +55,9 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
     monkeypatch.setattr(make_figures, "FIGURES", tmp_path)
     monkeypatch.setattr(make_figures, "ALT_TEXT", {})
 
+    triangles = make_figures.pair_triangles_figure()
     written = [
+        triangles,
         make_figures.registry_figure(),
         make_figures.descent_figure(),
         make_figures.ivm_figure(),
@@ -77,6 +79,7 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
     assert payload["generator"] == "scripts/make_figures.py"
     assert {entry["label"] for entry in payload["figures"]} == {
         "fig:registry",
+        "fig:pair-triangles",
         "fig:descent",
         "fig:ivm",
         "fig:extensions",
@@ -109,6 +112,8 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
     standalone = tmp_path / "OPH-FEP-Synergetics_Jitterbug_Poster.pdf"
     assert standalone.stat().st_size > 10_000
     assert standalone.read_bytes().startswith(b"%PDF-")
+    height, width, _ = make_figures.plt.imread(triangles).shape
+    assert 2 < width / height < 3
     height, width, _ = make_figures.plt.imread(written[-1]).shape
     assert width > height
 

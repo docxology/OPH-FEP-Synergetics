@@ -85,9 +85,18 @@ def test_caption_pages_count_each_page_separately():
     assert sum(counts.values()) == 3
 
 
+def test_caption_inventory_requires_every_number_once():
+    pages = _pages("  Figure 1: earlier panel\nTable 2: second table", "Figure 1: duplicate\n  Table 1: first table")
+    assert check_render.caption_inventory(pages, "Table", 2) == (True, "table captions: 2/2")
+    assert check_render.caption_inventory(pages, "Figure", 2) == (
+        False, "figure captions: 2/2 (missing [2]; repeated [1])",
+    )
+
+
 def test_missing_keys_are_reported_in_registry_order():
     absent = check_render.missing_keys(
-        "carrier-port-chart and spectral-gap", ("carrier-port-chart", "spectral-gap", "tree-number")
+        "carrier-port-chart and spectral-\n  gap\n\ntree-num\fber",
+        ("carrier-port-chart", "spectral-gap", "tree-number"),
     )
     assert absent == ["tree-number"]
 
@@ -141,7 +150,7 @@ def test_standalone_pdf_rejects_printed_reference_markers(tmp_path, monkeypatch)
         "Observers, Blankets, and Screens",
         *(f"Panel {index}\nFigure {index}: panel" for index in range(1, 6)),
         "Contents",
-        "See Proposition ?? and [@def:missing]. Citation [?]. Is this punctuation??",
+        "See Proposition ?? and [@def:missing]. Citation [?]. Raw label {#tbl:commands}. Is this punctuation??",
         "\n".join(f"Figure {index}: caption" for index in range(6, 17)),
     ]
     monkeypatch.setattr(check_render, "pdf_text", lambda _: pages)
@@ -150,7 +159,7 @@ def test_standalone_pdf_rejects_printed_reference_markers(tmp_path, monkeypatch)
     passed, lines = check_render.check(pdf, log=None, keys=())
 
     assert not passed
-    assert "printed unresolved references or citations: 3" in lines
+    assert "printed unresolved references or citations: 4" in lines
 
 
 @pytest.mark.skipif(not PDF.is_file(), reason="no rendered PDF in this checkout")

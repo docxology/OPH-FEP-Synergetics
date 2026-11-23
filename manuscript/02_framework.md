@@ -158,7 +158,8 @@ $$ {#eq:blanket}
 
 Equation [@eq:blanket] constrains the probability distribution. In the
 stationary control in [@prop:stationary], a family of distinct drifts
-preserves the same distribution and blanket.
+preserves the same distribution and blanket. [@fig:ga-carrier] locates a
+blanket on the carrier in the proper Gaussian model.
 
 ## Synergetics: tetravolume accounting
 
@@ -236,7 +237,8 @@ coordination shells of $10k^{2}+2$ sites with cumulative counts
 
 The OPH carrier, its Gaussian models, and the IVM lattice play different roles.
 Each row of [@tbl:vocabulary] names the mathematical object and the assumptions
-that make the comparison possible.
+that make the comparison possible. [@tbl:ontology-interfaces] compares the
+meanings of the terms used for interfaces and representations.
 
 | Object | Relation tested | Registry probes |
 |:-------|:----------------|:----------------|

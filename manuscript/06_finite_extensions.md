@@ -3,6 +3,8 @@
 The registry also tests what the basic correspondences imply for first
 passage, coarse-graining, record placement and dual geometry. These
 extensions use the same carrier and FCC shell as the preceding sections.
+[@tbl:ontology-exact-extensions] identifies the objects and assumptions for
+these reductions.
 
 ## First binary entry and distance reduction {#sec:repair-stopping-distance}
 

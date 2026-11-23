@@ -21,8 +21,10 @@ from pathlib import Path
 from typing import Sequence
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "src"))
 
+from scripts.manuscript_refs import index_references, read_sections  # noqa: E402
 from oph_fep_synergetics.analysis import CORRESPONDENCES, summary, verify  # noqa: E402
 from oph_fep_synergetics.analysis.provenance import load_sources  # noqa: E402
 from oph_fep_synergetics.manuscript_variables import MANUSCRIPT_VALUES, token_for  # noqa: E402
@@ -172,27 +174,20 @@ def render_concordance() -> str:
     """
     manuscript = ROOT / "manuscript"
     # Only main prose can supply the primary location of a registry claim.
-    section_paths = sorted(
-        path for path in manuscript.glob("[0-9]*.md") if path.name != ONTOLOGY_FILENAME
-    )
+    sections = read_sections(manuscript)
+    sections[ONTOLOGY_FILENAME] = render_ontology()
+    references = index_references(sections)
+    authored = {name: text for name, text in sections.items() if name != ONTOLOGY_FILENAME}
     table_row = re.compile(r"^\| `[a-z0-9-]+` \|")
-    figure_link = re.compile(
-        r"\]\(\.\./output/figures/(fig_[a-z0-9_]+\.png)\)\{#fig:([a-z0-9_-]+)"
+    authored_prose = dict(authored)
+    authored_prose["03_method.md"] = "\n".join(
+        line for line in authored["03_method.md"].splitlines() if not table_row.match(line)
     )
-
-    def naming(key: str) -> list[str]:
-        named: list[str] = []
-        for path in section_paths:
-            text = path.read_text(encoding="utf-8")
-            if path.name == "03_method.md":
-                text = "\n".join(
-                    line for line in text.splitlines() if not table_row.match(line)
-                )
-            if key in text:
-                named.append(path.name)
-        return named
-
-    named_by = {entry.key: naming(entry.key) for entry in CORRESPONDENCES}
+    claim_mentions = {
+        name: set(re.findall(r"`([a-z0-9-]+)`", text)) for name, text in authored_prose.items()
+    }
+    named_by = {entry.key: [name for name, keys in claim_mentions.items() if entry.key in keys]
+                for entry in CORRESPONDENCES}
     outline = manuscript / "MANUSCRIPT_STATUS.md"
     outline_text = outline.read_text(encoding="utf-8")
 
@@ -228,62 +223,44 @@ def render_concordance() -> str:
         "| section | claims its prose names |",
         "| --- | --- |",
     ]
-    for path in section_paths:
-        keys_here = [entry.key for entry in CORRESPONDENCES if path.name in named_by[entry.key]]
+    for name in authored:
+        keys_here = [entry.key for entry in CORRESPONDENCES if name in named_by[entry.key]]
         cell = ", ".join(f"`{key}`" for key in keys_here) if keys_here else "*none*"
-        lines.append(f"| `{path.name}` | {cell} |")
+        lines.append(f"| `{name}` | {cell} |")
     lines += [
         "",
         "## Figures",
         "",
-        "| figure | included by | claims whose values it draws |",
-        "| --- | --- | --- |",
+        "| figure | declared in | cited by | probe sources of values quoted in the caption |",
+        "| --- | --- | --- | --- |",
     ]
-    included: dict[str, list[str]] = {}
-    captions: dict[str, str] = {}
-    for path in section_paths:
-        text = path.read_text(encoding="utf-8")
-        for _, label in figure_link.findall(text):
-            included.setdefault(label, []).append(path.name)
-        for alt, filename in re.findall(
-            r"!\[([^\]]+)\]\(\.\./output/figures/(fig_[a-z0-9_]+\.png)\)", text
-        ):
-            captions[filename] = alt
+
+    def chapters(names: Sequence[str]) -> str:
+        return ", ".join(f"[`{name}`](../manuscript/{name})" for name in names) if names else "*never cited*"
+
     probe_of_token = {
         token_for(entry.key): entry.source.split(":")[1]
         for entry in MANUSCRIPT_VALUES
         if entry.source.startswith("probe:")
     }
-    for label in sorted(included):
-        filename = "fig_" + label.replace("-", "_") + ".png"
-        tokens = TOKEN_CAPTION.findall(captions.get(filename, ""))
-        claims = sorted({probe_of_token[token] for token in tokens if token in probe_of_token})
-        if claims:
-            drawn = ", ".join(f"`{key}`" for key in claims)
-        elif any(token.startswith("REGISTRY_") for token in tokens):
-            drawn = "*every entry (drawn from the registry itself)*"
-        else:
-            drawn = "*package readings, no single claim*"
-        lines.append(
-            f"| `fig:{label.replace('_', '-')}` | "
-            + ", ".join(f"`{name}`" for name in included[label])
-            + f" | {drawn} |"
-        )
-    declared: dict[str, dict[str, str]] = {}
-    for path in section_paths:
-        text = path.read_text(encoding="utf-8")
-        for kind, label in re.findall(r"\{#(prop|def):([a-z0-9_-]+)", text):
-            declared.setdefault(kind, {})[label] = path.name
-        for label in re.findall(r"\{#eq:([a-z0-9_-]+)\}", text):
-            declared.setdefault("eq", {})[label] = path.name
-    referenced: dict[str, list[str]] = {}
-    citation_group = re.compile(r"\[(-?@[^\[\]]+)\]")
-    formal_cite = re.compile(r"(?:^|;)\s*-?@((?:prop|def|eq):[a-z0-9_-]+)(?=[\s,;]|$)")
-    for path in section_paths:
-        groups = citation_group.findall(path.read_text(encoding="utf-8"))
-        labels = dict.fromkeys(label for group in groups for label in formal_cite.findall(group))
-        for label in labels:
-            referenced.setdefault(label, []).append(path.name)
+    for figure in sorted(references.figures, key=lambda row: row.label):
+        tokens = TOKEN_CAPTION.findall(figure.caption)
+        sources = [f"`{key}`" for key in sorted({probe_of_token[token] for token in tokens if token in probe_of_token})]
+        if any(token.startswith("REGISTRY_") for token in tokens):
+            sources.append("*registry totals*")
+        label = figure.label
+        lines.append(f"| `{label}` | {chapters(references.declared[label])} | "
+                     f"{chapters(references.cited_by.get(label, ()))} | {', '.join(sources) or '*none*'} |")
+    lines += [
+        "",
+        "## Tables",
+        "",
+        "| table | declared in | cited by |",
+        "| --- | --- | --- |",
+    ]
+    for label in references.labels("tbl"):
+        lines.append(f"| `{label}` | {chapters(references.declared[label])} | "
+                     f"{chapters(references.cited_by.get(label, ()))} |")
     lines += [
         "",
         "## Formal statements and equations",
@@ -291,11 +268,10 @@ def render_concordance() -> str:
         "| label | kind | stated in | cited by |",
         "| --- | --- | --- | --- |",
     ]
-    for kind in ("def", "prop", "eq"):
-        for label, where in declared.get(kind, {}).items():
-            citing = referenced.get(f"{kind}:{label}", [])
-            cell = ", ".join(f"`{name}`" for name in citing) if citing else "*never cited*"
-            lines.append(f"| `{kind}:{label}` | {kind} | `{where}` | {cell} |")
+    for kind in ("def", "prop", "eq", "thm", "lem", "cor", "rmk", "exa"):
+        for label in references.labels(kind):
+            lines.append(f"| `{label}` | {kind} | {chapters(references.declared[label])} | "
+                         f"{chapters(references.cited_by.get(label, ()))} |")
     lines += [
         "",
         "## Values",
@@ -304,9 +280,9 @@ def render_concordance() -> str:
         "| --- | --- |",
     ]
     quoted: dict[str, list[str]] = {}
-    for path in section_paths:
-        for token in TOKEN_CAPTION.findall(path.read_text(encoding="utf-8")):
-            quoted.setdefault(token, []).append(path.name)
+    for name, text in sections.items():
+        for token in dict.fromkeys(TOKEN_CAPTION.findall(text)):
+            quoted.setdefault(token, []).append(name)
     for token in sorted(quoted):
         lines.append(f"| `{{{{{token}}}}}` | " + ", ".join(f"`{name}`" for name in quoted[token]) + " |")
     lines += [

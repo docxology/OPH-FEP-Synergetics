@@ -5,7 +5,10 @@ carrier and the cuboctahedral first shell of the IVM have different seams,
 faces and symmetry groups [@oph; @fuller1975synergetics]. Here we hold an
 inference rule or a geometric operation fixed and ask which conclusions
 survive the change in graph. The FCC experiments apply OPH's local rule
-to a comparison graph under the specified protocol.
+to a comparison graph under the specified protocol. [@fig:three-way]
+compares transition, duality, quadratic variance and screening results.
+[@tbl:ontology-three-way-transfer] gives the assumptions for each
+comparison.
 
 ## Which pair records preserve repair dynamics? {#sec:repair-contrast-record}
 
@@ -26,7 +29,9 @@ one-attempt probabilities {{THREE_FCC_INWARD}} of reaching adjacency,
 respectively.
 :::
 
-The carrier is distance-transitive: up to graph symmetry, a pair is
+The record in [@prop:repair-contrast-record] can be checked by counting
+transition probabilities between symmetry classes. The carrier is
+distance-transitive: up to graph symmetry, a pair is
 specified by its distance. The FCC shell admits permutations and sign
 changes of the coordinate axes. On its twelve directions with two
 nonzero components, they give one pair orbit for each of the four
@@ -92,7 +97,8 @@ one that can jump back to it. The `repair-centroid-memory` probe finds an
 explicit target on each graph and checks the three-time probabilities both
 by summing the native transition counts and by directly counting hops.
 It also checks the first conditional moment and stationary variance over
-the entire binary shell.
+the entire binary shell. [@fig:centroid-memory] contrasts what the lag
+covariance and conditional return probabilities reveal.
 
 ![The repair centroid and its Gaussian match share a normalised lag covariance on each shell. Conditioning on the previous centroid changes the return probabilities from zero. The two probabilities are {{THREE_CARRIER_CENTROID_PROBS}} on the carrier and {{THREE_FCC_CENTROID_PROBS}} on the FCC shell.](../output/figures/fig_centroid_memory.png){#fig:centroid-memory width=100%}
 

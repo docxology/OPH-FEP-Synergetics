@@ -26,6 +26,13 @@ Exit codes:
 | `2` | a filter was unknown or the filters selected no probes |
 
 When combining filters, the probes must match every specified filter.
+To check both octahedral limits in the Jitterbug model, select their keys.
+
+```sh
+.venv/bin/oph-fep-synergetics verify \
+  --key jitterbug-octahedral-gaussian-limit \
+  --key jitterbug-averaged-repair-limit
+```
 
 ## The suite
 
@@ -34,7 +41,7 @@ When combining filters, the probes must match every specified filter.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-468 tests. The suite runs offline from a fresh process and exercises the actual
+471 tests. The suite runs offline from a fresh process and exercises the actual
 scientific code paths.
 
 | file | what it pins down |
@@ -103,6 +110,11 @@ uv sync --locked --extra dev --extra figures
 
 `docs/CORRESPONDENCES.md`, `docs/MANUSCRIPT_VALUES.md` and `docs/CONCORDANCE.md`
 are rendered from the registry, the manuscript value bindings and the text.
+The concordance records which authored sections refer to each numbered
+figure, table, equation and formal statement. Generated text does not count
+towards that coverage. The figure concordance links the referring chapters
+and reports the exact bound sources of values quoted in authored figure
+captions. Consult `scripts/make_figures.py` for the plot data and encodings.
 The ontology supplement is generated from `data/ontology_concordance.json`.
 Its probe and source references are checked against the registry and source
 register. `test_docs.py` checks that generated content is current.
@@ -126,28 +138,29 @@ A `moved` result is reported as `moved`. It is a reading, not a failure.
 
 ## The manuscript gates
 
-The PDF is produced by the `docxology/template` pipeline; the commands are in
-[README.md](../README.md#the-manuscript), and `scripts/build.py` runs them in
-order, ending in the contract check. The manuscript's own gates run in the
-suite rather than in LaTeX, so a defect is reported by `pytest`:
+The `docxology/template` pipeline produces the PDF. Follow the build
+instructions in the [README](../README.md#the-manuscript) and install Poppler's
+`pdftotext` for the render check. The suite checks the manuscript sources,
+and the build also checks the generated figures, PDF and LaTeX log.
 
 | gate | what it rejects |
 | --- | --- |
 | `test_every_token_resolves_to_a_bound_value` | a `{{TOKEN}}` no `BoundValue` publishes (the hydration script also exits 1) |
 | `test_the_published_value_set_is_used_except_where_documented` | a bound value the prose never quotes; the documented exception set is asserted to be exact |
 | `test_every_citation_resolves_and_every_entry_is_cited` | an undefined citation (also a hard render failure) and an uncited bibliography entry |
+| authored numbered cross-references | missing prose references to numbered figures, tables, equations and formal statements, or references to absent labels |
 | `test_every_top_level_heading_carries_a_section_label` | a heading the renderer would annotate, which it writes back into the source tree |
 | `test_the_registry_table_lists_exactly_the_registered_keys` | a manuscript registry table that drifts from `analysis/registry.py` |
 | `test_figure_links_match_the_accessibility_registry` | the wrong number of manuscript figure links or, after generating the figures, a missing registry entry or PNG |
 | `test_figures.py` | a builder that is not orchestrated, or a registry entry without alt text |
-| `test_render_contract.py` | PDF front matter, panel captions, registry keys, printed reference placeholders and the 0.6 in left-margin limit, plus LaTeX log diagnostics |
+| `test_render_contract.py` | PDF front matter, panel placement, the numbered figure and table caption inventories, registry keys, printed reference placeholders, the 0.6 in left-margin limit, and LaTeX log diagnostics |
 
 The [tracked PDF](../output/pdf/OPH-FEP-Synergetics_combined.pdf) places the
 cover on page 1, the five graphical abstract panels and their captions on
 pages 2 to 6, and the contents on page 7. Page 6 is the Jitterbug poster.
-Its measured left text margin is
-0.500 in. The render check reports the current page and caption counts and
-looks for every live registry key in the extracted text.
+Its measured left text margin is 0.500 in. The render check compares the
+printed figure and table caption inventories with the manuscript and looks for every live
+registry key in the extracted text. The cover is an unnumbered image.
 
 The suite checks the tracked PDF on a fresh checkout. A local
 `scripts/build.py` run also checks the LaTeX log for unresolved tokens,
@@ -155,6 +168,10 @@ overfull boxes and undefined citations or references. Rasterise the pages
 that contain changed figures at page size and inspect text, markers and
 legends for overlap. The figure registry binds each generated PNG to an
 alternative description for the tagged PDF.
+
+The figure-only build `.venv/bin/python scripts/make_figures.py` produces
+the Jitterbug PNG used on page 6 and the standalone vector poster at
+`output/figures/OPH-FEP-Synergetics_Jitterbug_Poster.pdf`.
 
 ## Tolerances and platforms
 

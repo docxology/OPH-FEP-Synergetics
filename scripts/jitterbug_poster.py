@@ -88,8 +88,8 @@ def draw_jitterbug_poster(rotation):
     text(0.049, 0.929, "Fuller’s Jitterbug", 35, weight="bold")
     text(0.050, 0.872, "From an FCC shell to paired octahedral sites", 20, weight="bold")
     text(0.050, 0.826,
-         f"{len(triangles)} rigid triangles turn about their joined corners while the {len(bars)} bars keep their length.\n"
-         "The regular icosahedral hull supplies the seam graph for observer patch holography (OPH).\n"
+         f"{len(triangles)} rigid triangles stay hinged at their corners while the {len(bars)} bars keep their length.\n"
+         "The regular icosahedral hull has the same seam graph as observer patch holography (OPH).\n"
          r"The ratio $t$ compares each joint’s smaller in-plane coordinate magnitude to its larger one.",
          11.0, colour=MUTED)
 
@@ -148,9 +148,9 @@ def draw_jitterbug_poster(rotation):
 
     text(0.535, 0.401, r"Tune the diagonal weight $w=1/t-t$", 11.0, weight="bold", colour=TEAL)
     text(0.535, 0.368,
-         "With unit bars, tuning makes fair binary seam\n"
-         "repair’s coordinate lag covariances match a\n"
-         "Gaussian Markov process.",
+         "Give the bars unit conductance. Tuning lets\n"
+         "fair binary repair and a Gaussian Markov\n"
+         "process share coordinate lag covariances.",
          9.9, colour=MUTED)
     text(0.535, 0.308,
          rf"At $t=1/2$, tuning needs $w={half_tuned['tuned_weight']}$ instead of $1$." "\n"
@@ -164,8 +164,8 @@ def draw_jitterbug_poster(rotation):
     text(0.050, 0.174, rf"Centred shared values have precision ${shared_bar_weight}L_{{\mathrm{{oct}}}}$.", 10.8)
     text(0.050, 0.142,
          "As the diagonal weight diverges, each pair\n"
-         "shares one value. Two bars per octahedral\n"
-         "edge give its doubled conductance.", 10.0, colour=MUTED)
+         "shares one value. Two bars per edge double\n"
+         "the unit-weight octahedral Laplacian.", 10.0, colour=MUTED)
 
     text(0.493, 0.206, "Fair binary repair", 11.3, weight="bold", colour=TEAL)
     text(0.493, 0.174,
@@ -195,7 +195,7 @@ def draw_jitterbug_poster(rotation):
         f"including {half_tuned['tuned_weight']} at t=1/2. Inverse-square weighting fails at t=1/3. "
         "The Gaussian limit on shared site values has precision "
         f"{shared_bar_weight} times the octahedral Laplacian. Pair totals freeze on the ordinary attempt clock. "
-        f"The accelerated, averaged capacity-two repair has coordinate lag exp(-{decay}s). "
+        f"The accelerated, averaged capacity-two repair has normalised coordinate lag covariance exp(-{decay}s). "
         "At finite weights the pair totals retain memory of which joints carry the loads."
     )
     return figure, alt

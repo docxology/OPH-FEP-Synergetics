@@ -23,10 +23,11 @@ model, derive a comparison and check it with the executable probe. Run
 
 ![Pairwise claim totals and representative results. The guide below the triangle gives the workflow from model to probe. The centre counts claims that use all three frameworks.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
 
-`spectral-gap` connects the mean repair and intrinsic Gaussian readings of
-the same Laplacian. `jitterbug-rigid-motion` reaches the regular carrier hull
-along a fixed-bar branch. `cuboctahedral-distance-split` shows that pairs at
-the same distance on the FCC first shell can have different contrast variances.
+- `spectral-gap` links mean repair and Gaussian precision through one Laplacian.
+- `jitterbug-rigid-motion` reaches the regular carrier hull along a fixed-bar branch.
+- `cuboctahedral-distance-split` finds distinct contrast variances at the same
+  graph distance on the FCC first shell.
+
 [@tbl:registry] gives the scope of each claim. [@sec:transfer-criteria] checks
 analogous results on other finite graphs, lattice shells and cellulations.
 

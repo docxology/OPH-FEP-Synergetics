@@ -13,6 +13,10 @@ Quoted numerical results are brace-delimited tokens resolved at build time.
 The build fails if a token remains unresolved, and the tests verify that the
 manuscript and value table use the same set of bindings.
 
+[@tbl:surfaces] identifies the source or build step for each surface. The
+figure PNGs, accessibility registry and standalone poster share the `figures`
+subdirectory of `output`.
+
 | Surface | Authored | Generated |
 |:-------------------------------------------|:-------------|:------------------------------------------|
 | Main manuscript sections | yes | never |
@@ -21,8 +25,10 @@ manuscript and value table use the same set of bindings.
 | `references.bib` | yes | never |
 | `src/oph_fep_synergetics/` | yes | never |
 | `uv.lock` | no | `uv lock` |
-| `output/figures/*.png` | no | `scripts/make_figures.py` |
-| `output/figures/figure_registry.json` | no | `scripts/make_figures.py` |
+| Figure PNGs | no | `scripts/make_figures.py` |
+| `figure_registry.json` | no | `scripts/make_figures.py` |
+| `OPH-FEP-Synergetics_Jitterbug_Poster.pdf` | no | `scripts/make_figures.py` |
+| `OPH-FEP-Synergetics_combined.pdf` in `output/pdf/` | no | `scripts/build.py` with the template checkout |
 | `docs/CORRESPONDENCES.md`, `docs/MANUSCRIPT_VALUES.md`, `docs/CONCORDANCE.md` | no | `scripts/render_docs.py` |
 | manuscript tokens | no | `scripts/z_generate_manuscript_variables.py` |
 
@@ -32,12 +38,15 @@ is never edited to make a check pass; the producer is changed instead.
 
 The ontology concordance in [@sec:ontology-concordance] maps terms to their
 model-specific meanings, applicability and relevant registry probes.
+[@tbl:ontology-dynamics] distinguishes the repair, inference and dynamical
+quantities that the probes report.
 
 ## The three source pins
 
 The three programmes are read at pinned commits. The commit itself lives in
 `data/sources.json` and is reported by `oph-fep-synergetics sources`, which also
-reports whether the live checkout still matches it.
+reports whether the live checkout still matches it. [@tbl:pins] lists the
+licences and identifier counts.
 
 | Source | Repository | Licence | Recorded |
 |:-----------------|:-------------------------------------------|:-------------------------|:-----------|
@@ -58,36 +67,29 @@ command reports the recorded pins and leaves the live checks unavailable.
 
 ## The commands
 
-```bash
-# install the locked test and figure environment
-uv sync --locked --extra dev --extra figures
+Run the commands in [@tbl:commands] from the project root. File paths for
+the vault and template checkout are examples.
 
-# the suite, and the coverage gate (90% branch minimum)
-.venv/bin/python -m pytest tests/ --cov --cov-report=term-missing
+| Step | Command |
+|:------------------|:----------------------------------------------------------|
+| Install the locked environment | `uv sync --locked --extra dev --extra figures` |
+| Run the tests and coverage gate | `.venv/bin/python -m pytest tests/ --cov --cov-report=term-missing` |
+| Verify all probes | `.venv/bin/oph-fep-synergetics verify` |
+| Filter by scope | `.venv/bin/oph-fep-synergetics verify --pair synergetics-oph` |
+| Filter by claim kind | `.venv/bin/oph-fep-synergetics verify --kind disagreement` |
+| Export probe results | `.venv/bin/oph-fep-synergetics verify --json` |
+| Compare pins against checkouts | `.venv/bin/oph-fep-synergetics sources --vault-root /path/to/vault` |
+| Check the generated documents | `.venv/bin/python scripts/render_docs.py --check` |
+| Build figures and the poster | `.venv/bin/python scripts/make_figures.py` |
+| Build and check the manuscript PDF | `.venv/bin/python scripts/build.py --template-root /path/to/template` |
 
-# every correspondence, in one run or one pairwise scope at a time
-.venv/bin/oph-fep-synergetics verify
-.venv/bin/oph-fep-synergetics verify --pair synergetics-oph
-.venv/bin/oph-fep-synergetics verify --kind disagreement
-.venv/bin/oph-fep-synergetics verify --json
+: Reproduction commands. Scope and kind filters select subsets of the probe
+registry. {#tbl:commands}
 
-# the pins, checked against the live checkouts
-.venv/bin/oph-fep-synergetics sources --vault-root /path/to/vault
-
-# the generated reference documents
-.venv/bin/python scripts/render_docs.py --check
-
-# generate figures and tokens, render the PDF, and check it against the render log
-.venv/bin/python scripts/build.py --template-root /path/to/template
-```
-
-: The reproduction commands, in order. The plain `verify` runs all
-{{REGISTRY_ENTRIES}} probes; `--pair` runs one ledger, of
-{{REGISTRY_OPH_FEP}}, {{REGISTRY_SYNERGETICS_OPH}},
-{{REGISTRY_FEP_SYNERGETICS}} and {{REGISTRY_THREE_WAY}} claims respectively, and
-`--json` writes the same report as machine-readable values. The build command
-uses the renderer and interpreter in the selected template checkout.
-{#tbl:commands}
+The manuscript build already runs the figure step. Adding `--deliver`
+copies the checked manuscript PDF to the `Downloads` folder in your home
+directory and verifies that the copy matches the build output. The standalone
+poster stays with the generated figure PNGs.
 
 ## Environment
 
@@ -105,7 +107,8 @@ ranks use NumPy. The build prints the interpreter and NumPy versions for
 the run.
 
 Rendering also uses the separate `docxology/template` environment, Pandoc,
-`pandoc-crossref`, and LuaLaTeX with PDF tagging support [@template]. The
+`pandoc-crossref`, and LuaLaTeX with PDF tagging support [@template].
+The render check uses Poppler's `pdftotext` to inspect the generated PDF. The
 figure registry supplies the embedded alternative descriptions. In the template checkout,
 `projects/working/OPH-FEP-Synergetics` must resolve to the project being
 built. The Python lock covers this project. The rendered PDF also depends on

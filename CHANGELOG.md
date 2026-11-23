@@ -6,6 +6,8 @@
   Five probes distinguish nearest-only disconnection, conductance-policy
   obstructions, a hard Gaussian constraint, finite-weight pair-load memory
   and the averaged repair generator on an accelerated clock.
+- Provide the Jitterbug graphical abstract on page 6 and generate a separate
+  vector poster with the figure suite.
 - Add Bernhard Mueller as second author with affiliations to Pragma Research
   and the Active Inference Institute. Record his ORCID in the manuscript,
   citation and Zenodo metadata.

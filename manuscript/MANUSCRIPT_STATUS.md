@@ -8,15 +8,14 @@ render [docs/MANUSCRIPT_VALUES.md](../docs/MANUSCRIPT_VALUES.md).
 Each section names the registry entries it rests on. A section may not claim
 more than its entries' statuses.
 
-The rendered edition has a cover (page 1) and five graphical abstract panels
-(pages 2 to 6) written in `00_00_graphical_abstract.md`. The final panel is a
-standalone-style guide to the Jitterbug for OPH readers. The contents begins on
-page 7. The registry carries a pairwise scope
-per entry, and `oph-fep-synergetics verify --pair` executes one scope at a time;
-`--kind` narrows a run to the identifications, the obstructions or the
-complementarities. `fig:network` draws the carrier's network readings — the
-resistance ladder, the shells, the subgraph census and the dual pair — beside
-the registry and triangle figures.
+The cover is on page 1. The five graphical abstract panels in
+`00_00_graphical_abstract.md` occupy pages 2 to 6. The Jitterbug poster on
+page 6 follows the linkage to octahedral coalescence. The contents starts on
+page 7. Each entry has one of three pairwise scopes or the three-way scope.
+Use `oph-fep-synergetics verify --pair` to select a scope and `--kind` to
+select a claim kind. The [generated concordance](../docs/CONCORDANCE.md)
+records where prose invokes each numbered figure, table, equation or formal
+statement.
 
 ---
 
@@ -162,10 +161,10 @@ identification that looks natural in prose fails as stated.
   twelve-around-one cell, whose `packing.cell_tetravolume` and packing density
   `packing.density` are derived from the same quadratic form rather than read
   from the table.
-- **No single programme supplies the exchange rate.** One lattice step has three
-  exact costs in three number fields (`tetravolume-arithmetic`), which is why the
-  two arithmetic comparisons are complementarities. The planar-dual result
-  below gives a separate three-way identity.
+- **The three models compute different quantities.** The lattice
+  displacement divergence, mean repair gap and normalised volumes use
+  separate units and arithmetic conventions (`tetravolume-arithmetic`).
+  The planar-dual result below gives a separate three-way identity.
 
 The replicator potential is included as a comparison class: selection climbs a
 potential, so the repair language covers it without sharing its mechanism.
@@ -188,7 +187,9 @@ forest counts, and test spectral geometry and planar duality on two solids.
 - The isomorphism claims are `exact-on-domain` where a domain restriction
   applies, and the domain is stated in the entry itself.
 - OPH's quantum event algebra and continuum limit are cited, not implemented.
-- FEP outside the linear-Gaussian corner is out of scope.
+- The inference results concern the stated Gaussian models, the asymmetric
+  seam control and finite conditional repair. The treatment of general
+  nonlinear variational dynamics remains open.
 - Fuller's apparatus appears only in the pieces the correspondence needs.
 - Scale separation is not addressed: OPH's patches and an FEP blanket are not
   mapped onto one another here.

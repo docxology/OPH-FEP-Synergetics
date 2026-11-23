@@ -12,6 +12,7 @@ from pathlib import Path
 
 from oph_fep_synergetics.analysis.registry import CORRESPONDENCES
 from oph_fep_synergetics.manuscript_variables import MANUSCRIPT_TOKENS
+from scripts.manuscript_refs import index_references, read_sections
 
 PROJECT = Path(__file__).resolve().parents[1]
 MANUSCRIPT = PROJECT / "manuscript"
@@ -26,9 +27,6 @@ CODE_SPAN = re.compile(r"`[^`\n]*`")
 TOKEN = re.compile(r"\{\{([A-Z][A-Z0-9_]*)\}\}")
 CITATION = re.compile(r"@([A-Za-z][A-Za-z0-9_]*)")
 REFERENCE_PREFIXES = ("sec", "eq", "fig", "tbl", "def", "prop", "thm", "lem", "cor", "rmk", "exa")
-FIGURE_LINK = re.compile(
-    r"\]\(\.\./output/figures/(fig_[a-z0-9_]+\.png)\)\{#fig:([a-z0-9_-]+)"
-)
 SECTION_HEADING = re.compile(r"# .+ \{#sec:[a-z0-9_-]+\}")
 
 
@@ -229,17 +227,15 @@ def test_the_registry_table_lists_exactly_the_registered_keys():
 
 
 def test_figure_links_match_the_accessibility_registry():
-    links: dict[str, str] = {}
-    for path in SECTIONS:
-        for match in FIGURE_LINK.finditer(path.read_text(encoding="utf-8")):
-            links[match.group(2)] = match.group(1)
-    assert len(links) == 29, sorted(links)
+    references = index_references(read_sections(MANUSCRIPT))
+    linked = {figure.label: figure.filename for figure in references.figures}
+    assert len(references.figures) == len(linked) == 29, sorted(linked)
+    assert set(linked) == set(references.labels("fig"))
     registry = PROJECT / "output" / "figures" / "figure_registry.json"
     if not registry.is_file():  # the figures are generated artefacts
         return
     payload = json.loads(registry.read_text(encoding="utf-8"))
     entries = {entry["label"]: entry for entry in payload["figures"]}
-    linked = {f"fig:{key}": name for key, name in links.items()}
     # The cover is the one registry entry no section links: `config.yaml` places
     # it as the page-1 cover art through `paper.cover.image`, and its alt text
     # lives in the same registry so that the tagged render and the EPUB cover
@@ -250,3 +246,39 @@ def test_figure_links_match_the_accessibility_registry():
         assert entries[label]["alt"], label
     for filename in [*linked.values(), *registry_only.values()]:
         assert (registry.parent / filename).stat().st_size > 10_000, filename
+
+
+def test_every_numbered_object_has_a_resolving_reference():
+    references = index_references(read_sections(MANUSCRIPT))
+    assert not references.problems(), "\n".join(references.problems())
+
+
+def test_reference_index_handles_attribute_order_and_excludes_examples():
+    sections = {
+        "01_intro.md": """
+# Introduction {#sec:intro}
+
+::: {.proposition #prop:real}
+The proposition.
+:::
+
+![Caption [@fig:picture; @prop:real].](../output/figures/fig_picture.png){#fig:picture}
+
+`[@fig:inline-example]` and <!-- [@prop:comment] -->
+
+```markdown
+[@fig:fenced-example] {#fig:fenced-example}
+```
+""",
+        "02_results.md": "See [@sec:intro; @fig:picture].",
+    }
+    references = index_references(sections)
+    assert references.problems() == []
+    assert references.figures[0].caption == "Caption [@fig:picture; @prop:real]."
+    assert references.cited_by == {"prop:real": ("01_intro.md",), "sec:intro": ("02_results.md",),
+                                   "fig:picture": ("02_results.md",)}
+    broken = index_references({**sections, "02_results.md": 'Another anchor {#prop:real}. See [@fig:missing].'})
+    assert len(broken.problems()) == 3
+    assert any(problem.startswith("duplicate label prop:real") for problem in broken.problems())
+    assert any(problem.startswith("no target for fig:missing") for problem in broken.problems())
+    assert any(problem.startswith("no in-text reference to fig:picture") for problem in broken.problems())

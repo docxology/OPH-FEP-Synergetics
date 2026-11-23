@@ -84,7 +84,9 @@ def test_every_claim_is_named_by_some_section():
     text = renderer.render_concordance()
     assert "no section names it" not in text
     assert "**no**" not in text
-    assert "90_ontology_concordance.md" not in text
+    claims, _, objects = text.partition("\n## Figures\n")
+    assert "90_ontology_concordance.md" not in claims
+    assert "90_ontology_concordance.md" in objects
 
 
 def test_check_mode_reports_stale_documents(tmp_path, monkeypatch, capsys):
@@ -123,7 +125,8 @@ def test_the_concordance_reports_no_uncited_formal_statement():
     renderer = _load_renderer()
     concordance = renderer.render_concordance()
     assert "never cited" not in concordance
-    assert "| `prop:ivm` | prop | `02_framework.md` | `01_introduction.md`" in concordance
+    assert ("| `prop:ivm` | prop | [`02_framework.md`](../manuscript/02_framework.md) | "
+            "[`01_introduction.md`](../manuscript/01_introduction.md)") in concordance
 
 
 def test_format_probe_value_renders_containers_and_scalars():

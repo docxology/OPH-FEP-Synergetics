@@ -5,8 +5,8 @@ The manuscript makes five promises that only a rendered artefact can keep:
 
 1. page 1 is the cover, pages 2 to 6 are the five panels of the graphical
    abstract, and the contents page follows the front matter;
-2. each panel page carries its own figure caption, so a panel cannot float away
-   from the figure it describes;
+2. each panel page carries its own figure caption, and the PDF includes every
+   authored figure and table caption exactly once;
 3. every registry key appears in the printed text, which is what shows that the
    registry table is the registry rather than a summary of it;
 4. the text margin is the narrow one the manuscript claims, measured from the
@@ -28,13 +28,16 @@ import re
 import shutil
 import subprocess
 import sys
+from collections import Counter
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+PROJECT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PROJECT))
+sys.path.insert(0, str(PROJECT / "src"))
 
 from oph_fep_synergetics.analysis.registry import CORRESPONDENCES  # noqa: E402
+from scripts.manuscript_refs import index_references, read_sections  # noqa: E402
 
-PROJECT = Path(__file__).resolve().parents[1]
 DEFAULT_PDF = PROJECT / "output" / "pdf" / "OPH-FEP-Synergetics_combined.pdf"
 DEFAULT_LOG = PROJECT / "output" / "pdf" / "_combined_manuscript.log"
 
@@ -51,11 +54,14 @@ UNDEFINED_REFERENCE = re.compile(
 )
 PRINTED_REFERENCE_PLACEHOLDER = re.compile(
     r"\[\?\]|\[@(?:sec|eq|fig|tbl|def|prop|thm|lem|cor|rmk|exa):[\w-]+\]"
+    r"|\{#(?:fig|tbl):[\w-]+\}"
     r"|\b(?:section|equation|figure|table|definition|proposition|theorem|lemma|"
     r"corollary|remark|example)\s+\(?\?\?",
     re.IGNORECASE,
 )
 TOKEN = re.compile(r"\{\{[A-Z][A-Z0-9_]*\}\}")
+CAPTION_LABEL = re.compile(r"(?m)^[ \t]*(Figure|Table)[ \t]+(\d+)[ \t]*:")
+AUX_LABEL = re.compile(r"(?m)^\\newlabel\{((?:fig|tbl):[a-z0-9_-]+)\}\{\{(\d+)\}")
 
 
 def pdf_text(pdf: Path) -> list[str]:
@@ -95,9 +101,26 @@ def text_left_margin(pdf: Path, page: int) -> float | None:
 def caption_pages(pages: list[str]) -> dict[int, int]:
     """Return how many figure captions each physical page carries."""
     return {
-        number: len(re.findall(r"^Figure \d+:", text, re.M))
+        number: sum(kind == "Figure" for kind, _ in CAPTION_LABEL.findall(text))
         for number, text in enumerate(pages, start=1)
     }
+
+
+def caption_inventory(pages: list[str], kind: str, expected: int) -> tuple[bool, str]:
+    """Compare printed caption numbers with the sequence implied by the source."""
+    counts = Counter(int(number) for page in pages for label, number in CAPTION_LABEL.findall(page)
+                     if label == kind)
+    wanted = set(range(1, expected + 1))
+    missing = sorted(wanted - counts.keys())
+    unexpected = sorted(counts.keys() - wanted)
+    repeated = sorted(number for number, count in counts.items() if count > 1)
+    differences = [f"{name} {items}" for name, items in (
+        ("missing", missing), ("unexpected", unexpected), ("repeated", repeated),
+    ) if items]
+    report = f"{kind.lower()} captions: {counts.total()}/{expected}"
+    if differences:
+        return False, f"{report} ({'; '.join(differences)})"
+    return True, report
 
 
 def panel_page_map(pages: list[str]) -> dict[str, int]:
@@ -120,8 +143,9 @@ def contents_page(pages: list[str]) -> int | None:
 
 
 def missing_keys(text: str, keys: tuple[str, ...]) -> list[str]:
-    """Return the registry keys that do not appear in the rendered text."""
-    return [key for key in keys if key not in text]
+    """Return missing registry keys, accepting words wrapped across two lines."""
+    unwrapped = re.sub(r"(?<=[a-z0-9-])\n[ \t]*(?=[a-z0-9-])", "", text)
+    return [key for key in keys if key not in text and key not in unwrapped]
 
 
 def log_findings(log_text: str) -> dict[str, object]:
@@ -163,22 +187,28 @@ def check(
 
     captions = caption_pages(pages)
     for panel, expected in zip(PANELS, PANEL_PAGES, strict=True):
-        ok = captions.get(expected, 0) >= 1
+        ok = captions.get(expected, 0) == 1
         passed &= ok
         lines.append(
-            f"{panel} figure on page {expected}: {'ok' if ok else 'FAIL (no caption)'}"
+            f"{panel} figure on page {expected}: {'ok' if ok else 'FAIL (expected one caption)'}"
         )
-    total_captions = sum(captions.values())
+    references = index_references(read_sections(PROJECT / "manuscript"))
+    figure_labels = set(references.labels("fig"))
+    table_labels = set(references.labels("tbl"))
+    for kind, labels in (("Figure", figure_labels), ("Table", table_labels)):
+        ok, report = caption_inventory(pages, kind, len(labels))
+        lines.append(report)
+        passed &= ok
+
     registry_file = pdf.parent.parent / "figures" / "figure_registry.json"
-    if registry_file.is_file():
+    if log is not None and registry_file.is_file():
         payload = json.loads(registry_file.read_text(encoding="utf-8"))
-        expected = sum(1 for item in payload["figures"] if item["label"] != "fig:cover")
-        note = f"expected from the accessibility registry: {expected}"
-    else:
-        expected = len(PANELS) + 11
-        note = f"at least {expected} expected (no accessibility registry found)"
-    lines.append(f"figure captions: {total_captions} ({note})")
-    passed &= total_captions >= expected
+        entries = payload["figures"]
+        expected = {figure.label: figure.filename for figure in references.figures} | {"fig:cover": "fig_cover.png"}
+        observed = {entry["label"]: entry["filename"] for entry in entries}
+        registry_ok = len(entries) == len(observed) and expected == observed and all(entry.get("alt") for entry in entries)
+        lines.append(f"accessibility registry matches image declarations: {'ok' if registry_ok else 'FAIL'}")
+        passed &= registry_ok
 
     margin_page = min(PANEL_PAGES[-1] + 2, len(pages))
     margin = text_left_margin(pdf, margin_page)
@@ -200,7 +230,7 @@ def check(
     )
     passed &= contents_ok
 
-    text = "\n".join(pages)
+    text = "\f".join(pages)
     absent = missing_keys(text, keys)
     lines.append(f"registry keys printed: {len(keys) - len(absent)}/{len(keys)}")
     if absent:
@@ -225,6 +255,16 @@ def check(
         passed &= not findings["undefined_citations"]
         passed &= not findings["undefined_references"]
         passed &= not findings["unresolved_tokens"]
+        aux = log.with_suffix(".aux")
+        if aux.is_file():
+            labels = Counter(label for label, _ in AUX_LABEL.findall(aux.read_text(encoding="utf-8")))
+            mismatches = sorted((figure_labels | table_labels) ^ labels.keys())
+            repeated = sorted(label for label, count in labels.items() if count > 1)
+            aux_ok = not mismatches and not repeated
+            lines.append(f"LaTeX figure and table targets: {sum(labels.values())}/{len(figure_labels | table_labels)}")
+            if mismatches or repeated:
+                lines.append("  mismatched or repeated labels: " + ", ".join(mismatches + repeated))
+            passed &= aux_ok
     else:
         lines.append(f"log: not found at {log}")
         passed = False
