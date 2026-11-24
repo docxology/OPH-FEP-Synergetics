@@ -67,6 +67,7 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         make_figures.repair_transfer_figure(),
         make_figures.geometry_transfer_figure(),
         make_figures.jitterbug_figure(),
+        make_figures.jitterbug_observation_figure(),
         make_figures.jitterbug_poster_figure(),
         make_figures.cover_figure(),
     ]
@@ -88,6 +89,7 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         "fig:repair-transfer",
         "fig:geometry-transfer",
         "fig:jitterbug",
+        "fig:jitterbug-observation-limits",
         "fig:ga-jitterbug",
         "fig:cover",
     }
@@ -107,6 +109,8 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
     assert f"{len(make_figures.CORRESPONDENCES)} claims" in cover["alt_text"]
     centroid = next(entry for entry in payload["figures"] if entry["label"] == "fig:centroid-memory")
     assert all(value in centroid["alt"] for value in ("1/180", "1/60", "1/72", "1/48"))
+    observations = next(entry for entry in payload["figures"] if entry["label"] == "fig:jitterbug-observation-limits")
+    assert all(value in observations["alt"] for value in ("-841/75240", "841/125400", "4/7", "1/1089"))
     poster = next(entry for entry in payload["figures"] if entry["label"] == "fig:ga-jitterbug")
     assert all(value in poster["alt"].lower() for value in ("nearest", "octahedral", "gaussian", "repair"))
     standalone = tmp_path / "OPH-FEP-Synergetics_Jitterbug_Poster.pdf"

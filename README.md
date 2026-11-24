@@ -25,7 +25,7 @@ binds numerical results to computations or cited sources.
 ## What runs
 
 ```
-oph-fep-synergetics verify                 # all 80 correspondence probes
+oph-fep-synergetics verify                 # all 83 correspondence probes
 oph-fep-synergetics verify --json          # the same, as a machine-readable report
 oph-fep-synergetics verify --key pr01-obstruction
 oph-fep-synergetics verify --key jitterbug-octahedral-gaussian-limit --key jitterbug-averaged-repair-limit
@@ -84,21 +84,23 @@ python3 -m venv .venv
 | | `core/surface_duality.py` | harmonic covariance and nonreciprocal weights on a square torus |
 | | `core/constraint_screening.py` | constrained Gaussian half-fields on larger FCC boundaries |
 | | `core/jitterbug_inference.py` | exact weighted matching contrasts and coordinate lag closure |
+| | `core/jitterbug_motion.py` | moving-coordinate covariance and the invariant six-slot readout |
+| | `core/jitterbug_projection.py` | finite pair-mean precision and pair-total lag defects |
 | | `core/jitterbug_repair.py` | stationary pair-load memory and the accelerated octahedral repair limit |
 | `geometry` | `geometry/quadray.py` | quadray coordinates, the A3/IVM embedding and exact tetravolumes |
 | | `geometry/lattice.py` | IVM shells, quadray classes of FCC sites and interstices, the cuboctahedral shell, Voronoi cell and packing density |
 | | `geometry/subdivision.py` | icosahedral subdivision and the dual count identities |
 | | `geometry/solids.py` | oriented faces, polyhedron volume, and the icosahedron's tetravolume against its closed form |
 | | `geometry/jitterbug.py` | fixed-bar Jitterbug coordinates and exact hull, bar and nearest-pair comparisons |
-| `analysis` | `analysis/registry.py` | the 80 registered correspondences, each with a pairwise or three-way scope and an executable probe |
+| `analysis` | `analysis/registry.py` | the 83 registered correspondences, each with a pairwise or three-way scope and an executable probe |
 | | `analysis/provenance.py` | source pins, licence terms and reuse policy |
 | `manuscript_variables` | `manuscript_variables/values.py` | every number the prose may quote, derived from the package where a derivation exists |
 
 ## The registry
 
-80 entries: **39 isomorphisms**, **31 disagreements**, **10 complementarities**,
+83 entries: **40 isomorphisms**, **33 disagreements**, **10 complementarities**,
 scoped to the pairs `oph-fep` (31), `synergetics-oph` (16), `fep-synergetics` (5)
-and `three-way` (28). All 80 probes pass. `verify --kind` narrows a run to one of
+and `three-way` (31). All 83 probes pass. `verify --kind` narrows a run to one of
 the three kinds and `--pair` to one of the four scopes. The full table, with the OPH / FEP /
 Synergetics reading of each entry and the values its probe asserts, is generated
 into [docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
@@ -117,11 +119,13 @@ and plane screening under global constraints.
 The [Jitterbug chapter](manuscript/07_jitterbug.md) reconstructs Fuller's
 fixed-bar path from the cuboctahedron through the regular icosahedron to
 octahedral joint coalescence. The nearest-only graph separates into dimers
-after regularity. A unique conductance law preserves Gaussian covariance
-closure at fixed poses. The hard Gaussian constraint gives an octahedral
-precision, while finite-rate pair repair retains memory. Fast within-pair
-mixing yields a separate octahedral occupancy process on the accelerated
-clock.
+after regularity. Tuning gives Gaussian covariance closure at each fixed
+pose. Moving the coordinate readout introduces a signed residual. Retaining
+six fixed components restores the covariance match. At finite weights,
+hidden pair differences affect both the marginal Gaussian precision and
+the two-step repair covariance. The hard Gaussian constraint gives a
+doubled octahedral precision. Fast within-pair mixing gives an octahedral
+occupancy process on the accelerated clock.
 
 Selected results follow.
 
@@ -243,8 +247,8 @@ repair and grounded FCC screening. Pages 2 to 5 cover claim scope, the OPH
 carrier, repair and lattice costs, and tetravolumes. The Jitterbug poster
 on page 6 follows the linkage past the regular icosahedron to the paired
 octahedral sites. It shows nearest-pair disconnection, the tuned conductance
-rule, and how Gaussian equality and averaged binary repair behave at the
-endpoint.
+rule, the moving-pose obstruction and the effects of hidden pair differences.
+It also compares the Gaussian and repair limits at the paired endpoint.
 
 To regenerate the figures without invoking LaTeX, run
 `.venv/bin/python scripts/make_figures.py`. It writes the poster as
@@ -276,7 +280,7 @@ The manuscript checks cover four contracts.
 
 ```
 data/sources.json                    pinned sources, licences, cited identifiers
-docs/CORRESPONDENCES.md              generated: the 80 entries and their probe values
+docs/CORRESPONDENCES.md              generated: the 83 entries and their probe values
 docs/MANUSCRIPT_VALUES.md            generated: every bound value
 docs/CONCORDANCE.md                  generated: claims, references and bound values quoted in figure captions
 docs/PROVENANCE.md                   the pins and the reuse rules
@@ -286,11 +290,11 @@ data/ontology_concordance.json       structured terms, comparisons, evidence and
 manuscript/                          paper, bibliography and generated ontology supplement
 scripts/check_local_ci.py           checks the committed tree locally on Python 3.14
 scripts/render_docs.py               regenerates the reference documents and ontology supplement
-scripts/make_figures.py              renders the thirty figures, standalone vector poster and accessibility registry
+scripts/make_figures.py              renders the 31 figures, standalone vector poster and accessibility registry
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (474 tests)
+tests/                               the suite (480 tests)
 ```
 
 ## Tests and local CI
@@ -311,7 +315,7 @@ checks. During development you can run the suite directly.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-474 tests. The suite checks exact values rather than
+480 tests. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

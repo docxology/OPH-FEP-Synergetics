@@ -41,14 +41,14 @@ gives one; `Note` records what is measured rather than quoted.
 | `two_node.relaxation_min_radius_measured` | 0.840070783 |  | two_node_relaxation_orbit, measured in this package | minimum over the finite post-transient relaxation sample |
 | `two_node.relaxation_max_radius` | 1.05339122 |  | two_node_relaxation_orbit, measured in this package | maximum over the finite post-transient relaxation sample |
 | `two_node.relaxation_period_measured` | 7.575 |  | two_node_relaxation_orbit, measured in this package at dt = 1e-3 | estimated time to return near the anchor point of the sampled trajectory |
-| `registry.entries` | 80 | `80` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.isomorphisms` | 39 | `39` | analysis/registry.py CORRESPONDENCES |  |
-| `registry.disagreements` | 31 | `31` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.entries` | 83 | `83` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.isomorphisms` | 40 | `40` | analysis/registry.py CORRESPONDENCES |  |
+| `registry.disagreements` | 33 | `33` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.complementarities` | 10 | `10` | analysis/registry.py CORRESPONDENCES |  |
 | `registry.oph_fep` | 31 |  | analysis/registry.py CORRESPONDENCES, pairwise scope oph-fep |  |
 | `registry.fep_synergetics` | 5 |  | analysis/registry.py CORRESPONDENCES, pairwise scope fep-synergetics |  |
 | `registry.synergetics_oph` | 16 |  | analysis/registry.py CORRESPONDENCES, pairwise scope synergetics-oph |  |
-| `registry.three_way` | 28 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
+| `registry.three_way` | 31 |  | analysis/registry.py CORRESPONDENCES, pairwise scope three-way |  |
 | `carrier.tree_number` | 5184000 | `5184000` | core/invariants.py, Kirchhoff: the exact reduced-Laplacian determinant |  |
 | `gmrf.marginal_variance` | 0.194444444 | `7/36` | core/invariants.py, the reciprocal spectrum summed exactly in the rationals |  |
 | `gmrf.blanket_size` | 5 | `five` | core/invariants.py: the Markov blanket of a port is its neighbours |  |
@@ -289,6 +289,14 @@ gives one; `Note` records what is measured rather than quoted.
 | `jitterbug.pair_load_count` | 21 |  | probe:jitterbug-averaged-repair-limit:pair_load_count |  |
 | `jitterbug.mass_clock_decay_rate` | 2 |  | probe:jitterbug-averaged-repair-limit:mass_clock_decay_rate |  |
 | `jitterbug.centred_count_covariance` | 10/33 |  | probe:jitterbug-averaged-repair-limit:centred_count_covariance |  |
+| `jitterbug.moving_poses` | (3/5, 1/2, 1/3) |  | probe:jitterbug-moving-closure-obstruction:moving_poses |  |
+| `jitterbug.moving_covariance_scale` | 20/33 |  | probe:jitterbug-moving-closure-obstruction:moving_covariance_scale |  |
+| `jitterbug.moving_defect` | -841/75240 |  | probe:jitterbug-moving-closure-obstruction:moving_defect |  |
+| `jitterbug.reversal_defect` | 841/125400 |  | probe:jitterbug-moving-closure-obstruction:reversal_defect |  |
+| `jitterbug.odd_readout_dimension` | 6 |  | probe:jitterbug-augmented-lag-realization:odd_readout_dimension |  |
+| `jitterbug.pair_mean_opposite_precision` | 4/7 |  | probe:jitterbug-pair-projection-defect:pair_mean_opposite_precision |  |
+| `jitterbug.pair_mean_contrast_variances` | (11/48, 7/24) |  | probe:jitterbug-pair-projection-defect:pair_mean_contrast_variances |  |
+| `jitterbug.pair_odd_lag_defect` | 1/1089 |  | probe:jitterbug-pair-projection-defect:pair_odd_lag_defect |  |
 | `carrier.chart_0` | 1, 5, 7, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 0 |
 | `carrier.chart_1` | 0, 5, 7, 8, 9 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 1 |
 | `carrier.chart_2` | 3, 4, 6, 10, 11 |  | core/carrier.py OPH_NEIGHBOURS: the port chart derived from OPH_ORIENTED_BASE_FACES | the five neighbours of port 2 |

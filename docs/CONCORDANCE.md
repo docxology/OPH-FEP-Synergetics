@@ -91,8 +91,11 @@ argue by key.
 | `jitterbug-octahedral-gaussian-limit` | isomorphism | exact-on-domain | three-way | `07_jitterbug.md` | yes |
 | `jitterbug-pair-load-memory` | disagreement | obstructed | three-way | `07_jitterbug.md` | yes |
 | `jitterbug-averaged-repair-limit` | isomorphism | exact-on-domain | three-way | `07_jitterbug.md` | yes |
+| `jitterbug-moving-closure-obstruction` | disagreement | obstructed | three-way | `07_jitterbug.md` | yes |
+| `jitterbug-augmented-lag-realization` | isomorphism | exact-on-domain | three-way | `07_jitterbug.md` | yes |
+| `jitterbug-pair-projection-defect` | disagreement | obstructed | three-way | `07_jitterbug.md` | yes |
 
-80 of 80 claims are named by at least one section's prose.
+83 of 83 claims are named by at least one section's prose.
 
 ## Sections
 
@@ -107,7 +110,7 @@ argue by key.
 | `05_disagreements.md` | `pr01-obstruction`, `free-energy-name-collision`, `mediator-obstruction`, `stationary-blanket`, `solenoidal-freedom`, `d-stability`, `schedule-path`, `reduction-criterion`, `existence-without-reachability`, `directed-gradient`, `four-cycle-local-minimum`, `cuboctahedron-vs-icosahedron`, `shell-vs-free-energy`, `vertex-shells`, `twelve-around-one-families` |
 | `06_complementarities.md` | `quadray-ivm`, `equilibrium-propagation`, `replicator-potential`, `kissing-twelve`, `effective-resistance`, `two-record-resistance`, `dual-cells`, `conjugation-norm` |
 | `06_finite_extensions.md` | `repair-first-entry`, `repair-distance-lumping`, `grounded-forest-precision`, `greedy-record-placement`, `planar-dual-covariance`, `cuboctahedral-spectral-chords`, `cuboctahedral-distance-split` |
-| `07_jitterbug.md` | `jitterbug-rigid-motion`, `jitterbug-graph-obstruction`, `jitterbug-weighted-precision`, `jitterbug-coordinate-closure`, `jitterbug-nearest-only-obstruction`, `jitterbug-weight-policy-obstruction`, `jitterbug-octahedral-gaussian-limit`, `jitterbug-pair-load-memory`, `jitterbug-averaged-repair-limit` |
+| `07_jitterbug.md` | `jitterbug-rigid-motion`, `jitterbug-graph-obstruction`, `jitterbug-weighted-precision`, `jitterbug-coordinate-closure`, `jitterbug-nearest-only-obstruction`, `jitterbug-weight-policy-obstruction`, `jitterbug-octahedral-gaussian-limit`, `jitterbug-pair-load-memory`, `jitterbug-averaged-repair-limit`, `jitterbug-moving-closure-obstruction`, `jitterbug-augmented-lag-realization`, `jitterbug-pair-projection-defect` |
 | `07_scope.md` | `pr01-obstruction`, `reduction-criterion` |
 | `07_three_way_limits.md` | `repair-contrast-quotient`, `repair-distance-counterexample`, `reciprocal-dual-weights`, `copied-dual-weight-obstruction`, `quadratic-even-field`, `quadratic-isotropy-obstruction`, `central-plane-screening`, `repair-centroid-memory` |
 | `07_transfer_criteria.md` | `distance-regular-repair`, `bipartite-contrast-collision`, `periodic-fcc-contrast-collision`, `linear-lag-closure`, `single-seam-lag-obstruction`, `surface-harmonic-covariance`, `copied-surface-weight-obstruction`, `root-shell-quadratic-precision`, `fcc-plane-screen-transfer`, `centered-gaussian-screen-obstruction` |
@@ -134,6 +137,7 @@ argue by key.
 | `fig:geometry-transfer` | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | `copied-surface-weight-obstruction` |
 | `fig:ivm` | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) | *none* |
 | `fig:jitterbug` | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | *none* |
+| `fig:jitterbug-observation-limits` | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | *none* |
 | `fig:mediator` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | `mediator-obstruction`, `reduction-criterion` |
 | `fig:network` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) | *none* |
 | `fig:orbit` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | *none* |
@@ -226,9 +230,12 @@ argue by key.
 | `prop:jitterbug-coordinate-closure` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
 | `prop:jitterbug-nearest-only-obstruction` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
 | `prop:jitterbug-weight-policy-obstruction` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
+| `prop:jitterbug-moving-closure` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
+| `prop:jitterbug-augmented-lag` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
 | `prop:jitterbug-octahedral-gaussian-limit` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
 | `prop:jitterbug-pair-load-memory` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
 | `prop:jitterbug-averaged-repair-limit` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
+| `prop:jitterbug-pair-projection` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
 | `prop:repair-contrast-record` | prop | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) |
 | `prop:repair-centroid-memory` | prop | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
 | `prop:reciprocal-dual-weights` | prop | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
@@ -406,12 +413,20 @@ argue by key.
 | `{{JITTERBUG_MATCHING_VARIANCES}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_METRIC_FIRST_VS_COLLAPSE_FIRST_EDGES}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_MICROSTATE_COUNT}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_MOVING_COVARIANCE_SCALE}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_MOVING_DEFECT}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_MOVING_POSES}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_OCTAHEDRAL_EDGES}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_OCTAHEDRAL_FULL_CONTRASTS}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_OCTAHEDRAL_JOINTS}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_OCTAHEDRAL_UNIT_BAR_CHORD_FACTOR}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_ODD_READOUT_DIMENSION}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_PAIR_LOAD_COUNT}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_PAIR_MEAN_CONTRAST_VARIANCES}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_PAIR_MEAN_OPPOSITE_PRECISION}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_PAIR_ODD_LAG_DEFECT}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_PRECISION_RATIO}}` | `07_jitterbug.md` |
+| `{{JITTERBUG_REVERSAL_DEFECT}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_RIGID_BARS}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_RIGID_TRIANGLES}}` | `07_jitterbug.md` |
 | `{{JITTERBUG_SPHERE_CONTACT_THRESHOLD_SQUARED}}` | `07_jitterbug.md` |
@@ -554,7 +569,7 @@ argue by key.
 | `{{VORONOI_FACES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `06_complementarities.md` |
 | `{{VORONOI_VERTICES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `06_complementarities.md` |
 
-293 of the bound values are quoted by the prose. The cover is
+301 of the bound values are quoted by the prose. The cover is
 placed by `manuscript/config.yaml`; the accessibility registry that gives
 each figure its alternative text is `output/figures/figure_registry.json`,
 written by `scripts/make_figures.py`.

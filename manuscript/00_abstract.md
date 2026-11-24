@@ -46,7 +46,10 @@ Fuller's fixed-bar Jitterbug passes through the regular icosahedral
 carrier to paired octahedral sites. Past regularity, the hull stays
 connected while nearest-only seams split into dimers. A unique matching
 conductance still preserves Gaussian lag covariance at each distinct
-pose. At coalescence the Gaussian gives a doubled octahedral precision,
+pose. Moving observations break that closure, which six fixed readout
+dimensions restore at the level of covariances. At finite weights, the
+same hidden pair contrasts change Gaussian precision and repair lag
+covariances. At coalescence the Gaussian gives a doubled octahedral precision,
 while finite-weight repair retains pair-load memory and yields a
 Markov quotient only in the accelerated limit studied here.
 Cuboctahedral and icosahedral configurations attain the same kissing number

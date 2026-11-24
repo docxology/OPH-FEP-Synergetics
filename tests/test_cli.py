@@ -28,7 +28,7 @@ def test_version_flag(capsys):
 def test_verify_reports_every_probe(capsys):
     assert main(["verify"]) == 0
     out = capsys.readouterr().out
-    assert "80/80 probes passed" in out
+    assert "83/83 probes passed" in out
     assert "[FAIL]" not in out
     assert "carrier-port-chart" in out
     assert "pr01-obstruction" in out
@@ -40,14 +40,14 @@ def test_verify_json_payload_is_complete(capsys):
     assert main(["verify", "--json"]) == 0
     payload = json.loads(capsys.readouterr().out)
     assert payload["schema_version"] == "1.2"
-    assert payload["summary"]["total"] == 80
+    assert payload["summary"]["total"] == 83
     assert payload["summary"]["failed"] == 0
     assert payload["summary"]["failures"] == []
-    assert len(payload["results"]) == 80
+    assert len(payload["results"]) == 83
     assert all(result["passed"] for result in payload["results"])
     assert all(result["values"] for result in payload["results"])
     assert all(result["pair"] in payload["summary"]["by_pair"] for result in payload["results"])
-    assert sum(entry["passed"] for entry in payload["summary"]["by_pair"].values()) == 80
+    assert sum(entry["passed"] for entry in payload["summary"]["by_pair"].values()) == 83
 
 
 def test_verify_selects_named_probes(capsys):
@@ -58,7 +58,7 @@ def test_verify_selects_named_probes(capsys):
 def test_verify_selects_one_pairwise_scope(capsys):
     assert main(["verify", "--pair", "three-way"]) == 0
     out = capsys.readouterr().out
-    assert "28/28 probes passed" in out
+    assert "31/31 probes passed" in out
     assert "tetravolume-arithmetic" in out
     assert "conjugation-norm" in out
     assert "jitterbug-averaged-repair-limit" in out

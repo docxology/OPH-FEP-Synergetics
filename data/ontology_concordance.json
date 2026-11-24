@@ -682,6 +682,45 @@
           "limit": "Scale the clock by total attempt weight before sending the matching weight to infinity.",
           "probes": ["jitterbug-averaged-repair-limit"],
           "citations": ["oph", "stachel1994heureka", "giardina2009duality"]
+        },
+        {
+          "id": "jitterbug-moving-readout",
+          "term": "Moving coordinate readout",
+          "meanings": {
+            "oph": "Each departure-pose update preserves the uniform two-token law.",
+            "fep": "The middle-coordinate Gaussian Markov identity has a signed residual.",
+            "synergetics": "Fixed bars link the same labels while their positions change."
+          },
+          "relation": "counterexample",
+          "limit": "Two attempts at prescribed distinct-joint departure poses with unit bars and individually tuned closing weights. Holding either leg fixed gives a zero residual.",
+          "probes": ["jitterbug-moving-closure-obstruction"],
+          "citations": ["oph", "stachel1994heureka"]
+        },
+        {
+          "id": "jitterbug-odd-slots",
+          "term": "Fixed sign-supported slots",
+          "meanings": {
+            "oph": "Both mean repair operators preserve the six linear slots.",
+            "fep": "A Gaussian state-space model matches their lag covariances.",
+            "synergetics": "Two slot coefficients per axis recover the coordinates in every pose."
+          },
+          "relation": "conditional-identity",
+          "limit": "Stationary marginal and lag covariances for prescribed finite schedules of nonnegative matching weights. The dimension bound applies to fixed linear spaces containing the coordinates at two poses.",
+          "probes": ["jitterbug-augmented-lag-realization"],
+          "citations": ["oph", "stachel1994heureka", "kalman1960filtering"]
+        },
+        {
+          "id": "jitterbug-pair-mean",
+          "term": "Finite projection onto closing pairs",
+          "meanings": {
+            "oph": "Observed pair totals retain a lag-two covariance defect.",
+            "fep": "Marginal pair-mean precision has a positive opposite-site entry.",
+            "synergetics": "Pairing joint labels defines site means and hidden internal differences."
+          },
+          "relation": "counterexample",
+          "limit": "Unit bars, finite common matching conductance, a centred Gaussian field and fair repair on the binary two-token shell. The Gaussian sign test concerns literal arithmetic means.",
+          "probes": ["jitterbug-pair-projection-defect"],
+          "citations": ["oph", "fuller1975synergetics", "dorfler2013kron"]
         }
       ]
     }

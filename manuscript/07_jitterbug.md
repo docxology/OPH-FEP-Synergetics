@@ -208,6 +208,90 @@ weights from $w=1/t-t$ keep the coordinate space invariant at all
 distinct-joint poses. The `jitterbug-weight-policy-obstruction` probe
 checks the lag defect by projecting full weighted transition matrices.
 
+## Moving poses and the missing coordinate {#sec:jitterbug-moving}
+
+The posewise result in [@prop:jitterbug-coordinate-closure] compares repeated
+attempts at a fixed geometry. Consider instead three observation times at
+poses $a,b,c$ with $0<t\leq1$ for each pose ratio $t$, allowing repeats.
+Use one fair binary repair attempt at each departure pose, first $a$ and
+then $b$. At each attempt the bars have unit conductance
+and the closing seams use the tuned weight $w(t)=1/t-t$. Each repair kernel
+preserves the uniform law on the two-token shell, so the same uniform law
+holds at all three times when used initially. The protocol sets the poses
+and attempt times independently of the repair outcomes.
+
+::: {.proposition #prop:jitterbug-moving-closure}
+Let $Y_t$ be the sum of the two occupied unscaled joint positions at pose $t$.
+For the protocol above, write $C_{ij}$ for their cross-covariance divided by
+{{JITTERBUG_MOVING_COVARIANCE_SCALE}}. The normalised Gaussian Markov covariance residual at the middle
+pose is
+$$
+C_{02}-C_{01}C_{11}^{-1}C_{12}
+=\rho(a)\sigma(b)\,\frac{(a-b)(c-b)}{1+b^2}\,I_3,
+$$
+where $\rho(t)=1-(4-2t)/(2W_t)$,
+$\sigma(t)=1-(4+2/t)/(2W_t)$, and $W_t=24+6w(t)$.
+It is strictly negative on the diagonal during strict contraction
+$a>b>c>0$, and also during strict expansion $0<a<b<c$. A reversal
+with unequal legs gives a positive diagonal residual. Holding either
+leg fixed gives zero.
+:::
+
+To obtain [@prop:jitterbug-moving-closure], the stationary covariance of the
+binary occupancy vector is a quarter of that scale times the centred
+projector. A coordinate
+axis uses two disjoint sign-supported vectors, each of squared norm four. Its
+coefficients are $b_t=(t,1)$ and its orthogonal companion is $v_t=(1,-t)$.
+In this two-dimensional block, tuned mean repair has eigenvectors $b_t$ and
+$v_t$ with eigenvalues $\rho(t)$ and $\sigma(t)$. Conditioning a Gaussian
+on the middle coordinate subtracts its projection onto $b_b$. The residual
+therefore contains $b_a^{\mathsf T}v_b v_b^{\mathsf T}b_c/(1+b^2)$,
+with the two stated retention factors. Both factors are positive. For
+positions scaled to a fixed bar length, the residual is multiplied by the
+positive scale factors of the first and last poses. If the departure poses
+are held for $m$ and $n$ attempts, the two factors become $\rho(a)^m$ and
+$\sigma(b)^n$. The sign persists for finite attempt counts, including
+zero. It follows from the changing observation subspace.
+
+The `jitterbug-moving-closure-obstruction` probe enumerates all
+{{JITTERBUG_MICROSTATE_COUNT}} binary states and both weighted transition
+matrices. At the three post-icosahedral poses {{JITTERBUG_MOVING_POSES}},
+the normalised residual is {{JITTERBUG_MOVING_DEFECT}}. The reversal control
+gives {{JITTERBUG_REVERSAL_DEFECT}}. The strict expansion control gives a
+negative residual, and holding either leg gives zero.
+A Gaussian process on the measured coordinates would require zero
+conditional covariance between the endpoints given the middle observation.
+[@fig:jitterbug-observation-limits] shows the signed test as the final pose varies.
+
+::: {.proposition #prop:jitterbug-augmented-lag}
+Retaining both sign-supported slots for each of the three spatial axes
+gives a fixed {{JITTERBUG_ODD_READOUT_DIMENSION}}-dimensional readout.
+For any sequence of nonnegative closing weights, this readout admits a
+Gaussian Markov process with the same linear lag covariances as fair repair.
+Any fixed linear readout space that contains all three geometric coordinates
+at two distinct poses must contain these six dimensions.
+:::
+
+Both the bar and matching kernels leave the six slots in
+[@prop:jitterbug-augmented-lag] invariant. After normalising their common
+stationary covariance to the identity, the transition restricted to the
+slots is a symmetric contraction $A_i$ at step $i$. A Gaussian recursion
+with transition $A_i$ and independent innovations of covariance $I-A_i^2$
+preserves the identity as its marginal covariance. Its cross-covariances
+are the same products of the restricted transitions that compute the
+repair cross-covariances. This uses a time-dependent linear state-space
+representation [@kalman1960filtering]. The
+`jitterbug-augmented-lag-realization` probe verifies invariance for the two
+constituent kernels and the two-step covariance identity in the augmented
+readout. At each pose, including the companion $v_t$ alongside $b_t$ recovers
+the fixed six-slot basis. The resulting agreement concerns second moments.
+
+
+The normalised formulas also hold for any uniform fixed binary load with
+$1\leq k\leq11$. The centred occupancy covariance scales by
+$k(12-k)/(12\cdot11)$, and the linear mean repair is unchanged. The
+enumerated probes use $k=2$.
+
 ## Two reductions at the octahedral limit {#sec:jitterbug-octahedral-reductions}
 
 Let $D$ copy one value at each octahedral site onto its pair of joints.
@@ -322,3 +406,64 @@ and dashed lines mark the hull diagonals. Beyond the regular icosahedron the
 diagonals are shorter than the bars. The lower plots show the length ratio
 and compare the conductance that preserves coordinate lag covariance with
 inverse-square weighting and the dotted unit baseline.](../output/figures/fig_jitterbug.png){#fig:jitterbug width=100%}
+
+## Finite pair means and their hidden contrasts {#sec:jitterbug-finite-projection}
+
+The limit in [@prop:jitterbug-octahedral-gaussian-limit] gives hard equality
+within each closing pair. At finite weight one can instead observe the
+arithmetic means of its two field values. Let $U$ embed orthonormal pair
+means and $V$ embed pair differences. Work on the centred label space and
+write the precision blocks in these bases as $A=U^{\mathsf T}LU$,
+$B=V^{\mathsf T}LU$, and $H=V^{\mathsf T}LV$. The finite Gaussian marginal
+precision in orthonormal mean coordinates is $A-B^{\mathsf T}H^{-1}B$.
+The hard equality restriction has precision $A$. For the associated fair
+repair, let $\Delta=B^{\mathsf T}B/(4W^2)$ be the normalised lag-two covariance
+defect of pair totals, by [@prop:lag-closure-transfer]. For the fixed-shell
+fair repair and any complementary orthonormal split of the centred label
+space with positive $H$, the Schur correction $A-S$, where
+$S=A-B^{\mathsf T}H^{-1}B$, has the same nullspace as $\Delta$. In positive
+semidefinite order,
+$$
+\frac{4W^2}{\lambda_{\max}(H)}\Delta
+\preceq A-S \preceq
+\frac{4W^2}{\lambda_{\min}(H)}\Delta.
+$$
+At the Jitterbug pairs $H$ is scalar, so both bounds coincide.
+
+::: {.proposition #prop:jitterbug-pair-projection}
+For finite matching weight $w\geq0$, put $h=4+2w$ and let $\Pi_-$ project onto
+the three odd opposite-site modes of the octahedron. The precision blocks
+satisfy $A=L_{\mathrm{oct}}$, $H=hI$, and $B^{\mathsf T}B=4\Pi_-$.
+The marginal precision in literal pair means is
+$2L_{\mathrm{oct}}-(8/h)\Pi_-$. It has positive opposite-site entries
+$4/h$. The normalised repair lag-two defect of pair totals is
+$\Pi_-/W^2$, with $W=24+6w$.
+:::
+
+For [@prop:jitterbug-pair-projection], each unit octahedral edge represents
+two bars, and their action on pair sums gives $A=L_{\mathrm{oct}}$ in the
+orthonormal basis. The three odd modes couple with coefficient magnitude
+two to their pair differences. The two centred even modes have no such
+coupling. The hidden block has eigenvalue $h$ on all six difference modes.
+Literal means are $1/\sqrt{2}$ times the orthonormal coordinates, which
+doubles precision. The odd projector has opposite-site entry minus one half,
+so the finite marginal's zero-row-sum precision cannot be realised with
+nonnegative octahedral edge conductances. Ordinary Kron reduction removes
+selected vertex potentials and preserves the Laplacian sign pattern
+[@dorfler2013kron]. Here the eliminated coordinates are differences in a
+rotated mean-and-difference basis.
+
+At the tuned half-ratio pose, $w={{JITTERBUG_HALF_POSE_WEIGHT}}$, the
+opposite-site entry is {{JITTERBUG_PAIR_MEAN_OPPOSITE_PRECISION}}.
+Adjacent and opposite marginal variances are
+{{JITTERBUG_PAIR_MEAN_CONTRAST_VARIANCES}}, compared with the hard-limit
+values in [@prop:jitterbug-octahedral-gaussian-limit]. The odd lag-two
+covariance defect at the same pose is {{JITTERBUG_PAIR_ODD_LAG_DEFECT}}.
+The `jitterbug-pair-projection-defect` probe checks the blocks and Gaussian
+contrasts using the exact twelve-vertex Green matrix. It checks the lag
+defect by aggregating the two-step counts of all binary microstates. The
+static correction decays with inverse closing weight, while the one-attempt
+clock lag defect decays with inverse weight squared. The separate finite
+pair-load memory result is tested in [@prop:jitterbug-pair-load-memory].
+
+![Two tests of Jitterbug readouts. Left, with the two departure poses fixed, contraction gives a negative residual in the Gaussian Markov covariance identity. A hold gives zero, and reversal gives a positive residual. Right, the finite pair-mean precision has a positive opposite-site entry and the pair-total lag covariance has a positive defect on odd opposite-site modes and zero on even modes. The highlighted conductance is the tuned weight at the middle pose.](../output/figures/fig_jitterbug_observation_limits.png){#fig:jitterbug-observation-limits width=100%}

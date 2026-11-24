@@ -3147,6 +3147,17 @@ def jitterbug_figure() -> Path:
     )
 
 
+def jitterbug_observation_figure() -> Path:
+    """Plot two observable covariance obstructions and exact controls."""
+    if __package__:
+        from .jitterbug_observation_figure import draw_jitterbug_observation_limits
+    else:
+        from jitterbug_observation_figure import draw_jitterbug_observation_limits
+
+    figure, alt = draw_jitterbug_observation_limits()
+    return _save(figure, "fig_jitterbug_observation_limits.png", alt)
+
+
 def jitterbug_poster_figure() -> Path:
     """Write the manuscript image and a standalone vector poster."""
     if __package__:
@@ -3229,6 +3240,7 @@ def main() -> int:
         repair_transfer_figure,
         geometry_transfer_figure,
         jitterbug_figure,
+        jitterbug_observation_figure,
     )
     unrendered = {
         name

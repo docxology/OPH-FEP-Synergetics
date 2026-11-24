@@ -95,13 +95,16 @@ diagnostics below `1e-9` in magnitude are reported as such.
 | three-way | isomorphism | exact-on-domain | `jitterbug-octahedral-gaussian-limit` | Infinite tuned matching conductance forces equality within each coalescing pair. In common site-value coordinates, the limiting centred Gaussian precision is twice the unit octahedral Laplacian. |
 | three-way | disagreement | obstructed | `jitterbug-pair-load-memory` | Identifying coincident geometry and Gaussian field values does not yield a Markov chain of binary pair loads at finite matching weight. The projected process retains memory even at stationarity. |
 | three-way | isomorphism | exact-on-domain | `jitterbug-averaged-repair-limit` | On the accelerated clock proportional to total attempt weight, infinitely fast matching repair yields a two-capacity octahedral generator with mean operator minus half the unit Laplacian. Its coordinate lag correlation decays at rate two. |
+| three-way | disagreement | obstructed | `jitterbug-moving-closure-obstruction` | Instantaneous conductance tuning leaves a nonzero covariance residual when the geometric readout changes on both legs of a two-attempt protocol. |
+| three-way | isomorphism | exact-on-domain | `jitterbug-augmented-lag-realization` | The six fixed sign-supported slots realise all linear lag covariances as a time-dependent Gaussian Markov process for nonnegative matching weights. Two distinct poses already demand this dimension of a fixed linear space. |
+| three-way | disagreement | obstructed | `jitterbug-pair-projection-defect` | Finite elimination of pair differences gives a positive opposite-site Gaussian precision entry and the same hidden coupling produces a rank-three pair-total lag-two defect. |
 
-Totals: 80/80 probes pass, 0 fail.
+Totals: 83/83 probes pass, 0 fail.
 
 By kind:
 
-- isomorphism: 39 passing, 0 failing
-- disagreement: 31 passing, 0 failing
+- isomorphism: 40 passing, 0 failing
+- disagreement: 33 passing, 0 failing
 - complementarity: 10 passing, 0 failing
 
 By pairwise scope:
@@ -109,7 +112,7 @@ By pairwise scope:
 - oph-fep: 31 passing, 0 failing
 - fep-synergetics: 5 passing, 0 failing
 - synergetics-oph: 16 passing, 0 failing
-- three-way: 28 passing, 0 failing
+- three-way: 31 passing, 0 failing
 
 ## `carrier-port-chart`
 
@@ -1963,4 +1966,61 @@ Probe values:
 - `positive_rates` = (1/4, 1/2, 1)
 - `centred_count_covariance` = 10/33
 - `mass_clock_decay_rate` = 2
+
+## `jitterbug-moving-closure-obstruction`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+Instantaneous conductance tuning leaves a nonzero covariance residual when the geometric readout changes on both legs of a two-attempt protocol.
+
+- OPH: Each departure-pose fair repair preserves the uniform two-token law.
+- FEP: The endpoint covariances fail Gaussian Markov closure conditioned on the middle observed coordinate.
+- Synergetics: Moving labelled joints changes the linear readout even with the same bars and matching.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Stachel (1994) for the linkage; moving protocol and witness derived here
+
+Probe values:
+
+- `moving_poses` = (3/5, 1/2, 1/3)
+- `moving_covariance_scale` = 20/33
+- `moving_defect` = -841/75240
+- `reversal_defect` = 841/125400
+- `frozen_defect` = 0
+- `hold_first_defect` = 0
+- `hold_second_defect` = 0
+- `expanding_defect` = -667/59400
+
+## `jitterbug-augmented-lag-realization`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+The six fixed sign-supported slots realise all linear lag covariances as a time-dependent Gaussian Markov process for nonnegative matching weights. Two distinct poses already demand this dimension of a fixed linear space.
+
+- OPH: The bar and matching mean operators both preserve the six-slot subspace.
+- FEP: Independent Gaussian innovations realise the stationary marginal covariances and the repair cross-covariances.
+- Synergetics: The three spatial coordinates are pose-dependent combinations within this fixed six-dimensional space.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Stachel (1994) for geometry; Kalman (1960) for state-space representation; invariant readout derived here
+
+Probe values:
+
+- `odd_readout_dimension` = 6
+- `bar_and_matching_preserve_odd_basis` = (True, True)
+
+## `jitterbug-pair-projection-defect`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+Finite elimination of pair differences gives a positive opposite-site Gaussian precision entry and the same hidden coupling produces a rank-three pair-total lag-two defect.
+
+- OPH: Fair binary repair couples the pair totals to the differences between their labelled loads.
+- FEP: The marginal pair-mean precision has a sign incompatible with a nonnegative site conductance Laplacian.
+- Synergetics: Two bars per quotient edge still connect persistent label pairs before hard equality.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian); Fuller (1975), fig. 460.08 for geometry; Dörfler and Bullo (2013) for Kron reduction; rotated projection derived here
+
+Probe values:
+
+- `pair_mean_opposite_precision` = 4/7
+- `pair_mean_contrast_variances` = (11/48, 7/24)
+- `pair_odd_lag_defect` = 1/1089
+- `sample_weights` = (0, 3/2, 15/4)
+- `lag_defect_rank` = 3
 

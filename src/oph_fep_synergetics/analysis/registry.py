@@ -42,7 +42,7 @@ from ..core import centroid_dynamics
 from ..core import constraint_screening, contrast_quotients
 from ..core import controls as control_module
 from ..core import free_energy as free_energy_module
-from ..core import geometric_screening, jitterbug_inference, jitterbug_repair
+from ..core import geometric_screening, jitterbug_inference, jitterbug_motion, jitterbug_projection, jitterbug_repair
 from ..core import invariants as invariant_module
 from ..core import native_dynamics
 from ..core import network as network_module
@@ -2601,6 +2601,67 @@ def _probe_jitterbug_averaged_repair() -> tuple[bool, dict]:
     ), values
 
 
+def _probe_jitterbug_moving_closure() -> tuple[bool, dict]:
+    row = jitterbug_motion.jitterbug_motion_census()
+    samples = row["samples"]
+    values = {
+        "moving_poses": samples["contracting"]["poses"],
+        "moving_covariance_scale": row["readout_covariance_scale"],
+        "moving_defect": samples["contracting"]["coordinate_lag_defect"],
+        "reversal_defect": samples["reversing"]["coordinate_lag_defect"],
+        "frozen_defect": samples["frozen"]["coordinate_lag_defect"],
+        "hold_first_defect": samples["unchanged_first"]["coordinate_lag_defect"],
+        "hold_second_defect": samples["unchanged_second"]["coordinate_lag_defect"],
+        "expanding_defect": samples["expanding"]["coordinate_lag_defect"],
+    }
+    return (
+        row["microstate_count"] == 66 and row["readout_covariance_scale"] == Fraction(20, 33)
+        and all(all(sample[key] for key in ("formula_matches", "coordinate_isotropic", "uniform_stationary"))
+                for sample in samples.values())
+        and values == {
+            "moving_poses": (Fraction(3, 5), Fraction(1, 2), Fraction(1, 3)),
+            "moving_covariance_scale": Fraction(20, 33),
+            "moving_defect": Fraction(-841, 75240), "reversal_defect": Fraction(841, 125400),
+            "frozen_defect": 0, "hold_first_defect": 0, "hold_second_defect": 0,
+            "expanding_defect": Fraction(-667, 59400),
+        }
+    ), values
+
+
+def _probe_jitterbug_augmented_lag() -> tuple[bool, dict]:
+    row = jitterbug_motion.jitterbug_motion_census()
+    values = {key: row[key] for key in ("odd_readout_dimension", "bar_and_matching_preserve_odd_basis")}
+    return (
+        row["centred_fixed_odd_covariance"]
+        and all(sample["augmented_lag_closes"] and sample["augmented_mean_invariant"]
+                for sample in row["samples"].values())
+        and values == {"odd_readout_dimension": 6, "bar_and_matching_preserve_odd_basis": (True, True)}
+    ), values
+
+
+def _probe_jitterbug_pair_projection() -> tuple[bool, dict]:
+    samples = jitterbug_projection.jitterbug_pair_projection_census()
+    half = samples[1]
+    values = {
+        "pair_mean_opposite_precision": half["pair_mean_opposite_precision"],
+        "pair_mean_contrast_variances": (half["pair_mean_adjacent_variance"], half["pair_mean_opposite_variance"]),
+        "pair_odd_lag_defect": half["odd_lag_two_defect"],
+        "sample_weights": tuple(sample["closing_weight"] for sample in samples),
+        "lag_defect_rank": half["lag_defect_rank"],
+    }
+    return (
+        all(all(sample[key] for key in ("matrix_pair_blocks_match", "matrix_gaussian_marginal_matches",
+                                        "native_pair_lag_matches", "matrix_common_coupling_matches"))
+            and sample["lag_defect_rank"] == 3 for sample in samples)
+        and values == {
+            "pair_mean_opposite_precision": Fraction(4, 7),
+            "pair_mean_contrast_variances": (Fraction(11, 48), Fraction(7, 24)),
+            "pair_odd_lag_defect": Fraction(1, 1089),
+            "sample_weights": (0, Fraction(3, 2), Fraction(15, 4)), "lag_defect_rank": 3,
+        }
+    ), values
+
+
 CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="carrier-port-chart",
@@ -3551,6 +3612,36 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         status="exact-on-domain",
         source=f"{_CARRIER_SOURCE}; Stachel (1994) for the limit geometry; Giardinà et al. (2009), §3.2 for partial exclusion; averaging and lag laws derived here",
         probe=_probe_jitterbug_averaged_repair,
+    ),
+    Correspondence(
+        key="jitterbug-moving-closure-obstruction", kind=DISAGREEMENT, pair=THREE_WAY,
+        claim="Instantaneous conductance tuning leaves a nonzero covariance residual when the geometric readout changes on both legs of a two-attempt protocol.",
+        oph="Each departure-pose fair repair preserves the uniform two-token law.",
+        fep="The endpoint covariances fail Gaussian Markov closure conditioned on the middle observed coordinate.",
+        synergetics="Moving labelled joints changes the linear readout even with the same bars and matching.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; Stachel (1994) for the linkage; moving protocol and witness derived here",
+        probe=_probe_jitterbug_moving_closure,
+    ),
+    Correspondence(
+        key="jitterbug-augmented-lag-realization", kind=ISOMORPHISM, pair=THREE_WAY,
+        claim="The six fixed sign-supported slots realise all linear lag covariances as a time-dependent Gaussian Markov process for nonnegative matching weights. Two distinct poses already demand this dimension of a fixed linear space.",
+        oph="The bar and matching mean operators both preserve the six-slot subspace.",
+        fep="Independent Gaussian innovations realise the stationary marginal covariances and the repair cross-covariances.",
+        synergetics="The three spatial coordinates are pose-dependent combinations within this fixed six-dimensional space.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}; Stachel (1994) for geometry; Kalman (1960) for state-space representation; invariant readout derived here",
+        probe=_probe_jitterbug_augmented_lag,
+    ),
+    Correspondence(
+        key="jitterbug-pair-projection-defect", kind=DISAGREEMENT, pair=THREE_WAY,
+        claim="Finite elimination of pair differences gives a positive opposite-site Gaussian precision entry and the same hidden coupling produces a rank-three pair-total lag-two defect.",
+        oph="Fair binary repair couples the pair totals to the differences between their labelled loads.",
+        fep="The marginal pair-mean precision has a sign incompatible with a nonnegative site conductance Laplacian.",
+        synergetics="Two bars per quotient edge still connect persistent label pairs before hard equality.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}; Fuller (1975), fig. 460.08 for geometry; Dörfler and Bullo (2013) for Kron reduction; rotated projection derived here",
+        probe=_probe_jitterbug_pair_projection,
     ),
 )
 

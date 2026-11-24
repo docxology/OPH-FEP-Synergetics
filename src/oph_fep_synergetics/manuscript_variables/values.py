@@ -401,6 +401,13 @@ def _jitterbug_values() -> tuple[BoundValue, ...]:
         ("jitterbug-averaged-repair-limit", (
             "microstate_count", "pair_load_count", "mass_clock_decay_rate", "centred_count_covariance",
         )),
+        ("jitterbug-moving-closure-obstruction", (
+            "moving_poses", "moving_covariance_scale", "moving_defect", "reversal_defect",
+        )),
+        ("jitterbug-augmented-lag-realization", ("odd_readout_dimension",)),
+        ("jitterbug-pair-projection-defect", (
+            "pair_mean_opposite_precision", "pair_mean_contrast_variances", "pair_odd_lag_defect",
+        )),
     )
     entries = []
     for probe, fields in groups:

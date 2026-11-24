@@ -14,7 +14,7 @@ contracts.
 .venv/bin/oph-fep-synergetics verify --kind <kind>
 ```
 
-Each of the 80 entries carries an executable probe. Its return value
+Each of the 83 entries carries an executable probe. Its return value
 `(passed, values)` records both the verdict and the quantities checked.
 
 Exit codes:
@@ -32,6 +32,15 @@ To check both octahedral limits in the Jitterbug model, select their keys.
 .venv/bin/oph-fep-synergetics verify \
   --key jitterbug-octahedral-gaussian-limit \
   --key jitterbug-averaged-repair-limit
+```
+
+Check the exact moving and finite-pair calculations with the three new keys.
+
+```sh
+.venv/bin/oph-fep-synergetics verify \
+  --key jitterbug-moving-closure-obstruction \
+  --key jitterbug-augmented-lag-realization \
+  --key jitterbug-pair-projection-defect
 ```
 
 ## Local CI
@@ -89,7 +98,7 @@ checks pushes made from that clone. Managed Dependabot operates on GitHub.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-474 tests. The suite runs offline from a fresh process and exercises the actual
+480 tests. The suite runs offline from a fresh process and exercises the actual
 scientific code paths.
 
 | file | what it pins down |
@@ -110,6 +119,8 @@ scientific code paths.
 | `test_constraint_screening.py` | exact FCC plane cuts, joint Gaussian hard and noisy sum conditioning, and a general weighted-graph witness |
 | `test_jitterbug.py` | rigid triangles, supporting hulls, nearest-pair dimers, the sphere-contact threshold and graph construction at octahedral coalescence |
 | `test_jitterbug_inference.py` | weighted precision invariants, exact coordinate projection, lag-defect controls and the hard Gaussian quotient |
+| `test_jitterbug_motion.py` | exact contraction, expansion, two holds, reversal and the six-slot covariance match |
+| `test_jitterbug_projection.py` | exact finite Gaussian marginals, native repair lag defects and their common coupling |
 | `test_jitterbug_repair.py` | finite-weight pair-load memory and exact averaged octahedral rates, balance and mean evolution |
 | `test_controls.py` | the descent census, the Routh column in closed form, the Lyapunov pair and its determinant, the mediator threshold, the affine contrast as an exact rational, the orbits, the four-cycle trap, and the replicator potential |
 | `test_geometry.py` | the twelve moves and their metric, the gauge, the exact xyz round-trip over shell sites, the shell sequence, the exact volumes, the vector equilibrium, and the subdivision identities |

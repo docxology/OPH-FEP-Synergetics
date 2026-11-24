@@ -239,15 +239,22 @@ the first shell and compares grounded, noisy-sum and exact-sum conditioning.
 `jitterbug-weighted-precision`, `jitterbug-coordinate-closure`,
 `jitterbug-nearest-only-obstruction`, `jitterbug-weight-policy-obstruction`,
 `jitterbug-octahedral-gaussian-limit`, `jitterbug-pair-load-memory`,
-`jitterbug-averaged-repair-limit`.
+`jitterbug-averaged-repair-limit`, `jitterbug-moving-closure-obstruction`,
+`jitterbug-augmented-lag-realization`, `jitterbug-pair-projection-defect`.
 
 The coordinate path keeps the eight triangles rigid. The hull already
 has triangulated openings on the contracting branch before the short
 diagonals reach the bar length. The Gaussian comparison distinguishes
 bar-only precision from adding conductance to the short matching.
-The latter gives a unique weight law for the moving linear coordinate
-modes. Past regularity, nearest-only seams disconnect the graph and
+The latter gives a unique weight law for the linear coordinate modes
+at each fixed pose. Past regularity, nearest-only seams disconnect the graph and
 standard weight policies can break lag closure. At coalescence, the
 hard-constraint Gaussian adds the parallel bar conductances, while
 finite-weight pair counts retain memory. Averaging fast matching repair
 on the accelerated clock gives an octahedral occupancy generator.
+
+The moving-pose result tests Gaussian covariance closure across two successive
+departure-pose updates. A fixed six-slot readout restores the covariance
+match for arbitrary nonnegative weight schedules. Finite pair means and
+pair totals expose the same hidden coupling in Gaussian precision and
+repair lag covariances. The new figure and revised poster show these tests.

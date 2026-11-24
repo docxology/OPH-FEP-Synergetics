@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Test Jitterbug observations during motion and at finite matching weight.
+  Add the six-slot covariance construction, exact pair-projection tests,
+  three ontology entries, a new figure and an expanded vector poster.
 - Require Python 3.14 or newer and use Python 3.14 for local CI. The pre-push
   hook requires a Python 3.14 pass receipt for the exact commit sent to `main`.
 - Follow Fuller's fixed-bar Jitterbug through octahedral joint coalescence.

@@ -154,6 +154,13 @@ hold.
   accelerates the clock by total attempt weight. Fast matching repair mixes
   within each pair-count fibre. The finite-weight stationary obstruction is
   recorded separately in `jitterbug-pair-load-memory`.
+- `jitterbug-moving-closure-obstruction` applies to two fair repair attempts
+  at prescribed departure poses from a uniform binary two-token law.
+- `jitterbug-augmented-lag-realization` matches second moments in the six
+  invariant sign-supported slots for finite nonnegative weight schedules.
+- `jitterbug-pair-projection-defect` links the marginal centred Gaussian
+  pair-mean precision to a lag-two covariance defect of fair binary
+  pair totals. Both use unit bars and a finite common matching weight.
 - `centered-gaussian-screen-obstruction` compares a grounded Gaussian with
   the same free field conditioned on an exact or noisy global sum. Screening
   under ordinary clamping alone does not carry to the constrained field.

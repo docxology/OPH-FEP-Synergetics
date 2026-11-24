@@ -112,13 +112,13 @@ uv run --no-project --python 3.14 python scripts/check_local_ci.py  # local CI g
 python3 scripts/local_ci_receipts.py --install                     # pre-push hook
 .venv/bin/python -m pytest tests/ -q                  # the suite
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
-.venv/bin/oph-fep-synergetics verify                  # the registry, all 80 probes
+.venv/bin/oph-fep-synergetics verify                  # the registry, all 83 probes
 .venv/bin/oph-fep-synergetics verify --pair oph-fep   # one pairwise ledger
 .venv/bin/oph-fep-synergetics verify --kind disagreement   # one kind of claim
 .venv/bin/oph-fep-synergetics sources --vault-root /path/to/vault
 .venv/bin/python scripts/render_docs.py               # regenerate the reference docs and supplement
 .venv/bin/python scripts/render_docs.py --check       # fail when stale
-.venv/bin/python scripts/make_figures.py              # thirty figures, vector Jitterbug poster and registry
+.venv/bin/python scripts/make_figures.py              # 31 figures, vector Jitterbug poster and registry
 .venv/bin/python scripts/build.py --template-root /path/to/template
 ```
 
