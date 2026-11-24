@@ -284,6 +284,7 @@ docs/SCOPE.md                        what is reimplemented, what is cited, what 
 docs/VERIFICATION.md                 the gates and how to run them
 data/ontology_concordance.json       structured terms, comparisons, evidence and limits
 manuscript/                          paper, bibliography and generated ontology supplement
+scripts/check_local_ci.py           checks the committed tree locally on Python 3.12 and 3.14
 scripts/render_docs.py               regenerates the reference documents and ontology supplement
 scripts/make_figures.py              renders the thirty figures, standalone vector poster and accessibility registry
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
@@ -292,7 +293,18 @@ src/oph_fep_synergetics/             the package
 tests/                               the suite (471 tests)
 ```
 
-## Tests
+## Tests and local CI
+
+Before publishing, run the local gate on the committed candidate with Git, uv,
+and Poppler's `pdftotext` available.
+
+```sh
+uv run --no-project --python 3.12 python scripts/check_local_ci.py
+```
+
+The gate checks Python 3.12 and 3.14 in separate temporary installations. Both
+must pass. See [local CI](docs/VERIFICATION.md#local-ci) for the individual
+steps and single-version commands. To run just the suite during development:
 
 ```
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
@@ -319,11 +331,9 @@ registry they describe.
 
 Issues and pull requests are welcome on the public remote,
 [docxology/OPH-FEP-Synergetics](https://github.com/docxology/OPH-FEP-Synergetics).
-A pull request that changes a claim, a number or a figure has to keep the gates
-green: [docs/VERIFICATION.md](docs/VERIFICATION.md) lists them, and
-[AGENTS.md](AGENTS.md) records the house rules — the two most important being
-that manuscript numbers are bound tokens and that the generated documents are
-re-rendered, never hand-edited.
+Every candidate for `main` must pass the [local CI gate](docs/VERIFICATION.md#local-ci)
+on both Python versions. Manuscript numbers use bound tokens. Regenerate the
+reference documents from their sources. [Repository instructions](AGENTS.md)
 
 To cite this repository use the machine-readable
 [CITATION.cff](CITATION.cff), which GitHub renders under "Cite this

@@ -16,8 +16,8 @@
 - Expand the cover into a graphical abstract and revise the manuscript figures
   and README diagram. Compare squared chords with Gaussian variance on the
   cover using adjacent port pairs as the common reference.
-- Track the verified `uv.lock` and install its development and figure
-  dependencies in CI on both supported Python versions exercised there.
+- Track `uv.lock` for reproducible installation of the runtime, development and
+  figure dependencies.
 - Add a README overview with one executable example for each pair of programs.
   Cite *Agreement and Surprise* at the results it supplies and distinguish
   those results from derivations and examples introduced here.
@@ -29,9 +29,11 @@
   shell. The broken-seam gate terminates with multiple reachable normal forms.
   The binary-chain probe separates pathwise load energy from ensemble relative
   entropy and checks the port relaxation gap.
-- Run the suite, coverage gate, probes and generated-doc freshness checks on
-  GitHub Actions. Round measured values in the generated tables for portability;
-  the verifier continues to return its raw values.
+- Run local CI on Python 3.12 and 3.14 through `scripts/check_local_ci.py`. Both
+  must pass before publishing the commit. The project GitHub Actions workflow
+  was removed.
+- Round measured values in the generated tables for portability. The verifier
+  continues to return its raw values.
 - Distinguish the proper Gaussian's seam Markov blankets from the intrinsic
   zero-sum field's covariance and its constrained conditional laws.
 - Include the pinned source register in regular installations so the

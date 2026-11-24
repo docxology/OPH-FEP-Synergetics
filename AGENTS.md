@@ -108,6 +108,7 @@ or manuscript sources and regenerate them with `scripts/render_docs.py`.
 ## Commands
 
 ```
+uv run --no-project --python 3.12 python scripts/check_local_ci.py  # both local CI versions
 .venv/bin/python -m pytest tests/ -q                  # the suite
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 .venv/bin/oph-fep-synergetics verify                  # the registry, all 80 probes
@@ -140,16 +141,18 @@ requires an interpreter that passes the template's bytecode audit.
 
 ## Definition of done
 
-- `pytest` is green and coverage stays at or above the 90% gate.
-- `oph-fep-synergetics verify` exits 0 with all probes passing.
-- `scripts/render_docs.py --check` exits 0.
+- The [local CI gate](docs/VERIFICATION.md#local-ci) passes on Python 3.12 and
+  3.14 for the exact candidate commit. It installs the locked package, checks the
+  installed source register, runs the tests at the 90% coverage gate, verifies
+  all probes and checks the generated documents.
 - Any new number in prose exists as a `BoundValue` and appears in
   `docs/MANUSCRIPT_VALUES.md`.
 - Any new correspondence names its OPH, FEP and Synergetics reading and its
   source.
-- The manuscript renders. The PDF has no unresolved reference placeholders,
-  and its LaTeX log has no overfull boxes or undefined references or citations.
-  The printed figure captions match the numbered manuscript inventory.
+- Rebuild the manuscript when its rendering inputs change. The PDF has no
+  unresolved reference placeholders, and its LaTeX log has no overfull boxes or
+  undefined references or citations. The printed captions match the numbered
+  manuscript inventory.
   Check the cover and changed figure pages at page size. The tagged PDF uses
   the alternative descriptions in the figure registry and cover configuration.
 - The test count in `README.md` and `docs/VERIFICATION.md` matches the collected
@@ -172,5 +175,7 @@ requires an interpreter that passes the template's bytecode audit.
 - Publish only to the configured
   [docxology/OPH-FEP-Synergetics](https://github.com/docxology/OPH-FEP-Synergetics)
   remote through the maintainer's approved workflow. In GitVault, follow the
-  owned-project publication procedure in the vault's operations guide. Verify
-  the published commit and its required checks. Never force-push.
+  owned-project publication procedure in the vault's operations guide. Complete
+  both local CI checks before pushing, then verify that the remote points to the
+  tested commit. Project CI runs locally. Managed Dependabot operates separately.
+  Never force-push.
