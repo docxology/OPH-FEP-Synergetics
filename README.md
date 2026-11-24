@@ -290,7 +290,7 @@ scripts/make_figures.py              renders the thirty figures, standalone vect
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (471 tests)
+tests/                               the suite (474 tests)
 ```
 
 ## Tests and local CI
@@ -304,13 +304,14 @@ uv run --no-project --python 3.12 python scripts/check_local_ci.py
 
 The gate checks Python 3.12 and 3.14 in separate temporary installations. Both
 must pass. See [local CI](docs/VERIFICATION.md#local-ci) for the individual
-steps and single-version commands. To run just the suite during development:
+steps and single-version commands. Install the [pre-push hook](docs/VERIFICATION.md#pre-push-hook)
+in each checkout used to publish `main`. To run just the suite during development:
 
 ```
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-471 tests. The suite checks exact values rather than
+474 tests. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

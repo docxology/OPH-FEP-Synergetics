@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Guard local pushes to `main` with per-commit Python 3.12 and 3.14 pass
+  receipts. The repository provides an installer for the pre-push hook.
+
 - Follow Fuller's fixed-bar Jitterbug through octahedral joint coalescence.
   Five probes distinguish nearest-only disconnection, conductance-policy
   obstructions, a hard Gaussian constraint, finite-weight pair-load memory

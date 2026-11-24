@@ -60,6 +60,31 @@ interpreters available and the cache populated, set `UV_OFFLINE=1` for an offlin
 run. On GitVault, use the qualified offline test runner and retain its receipt
 for the tested commit.
 
+## Pre-push hook
+
+Install the hook once per checkout from the repository root. Git runs it using
+`python3` on `PATH`.
+
+```sh
+python3 scripts/local_ci_receipts.py --install
+```
+
+The installer puts an executable copy in the repository's default hooks
+directory. It preserves unrelated hooks and asks for review when Git uses a
+custom hooks path. Re-run the installer when the hook policy changes. In GitVault,
+run this command under the project repository lease before publishing.
+
+The gate writes passing receipts to `output/local-ci/<commit>/<python>.json`
+in the checkout where it runs. Each receipt records the full commit ID and the
+Python patch version. The hook checks the object being sent to
+`refs/heads/main`, including when the push uses an explicit SHA or a different
+local branch. Both receipts must match that object. A new commit needs a new
+pair of receipts. Run the checks in the checkout that will push. In GitVault,
+the qualified local test runner can write these ignored outputs.
+
+This is a client-side hook. Each clone installs its own copy, and the hook
+checks pushes made from that clone. Managed Dependabot operates on GitHub.
+
 ## The suite
 
 ```
@@ -67,7 +92,7 @@ for the tested commit.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-471 tests. The suite runs offline from a fresh process and exercises the actual
+474 tests. The suite runs offline from a fresh process and exercises the actual
 scientific code paths.
 
 | file | what it pins down |
@@ -104,6 +129,7 @@ scientific code paths.
 | `test_manuscript_variables.py` | every bound value, cross-checked against the function that produces it |
 | `test_cli.py` | every subcommand, the JSON payloads, the exit codes, and the console-script declaration |
 | `test_public_api.py` | that every exported name resolves, and that no prefix of a pinned commit appears anywhere in the package |
+| `test_pre_push.py` | exact commit and Python receipt checks, destination filtering and safe hook installation |
 | `test_docs.py` | current generated documents and ontology supplement, registry mentions in the main prose, and working relative links in the guides |
 | `test_manuscript.py` | the authored and generated sections the renderer discovers, token and citation coverage, an explicit label on each top-level heading, registry table order, and correspondence between figure links and the accessibility registry when artefacts exist |
 | `test_figures.py` | that every figure builder exists and is orchestrated, and that a sample renders non-trivial PNGs plus a well-formed registry (skipped without the `figures` extra) |

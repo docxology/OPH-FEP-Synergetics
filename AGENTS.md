@@ -109,6 +109,7 @@ or manuscript sources and regenerate them with `scripts/render_docs.py`.
 
 ```
 uv run --no-project --python 3.12 python scripts/check_local_ci.py  # both local CI versions
+python3 scripts/local_ci_receipts.py --install                     # pre-push hook
 .venv/bin/python -m pytest tests/ -q                  # the suite
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 .venv/bin/oph-fep-synergetics verify                  # the registry, all 80 probes
@@ -176,6 +177,7 @@ requires an interpreter that passes the template's bytecode audit.
   [docxology/OPH-FEP-Synergetics](https://github.com/docxology/OPH-FEP-Synergetics)
   remote through the maintainer's approved workflow. In GitVault, follow the
   owned-project publication procedure in the vault's operations guide. Complete
-  both local CI checks before pushing, then verify that the remote points to the
-  tested commit. Project CI runs locally. Managed Dependabot operates separately.
+  both local CI checks before pushing. Install the [pre-push hook](docs/VERIFICATION.md#pre-push-hook)
+  in the publishing checkout and verify that the remote points to the tested
+  commit. Project CI runs locally. Managed Dependabot operates separately.
   Never force-push.
