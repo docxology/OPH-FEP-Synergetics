@@ -13,14 +13,14 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 from typing import Iterable
 
-VERSIONS = ("3.12", "3.14")
+PYTHON_VERSION = "3.14"
 SCHEMA = 1
 HOOK_MARKER = b"# OPH-FEP-Synergetics local CI pre-push hook"
-RUN_GATE = "uv run --no-project --python 3.12 python scripts/check_local_ci.py"
+RUN_GATE = f"uv run --no-project --python {PYTHON_VERSION} python scripts/check_local_ci.py"
 
 
-def _receipt_path(root: Path, commit: str, version: str) -> Path:
-    path = root.resolve() / "output" / "local-ci" / commit / f"{version}.json"
+def _receipt_path(root: Path, commit: str) -> Path:
+    path = root.resolve() / "output" / "local-ci" / commit / f"{PYTHON_VERSION}.json"
     if path.resolve() != path:
         raise ValueError(f"Expected an ordinary local CI receipt path: {path}")
     return path
@@ -39,32 +39,32 @@ def _atomic_write(path: Path, data: bytes, mode: int) -> None:
             temporary.unlink(missing_ok=True)
 
 
-def is_version(runtime: object, version: str) -> bool:
-    return isinstance(runtime, str) and re.fullmatch(rf"{re.escape(version)}\.\d+", runtime) is not None
+def is_gate_version(runtime: object) -> bool:
+    return isinstance(runtime, str) and re.fullmatch(rf"{re.escape(PYTHON_VERSION)}\.\d+", runtime) is not None
 
 
 def _is_commit(commit: str) -> bool:
     return re.fullmatch(r"(?:[0-9a-f]{40}|[0-9a-f]{64})", commit) is not None and bool(commit.strip("0"))
 
 
-def record_pass(root: Path, commit: str, version: str, runtime: str) -> Path:
-    if not _is_commit(commit) or version not in VERSIONS or not is_version(runtime, version):
+def record_pass(root: Path, commit: str, runtime: str) -> Path:
+    if not _is_commit(commit) or not is_gate_version(runtime):
         raise ValueError("A local CI pass requires a full commit ID and the requested Python runtime.")
     payload = {"schema": SCHEMA, "commit": commit, "python": runtime, "result": "passed"}
-    path = _receipt_path(root, commit, version)
+    path = _receipt_path(root, commit)
     _atomic_write(path, (json.dumps(payload, indent=2) + "\n").encode(), 0o600)
     return path
 
 
-def _passed(root: Path, commit: str, version: str) -> bool:
+def _passed(root: Path, commit: str) -> bool:
     try:
-        record = json.loads(_receipt_path(root, commit, version).read_text(encoding="utf-8"))
+        record = json.loads(_receipt_path(root, commit).read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return False
     if not isinstance(record, dict) or set(record) != {"schema", "commit", "python", "result"}:
         return False
     return (type(record["schema"]) is int and record["schema"] == SCHEMA and record["commit"] == commit
-            and record["result"] == "passed" and is_version(record["python"], version))
+            and record["result"] == "passed" and is_gate_version(record["python"]))
 
 
 def pre_push(root: Path, updates: Iterable[str]) -> None:
@@ -77,9 +77,8 @@ def pre_push(root: Path, updates: Iterable[str]) -> None:
             continue
         if not _is_commit(commit):
             raise ValueError("An update to refs/heads/main must publish a tested commit.")
-        missing = [version for version in VERSIONS if not _passed(root, commit, version)]
-        if missing:
-            raise ValueError(f"{commit} is missing passing local CI receipts for Python {', '.join(missing)}.\n"
+        if not _passed(root, commit):
+            raise ValueError(f"{commit} is missing a passing local CI receipt for Python {PYTHON_VERSION}.\n"
                              f"Check out and test the commit before pushing to main.\n  {RUN_GATE}")
 
 

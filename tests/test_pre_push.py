@@ -15,16 +15,19 @@ def update(commit=CANDIDATE, destination=MAIN):
     return f"refs/heads/topic {commit} {destination} {PREVIOUS}\n"
 
 
-def test_main_requires_both_valid_receipts_for_the_pushed_object(tmp_path):
-    for version in receipts.VERSIONS:
-        receipts.record_pass(tmp_path, PREVIOUS, version, version + ".1")
-    with pytest.raises(ValueError, match=f"{CANDIDATE}.*3.12, 3.14"):
+def test_main_requires_the_python_314_receipt_for_the_pushed_object(tmp_path):
+    previous = receipts.record_pass(tmp_path, PREVIOUS, "3.14.10")
+    with pytest.raises(ValueError, match=rf"{CANDIDATE}.*Python 3\.14"):
         receipts.pre_push(tmp_path, [update()])
 
-    receipts.record_pass(tmp_path, CANDIDATE, "3.12", "3.12.16")
-    with pytest.raises(ValueError, match="Python 3.14"):
+    legacy = previous.parent.parent / CANDIDATE / "3.12.json"
+    legacy.parent.mkdir()
+    legacy.write_text(json.dumps({"schema": 1, "commit": CANDIDATE, "python": "3.12.16", "result": "passed"}))
+    with pytest.raises(ValueError, match=r"Python 3\.14"):
         receipts.pre_push(tmp_path, [update()])
-    other = receipts.record_pass(tmp_path, CANDIDATE, "3.14", "3.14.10")
+    with pytest.raises(ValueError, match="requested Python runtime"):
+        receipts.record_pass(tmp_path, CANDIDATE, "3.15.2")
+    other = receipts.record_pass(tmp_path, CANDIDATE, "3.14.10")
     receipts.pre_push(tmp_path, [update()])
     record = json.loads(other.read_text())
     for wrong in ({"commit": PREVIOUS}, {"python": "3.12.16"}, {"result": "failed"}, {"schema": True}):

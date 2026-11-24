@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the committed checkout locally on Python 3.12 and 3.14."""
+"""Validate the committed checkout locally on Python 3.14."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ import tarfile
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from local_ci_receipts import VERSIONS, is_version, record_pass
+from local_ci_receipts import PYTHON_VERSION, is_gate_version, record_pass
 
 ROOT = Path(__file__).resolve().parents[1]
 PDF = Path("output/pdf/OPH-FEP-Synergetics_combined.pdf")
@@ -50,7 +50,7 @@ def check_version(version: str, archive: Path, work: Path) -> str:
         cwd=source, env=env)
     runtime = subprocess.check_output((python, "-c", "import platform; print(platform.python_version())"),
                                       cwd=work, env=env, text=True).strip()
-    if not is_version(runtime, version):
+    if not is_gate_version(runtime):
         raise RuntimeError(f"Expected Python {version}, got {runtime}.")
     print(f"Python {runtime}", flush=True)
     print(f"== Python {version}: installed source register ==", flush=True)
@@ -65,7 +65,8 @@ def check_version(version: str, archive: Path, work: Path) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--python", choices=VERSIONS, help="Run one version. With no selection, run both.")
+    parser.add_argument("--python", choices=(PYTHON_VERSION,), default=PYTHON_VERSION,
+                        help="Select the Python 3.14 gate explicitly.")
     args = parser.parse_args()
     for tool in ("git", "uv", "pdftotext"):
         if shutil.which(tool) is None:
@@ -76,18 +77,16 @@ def main() -> int:
         changes = subprocess.check_output((*git, "status", "--porcelain", "--untracked-files=no"), cwd=ROOT)
         if changes:
             raise RuntimeError("Commit the tracked changes before running the local CI gate.")
-        versions = (args.python,) if args.python else VERSIONS
         print(f"Local CI for {commit}", flush=True)
         with TemporaryDirectory(prefix="oph-fep-local-ci-") as temporary:
             work = Path(temporary)
             archive = work / "source.tar"
             with archive.open("wb") as stream:
                 subprocess.run((*git, "archive", commit), cwd=ROOT, stdout=stream, stdin=subprocess.DEVNULL, check=True)
-            passes = {version: check_version(version, archive, work / version) for version in versions}
-        for version, runtime in passes.items():
-            receipt = record_pass(ROOT, commit, version, runtime)
-            print(f"Recorded Python {runtime} pass in {receipt}", flush=True)
-        print(f"Local CI passed for {commit} on Python {', '.join(versions)}", flush=True)
+            runtime = check_version(args.python, archive, work / args.python)
+        receipt = record_pass(ROOT, commit, runtime)
+        print(f"Recorded Python {runtime} pass in {receipt}", flush=True)
+        print(f"Local CI passed for {commit} on Python {PYTHON_VERSION}", flush=True)
     except (RuntimeError, ValueError, OSError, subprocess.CalledProcessError) as error:
         print(f"Local CI failed: {error}", file=sys.stderr)
         return 1

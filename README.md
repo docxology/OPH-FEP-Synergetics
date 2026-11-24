@@ -48,7 +48,7 @@ uv sync --locked --extra dev --extra figures
 uv run --locked --extra dev --extra figures oph-fep-synergetics verify
 ```
 
-The package requires Python 3.12 or newer and NumPy. The `dev` extra adds
+The package requires Python 3.14 or newer and NumPy. The `dev` extra adds
 pytest and pytest-cov. The `figures` extra adds Matplotlib for the figure suite
 and manuscript build. Add `--no-editable` to `uv sync` for a regular install.
 The installed `sources` command reads the bundled source register from any
@@ -284,7 +284,7 @@ docs/SCOPE.md                        what is reimplemented, what is cited, what 
 docs/VERIFICATION.md                 the gates and how to run them
 data/ontology_concordance.json       structured terms, comparisons, evidence and limits
 manuscript/                          paper, bibliography and generated ontology supplement
-scripts/check_local_ci.py           checks the committed tree locally on Python 3.12 and 3.14
+scripts/check_local_ci.py           checks the committed tree locally on Python 3.14
 scripts/render_docs.py               regenerates the reference documents and ontology supplement
 scripts/make_figures.py              renders the thirty figures, standalone vector poster and accessibility registry
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
@@ -299,13 +299,13 @@ Before publishing, run the local gate on the committed candidate with Git, uv,
 and Poppler's `pdftotext` available.
 
 ```sh
-uv run --no-project --python 3.12 python scripts/check_local_ci.py
+uv run --no-project --python 3.14 python scripts/check_local_ci.py
 ```
 
-The gate checks Python 3.12 and 3.14 in separate temporary installations. Both
-must pass. See [local CI](docs/VERIFICATION.md#local-ci) for the individual
-steps and single-version commands. Install the [pre-push hook](docs/VERIFICATION.md#pre-push-hook)
-in each checkout used to publish `main`. To run just the suite during development:
+The gate tests the committed tree in a fresh Python 3.14 installation. Install
+the [pre-push hook](docs/VERIFICATION.md#pre-push-hook) in each checkout used to
+publish `main`. The [local CI guide](docs/VERIFICATION.md#local-ci) describes the
+checks. During development you can run the suite directly.
 
 ```
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
@@ -333,7 +333,7 @@ registry they describe.
 Issues and pull requests are welcome on the public remote,
 [docxology/OPH-FEP-Synergetics](https://github.com/docxology/OPH-FEP-Synergetics).
 Every candidate for `main` must pass the [local CI gate](docs/VERIFICATION.md#local-ci)
-on both Python versions. Manuscript numbers use bound tokens. Regenerate the
+on Python 3.14. Manuscript numbers use bound tokens. Regenerate the
 reference documents from their sources. [Repository instructions](AGENTS.md)
 
 To cite this repository use the machine-readable

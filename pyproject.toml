@@ -12,7 +12,7 @@ authors = [
     {name = "Daniel Ari Friedman", email = "daniel@activeinference.institute"},
     {name = "Bernhard Mueller"},
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.14"
 dependencies = [
     "numpy>=1.24.0",
 ]

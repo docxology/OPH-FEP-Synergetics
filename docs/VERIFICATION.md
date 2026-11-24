@@ -37,27 +37,25 @@ To check both octahedral limits in the Jitterbug model, select their keys.
 ## Local CI
 
 Run the publication gate from the repository root after committing the candidate.
-Install Git, uv and Poppler's `pdftotext`. uv can supply Python 3.12 and 3.14.
+Install Git, uv and Poppler's `pdftotext`. uv can supply Python 3.14.
 
 ```sh
-uv run --no-project --python 3.12 python scripts/check_local_ci.py
+uv run --no-project --python 3.14 python scripts/check_local_ci.py
 ```
 
-The script prints the commit SHA and checks its archived Git tree on both Python
-versions. Each version gets a clean, noneditable install of the `dev` and
-`figures` extras from `uv.lock`. The gate runs the installed `sources --json`
+The script prints the commit SHA and checks its archived Git tree with a clean,
+noneditable Python 3.14 install of the `dev` and `figures` extras from `uv.lock`.
+The gate runs the installed `sources --json`
 command outside the staged checkout, runs the full test suite with at least 90%
 coverage, verifies all executable probes, and checks the generated documents.
 The tests include the committed PDF contract. The [manuscript build gate](#the-manuscript-gates)
 checks a fresh render and its LaTeX log when rendering inputs change.
 
-For a single version, append `--python 3.12` or `--python 3.14`. Both versions
-must pass on the same commit before publishing. Project CI runs locally. GitHub's
-managed Dependabot runs independently.
+The exact commit must pass the Python 3.14 gate before publishing. Project CI
+runs locally. GitHub's managed Dependabot runs independently.
 
-The gate can install missing interpreters and dependencies through uv. With both
-interpreters available and the cache populated, set `UV_OFFLINE=1` for an offline
-run. On GitVault, use the qualified offline test runner and retain its receipt
+The gate can install Python 3.14 and dependencies through uv. With Python 3.14
+available and the cache populated, set `UV_OFFLINE=1` for an offline run. On GitVault, use the qualified offline test runner and retain its receipt
 for the tested commit.
 
 ## Pre-push hook
@@ -74,13 +72,12 @@ directory. It preserves unrelated hooks and asks for review when Git uses a
 custom hooks path. Re-run the installer when the hook policy changes. In GitVault,
 run this command under the project repository lease before publishing.
 
-The gate writes passing receipts to `output/local-ci/<commit>/<python>.json`
-in the checkout where it runs. Each receipt records the full commit ID and the
-Python patch version. The hook checks the object being sent to
-`refs/heads/main`, including when the push uses an explicit SHA or a different
-local branch. Both receipts must match that object. A new commit needs a new
-pair of receipts. Run the checks in the checkout that will push. In GitVault,
-the qualified local test runner can write these ignored outputs.
+The gate writes `output/local-ci/<commit>/3.14.json` in the checkout where it
+runs. The receipt records the full commit ID and the Python patch version.
+The hook checks the object being sent to `refs/heads/main`, including when the
+push uses an explicit SHA or a different local branch. The receipt must match
+that object. Run the gate for each new commit in the checkout that will push.
+In GitVault, the qualified local test runner can write this ignored output.
 
 This is a client-side hook. Each clone installs its own copy, and the hook
 checks pushes made from that clone. Managed Dependabot operates on GitHub.
@@ -143,8 +140,7 @@ identity.
 
 `pyproject.toml` enforces `fail_under = 90` with branch coverage over
 `src/oph_fep_synergetics`. The command above reports the current result and any
-uncovered statements or branches. The local CI gate runs this command on Python
-3.12 and 3.14.
+uncovered statements or branches. The local CI gate runs this command on Python 3.14.
 
 ```sh
 uv lock --check

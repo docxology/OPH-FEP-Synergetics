@@ -108,7 +108,7 @@ or manuscript sources and regenerate them with `scripts/render_docs.py`.
 ## Commands
 
 ```
-uv run --no-project --python 3.12 python scripts/check_local_ci.py  # both local CI versions
+uv run --no-project --python 3.14 python scripts/check_local_ci.py  # local CI gate
 python3 scripts/local_ci_receipts.py --install                     # pre-push hook
 .venv/bin/python -m pytest tests/ -q                  # the suite
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
@@ -142,8 +142,8 @@ requires an interpreter that passes the template's bytecode audit.
 
 ## Definition of done
 
-- The [local CI gate](docs/VERIFICATION.md#local-ci) passes on Python 3.12 and
-  3.14 for the exact candidate commit. It installs the locked package, checks the
+- The [local CI gate](docs/VERIFICATION.md#local-ci) passes on Python 3.14 for
+  the exact candidate commit. It installs the locked package, checks the
   installed source register, runs the tests at the 90% coverage gate, verifies
   all probes and checks the generated documents.
 - Any new number in prose exists as a `BoundValue` and appears in
@@ -177,7 +177,7 @@ requires an interpreter that passes the template's bytecode audit.
   [docxology/OPH-FEP-Synergetics](https://github.com/docxology/OPH-FEP-Synergetics)
   remote through the maintainer's approved workflow. In GitVault, follow the
   owned-project publication procedure in the vault's operations guide. Complete
-  both local CI checks before pushing. Install the [pre-push hook](docs/VERIFICATION.md#pre-push-hook)
+  the Python 3.14 local gate before pushing. Install the [pre-push hook](docs/VERIFICATION.md#pre-push-hook)
   in the publishing checkout and verify that the remote points to the tested
   commit. Project CI runs locally. Managed Dependabot operates separately.
   Never force-push.

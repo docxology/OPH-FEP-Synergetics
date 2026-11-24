@@ -2,9 +2,8 @@
 
 ## Unreleased
 
-- Guard local pushes to `main` with per-commit Python 3.12 and 3.14 pass
-  receipts. The repository provides an installer for the pre-push hook.
-
+- Require Python 3.14 or newer and use Python 3.14 for local CI. The pre-push
+  hook requires a Python 3.14 pass receipt for the exact commit sent to `main`.
 - Follow Fuller's fixed-bar Jitterbug through octahedral joint coalescence.
   Five probes distinguish nearest-only disconnection, conductance-policy
   obstructions, a hard Gaussian constraint, finite-weight pair-load memory
@@ -32,9 +31,8 @@
   shell. The broken-seam gate terminates with multiple reachable normal forms.
   The binary-chain probe separates pathwise load energy from ensemble relative
   entropy and checks the port relaxation gap.
-- Run local CI on Python 3.12 and 3.14 through `scripts/check_local_ci.py`. Both
-  must pass before publishing the commit. The project GitHub Actions workflow
-  was removed.
+- Replace the project GitHub Actions workflow with the local CI gate in
+  `scripts/check_local_ci.py`.
 - Round measured values in the generated tables for portability. The verifier
   continues to return its raw values.
 - Distinguish the proper Gaussian's seam Markov blankets from the intrinsic
