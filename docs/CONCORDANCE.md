@@ -94,8 +94,14 @@ argue by key.
 | `jitterbug-moving-closure-obstruction` | disagreement | obstructed | three-way | `07_jitterbug.md` | yes |
 | `jitterbug-augmented-lag-realization` | isomorphism | exact-on-domain | three-way | `07_jitterbug.md` | yes |
 | `jitterbug-pair-projection-defect` | disagreement | obstructed | three-way | `07_jitterbug.md` | yes |
+| `moving-readout-history` | isomorphism | exact-on-domain | three-way | `07_transfer_criteria.md` | yes |
+| `consecutive-readout-obstruction` | disagreement | obstructed | three-way | `07_transfer_criteria.md` | yes |
+| `balanced-pair-transfer` | isomorphism | exact-on-domain | three-way | `07_transfer_criteria.md` | yes |
+| `pair-precision-sign-obstruction` | disagreement | obstructed | three-way | `07_transfer_criteria.md` | yes |
+| `pair-count-lumpability-obstruction` | disagreement | obstructed | three-way | `07_transfer_criteria.md` | yes |
+| `switching-pair-obstruction` | disagreement | obstructed | three-way | `07_transfer_criteria.md` | yes |
 
-83 of 83 claims are named by at least one section's prose.
+89 of 89 claims are named by at least one section's prose.
 
 ## Sections
 
@@ -113,7 +119,7 @@ argue by key.
 | `07_jitterbug.md` | `jitterbug-rigid-motion`, `jitterbug-graph-obstruction`, `jitterbug-weighted-precision`, `jitterbug-coordinate-closure`, `jitterbug-nearest-only-obstruction`, `jitterbug-weight-policy-obstruction`, `jitterbug-octahedral-gaussian-limit`, `jitterbug-pair-load-memory`, `jitterbug-averaged-repair-limit`, `jitterbug-moving-closure-obstruction`, `jitterbug-augmented-lag-realization`, `jitterbug-pair-projection-defect` |
 | `07_scope.md` | `pr01-obstruction`, `reduction-criterion` |
 | `07_three_way_limits.md` | `repair-contrast-quotient`, `repair-distance-counterexample`, `reciprocal-dual-weights`, `copied-dual-weight-obstruction`, `quadratic-even-field`, `quadratic-isotropy-obstruction`, `central-plane-screening`, `repair-centroid-memory` |
-| `07_transfer_criteria.md` | `distance-regular-repair`, `bipartite-contrast-collision`, `periodic-fcc-contrast-collision`, `linear-lag-closure`, `single-seam-lag-obstruction`, `surface-harmonic-covariance`, `copied-surface-weight-obstruction`, `root-shell-quadratic-precision`, `fcc-plane-screen-transfer`, `centered-gaussian-screen-obstruction` |
+| `07_transfer_criteria.md` | `distance-regular-repair`, `bipartite-contrast-collision`, `periodic-fcc-contrast-collision`, `linear-lag-closure`, `single-seam-lag-obstruction`, `surface-harmonic-covariance`, `copied-surface-weight-obstruction`, `root-shell-quadratic-precision`, `fcc-plane-screen-transfer`, `centered-gaussian-screen-obstruction`, `moving-readout-history`, `consecutive-readout-obstruction`, `balanced-pair-transfer`, `pair-precision-sign-obstruction`, `pair-count-lumpability-obstruction`, `switching-pair-obstruction` |
 | `08_reproducibility.md` | *none* |
 | `99_references.md` | *none* |
 
@@ -142,6 +148,7 @@ argue by key.
 | `fig:network` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) | *none* |
 | `fig:orbit` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | *none* |
 | `fig:pair-triangles` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) | *none* |
+| `fig:readout-transfer` | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md), [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | *none* |
 | `fig:registry` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) | *none* |
 | `fig:repair-transfer` | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | `periodic-fcc-contrast-collision`, `single-seam-lag-obstruction` |
 | `fig:sandwich` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) | `free-energy-dictionary`, `free-energy-name-collision` |
@@ -244,6 +251,12 @@ argue by key.
 | `prop:distance-regular-repair` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
 | `prop:resistance-collision` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
 | `prop:lag-closure-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md), [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:moving-readout-history` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md), [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:consecutive-readout-obstruction` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:balanced-pair-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md), [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:pair-precision-sign-obstruction` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:pair-count-lumpability` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
+| `prop:switching-pair-obstruction` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md), [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
 | `prop:surface-harmonic-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
 | `prop:root-quadratic-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
 | `prop:sum-constraint-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
@@ -460,6 +473,16 @@ argue by key.
 | `{{PR01_STAY_PROBABILITY}}` | `05_disagreements.md`, `07_scope.md` |
 | `{{PR01_UNGATED_NORMAL_FORMS}}` | `05_disagreements.md` |
 | `{{PR01_WALK_ENERGY}}` | `05_disagreements.md` |
+| `{{READOUT_ADJACENT_COVARIANCES}}` | `07_transfer_criteria.md` |
+| `{{READOUT_AUGMENTATION_DIMENSIONS}}` | `07_transfer_criteria.md` |
+| `{{READOUT_CYCLE4_HISTORY}}` | `07_transfer_criteria.md` |
+| `{{READOUT_ENDPOINT_DEFECT}}` | `07_transfer_criteria.md` |
+| `{{READOUT_PATH4_LAG_TRACE}}` | `07_transfer_criteria.md` |
+| `{{READOUT_PATH4_PRECISION}}` | `07_transfer_criteria.md` |
+| `{{READOUT_PATH6_PRECISION}}` | `07_transfer_criteria.md` |
+| `{{READOUT_SWITCH_HISTORY}}` | `07_transfer_criteria.md` |
+| `{{READOUT_SWITCH_LAG_DEFECT}}` | `07_transfer_criteria.md` |
+| `{{READOUT_TRIPLE_DEFECTS}}` | `07_transfer_criteria.md` |
 | `{{REDUCTION_FIRST_AFTER}}` | `05_disagreements.md` |
 | `{{REDUCTION_RESPONSE_DISTANCE}}` | `05_disagreements.md` |
 | `{{REDUCTION_SAME_OBSERVATION}}` | `05_disagreements.md` |
@@ -569,7 +592,7 @@ argue by key.
 | `{{VORONOI_FACES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `06_complementarities.md` |
 | `{{VORONOI_VERTICES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `06_complementarities.md` |
 
-301 of the bound values are quoted by the prose. The cover is
+311 of the bound values are quoted by the prose. The cover is
 placed by `manuscript/config.yaml`; the accessibility registry that gives
 each figure its alternative text is `output/figures/figure_registry.json`,
 written by `scripts/make_figures.py`.

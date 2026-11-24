@@ -14,7 +14,7 @@ contracts.
 .venv/bin/oph-fep-synergetics verify --kind <kind>
 ```
 
-Each of the 83 entries carries an executable probe. Its return value
+Each of the 89 entries carries an executable probe. Its return value
 `(passed, values)` records both the verdict and the quantities checked.
 
 Exit codes:
@@ -98,7 +98,7 @@ checks pushes made from that clone. Managed Dependabot operates on GitHub.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-480 tests. The suite runs offline from a fresh process and exercises the actual
+486 tests. The suite runs offline from a fresh process and exercises the actual
 scientific code paths.
 
 | file | what it pins down |
@@ -119,6 +119,8 @@ scientific code paths.
 | `test_constraint_screening.py` | exact FCC plane cuts, joint Gaussian hard and noisy sum conditioning, and a general weighted-graph witness |
 | `test_jitterbug.py` | rigid triangles, supporting hulls, nearest-pair dimers, the sphere-contact threshold and graph construction at octahedral coalescence |
 | `test_jitterbug_inference.py` | weighted precision invariants, exact coordinate projection, lag-defect controls and the hard Gaussian quotient |
+| `test_readout_motion.py` | exact signed and zero moving residuals, the missed longer lag, and invariant-span controls |
+| `test_pair_projection_transfer.py` | path marginals, pair balance, stationary count memory and switching pairings |
 | `test_jitterbug_motion.py` | exact contraction, expansion, two holds, reversal and the six-slot covariance match |
 | `test_jitterbug_projection.py` | exact finite Gaussian marginals, native repair lag defects and their common coupling |
 | `test_jitterbug_repair.py` | finite-weight pair-load memory and exact averaged octahedral rates, balance and mean evolution |

@@ -229,7 +229,7 @@ def test_the_registry_table_lists_exactly_the_registered_keys():
 def test_figure_links_match_the_accessibility_registry():
     references = index_references(read_sections(MANUSCRIPT))
     linked = {figure.label: figure.filename for figure in references.figures}
-    assert len(references.figures) == len(linked) == 30, sorted(linked)
+    assert len(references.figures) == len(linked) == 31, sorted(linked)
     assert set(linked) == set(references.labels("fig"))
     registry = PROJECT / "output" / "figures" / "figure_registry.json"
     if not registry.is_file():  # the figures are generated artefacts

@@ -467,3 +467,9 @@ clock lag defect decays with inverse weight squared. The separate finite
 pair-load memory result is tested in [@prop:jitterbug-pair-load-memory].
 
 ![Two tests of Jitterbug readouts. Left, with the two departure poses fixed, contraction gives a negative residual in the Gaussian Markov covariance identity. A hold gives zero, and reversal gives a positive residual. Right, the finite pair-mean precision has a positive opposite-site entry and the pair-total lag covariance has a positive defect on odd opposite-site modes and zero on even modes. The highlighted conductance is the tuned weight at the middle pose.](../output/figures/fig_jitterbug_observation_limits.png){#fig:jitterbug-observation-limits width=100%}
+
+The same tests extend to prescribed observations on other finite graphs.
+See [@prop:moving-readout-history] for the history criterion and
+[@prop:balanced-pair-transfer] for the balance condition on fixed pairs.
+The tetrahedral control in [@prop:switching-pair-obstruction] shows that
+changing the pairing can undo an exact fixed-partition count quotient.

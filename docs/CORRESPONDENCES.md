@@ -98,13 +98,19 @@ diagnostics below `1e-9` in magnitude are reported as such.
 | three-way | disagreement | obstructed | `jitterbug-moving-closure-obstruction` | Instantaneous conductance tuning leaves a nonzero covariance residual when the geometric readout changes on both legs of a two-attempt protocol. |
 | three-way | isomorphism | exact-on-domain | `jitterbug-augmented-lag-realization` | The six fixed sign-supported slots realise all linear lag covariances as a time-dependent Gaussian Markov process for nonnegative matching weights. Two distinct poses already demand this dimension of a fixed linear space. |
 | three-way | disagreement | obstructed | `jitterbug-pair-projection-defect` | Finite elimination of pair differences gives a positive opposite-site Gaussian precision entry and the same hidden coupling produces a rank-three pair-total lag-two defect. |
+| three-way | isomorphism | exact-on-domain | `moving-readout-history` | A prescribed moving linear readout has a Gaussian Markov covariance match exactly when the past and future components transported outside the middle readout are orthogonal at every split. The common invariant span supplies a fixed augmentation. |
+| three-way | disagreement | obstructed | `consecutive-readout-obstruction` | Testing only consecutive triples can miss a nonzero covariance residual over a longer history, even when all adjacent scalar covariances are nonzero. |
+| three-way | isomorphism | exact-on-domain | `balanced-pair-transfer` | External equitability of a fixed pair partition is equivalent to equality of Gaussian marginal and restriction precisions and to closure of all linear pair-total lag covariances. |
+| three-way | disagreement | obstructed | `pair-precision-sign-obstruction` | A conventional site Laplacian for the marginal pair means can coexist with a nonzero repair lag-two defect. Pairing a longer path can give a positive endpoint precision entry. |
+| three-way | disagreement | obstructed | `pair-count-lumpability-obstruction` | External equitability can preserve every linear lag while stationary pair counts retain memory. At interior binary loads, full count lumpability requires uniform weights in every cross-pair block. |
+| three-way | disagreement | obstructed | `switching-pair-obstruction` | A moving pair partition can break Gaussian covariance closure and stationary-initialised count Markovness even when every fixed partition is itself balanced and strongly lumpable. |
 
-Totals: 83/83 probes pass, 0 fail.
+Totals: 89/89 probes pass, 0 fail.
 
 By kind:
 
-- isomorphism: 40 passing, 0 failing
-- disagreement: 33 passing, 0 failing
+- isomorphism: 42 passing, 0 failing
+- disagreement: 37 passing, 0 failing
 - complementarity: 10 passing, 0 failing
 
 By pairwise scope:
@@ -112,7 +118,7 @@ By pairwise scope:
 - oph-fep: 31 passing, 0 failing
 - fep-synergetics: 5 passing, 0 failing
 - synergetics-oph: 16 passing, 0 failing
-- three-way: 31 passing, 0 failing
+- three-way: 37 passing, 0 failing
 
 ## `carrier-port-chart`
 
@@ -2023,4 +2029,113 @@ Probe values:
 - `pair_odd_lag_defect` = 1/1089
 - `sample_weights` = (0, 3/2, 15/4)
 - `lag_defect_rank` = 3
+
+## `moving-readout-history`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+A prescribed moving linear readout has a Gaussian Markov covariance match exactly when the past and future components transported outside the middle readout are orthogonal at every split. The common invariant span supplies a fixed augmentation.
+
+- OPH: Prescribed symmetric seam-sampling steps keep the uniform fixed-load law and transport the mean vertex field.
+- FEP: Gaussian conditioning removes the observed block and tests the conditional covariance of the hidden components.
+- Synergetics: Alternating edge weights on a square distinguish the coordinate modes and the alternating-sign mode.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian). Caputo et al. (2010) for exclusion and Kalman (1960) for state space. split criterion and witnesses derived here
+
+Probe values:
+
+- `triple_defects` = (5/9, -5/9, 0)
+- `augmentation_dimensions` = (2, 3)
+- `hidden_component_norms` = ((25/36, 4/9), (25/36, 4/9), (25/36, 1/4))
+- `transported_moving_closes` = True
+
+## `consecutive-readout-obstruction`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+Testing only consecutive triples can miss a nonzero covariance residual over a longer history, even when all adjacent scalar covariances are nonzero.
+
+- OPH: The uniform two-token law on a weighted square transports an unobserved mode through both intermediate observations.
+- FEP: The two local Gaussian conditional covariance tests pass while both endpoint splits fail.
+- Synergetics: The initial and final readouts include both square coordinate modes, and the middle readouts include one.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian). weighted square control derived here
+
+Probe values:
+
+- `consecutive_defects` = (0, 0)
+- `endpoint_defect` = 25/54
+- `endpoint_covariance` = 5/6
+- `adjacent_covariances` = (2/3, 5/6, 2/3)
+
+## `balanced-pair-transfer`
+
+**isomorphism** / **exact-on-domain** / **three-way** / probe PASS
+
+External equitability of a fixed pair partition is equivalent to equality of Gaussian marginal and restriction precisions and to closure of all linear pair-total lag covariances.
+
+- OPH: Equal external degrees make pair sums an invariant space of the linear mean repair law.
+- FEP: The same zero cross-block condition removes the hidden correction to Gaussian marginal precision.
+- Synergetics: Pairs define retained common site values and internal differences. the weight balance is tested pair by pair.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian). Schaub et al. (2016), §II for Laplacian equitability. Gaussian and repair criterion derived here
+
+Probe values:
+
+- `graphs` = (path4, path6, cycle4, complete4)
+- `pair_balanced` = (False, False, True, True)
+- `static_correction_vanishes` = (False, False, True, True)
+- `lag_two_defect_trace` = (1/36, 3/200, 0, 0)
+
+## `pair-precision-sign-obstruction`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+A conventional site Laplacian for the marginal pair means can coexist with a nonzero repair lag-two defect. Pairing a longer path can give a positive endpoint precision entry.
+
+- OPH: Exact binary transitions retain a lag defect on both paths.
+- FEP: Schur marginal precision has distinct sign tests on the two paths.
+- Synergetics: Consecutive pairs along a chain isolate how the geometry of site assignment affects the sign.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian). Dörfler and Bullo (2013) for vertex elimination. rotated pair averages on paths calculated here
+
+Probe values:
+
+- `path4_precision` = -2/3
+- `path4_lag_trace` = 1/36
+- `path6_precision` = 4/35
+- `path6_lag_trace` = 3/200
+- `marginal_laplacians` = (True, False)
+
+## `pair-count-lumpability-obstruction`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+External equitability can preserve every linear lag while stationary pair counts retain memory. At interior binary loads, full count lumpability requires uniform weights in every cross-pair block.
+
+- OPH: With one occupied joint in each pair, a count-changing update can sample just one seam weight.
+- FEP: The linear Gaussian covariance match does not encode the count process's return probabilities.
+- Synergetics: Adjacent pairs on a square have equal external degrees despite incomplete cross-pair connections.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian). Kemeny and Snell (1976), Theorem 6.3.2 for lumpability. weighted pair condition and square witness derived here
+
+Probe values:
+
+- `cycle4_history` = (1/8, 1/16)
+- `complete4_history` = (1/12, 1/12)
+- `strong_lumping` = (False, False, False, True)
+- `uniform_blocks` = (False, False, False, True)
+- `linear_lag_defect_traces` = (0, 0)
+
+## `switching-pair-obstruction`
+
+**disagreement** / **obstructed** / **three-way** / probe PASS
+
+A moving pair partition can break Gaussian covariance closure and stationary-initialised count Markovness even when every fixed partition is itself balanced and strongly lumpable.
+
+- OPH: The same fair repair kernel acts throughout, while the pair-count record changes between attempts.
+- FEP: Orthogonal middle coordinates give zero adjacent covariances and a positive endpoint residual.
+- Synergetics: The regular tetrahedral seam graph admits different opposite-edge pairings of its four vertices.
+- Source: OPH evidence/observer_dynamics_20260925/oph-physics-sim (ORIENTED_BASE_FACES, seams, laplacian). Kemeny and Snell (1976) for fixed-partition lumpability. switching control derived here
+
+Probe values:
+
+- `switch_lag_defect` = 4/9
+- `switch_history` = (11/20, 5/24)
+- `adjacent_covariances` = (0, 0)
 

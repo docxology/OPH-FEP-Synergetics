@@ -3158,6 +3158,17 @@ def jitterbug_observation_figure() -> Path:
     return _save(figure, "fig_jitterbug_observation_limits.png", alt)
 
 
+def readout_transfer_figure() -> Path:
+    """Show exact motion and pairing controls on other finite graphs."""
+    if __package__:
+        from .readout_transfer_figure import draw_readout_transfer
+    else:
+        from readout_transfer_figure import draw_readout_transfer
+
+    figure, alt = draw_readout_transfer()
+    return _save(figure, "fig_readout_transfer.png", alt)
+
+
 def jitterbug_poster_figure() -> Path:
     """Write the manuscript image and a standalone vector poster."""
     if __package__:
@@ -3241,6 +3252,7 @@ def main() -> int:
         geometry_transfer_figure,
         jitterbug_figure,
         jitterbug_observation_figure,
+        readout_transfer_figure,
     )
     unrendered = {
         name

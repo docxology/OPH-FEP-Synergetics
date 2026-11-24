@@ -553,6 +553,116 @@
             "quadmath",
             "bolin2021sparse"
           ]
+        },
+        {
+          "id": "moving-readout-history",
+          "term": "Transported readout",
+          "meanings": {
+            "oph": "Prescribed seam weights transport a uniform binary load field.",
+            "fep": "The Gaussian conditional covariance tests two projected history components.",
+            "synergetics": "Observed directions can follow or rotate away from transported square modes."
+          },
+          "relation": "conditional-identity",
+          "limit": "Centred linear observations and a uniform initial fixed binary load. Check each next observation against the whole past.",
+          "probes": [
+            "moving-readout-history"
+          ],
+          "citations": [
+            "caputo2010aldous",
+            "kalman1960filtering"
+          ]
+        },
+        {
+          "id": "consecutive-triples",
+          "term": "Consecutive covariance checks",
+          "meanings": {
+            "oph": "An omitted load field survives two intermediate reads.",
+            "fep": "Consecutive conditional covariances vanish while a longer one survives.",
+            "synergetics": "The end observations share a square mode omitted from the middle."
+          },
+          "relation": "counterexample",
+          "limit": "Prescribed alternating weights and a four-time readout of the weighted square.",
+          "probes": [
+            "consecutive-readout-obstruction"
+          ],
+          "citations": [
+            "caputo2010aldous",
+            "kalman1960filtering"
+          ]
+        },
+        {
+          "id": "balanced-pair-transfer",
+          "term": "Externally equitable pairs",
+          "meanings": {
+            "oph": "Equal external weighted degrees close the linear pair-total lags.",
+            "fep": "The Gaussian marginal equals the hard restriction in pair coordinates.",
+            "synergetics": "A pair determines one common site value and one internal contrast."
+          },
+          "relation": "conditional-identity",
+          "limit": "Fixed pairs in a connected weighted graph. Each pair has equal partner weights summed separately to every other pair.",
+          "probes": [
+            "balanced-pair-transfer"
+          ],
+          "citations": [
+            "oph",
+            "schaub2016graph"
+          ]
+        },
+        {
+          "id": "pair-precision-sign",
+          "term": "Pair marginal sign",
+          "meanings": {
+            "oph": "Both unit paths have a nonzero pair-total lag defect.",
+            "fep": "The shorter path gives a site Laplacian. The longer gives a positive endpoint entry.",
+            "synergetics": "Consecutive sites of a chain are grouped in pairs."
+          },
+          "relation": "counterexample",
+          "limit": "Use literal arithmetic means in a centred Gaussian field and fair binary repair with the same graph.",
+          "probes": [
+            "pair-precision-sign-obstruction"
+          ],
+          "citations": [
+            "oph",
+            "dorfler2013kron"
+          ]
+        },
+        {
+          "id": "pair-count-lumpability",
+          "term": "Count lumpability",
+          "meanings": {
+            "oph": "At interior binary loads each cross-pair block must have uniform weights.",
+            "fep": "A linear covariance match leaves higher-order return probabilities undetermined.",
+            "synergetics": "Matching seams on a square can balance degrees while leaving distinct load placements."
+          },
+          "relation": "counterexample",
+          "limit": "Fixed pairs. With one token or vacancy, external equitability already gives the count quotient.",
+          "probes": [
+            "pair-count-lumpability-obstruction"
+          ],
+          "citations": [
+            "oph",
+            "kemeny1976finite",
+            "schaub2016graph"
+          ]
+        },
+        {
+          "id": "switching-pairs",
+          "term": "Switching pair partitions",
+          "meanings": {
+            "oph": "Actual count return probabilities depend on the first observation.",
+            "fep": "Orthogonal pair contrasts leave a nonzero Gaussian covariance residual.",
+            "synergetics": "Alternate opposite-edge pairings on the tetrahedron."
+          },
+          "relation": "counterexample",
+          "limit": "Three reads on the unit tetrahedral graph with a uniform binary two-token start.",
+          "probes": [
+            "switching-pair-obstruction"
+          ],
+          "citations": [
+            "oph",
+            "kemeny1976finite",
+            "kalman1960filtering"
+          ]
         }
       ]
     },

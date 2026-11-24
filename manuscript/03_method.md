@@ -135,6 +135,12 @@ other. By scope, {{REGISTRY_OPH_FEP}} claims relate OPH to the FEP,
 | `jitterbug-moving-closure-obstruction` | disagreement | `obstructed` | `three-way` | posewise tuning leaves a signed covariance residual when the observation moves |
 | `jitterbug-augmented-lag-realization` | isomorphism | `exact-on-domain` | `three-way` | six invariant slots realise the lag covariances under an arbitrary weight schedule |
 | `jitterbug-pair-projection-defect` | disagreement | `obstructed` | `three-way` | finite pair means have a positive precision entry and pair totals have a lag-two defect |
+| `moving-readout-history` | isomorphism | `exact-on-domain` | `three-way` | transported hidden components test each moving Gaussian covariance split |
+| `consecutive-readout-obstruction` | disagreement | `obstructed` | `three-way` | consecutive covariance checks can miss an endpoint residual |
+| `balanced-pair-transfer` | isomorphism | `exact-on-domain` | `three-way` | external equitability preserves marginal precision and linear lags |
+| `pair-precision-sign-obstruction` | disagreement | `obstructed` | `three-way` | a site Laplacian can coexist with a lag defect on paired paths |
+| `pair-count-lumpability-obstruction` | disagreement | `obstructed` | `three-way` | pair counts at interior loads require uniform cross-pair weights |
+| `switching-pair-obstruction` | disagreement | `obstructed` | `three-way` | changing valid pair partitions can introduce memory |
 
 : The {{REGISTRY_ENTRIES}} correspondences, in registry order:
 {{REGISTRY_ISOMORPHISMS}} isomorphisms, {{REGISTRY_DISAGREEMENTS}}

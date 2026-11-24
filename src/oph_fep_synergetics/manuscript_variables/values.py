@@ -380,6 +380,23 @@ def _transfer_values() -> tuple[BoundValue, ...]:
     return tuple(entries)
 
 
+def _readout_transfer_values() -> tuple[BoundValue, ...]:
+    """Bind the finite motion and pair-projection transfer examples."""
+    groups = (
+        ("moving-readout-history", ("triple_defects", "augmentation_dimensions")),
+        ("consecutive-readout-obstruction", ("endpoint_defect", "adjacent_covariances")),
+        ("pair-precision-sign-obstruction", ("path4_precision", "path4_lag_trace", "path6_precision")),
+        ("pair-count-lumpability-obstruction", ("cycle4_history",)),
+        ("switching-pair-obstruction", ("switch_lag_defect", "switch_history")),
+    )
+    entries = []
+    for probe, fields in groups:
+        evidence = _probe_values(probe)
+        entries.extend(BoundValue(f"readout.{field}", evidence[field], f"probe:{probe}:{field}")
+                       for field in fields)
+    return tuple(entries)
+
+
 def _jitterbug_values() -> tuple[BoundValue, ...]:
     """Bind the measured quantities quoted for the Jitterbug linkage."""
     groups = (
@@ -1574,6 +1591,7 @@ MANUSCRIPT_VALUES: tuple[BoundValue, ...] = (
     *_three_way_values(),
     *_transfer_values(),
     *_jitterbug_values(),
+    *_readout_transfer_values(),
     *_chart_values(),
 )
 

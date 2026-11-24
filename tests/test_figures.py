@@ -34,6 +34,7 @@ EXPECTED_BUILDERS = (
     "ga_descent_figure",
     "ga_synergetics_figure",
     "jitterbug_poster_figure",
+    "readout_transfer_figure",
     "pair_triangles_figure",
     "scope_matrix_figure",
     "network_figure",
@@ -68,6 +69,7 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         make_figures.geometry_transfer_figure(),
         make_figures.jitterbug_figure(),
         make_figures.jitterbug_observation_figure(),
+        make_figures.readout_transfer_figure(),
         make_figures.jitterbug_poster_figure(),
         make_figures.cover_figure(),
     ]
@@ -90,6 +92,7 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
         "fig:geometry-transfer",
         "fig:jitterbug",
         "fig:jitterbug-observation-limits",
+        "fig:readout-transfer",
         "fig:ga-jitterbug",
         "fig:cover",
     }
@@ -113,6 +116,9 @@ def test_a_sample_of_builders_writes_figures_and_the_registry(tmp_path, monkeypa
     assert all(value in observations["alt"] for value in ("-841/75240", "841/125400", "4/7", "1/1089"))
     poster = next(entry for entry in payload["figures"] if entry["label"] == "fig:ga-jitterbug")
     assert all(value in poster["alt"].lower() for value in ("nearest", "octahedral", "gaussian", "repair"))
+    transfer = next(entry for entry in payload["figures"] if entry["label"] == "fig:readout-transfer")
+    assert all(value in transfer["alt"] for value in ("25/54", "4/35", "4/9", "11/20"))
+    assert all(value in poster["alt"] for value in ("25/54", "4/9", "1/16", "1/8"))
     standalone = tmp_path / "OPH-FEP-Synergetics_Jitterbug_Poster.pdf"
     assert standalone.stat().st_size > 10_000
     assert standalone.read_bytes().startswith(b"%PDF-")

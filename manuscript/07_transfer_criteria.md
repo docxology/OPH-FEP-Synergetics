@@ -140,6 +140,206 @@ defect with the distance and resistance tests on the other graphs.
 
 ![Repair transfer to the cube, bipartite and periodic FCC graphs, and the twenty-four-cell. The periodic FCC witness has two one-step rates {{TRANSFER_PERIODIC_FCC_JUMPS}} from the same variance class. The weighted twenty-four-cell has a nonzero two-lag defect {{TRANSFER_24CELL_LAG_DEFECT}}.](../output/figures/fig_repair_transfer.png){#fig:repair-transfer width=100%}
 
+## Moving observations require the whole recorded past {#sec:moving-readout-transfer}
+
+The fair repair model can change its seam weights between attempts while
+keeping the same vertex labels and total binary load. The schedule is
+prescribed independently of the repair outcomes. Each update is a
+mixture of permutations, so the uniform load law persists from a uniform
+start. Write $P_s=I-L_s/(2W_s)$ for the symmetric mean operator at
+departure time $s$, with $W_s$ the positive sum of seam weights. On the
+centred vertex space, set $K_{ij}=P_i\cdots P_{j-1}$. The columns of $U_i$
+are independent centred readout directions at time $i$. Their
+normalised cross-covariance is $C_{ij}=U_i^{\mathsf T}K_{ij}U_j$, where
+normalisation divides by the scalar binary occupancy covariance.
+
+::: {.proposition #prop:moving-readout-history}
+For any finite observation schedule, there is a first-order Gaussian
+Markov process with these readout covariances exactly when, for every
+split $i<j<k$,
+$$
+C_{ik}-C_{ij}C_{jj}^{-1}C_{jk}
+=U_i^{\mathsf T}K_{ij}(I-\Pi_j)K_{jk}U_k=0,
+\qquad
+\Pi_j=U_j(U_j^{\mathsf T}U_j)^{-1}U_j^{\mathsf T}.
+$$
+It suffices to test the next observation $k=j+1$ against every
+preceding observation $i<j$. For a specified family of mean operators,
+the smallest fixed invariant space containing all readout directions
+is their span under all finite products of the operators.
+:::
+
+The identity in [@prop:moving-readout-history] follows by conditioning
+on the middle Gaussian block. The residual is a matrix of inner
+products between the transported past and future directions that are
+orthogonal to the middle space. It can have either sign in a scalar
+readout. The residual can also vanish when both hidden components are
+nonzero if the components are orthogonal. At a consecutive split with a fixed space and a repeated symmetric
+operator this product becomes the squared projection
+in [@prop:lag-closure-transfer]. One sufficient condition for moving
+readouts is that each $P_s$ transports the current observed span into
+the next span. Then the entire transported past lies inside the current
+observation and the corresponding hidden component vanishes.
+
+A full centred Gaussian realisation uses transitions $P_s$ with
+independent innovations of covariance $I-P_s^2$ and starts with
+identity covariance, as in a time-dependent linear state-space model
+[@kalman1960filtering]. Its projected law has the required covariances.
+When all past blocks have zero conditional covariance with the next
+block, joint Gaussianity makes the next block independent of the
+recorded past given the present. This proves sufficiency even when an
+innovation is singular. Starting from the span of the readouts and
+repeatedly adjoining its image under each allowed operator gives the
+fixed invariant space in [@prop:moving-readout-history]. Restricting
+the Gaussian realisation to this space preserves all readout lags.
+The minimum here is over fixed invariant spaces that contain the
+readout directions for that operator family.
+
+For an exact comparison, take a square with horizontal and vertical
+seam weights that alternate between a ratio of one to two and its
+reverse. Its horizontal, vertical and alternating-sign modes $x,y,z$
+are mutually orthogonal. Choose signs so that $x$ is constant along
+each horizontal edge and $y$ along each vertical edge, with $z$
+their entrywise product. Divide all covariances by the common variance
+of one sign mode. Holding the middle readout at $x$, the
+`moving-readout-history` probe tests three terminal observations after
+starting at $x+y$. Returning to $x+y$, choosing $x-y$, and choosing
+$x+z$ give, respectively, {{READOUT_TRIPLE_DEFECTS}}. Both hidden
+components have positive squared norms in each test. A basis change
+within an invariant span preserves closure. A readout can change its span
+and still close. Alternating $x+y$ with $4x+5y$ follows the direct
+transport condition. Strengthening one
+horizontal edge increases the minimum common invariant dimension
+from the first to the second entry of {{READOUT_AUGMENTATION_DIMENSIONS}}.
+
+::: {.proposition #prop:consecutive-readout-obstruction}
+On that square, observing $(x+y,x,x,x+y)$ gives zero residual at each
+consecutive triple and positive endpoint residual
+{{READOUT_ENDPOINT_DEFECT}} through either interior split.
+:::
+
+The `consecutive-readout-obstruction` probe checks
+[@prop:consecutive-readout-obstruction] by summing the weighted
+transitions on the full binary microstates. Adjacent normalised
+covariances are {{READOUT_ADJACENT_COVARIANCES}}. The end readouts share
+both the $x$ and $y$ contributions. The intermediate readouts contain
+$x$ alone, so the $y$ contribution can survive to the endpoint without
+appearing in either shorter test. [@fig:readout-transfer] shows the
+observation schedule and the residuals.
+
+## Balanced pairs and the stronger count criterion {#sec:pair-readout-transfer}
+
+Partition a connected weighted graph into disjoint pairs of vertices
+and use the orthonormal pair sums $U$ and differences $V$. The Gaussian
+is centred over all vertices. In the mean coordinates keep the centred
+site space, so the global constant is discarded in inverses. Put
+$A=U^{\mathsf T}LU$, $B=V^{\mathsf T}LU$ and $H=V^{\mathsf T}LV$. The
+centred marginal has precision $S=A-B^{\mathsf T}H^{-1}B$. Restricting
+the field to equality within each pair instead gives $A$. Precision in
+literal arithmetic pair means is twice the corresponding precision
+in the orthonormal coordinates.
+
+::: {.proposition #prop:balanced-pair-transfer}
+At a fixed pair partition, the following are equivalent. Each
+partner has equal total conductance to every other pair, the Gaussian
+marginal and hard restriction have the same precision, and fair
+binary repair admits a Gaussian match of all linear pair-total lags
+on every nontrivial uniform load shell. When the conditions fail,
+the Schur correction and the normalised lag-two defect have common
+nullspace $\ker B$ on the centred site space.
+:::
+
+The balance condition in [@prop:balanced-pair-transfer] is the
+external equitable partition condition for the weighted Laplacian
+[@schaub2016graph, section II]. If $\delta_{ij}$ is the difference
+between the partners' weighted degrees to pair $j$, the off-diagonal
+entry $B_{ij}$ is $-\delta_{ij}/2$. Internal pair conductances cancel
+and the diagonal follows from zero row sums. Thus $B=0$ is exactly
+external equitability. Connectedness gives $H\succ0$. By
+[@prop:lag-closure-transfer], the pair-total lag-two defect is
+$\Delta=B^{\mathsf T}B/(4W^2)$. Both corrections vanish exactly with
+$B$ and have kernel $\ker B$. The relative spectral bounds in
+[@sec:jitterbug-finite-projection] require only $H\succ0$ and apply here.
+The `balanced-pair-transfer` probe checks the coupling, the independently
+inverted marginal and the enumerated repair lags on both paths, the square
+and the tetrahedral graph.
+
+::: {.proposition #prop:pair-precision-sign-obstruction}
+For a connected graph with consecutive pairs along a unit path,
+a valid site Laplacian for the marginal can coexist with a nonzero
+repair lag-two defect. A longer unit path with consecutive pairs
+can instead have a positive precision entry between its endpoint
+site means.
+:::
+
+For the shorter path in [@prop:pair-precision-sign-obstruction], the
+endpoint precision entry is {{READOUT_PATH4_PRECISION}} and the trace
+of the normalised lag defect is {{READOUT_PATH4_LAG_TRACE}}. The
+two-site zero-row-sum precision is a conductance Laplacian. For the
+longer path, the endpoint precision entry is {{READOUT_PATH6_PRECISION}}.
+A positive off-diagonal entry implies a lag defect for any pair partition
+in this model. When $B=0$, the marginal is $2A$, whose off-diagonals
+are the negatives of the total conductances between pairs. The `pair-precision-sign-obstruction` probe checks both
+marginals by exact covariance inversion on the full graph and both
+repair defects by counting binary transitions.
+
+::: {.proposition #prop:pair-count-lumpability}
+For a fixed pair partition and $2\leq k\leq n-2$, the binary count
+record is Markov from every initial law exactly when all weights in
+each cross-pair block coincide, treating an absent edge as zero. The
+same criterion holds for the stationary count process. With a
+single token or single vacancy, external equitability suffices and
+is necessary.
+:::
+
+For necessity in [@prop:pair-count-lumpability], place one token in
+each of two chosen pairs and hold the same outside configuration
+fixed. The probability that the source empties and the destination
+fills is the weight of the unique occupied-to-vacant seam divided
+by $2W$. Varying the chosen occupied labels while holding the pair
+totals fixed tests every weight in that block. The row-sum condition
+for strong lumpability [@kemeny1976finite, theorem 6.3.2] requires their
+equality. Conversely a common cross-pair weight $\gamma_{ij}$ gives
+the one-attempt transfer probability
+$$
+\frac{\gamma_{ij} r_i(2-r_j)}{2W}
+$$
+from pair $i$ into pair $j$, depending only on the totals $r_i,r_j$.
+Within-pair moves leave those totals fixed. A token or vacancy alone
+sees only the row sums to each other pair. At stationarity, reversibility
+makes varying off-class transition probabilities visible in a
+three-time return test, as in [@sec:transfer-distance]. For an
+adjacently paired unit square the probabilities conditioned on past
+and present, then on present alone, are {{READOUT_CYCLE4_HISTORY}}.
+The unit complete graph on four labels gives the equal-probability
+control in the `pair-count-lumpability-obstruction` probe. This square
+closes every linear lag by [@prop:balanced-pair-transfer] while its
+counts retain history.
+
+::: {.proposition #prop:switching-pair-obstruction}
+Changing pair partitions can break covariance closure and the
+Markov property of the count record even when every fixed partition
+is externally equitable and strongly lumpable.
+:::
+
+The `switching-pair-obstruction` probe checks
+[@prop:switching-pair-obstruction] on the unit tetrahedral graph.
+It observes one pairing, a different pairing after one attempt,
+then the original pairing. Each fixed pairing of this graph has
+constant cross-pair weights. The centred directions of the
+two pair-total contrasts are orthogonal, and the centred vertex
+retention is the same in every direction. Hence the adjacent
+covariances vanish and the endpoint residual is
+{{READOUT_SWITCH_LAG_DEFECT}}. For the return event with both tokens
+in the original first pair, conditioning on that prior event and
+a split middle count gives the first probability in
+{{READOUT_SWITCH_HISTORY}}. Conditioning on the split alone gives
+the second. The exact native enumeration checks both results.
+[@fig:readout-transfer] separates the static sign and balance tests
+from the history test under switching.
+
+![Readout transfer on a weighted square, unit paths, an adjacently paired square and the unit tetrahedral graph. Panel A shows consecutive closure with a surviving endpoint residual. Panel B compares the sign of marginal precision with a two-step covariance defect. Panel C compares a stationary square count failure with a complete-graph control. Panel D shows that alternating between balanced tetrahedral pairings can recover information about the first observation.](../output/figures/fig_readout_transfer.png){#fig:readout-transfer width=100%}
+
 ## Closed surfaces leave harmonic covariance {#sec:surface-harmonic-transfer}
 
 Use a connected closed orientable cellulation of genus $g$ with simple

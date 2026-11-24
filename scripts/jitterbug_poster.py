@@ -12,6 +12,8 @@ from matplotlib.patches import FancyBboxPatch, Polygon, Rectangle
 from oph_fep_synergetics.core.jitterbug_inference import jitterbug_contraction_census
 from oph_fep_synergetics.core.jitterbug_motion import jitterbug_motion_defect
 from oph_fep_synergetics.core.jitterbug_projection import jitterbug_pair_projection
+from oph_fep_synergetics.core.pair_projection_transfer import pair_projection_transfer_census, switching_pair_census
+from oph_fep_synergetics.core.readout_motion import moving_readout_census
 from oph_fep_synergetics.geometry import jitterbug
 
 PAPER = "#FAF9F5"
@@ -69,6 +71,10 @@ def draw_jitterbug_poster(rotation):
     moving = jitterbug_motion_defect(Fraction(3, 5), half, Fraction(1, 3))
     reversing = jitterbug_motion_defect(Fraction(3, 5), half, Fraction(3, 5))
     pair = jitterbug_pair_projection(half_tuned["tuned_weight"])
+    motion = moving_readout_census()
+    controls = pair_projection_transfer_census()
+    switched = switching_pair_census()
+    square_past, square_present = controls["cycle4"]["return_probabilities"]
     rank = post_ico["vertex_count"] - half_tuned["nearest_only_nullity"]
     nullity = half_tuned["nearest_only_centered_nullity"]
     decay = inference["tuned_limit"]["mass_clock_covariance_decay_rate"]
@@ -136,56 +142,55 @@ def draw_jitterbug_poster(rotation):
             text(center + 0.115, 0.619, "→", 10.5, align="center", colour=MUTED)
 
     rule(0.454)
-    text(0.050, 0.439, "After the icosahedron, the graph and the weights matter", 14, weight="bold")
-    text(0.050, 0.401, r"Compare two seam graphs at $t=1/2$", 11, weight="bold")
-    comparison = figure.add_axes((0.046, 0.278, 0.161, 0.103), facecolor="none")
+    text(0.050, 0.438, "Past the icosahedron, graph choice and weights matter", 14, weight="bold")
+    text(0.050, 0.405, r"Two seam graphs at $t=1/2$", 10.7, weight="bold")
+    comparison = figure.add_axes((0.052, 0.319, 0.143, 0.071), facecolor="none")
     _pose(comparison, half, rotation, (), matching)
-    text(0.125, 0.281, "Nearest seams only", 8.7, align="center", colour=ORANGE)
-    text(0.216, 0.369,
-         f"Full hull  ·  {post_ico['hull_edge_count']} seams\nOne connected graph",
-         9.9, colour=MUTED)
-    text(0.216, 0.322,
-         f"Nearest only  ·  {half_tuned['nearest_only_seams']} disjoint dimers\n"
-         f"Precision rank {rank}, with {nullity} extra\nnull modes after centring",
-         9.9, colour=MUTED)
+    text(0.125, 0.319, "Nearest seams", 8.6, align="center", colour=ORANGE)
+    text(0.205, 0.380,
+         f"Hull  ·  {post_ico['hull_edge_count']} seams, connected\n"
+         f"Nearest  ·  {half_tuned['nearest_only_seams']} disjoint dimers\n"
+         f"Precision rank {rank}, with {nullity} extra null modes",
+         9.15, colour=MUTED)
 
-    text(0.535, 0.401, r"Tune the diagonal weight $w=1/t-t$", 11.0, weight="bold", colour=TEAL)
-    text(0.535, 0.368,
-         "At a fixed pose with unit bar conductance,\n"
-         "tuning matches fair repair and Gaussian\n"
-         "Markov coordinate lag covariances.",
-         9.9, colour=MUTED)
-    text(0.535, 0.308,
-         rf"At $t=1/2$, tuning needs $w={half_tuned['tuned_weight']}$ instead of $1$." "\n"
-         rf"At $t=1/3$, inverse-square gives ${third_inverse_square['closing_weight']}$."
-         rf" Tuning needs ${third_inverse_square['tuned_weight']}$.",
-         9.6, colour=INK)
+    text(0.540, 0.405, r"Tune the diagonal weight $w=1/t-t$", 10.7, weight="bold", colour=TEAL)
+    text(0.540, 0.380,
+         "With unit bars, tuning closes coordinate\n"
+         "lag covariances at each fixed pose.\n"
+         rf"At $t=1/3$ it needs ${third_inverse_square['tuned_weight']}$."
+         rf" Inverse-square gives ${third_inverse_square['closing_weight']}$.",
+         9.15, colour=MUTED)
 
-    rule(0.259)
-    text(0.050, 0.245, "Changing the observation changes the result", 13, weight="bold")
-    text(0.050, 0.216, "Moving coordinates", 10.5, weight="bold", colour=BLUE)
-    text(0.050, 0.194,
-         r"$3/5 \to 1/2 \to 1/3$ leaves a negative lag residual." "\n"
-         "It vanishes on a hold and turns positive on reversal.\n"
-         "Six fixed slots restore the covariance match.",
-         9.4, colour=MUTED)
-    text(0.535, 0.216, "Finite pair means and totals", 10.5, weight="bold", colour=TEAL)
-    text(0.535, 0.194,
-         rf"At $w=3/2$, opposite-site precision is $\!+{pair['pair_mean_opposite_precision']}$." "\n"
-         rf"The odd pair-total lag defect is ${pair['odd_lag_two_defect']}$." "\n"
-         "Both effects come from hidden pair differences.",
-         9.4, colour=MUTED)
+    rule(0.298)
+    text(0.050, 0.284, "Jitterbug readouts and the paired limit", 12.6, weight="bold")
+    text(0.050, 0.256, "Moving coordinates", 9.9, weight="bold", colour=BLUE)
+    text(0.050, 0.236,
+         r"$3/5 \to 1/2 \to 1/3$ leaves a negative residual." "\n"
+         "A hold gives zero. Reversing gives a positive result.\n"
+         "Six fixed components restore the covariance match.",
+         9.0, colour=MUTED)
+    text(0.540, 0.256, "Pair means and totals", 9.9, weight="bold", colour=TEAL)
+    text(0.540, 0.236,
+         rf"At $w=3/2$, hidden differences give precision $\!+{pair['pair_mean_opposite_precision']}$" "\n"
+         rf"across opposite sites and odd lag defect ${pair['odd_lag_two_defect']}$." "\n"
+         rf"At the paired limit, precision is ${shared_bar_weight}L_{{\rm oct}}$ and" "\n"
+         rf"accelerated repair has coordinate lag factor $e^{{-{decay}s}}$.",
+         9.0, colour=MUTED)
 
-    rule(0.140)
-    text(0.050, 0.128, r"The paired limit as $w$ diverges", 12.2, weight="bold")
-    text(0.050, 0.103,
-         rf"Gaussian  $\cdot$  Shared site values have precision ${shared_bar_weight}L_{{\mathrm{{oct}}}}$." "\n"
-         "Two bars supply conductance along each site edge.",
-         9.3, colour=BLUE)
-    text(0.535, 0.103,
-         "Repair  ·  Pair totals freeze on the attempt clock.\n"
-         rf"The accelerated capacity-two process has lag $e^{{-{decay}s}}$.",
-         9.3, colour=TEAL)
+    rule(0.171)
+    text(0.050, 0.157, "Beyond the linkage", 12.6, weight="bold")
+    text(0.050, 0.130, "Changing readouts", 9.6, weight="bold", colour=BLUE)
+    text(0.050, 0.111,
+         f"A weighted square passes both local triple checks.\n"
+         f"A longer lag leaves residual {motion['endpoint_defects'][0]}.\n"
+         f"Switching tetrahedral pairs leaves {switched['lag_two_residual']}.",
+         8.9, colour=MUTED)
+    text(0.540, 0.130, "Fixed pair readouts", 9.6, weight="bold", colour=TEAL)
+    text(0.540, 0.111,
+         "Equal external degrees close all linear lags.\n"
+         "Pair counts can still depend on the past. The\n"
+         f"square's return probability changes {square_present} → {square_past}.",
+         8.9, colour=MUTED)
 
     rule(0.061)
     text(0.050, 0.047, "Daniel Ari Friedman · Bernhard Mueller  |  Observers, Blankets, and Screens", 9, weight="bold")
@@ -211,6 +216,11 @@ def draw_jitterbug_poster(rotation):
         "The Gaussian limit on shared site values has precision "
         f"{shared_bar_weight} times the octahedral Laplacian. Pair totals freeze on the ordinary attempt clock. "
         f"The accelerated, averaged capacity-two repair has normalised coordinate lag covariance exp(-{decay}s). "
-        "At finite weights the pair totals retain memory of which joints carry the loads."
+        "At finite weights the pair totals retain memory of which joints carry the loads. "
+        "Transfer controls show that the weighted square passes both consecutive triple tests but "
+        f"retains a longer residual {motion['endpoint_defects'][0]}. Switching fixed valid pairings "
+        f"on the tetrahedron gives residual {switched['lag_two_residual']}. On an adjacent-pair "
+        f"square external balance closes linear lags but the return probability changes from "
+        f"{square_present} to {square_past} when the past is included."
     )
     return figure, alt

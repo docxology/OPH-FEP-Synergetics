@@ -40,6 +40,16 @@ from oph_fep_synergetics.manuscript_variables import MANUSCRIPT_VALUES, as_dict
 from oph_fep_synergetics.manuscript_variables.values import _value
 
 EXPECTED_KEYS = {
+    "readout.adjacent_covariances",
+    "readout.augmentation_dimensions",
+    "readout.cycle4_history",
+    "readout.endpoint_defect",
+    "readout.path4_lag_trace",
+    "readout.path4_precision",
+    "readout.path6_precision",
+    "readout.switch_history",
+    "readout.switch_lag_defect",
+    "readout.triple_defects",
     "blanket.cross_drift",
     "blanket.drift",
     "blanket.q",

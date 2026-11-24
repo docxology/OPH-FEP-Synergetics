@@ -42,7 +42,15 @@ from ..core import centroid_dynamics
 from ..core import constraint_screening, contrast_quotients
 from ..core import controls as control_module
 from ..core import free_energy as free_energy_module
-from ..core import geometric_screening, jitterbug_inference, jitterbug_motion, jitterbug_projection, jitterbug_repair
+from ..core import (
+    geometric_screening,
+    jitterbug_inference,
+    jitterbug_motion,
+    jitterbug_projection,
+    jitterbug_repair,
+    pair_projection_transfer,
+    readout_motion,
+)
 from ..core import invariants as invariant_module
 from ..core import native_dynamics
 from ..core import network as network_module
@@ -2662,6 +2670,122 @@ def _probe_jitterbug_pair_projection() -> tuple[bool, dict]:
     ), values
 
 
+def _probe_moving_readout_history() -> tuple[bool, dict]:
+    row = readout_motion.moving_readout_census()
+    values = {
+        "triple_defects": row["defects"],
+        "augmentation_dimensions": row["minimum_common_dimensions"],
+        "hidden_component_norms": row["hidden_component_norms"],
+        "transported_moving_closes": row["transported_moving_closes"],
+    }
+    return (
+        row["native_matches_transport"] and row["split_factorisation_matches"]
+        and row["uniform_stationary"] and row["changing_basis_closes"]
+        and row["state_count"] == 6 and row["covariance_scale"] == Fraction(4, 3)
+        and values == {
+            "triple_defects": (Fraction(5, 9), Fraction(-5, 9), 0),
+            "augmentation_dimensions": (2, 3),
+            "hidden_component_norms": ((Fraction(25, 36), Fraction(4, 9)),
+                                       (Fraction(25, 36), Fraction(4, 9)),
+                                       (Fraction(25, 36), Fraction(1, 4))),
+            "transported_moving_closes": True,
+        }
+    ), values
+
+
+def _probe_consecutive_readout_obstruction() -> tuple[bool, dict]:
+    row = readout_motion.moving_readout_census()
+    first, second = row["endpoint_defects"]
+    values = {
+        "consecutive_defects": row["adjacent_defects"],
+        "endpoint_defect": first,
+        "endpoint_covariance": row["endpoint_covariance"],
+        "adjacent_covariances": row["adjacent_covariances"],
+    }
+    return (
+        row["native_matches_transport"] and row["split_factorisation_matches"] and first == second
+        and values == {
+            "consecutive_defects": (0, 0), "endpoint_defect": Fraction(25, 54),
+            "endpoint_covariance": Fraction(5, 6),
+            "adjacent_covariances": (Fraction(2, 3), Fraction(5, 6), Fraction(2, 3)),
+        }
+    ), values
+
+
+def _pair_transfer_checks(rows: dict) -> bool:
+    return all(all(row[key] for key in ("balance_formula_matches", "gaussian_marginal_matches", "native_lags_match"))
+               for row in rows.values())
+
+
+def _probe_balanced_pair_transfer() -> tuple[bool, dict]:
+    rows = pair_projection_transfer.pair_projection_transfer_census()
+    pooled = {
+        key: tuple(row[key] for row in rows.values())
+        for key in ("pair_balanced", "static_correction_vanishes", "lag_two_defect_trace")
+    }
+    values = {"graphs": tuple(rows), **pooled}
+    return (
+        _pair_transfer_checks(rows) and values == {
+            "graphs": ("path4", "path6", "cycle4", "complete4"),
+            "pair_balanced": (False, False, True, True),
+            "static_correction_vanishes": (False, False, True, True),
+            "lag_two_defect_trace": (Fraction(1, 36), Fraction(3, 200), 0, 0),
+        }
+    ), values
+
+
+def _probe_pair_precision_sign_obstruction() -> tuple[bool, dict]:
+    rows = pair_projection_transfer.pair_projection_transfer_census()
+    short, long = rows["path4"], rows["path6"]
+    values = {
+        "path4_precision": short["endpoint_precision"], "path4_lag_trace": short["lag_two_defect_trace"],
+        "path6_precision": long["endpoint_precision"], "path6_lag_trace": long["lag_two_defect_trace"],
+        "marginal_laplacians": (short["site_precision_is_laplacian"], long["site_precision_is_laplacian"]),
+    }
+    return (
+        _pair_transfer_checks(rows) and values == {
+            "path4_precision": Fraction(-2, 3), "path4_lag_trace": Fraction(1, 36),
+            "path6_precision": Fraction(4, 35), "path6_lag_trace": Fraction(3, 200),
+            "marginal_laplacians": (True, False),
+        }
+    ), values
+
+
+def _probe_pair_count_lumpability() -> tuple[bool, dict]:
+    rows = pair_projection_transfer.pair_projection_transfer_census()
+    square, complete = rows["cycle4"], rows["complete4"]
+    values = {
+        "cycle4_history": square["return_probabilities"],
+        "complete4_history": complete["return_probabilities"],
+        "strong_lumping": tuple(row["strongly_lumpable"] for row in rows.values()),
+        "uniform_blocks": tuple(row["uniform_cross_blocks"] for row in rows.values()),
+        "linear_lag_defect_traces": (square["lag_two_defect_trace"], complete["lag_two_defect_trace"]),
+    }
+    return (
+        _pair_transfer_checks(rows) and values == {
+            "cycle4_history": (Fraction(1, 8), Fraction(1, 16)),
+            "complete4_history": (Fraction(1, 12), Fraction(1, 12)),
+            "strong_lumping": (False, False, False, True),
+            "uniform_blocks": (False, False, False, True),
+            "linear_lag_defect_traces": (0, 0),
+        }
+    ), values
+
+
+def _probe_switching_pair_obstruction() -> tuple[bool, dict]:
+    row = pair_projection_transfer.switching_pair_census()
+    values = {
+        "switch_lag_defect": row["lag_two_residual"], "switch_history": row["return_probabilities"],
+        "adjacent_covariances": row["adjacent_covariances"],
+    }
+    return (
+        row["all_fixed_partitions_lumpable"] and row["all_fixed_partitions_balanced"]
+        and row["endpoint_covariance"] == Fraction(4, 9)
+        and values == {"switch_lag_defect": Fraction(4, 9), "switch_history": (Fraction(11, 20), Fraction(5, 24)),
+                       "adjacent_covariances": (0, 0)}
+    ), values
+
+
 CORRESPONDENCES: tuple[Correspondence, ...] = (
     Correspondence(
         key="carrier-port-chart",
@@ -3642,6 +3766,66 @@ CORRESPONDENCES: tuple[Correspondence, ...] = (
         status="obstructed",
         source=f"{_CARRIER_SOURCE}; Fuller (1975), fig. 460.08 for geometry; Dörfler and Bullo (2013) for Kron reduction; rotated projection derived here",
         probe=_probe_jitterbug_pair_projection,
+    ),
+    Correspondence(
+        key="moving-readout-history", kind=ISOMORPHISM, pair=THREE_WAY,
+        claim="A prescribed moving linear readout has a Gaussian Markov covariance match exactly when the past and future components transported outside the middle readout are orthogonal at every split. The common invariant span supplies a fixed augmentation.",
+        oph="Prescribed symmetric seam-sampling steps keep the uniform fixed-load law and transport the mean vertex field.",
+        fep="Gaussian conditioning removes the observed block and tests the conditional covariance of the hidden components.",
+        synergetics="Alternating edge weights on a square distinguish the coordinate modes and the alternating-sign mode.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}. Caputo et al. (2010) for exclusion and Kalman (1960) for state space. split criterion and witnesses derived here",
+        probe=_probe_moving_readout_history,
+    ),
+    Correspondence(
+        key="consecutive-readout-obstruction", kind=DISAGREEMENT, pair=THREE_WAY,
+        claim="Testing only consecutive triples can miss a nonzero covariance residual over a longer history, even when all adjacent scalar covariances are nonzero.",
+        oph="The uniform two-token law on a weighted square transports an unobserved mode through both intermediate observations.",
+        fep="The two local Gaussian conditional covariance tests pass while both endpoint splits fail.",
+        synergetics="The initial and final readouts include both square coordinate modes, and the middle readouts include one.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}. weighted square control derived here",
+        probe=_probe_consecutive_readout_obstruction,
+    ),
+    Correspondence(
+        key="balanced-pair-transfer", kind=ISOMORPHISM, pair=THREE_WAY,
+        claim="External equitability of a fixed pair partition is equivalent to equality of Gaussian marginal and restriction precisions and to closure of all linear pair-total lag covariances.",
+        oph="Equal external degrees make pair sums an invariant space of the linear mean repair law.",
+        fep="The same zero cross-block condition removes the hidden correction to Gaussian marginal precision.",
+        synergetics="Pairs define retained common site values and internal differences. the weight balance is tested pair by pair.",
+        status="exact-on-domain",
+        source=f"{_CARRIER_SOURCE}. Schaub et al. (2016), §II for Laplacian equitability. Gaussian and repair criterion derived here",
+        probe=_probe_balanced_pair_transfer,
+    ),
+    Correspondence(
+        key="pair-precision-sign-obstruction", kind=DISAGREEMENT, pair=THREE_WAY,
+        claim="A conventional site Laplacian for the marginal pair means can coexist with a nonzero repair lag-two defect. Pairing a longer path can give a positive endpoint precision entry.",
+        oph="Exact binary transitions retain a lag defect on both paths.",
+        fep="Schur marginal precision has distinct sign tests on the two paths.",
+        synergetics="Consecutive pairs along a chain isolate how the geometry of site assignment affects the sign.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}. Dörfler and Bullo (2013) for vertex elimination. rotated pair averages on paths calculated here",
+        probe=_probe_pair_precision_sign_obstruction,
+    ),
+    Correspondence(
+        key="pair-count-lumpability-obstruction", kind=DISAGREEMENT, pair=THREE_WAY,
+        claim="External equitability can preserve every linear lag while stationary pair counts retain memory. At interior binary loads, full count lumpability requires uniform weights in every cross-pair block.",
+        oph="With one occupied joint in each pair, a count-changing update can sample just one seam weight.",
+        fep="The linear Gaussian covariance match does not encode the count process's return probabilities.",
+        synergetics="Adjacent pairs on a square have equal external degrees despite incomplete cross-pair connections.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}. Kemeny and Snell (1976), Theorem 6.3.2 for lumpability. weighted pair condition and square witness derived here",
+        probe=_probe_pair_count_lumpability,
+    ),
+    Correspondence(
+        key="switching-pair-obstruction", kind=DISAGREEMENT, pair=THREE_WAY,
+        claim="A moving pair partition can break Gaussian covariance closure and stationary-initialised count Markovness even when every fixed partition is itself balanced and strongly lumpable.",
+        oph="The same fair repair kernel acts throughout, while the pair-count record changes between attempts.",
+        fep="Orthogonal middle coordinates give zero adjacent covariances and a positive endpoint residual.",
+        synergetics="The regular tetrahedral seam graph admits different opposite-edge pairings of its four vertices.",
+        status="obstructed",
+        source=f"{_CARRIER_SOURCE}. Kemeny and Snell (1976) for fixed-partition lumpability. switching control derived here",
+        probe=_probe_switching_pair_obstruction,
     ),
 )
 

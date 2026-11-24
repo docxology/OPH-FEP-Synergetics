@@ -161,6 +161,13 @@ hold.
 - `jitterbug-pair-projection-defect` links the marginal centred Gaussian
   pair-mean precision to a lag-two covariance defect of fair binary
   pair totals. Both use unit bars and a finite common matching weight.
+- The moving-readout transfer probes use prescribed weights and readouts
+  with a uniform fixed-load initial law. Their Gaussian comparison concerns
+  linear covariances over the full recorded history.
+- The pair transfer uses fixed equal-size pairs in a connected weighted
+  graph. Full count lumping at interior binary loads requires constant
+  cross-pair blocks. The tetrahedral control switches the observation while
+  holding the graph and repair kernel fixed.
 - `centered-gaussian-screen-obstruction` compares a grounded Gaussian with
   the same free field conditioned on an exact or noisy global sum. Screening
   under ordinary clamping alone does not carry to the constrained field.

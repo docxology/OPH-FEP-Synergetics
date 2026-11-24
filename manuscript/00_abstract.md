@@ -51,7 +51,11 @@ dimensions restore at the level of covariances. At finite weights, the
 same hidden pair contrasts change Gaussian precision and repair lag
 covariances. At coalescence the Gaussian gives a doubled octahedral precision,
 while finite-weight repair retains pair-load memory and yields a
-Markov quotient only in the accelerated limit studied here.
+Markov quotient in the accelerated limit studied here. On other graphs,
+covariance closure requires all recorded time splits. Balanced fixed pairs
+preserve linear lags, while exact count quotients at interior loads
+require equal weights across each pair block. Switching balanced
+pairings on a tetrahedron can restore dependence on the past.
 Cuboctahedral and icosahedral configurations attain the same kissing number
 with different contacts among the outer spheres. The cuboctahedral gauge
 determines lattice coordination shells, and equal-covariance Gaussian

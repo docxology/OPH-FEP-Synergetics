@@ -224,7 +224,10 @@ conditional-probability and geometry results directly.
 `periodic-fcc-contrast-collision`, `linear-lag-closure`,
 `single-seam-lag-obstruction`, `surface-harmonic-covariance`,
 `copied-surface-weight-obstruction`, `root-shell-quadratic-precision`,
-`fcc-plane-screen-transfer`, `centered-gaussian-screen-obstruction`.
+`fcc-plane-screen-transfer`, `centered-gaussian-screen-obstruction`,
+`moving-readout-history`, `consecutive-readout-obstruction`, `balanced-pair-transfer`,
+`pair-precision-sign-obstruction`, `pair-count-lumpability-obstruction`,
+`switching-pair-obstruction`.
 
 The transfer chapter gives conditions for a resistance quotient,
 Gaussian lag covariance closure and reciprocal duality on closed
@@ -232,6 +235,9 @@ surfaces. The cube, periodic FCC and strengthened 24-cell examples
 show which data determine these properties. The root-shell calculation
 separates diagonal and mixed modes. The FCC plane proof extends beyond
 the first shell and compares grounded, noisy-sum and exact-sum conditioning.
+The moving square tests all recorded splits. Paired paths separate the
+precision sign and lag tests. A square and a tetrahedron distinguish
+fixed-pair linear agreement, full count lumpability and switching memory.
 
 ## Fuller's Jitterbug and the carrier graph
 

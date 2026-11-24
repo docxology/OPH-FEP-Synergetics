@@ -25,7 +25,7 @@ binds numerical results to computations or cited sources.
 ## What runs
 
 ```
-oph-fep-synergetics verify                 # all 83 correspondence probes
+oph-fep-synergetics verify                 # all 89 correspondence probes
 oph-fep-synergetics verify --json          # the same, as a machine-readable report
 oph-fep-synergetics verify --key pr01-obstruction
 oph-fep-synergetics verify --key jitterbug-octahedral-gaussian-limit --key jitterbug-averaged-repair-limit
@@ -92,15 +92,15 @@ python3 -m venv .venv
 | | `geometry/subdivision.py` | icosahedral subdivision and the dual count identities |
 | | `geometry/solids.py` | oriented faces, polyhedron volume, and the icosahedron's tetravolume against its closed form |
 | | `geometry/jitterbug.py` | fixed-bar Jitterbug coordinates and exact hull, bar and nearest-pair comparisons |
-| `analysis` | `analysis/registry.py` | the 83 registered correspondences, each with a pairwise or three-way scope and an executable probe |
+| `analysis` | `analysis/registry.py` | the 89 registered correspondences, each with a pairwise or three-way scope and an executable probe |
 | | `analysis/provenance.py` | source pins, licence terms and reuse policy |
 | `manuscript_variables` | `manuscript_variables/values.py` | every number the prose may quote, derived from the package where a derivation exists |
 
 ## The registry
 
-83 entries: **40 isomorphisms**, **33 disagreements**, **10 complementarities**,
+89 entries: **42 isomorphisms**, **37 disagreements**, **10 complementarities**,
 scoped to the pairs `oph-fep` (31), `synergetics-oph` (16), `fep-synergetics` (5)
-and `three-way` (31). All 83 probes pass. `verify --kind` narrows a run to one of
+and `three-way` (37). All 89 probes pass. `verify --kind` narrows a run to one of
 the three kinds and `--pair` to one of the four scopes. The full table, with the OPH / FEP /
 Synergetics reading of each entry and the values its probe asserts, is generated
 into [docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
@@ -114,7 +114,10 @@ centroid on either shell, yet three-time events detect memory.
 The [transfer chapter](manuscript/07_transfer_criteria.md) proves when these
 claims generalise. It checks a cube quotient, resistance collisions on
 periodic FCC, a weighted twenty-four-cell, harmonic covariance on a torus
-and plane screening under global constraints.
+and plane screening under global constraints. A weighted square separates
+consecutive covariance checks from full history. Paired paths and a
+square separate Gaussian precision, linear lag, and count criteria.
+Switching tetrahedral pairings tests all three on a common graph.
 
 The [Jitterbug chapter](manuscript/07_jitterbug.md) reconstructs Fuller's
 fixed-bar path from the cuboctahedron through the regular icosahedron to
@@ -248,7 +251,8 @@ carrier, repair and lattice costs, and tetravolumes. The Jitterbug poster
 on page 6 follows the linkage past the regular icosahedron to the paired
 octahedral sites. It shows nearest-pair disconnection, the tuned conductance
 rule, the moving-pose obstruction and the effects of hidden pair differences.
-It also compares the Gaussian and repair limits at the paired endpoint.
+It also compares the paired endpoint limits and shows transfer controls on
+square and tetrahedral graphs.
 
 To regenerate the figures without invoking LaTeX, run
 `.venv/bin/python scripts/make_figures.py`. It writes the poster as
@@ -280,7 +284,7 @@ The manuscript checks cover four contracts.
 
 ```
 data/sources.json                    pinned sources, licences, cited identifiers
-docs/CORRESPONDENCES.md              generated: the 83 entries and their probe values
+docs/CORRESPONDENCES.md              generated: the 89 entries and their probe values
 docs/MANUSCRIPT_VALUES.md            generated: every bound value
 docs/CONCORDANCE.md                  generated: claims, references and bound values quoted in figure captions
 docs/PROVENANCE.md                   the pins and the reuse rules
@@ -290,11 +294,11 @@ data/ontology_concordance.json       structured terms, comparisons, evidence and
 manuscript/                          paper, bibliography and generated ontology supplement
 scripts/check_local_ci.py           checks the committed tree locally on Python 3.14
 scripts/render_docs.py               regenerates the reference documents and ontology supplement
-scripts/make_figures.py              renders the 31 figures, standalone vector poster and accessibility registry
+scripts/make_figures.py              renders the 32 figures, standalone vector poster and accessibility registry
 scripts/build.py                     runs the four manuscript steps, ending in the render contract
 scripts/z_generate_manuscript_variables.py   resolves every token into output/manuscript/
 src/oph_fep_synergetics/             the package
-tests/                               the suite (480 tests)
+tests/                               the suite (486 tests)
 ```
 
 ## Tests and local CI
@@ -315,7 +319,7 @@ checks. During development you can run the suite directly.
 .venv/bin/python -m pytest tests/ -q --cov --cov-report=term-missing
 ```
 
-480 tests. The suite checks exact values rather than
+486 tests. The suite checks exact values rather than
 smoke behaviour: the 78-state shell and all 4680 transitions, the exact
 rational contrast, the closed-form Routh column, the Lyapunov determinant
 `115/27`, the mediator threshold at `epsilon = 1/3`, the IVM round-trip over

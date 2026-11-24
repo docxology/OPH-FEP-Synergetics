@@ -116,7 +116,7 @@ units and number systems in the three comparisons.
 
 ## Panel 5 — Fuller's Jitterbug and the OPH carrier {#sec:ga-jitterbug}
 
-![Fuller's hinged triangles pass the regular icosahedral OPH carrier on their way to paired octahedral sites. The geometric hull diagonals become the entire nearest-pair graph, while the hull stays connected. Tuned weights preserve coordinate lag covariances at fixed poses. Changing the pose introduces a covariance residual. At the limit the Gaussian restricts to common site values, and pair-load repair requires an accelerated clock. See [@sec:jitterbug] for the derivations.](../output/figures/fig_ga_jitterbug.png){#fig:ga-jitterbug height=82%}
+![Fuller's hinged triangles pass the regular icosahedral OPH carrier on their way to paired octahedral sites. The geometric hull diagonals become the entire nearest-pair graph, while the hull stays connected. Tuned weights preserve coordinate lag covariances at fixed poses. Changing the pose on both legs introduces a covariance residual. At the limit the Gaussian restricts to common site values, and pair-load repair requires an accelerated clock. See [@sec:jitterbug] and [@fig:readout-transfer] for the Jitterbug and transfer tests.](../output/figures/fig_ga_jitterbug.png){#fig:ga-jitterbug height=82%}
 
 \floatplacement{figure}{tbp}
 

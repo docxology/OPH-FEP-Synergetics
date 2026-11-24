@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Generalise moving-readout and pair-projection tests to weighted squares,
+  paths, and tetrahedral pairings. Add exact history and lumpability
+  controls, a transfer figure and revised poster.
 - Test Jitterbug observations during motion and at finite matching weight.
   Add the six-slot covariance construction, exact pair-projection tests,
   three ontology entries, a new figure and an expanded vector poster.
