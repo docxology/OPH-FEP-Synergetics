@@ -162,4 +162,4 @@ package claims:
 3. Two bibliography identifiers were wrong when checked against Crossref (the
    DOI of Biehl, Pollock and Kanai's critique, and the DOI and year of Da Costa
    et al.'s discrete-state synthesis); both were corrected, and every DOI in
-   `manuscript/references.bib` now resolves to the metadata the entry states.
+   `docs/manuscript/references.bib` now resolves to the metadata the entry states.

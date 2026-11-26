@@ -127,154 +127,154 @@ argue by key.
 
 | figure | declared in | cited by | probe sources of values quoted in the caption |
 | --- | --- | --- | --- |
-| `fig:blanket` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | `stationary-blanket` |
-| `fig:carrier` | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md) | *none* |
-| `fig:centroid-memory` | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | `repair-centroid-memory` |
-| `fig:conjugation` | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) | *none* |
-| `fig:descent` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | `pr01-obstruction` |
-| `fig:dstability` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | `d-stability` |
-| `fig:extensions` | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | *none* |
-| `fig:families` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | *none* |
-| `fig:ga-carrier` | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md) | [`02_framework.md`](../manuscript/02_framework.md) | *none* |
-| `fig:ga-descent` | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | *none* |
-| `fig:ga-jitterbug` | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | *none* |
-| `fig:ga-synergetics` | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) | *none* |
-| `fig:ga-triangle` | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md) | [`03_method.md`](../manuscript/03_method.md) | *none* |
-| `fig:geometry-transfer` | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | `copied-surface-weight-obstruction` |
-| `fig:ivm` | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) | *none* |
-| `fig:jitterbug` | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | *none* |
-| `fig:jitterbug-observation-limits` | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | *none* |
-| `fig:mediator` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | `mediator-obstruction`, `reduction-criterion` |
-| `fig:network` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) | *none* |
-| `fig:orbit` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | *none* |
-| `fig:pair-triangles` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) | *none* |
-| `fig:readout-transfer` | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md), [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | *none* |
-| `fig:registry` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) | *none* |
-| `fig:repair-transfer` | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | `periodic-fcc-contrast-collision`, `single-seam-lag-obstruction` |
-| `fig:sandwich` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) | `free-energy-dictionary`, `free-energy-name-collision` |
-| `fig:schedule` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | *none* |
-| `fig:scope-matrix` | [`03_method.md`](../manuscript/03_method.md) | [`03_method.md`](../manuscript/03_method.md) | *none* |
-| `fig:shell-gauge` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | `shell-vs-free-energy` |
-| `fig:subdivision` | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) | *none* |
-| `fig:three-way` | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | `central-plane-screening`, `copied-dual-weight-obstruction`, `quadratic-isotropy-obstruction`, `repair-distance-counterexample` |
-| `fig:vertex-shells` | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) | *none* |
+| `fig:blanket` | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) | `stationary-blanket` |
+| `fig:carrier` | [`02_framework.md`](manuscript/02_framework.md) | [`02_framework.md`](manuscript/02_framework.md) | *none* |
+| `fig:centroid-memory` | [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) | [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) | `repair-centroid-memory` |
+| `fig:conjugation` | [`06_complementarities.md`](manuscript/06_complementarities.md) | [`06_complementarities.md`](manuscript/06_complementarities.md) | *none* |
+| `fig:descent` | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) | `pr01-obstruction` |
+| `fig:dstability` | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) | `d-stability` |
+| `fig:extensions` | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) | *none* |
+| `fig:families` | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) | *none* |
+| `fig:ga-carrier` | [`00_00_graphical_abstract.md`](manuscript/00_00_graphical_abstract.md) | [`02_framework.md`](manuscript/02_framework.md) | *none* |
+| `fig:ga-descent` | [`00_00_graphical_abstract.md`](manuscript/00_00_graphical_abstract.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) | *none* |
+| `fig:ga-jitterbug` | [`00_00_graphical_abstract.md`](manuscript/00_00_graphical_abstract.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | *none* |
+| `fig:ga-synergetics` | [`00_00_graphical_abstract.md`](manuscript/00_00_graphical_abstract.md) | [`06_complementarities.md`](manuscript/06_complementarities.md) | *none* |
+| `fig:ga-triangle` | [`00_00_graphical_abstract.md`](manuscript/00_00_graphical_abstract.md) | [`03_method.md`](manuscript/03_method.md) | *none* |
+| `fig:geometry-transfer` | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | `copied-surface-weight-obstruction` |
+| `fig:ivm` | [`06_complementarities.md`](manuscript/06_complementarities.md) | [`06_complementarities.md`](manuscript/06_complementarities.md) | *none* |
+| `fig:jitterbug` | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | *none* |
+| `fig:jitterbug-observation-limits` | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | *none* |
+| `fig:mediator` | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) | `mediator-obstruction`, `reduction-criterion` |
+| `fig:network` | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`04_correspondences.md`](manuscript/04_correspondences.md) | *none* |
+| `fig:orbit` | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) | *none* |
+| `fig:pair-triangles` | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`04_correspondences.md`](manuscript/04_correspondences.md) | *none* |
+| `fig:readout-transfer` | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`00_00_graphical_abstract.md`](manuscript/00_00_graphical_abstract.md), [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | *none* |
+| `fig:registry` | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`04_correspondences.md`](manuscript/04_correspondences.md) | *none* |
+| `fig:repair-transfer` | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | `periodic-fcc-contrast-collision`, `single-seam-lag-obstruction` |
+| `fig:sandwich` | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`04_correspondences.md`](manuscript/04_correspondences.md) | `free-energy-dictionary`, `free-energy-name-collision` |
+| `fig:schedule` | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) | *none* |
+| `fig:scope-matrix` | [`03_method.md`](manuscript/03_method.md) | [`03_method.md`](manuscript/03_method.md) | *none* |
+| `fig:shell-gauge` | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) | `shell-vs-free-energy` |
+| `fig:subdivision` | [`06_complementarities.md`](manuscript/06_complementarities.md) | [`06_complementarities.md`](manuscript/06_complementarities.md) | *none* |
+| `fig:three-way` | [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) | [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) | `central-plane-screening`, `copied-dual-weight-obstruction`, `quadratic-isotropy-obstruction`, `repair-distance-counterexample` |
+| `fig:vertex-shells` | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) | *none* |
 
 ## Tables
 
 | table | declared in | cited by |
 | --- | --- | --- |
-| `tbl:adjacency` | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md) |
-| `tbl:vocabulary` | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md) |
-| `tbl:status` | [`03_method.md`](../manuscript/03_method.md) | [`03_method.md`](../manuscript/03_method.md) |
-| `tbl:registry` | [`03_method.md`](../manuscript/03_method.md) | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md), [`03_method.md`](../manuscript/03_method.md) |
-| `tbl:surprises` | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) |
-| `tbl:reproduced` | [`07_scope.md`](../manuscript/07_scope.md) | [`07_scope.md`](../manuscript/07_scope.md) |
-| `tbl:surfaces` | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) |
-| `tbl:pins` | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) |
-| `tbl:commands` | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) |
-| `tbl:ontology-interfaces` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`02_framework.md`](../manuscript/02_framework.md) |
-| `tbl:ontology-dynamics` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`08_reproducibility.md`](../manuscript/08_reproducibility.md) |
-| `tbl:ontology-geometry` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `tbl:ontology-exact-extensions` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
-| `tbl:ontology-three-way-transfer` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) |
-| `tbl:ontology-transfer-beyond-shells` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `tbl:ontology-jitterbug-linkage` | [`90_ontology_concordance.md`](../manuscript/90_ontology_concordance.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
+| `tbl:adjacency` | [`02_framework.md`](manuscript/02_framework.md) | [`02_framework.md`](manuscript/02_framework.md) |
+| `tbl:vocabulary` | [`02_framework.md`](manuscript/02_framework.md) | [`02_framework.md`](manuscript/02_framework.md) |
+| `tbl:status` | [`03_method.md`](manuscript/03_method.md) | [`03_method.md`](manuscript/03_method.md) |
+| `tbl:registry` | [`03_method.md`](manuscript/03_method.md) | [`00_00_graphical_abstract.md`](manuscript/00_00_graphical_abstract.md), [`03_method.md`](manuscript/03_method.md) |
+| `tbl:surprises` | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`04_correspondences.md`](manuscript/04_correspondences.md) |
+| `tbl:reproduced` | [`07_scope.md`](manuscript/07_scope.md) | [`07_scope.md`](manuscript/07_scope.md) |
+| `tbl:surfaces` | [`08_reproducibility.md`](manuscript/08_reproducibility.md) | [`08_reproducibility.md`](manuscript/08_reproducibility.md) |
+| `tbl:pins` | [`08_reproducibility.md`](manuscript/08_reproducibility.md) | [`08_reproducibility.md`](manuscript/08_reproducibility.md) |
+| `tbl:commands` | [`08_reproducibility.md`](manuscript/08_reproducibility.md) | [`08_reproducibility.md`](manuscript/08_reproducibility.md) |
+| `tbl:ontology-interfaces` | [`90_ontology_concordance.md`](manuscript/90_ontology_concordance.md) | [`02_framework.md`](manuscript/02_framework.md) |
+| `tbl:ontology-dynamics` | [`90_ontology_concordance.md`](manuscript/90_ontology_concordance.md) | [`08_reproducibility.md`](manuscript/08_reproducibility.md) |
+| `tbl:ontology-geometry` | [`90_ontology_concordance.md`](manuscript/90_ontology_concordance.md) | [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `tbl:ontology-exact-extensions` | [`90_ontology_concordance.md`](manuscript/90_ontology_concordance.md) | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) |
+| `tbl:ontology-three-way-transfer` | [`90_ontology_concordance.md`](manuscript/90_ontology_concordance.md) | [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) |
+| `tbl:ontology-transfer-beyond-shells` | [`90_ontology_concordance.md`](manuscript/90_ontology_concordance.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `tbl:ontology-jitterbug-linkage` | [`90_ontology_concordance.md`](manuscript/90_ontology_concordance.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) |
 
 ## Formal statements and equations
 
 | label | kind | stated in | cited by |
 | --- | --- | --- | --- |
-| `def:carrier` | def | [`02_framework.md`](../manuscript/02_framework.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `def:shell` | def | [`02_framework.md`](../manuscript/02_framework.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) |
-| `def:coordination` | def | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`05_disagreements.md`](../manuscript/05_disagreements.md), [`07_scope.md`](../manuscript/07_scope.md) |
-| `def:correspondence` | def | [`03_method.md`](../manuscript/03_method.md) | [`01_introduction.md`](../manuscript/01_introduction.md) |
-| `def:dstability` | def | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `prop:carrier` | prop | [`02_framework.md`](../manuscript/02_framework.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md) |
-| `prop:spectrum` | prop | [`02_framework.md`](../manuscript/02_framework.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `prop:descent` | prop | [`02_framework.md`](../manuscript/02_framework.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `prop:ivm` | prop | [`02_framework.md`](../manuscript/02_framework.md) | [`01_introduction.md`](../manuscript/01_introduction.md) |
-| `prop:ve` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`07_scope.md`](../manuscript/07_scope.md) |
-| `prop:conditioning` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`07_scope.md`](../manuscript/07_scope.md) |
-| `prop:binary-conditional-variance` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md) |
-| `prop:sheaf` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md) |
-| `prop:tree` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `prop:cohomology` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`00_00_graphical_abstract.md`](../manuscript/00_00_graphical_abstract.md), [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md) |
-| `prop:symmetry` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`02_framework.md`](../manuscript/02_framework.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`07_scope.md`](../manuscript/07_scope.md) |
-| `prop:kl` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `prop:subgraph-census` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md) |
-| `prop:defect` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md) |
-| `prop:carrier-spectral-chords` | prop | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
-| `prop:census` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`07_scope.md`](../manuscript/07_scope.md) |
-| `prop:native-rewrite` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`05_disagreements.md`](../manuscript/05_disagreements.md), [`07_scope.md`](../manuscript/07_scope.md) |
-| `prop:stationary` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`02_framework.md`](../manuscript/02_framework.md) |
-| `prop:solenoid` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`07_scope.md`](../manuscript/07_scope.md) |
-| `prop:dstability` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`07_scope.md`](../manuscript/07_scope.md) |
-| `prop:mediator` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`07_scope.md`](../manuscript/07_scope.md) |
-| `prop:existence` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`03_method.md`](../manuscript/03_method.md) |
-| `prop:cuboctahedron` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `prop:shell-energy` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`02_framework.md`](../manuscript/02_framework.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `prop:vertex-shells` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `prop:families` | prop | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `prop:quadray-ivm` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `prop:subdivision` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `prop:ep` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `prop:replicator` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `prop:ico-volume` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `prop:packing` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `prop:currencies` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `prop:resistance` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`01_introduction.md`](../manuscript/01_introduction.md), [`06_complementarities.md`](../manuscript/06_complementarities.md), [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
-| `prop:dual-cells` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `prop:conjugation` | prop | [`06_complementarities.md`](../manuscript/06_complementarities.md) | [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `prop:repair-first-entry` | prop | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
-| `prop:repair-distance-lumping` | prop | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
-| `prop:grounded-forest-precision` | prop | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
-| `prop:greedy-record-placement` | prop | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) |
-| `prop:planar-dual-covariance` | prop | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md), [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) |
-| `prop:fcc-spectral-geometry` | prop | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](../manuscript/06_finite_extensions.md), [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) |
-| `prop:jitterbug-rigid-motion` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
-| `prop:jitterbug-graph-obstruction` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
-| `prop:jitterbug-weighted-precision` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
-| `prop:jitterbug-coordinate-closure` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
-| `prop:jitterbug-nearest-only-obstruction` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
-| `prop:jitterbug-weight-policy-obstruction` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
-| `prop:jitterbug-moving-closure` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
-| `prop:jitterbug-augmented-lag` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
-| `prop:jitterbug-octahedral-gaussian-limit` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
-| `prop:jitterbug-pair-load-memory` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
-| `prop:jitterbug-averaged-repair-limit` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
-| `prop:jitterbug-pair-projection` | prop | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md) |
-| `prop:repair-contrast-record` | prop | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) |
-| `prop:repair-centroid-memory` | prop | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:reciprocal-dual-weights` | prop | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:quadratic-mode-transfer` | prop | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) |
-| `prop:central-plane-blanket` | prop | [`07_three_way_limits.md`](../manuscript/07_three_way_limits.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:distance-regular-repair` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:resistance-collision` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:lag-closure-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md), [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:moving-readout-history` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md), [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:consecutive-readout-obstruction` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:balanced-pair-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md), [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:pair-precision-sign-obstruction` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:pair-count-lumpability` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:switching-pair-obstruction` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_jitterbug.md`](../manuscript/07_jitterbug.md), [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:surface-harmonic-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:root-quadratic-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `prop:sum-constraint-transfer` | prop | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](../manuscript/07_transfer_criteria.md) |
-| `eq:repair` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `eq:energy` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `eq:vfe` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`07_scope.md`](../manuscript/07_scope.md) |
-| `eq:gaussian` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`04_correspondences.md`](../manuscript/04_correspondences.md), [`05_disagreements.md`](../manuscript/05_disagreements.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `eq:blanket` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `eq:quadray` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md) |
-| `eq:neighbours` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`02_framework.md`](../manuscript/02_framework.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `eq:shell` | eq | [`02_framework.md`](../manuscript/02_framework.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md), [`06_complementarities.md`](../manuscript/06_complementarities.md) |
-| `eq:gamma` | eq | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `eq:chain` | eq | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) |
-| `eq:ve` | eq | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) |
-| `eq:fibre-vfe` | eq | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) |
-| `eq:tree` | eq | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md), [`05_disagreements.md`](../manuscript/05_disagreements.md) |
-| `eq:kl` | eq | [`04_correspondences.md`](../manuscript/04_correspondences.md) | [`04_correspondences.md`](../manuscript/04_correspondences.md) |
-| `eq:routh` | eq | [`05_disagreements.md`](../manuscript/05_disagreements.md) | [`05_disagreements.md`](../manuscript/05_disagreements.md) |
+| `def:carrier` | def | [`02_framework.md`](manuscript/02_framework.md) | [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `def:shell` | def | [`02_framework.md`](manuscript/02_framework.md) | [`04_correspondences.md`](manuscript/04_correspondences.md) |
+| `def:coordination` | def | [`02_framework.md`](manuscript/02_framework.md) | [`02_framework.md`](manuscript/02_framework.md), [`05_disagreements.md`](manuscript/05_disagreements.md), [`07_scope.md`](manuscript/07_scope.md) |
+| `def:correspondence` | def | [`03_method.md`](manuscript/03_method.md) | [`01_introduction.md`](manuscript/01_introduction.md) |
+| `def:dstability` | def | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `prop:carrier` | prop | [`02_framework.md`](manuscript/02_framework.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`04_correspondences.md`](manuscript/04_correspondences.md) |
+| `prop:spectrum` | prop | [`02_framework.md`](manuscript/02_framework.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`04_correspondences.md`](manuscript/04_correspondences.md), [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `prop:descent` | prop | [`02_framework.md`](manuscript/02_framework.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `prop:ivm` | prop | [`02_framework.md`](manuscript/02_framework.md) | [`01_introduction.md`](manuscript/01_introduction.md) |
+| `prop:ve` | prop | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`04_correspondences.md`](manuscript/04_correspondences.md), [`07_scope.md`](manuscript/07_scope.md) |
+| `prop:conditioning` | prop | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`04_correspondences.md`](manuscript/04_correspondences.md), [`07_scope.md`](manuscript/07_scope.md) |
+| `prop:binary-conditional-variance` | prop | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`04_correspondences.md`](manuscript/04_correspondences.md) |
+| `prop:sheaf` | prop | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`00_00_graphical_abstract.md`](manuscript/00_00_graphical_abstract.md) |
+| `prop:tree` | prop | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `prop:cohomology` | prop | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`00_00_graphical_abstract.md`](manuscript/00_00_graphical_abstract.md), [`01_introduction.md`](manuscript/01_introduction.md), [`04_correspondences.md`](manuscript/04_correspondences.md) |
+| `prop:symmetry` | prop | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`02_framework.md`](manuscript/02_framework.md), [`04_correspondences.md`](manuscript/04_correspondences.md), [`07_scope.md`](manuscript/07_scope.md) |
+| `prop:kl` | prop | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`04_correspondences.md`](manuscript/04_correspondences.md), [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `prop:subgraph-census` | prop | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`04_correspondences.md`](manuscript/04_correspondences.md) |
+| `prop:defect` | prop | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`04_correspondences.md`](manuscript/04_correspondences.md) |
+| `prop:carrier-spectral-chords` | prop | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`04_correspondences.md`](manuscript/04_correspondences.md), [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) |
+| `prop:census` | prop | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`07_scope.md`](manuscript/07_scope.md) |
+| `prop:native-rewrite` | prop | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`05_disagreements.md`](manuscript/05_disagreements.md), [`07_scope.md`](manuscript/07_scope.md) |
+| `prop:stationary` | prop | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`02_framework.md`](manuscript/02_framework.md) |
+| `prop:solenoid` | prop | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`07_scope.md`](manuscript/07_scope.md) |
+| `prop:dstability` | prop | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`07_scope.md`](manuscript/07_scope.md) |
+| `prop:mediator` | prop | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`07_scope.md`](manuscript/07_scope.md) |
+| `prop:existence` | prop | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`03_method.md`](manuscript/03_method.md) |
+| `prop:cuboctahedron` | prop | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `prop:shell-energy` | prop | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`02_framework.md`](manuscript/02_framework.md), [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `prop:vertex-shells` | prop | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `prop:families` | prop | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `prop:quadray-ivm` | prop | [`06_complementarities.md`](manuscript/06_complementarities.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `prop:subdivision` | prop | [`06_complementarities.md`](manuscript/06_complementarities.md) | [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `prop:ep` | prop | [`06_complementarities.md`](manuscript/06_complementarities.md) | [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `prop:replicator` | prop | [`06_complementarities.md`](manuscript/06_complementarities.md) | [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `prop:ico-volume` | prop | [`06_complementarities.md`](manuscript/06_complementarities.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `prop:packing` | prop | [`06_complementarities.md`](manuscript/06_complementarities.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `prop:currencies` | prop | [`06_complementarities.md`](manuscript/06_complementarities.md) | [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `prop:resistance` | prop | [`06_complementarities.md`](manuscript/06_complementarities.md) | [`01_introduction.md`](manuscript/01_introduction.md), [`06_complementarities.md`](manuscript/06_complementarities.md), [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) |
+| `prop:dual-cells` | prop | [`06_complementarities.md`](manuscript/06_complementarities.md) | [`04_correspondences.md`](manuscript/04_correspondences.md), [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `prop:conjugation` | prop | [`06_complementarities.md`](manuscript/06_complementarities.md) | [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `prop:repair-first-entry` | prop | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) |
+| `prop:repair-distance-lumping` | prop | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) |
+| `prop:grounded-forest-precision` | prop | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) |
+| `prop:greedy-record-placement` | prop | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) |
+| `prop:planar-dual-covariance` | prop | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md), [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) |
+| `prop:fcc-spectral-geometry` | prop | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md) | [`06_finite_extensions.md`](manuscript/06_finite_extensions.md), [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) |
+| `prop:jitterbug-rigid-motion` | prop | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) |
+| `prop:jitterbug-graph-obstruction` | prop | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) |
+| `prop:jitterbug-weighted-precision` | prop | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) |
+| `prop:jitterbug-coordinate-closure` | prop | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) |
+| `prop:jitterbug-nearest-only-obstruction` | prop | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) |
+| `prop:jitterbug-weight-policy-obstruction` | prop | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) |
+| `prop:jitterbug-moving-closure` | prop | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) |
+| `prop:jitterbug-augmented-lag` | prop | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) |
+| `prop:jitterbug-octahedral-gaussian-limit` | prop | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) |
+| `prop:jitterbug-pair-load-memory` | prop | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) |
+| `prop:jitterbug-averaged-repair-limit` | prop | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) |
+| `prop:jitterbug-pair-projection` | prop | [`07_jitterbug.md`](manuscript/07_jitterbug.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md) |
+| `prop:repair-contrast-record` | prop | [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) | [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) |
+| `prop:repair-centroid-memory` | prop | [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:reciprocal-dual-weights` | prop | [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:quadratic-mode-transfer` | prop | [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) | [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) |
+| `prop:central-plane-blanket` | prop | [`07_three_way_limits.md`](manuscript/07_three_way_limits.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:distance-regular-repair` | prop | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:resistance-collision` | prop | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:lag-closure-transfer` | prop | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md), [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:moving-readout-history` | prop | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md), [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:consecutive-readout-obstruction` | prop | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:balanced-pair-transfer` | prop | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md), [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:pair-precision-sign-obstruction` | prop | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:pair-count-lumpability` | prop | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:switching-pair-obstruction` | prop | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_jitterbug.md`](manuscript/07_jitterbug.md), [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:surface-harmonic-transfer` | prop | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:root-quadratic-transfer` | prop | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `prop:sum-constraint-transfer` | prop | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) | [`07_transfer_criteria.md`](manuscript/07_transfer_criteria.md) |
+| `eq:repair` | eq | [`02_framework.md`](manuscript/02_framework.md) | [`02_framework.md`](manuscript/02_framework.md), [`04_correspondences.md`](manuscript/04_correspondences.md), [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `eq:energy` | eq | [`02_framework.md`](manuscript/02_framework.md) | [`02_framework.md`](manuscript/02_framework.md), [`04_correspondences.md`](manuscript/04_correspondences.md), [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `eq:vfe` | eq | [`02_framework.md`](manuscript/02_framework.md) | [`02_framework.md`](manuscript/02_framework.md), [`04_correspondences.md`](manuscript/04_correspondences.md), [`07_scope.md`](manuscript/07_scope.md) |
+| `eq:gaussian` | eq | [`02_framework.md`](manuscript/02_framework.md) | [`02_framework.md`](manuscript/02_framework.md), [`04_correspondences.md`](manuscript/04_correspondences.md), [`05_disagreements.md`](manuscript/05_disagreements.md), [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `eq:blanket` | eq | [`02_framework.md`](manuscript/02_framework.md) | [`02_framework.md`](manuscript/02_framework.md), [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `eq:quadray` | eq | [`02_framework.md`](manuscript/02_framework.md) | [`02_framework.md`](manuscript/02_framework.md) |
+| `eq:neighbours` | eq | [`02_framework.md`](manuscript/02_framework.md) | [`02_framework.md`](manuscript/02_framework.md), [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `eq:shell` | eq | [`02_framework.md`](manuscript/02_framework.md) | [`05_disagreements.md`](manuscript/05_disagreements.md), [`06_complementarities.md`](manuscript/06_complementarities.md) |
+| `eq:gamma` | eq | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `eq:chain` | eq | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`04_correspondences.md`](manuscript/04_correspondences.md) |
+| `eq:ve` | eq | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`04_correspondences.md`](manuscript/04_correspondences.md) |
+| `eq:fibre-vfe` | eq | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`04_correspondences.md`](manuscript/04_correspondences.md) |
+| `eq:tree` | eq | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`04_correspondences.md`](manuscript/04_correspondences.md), [`05_disagreements.md`](manuscript/05_disagreements.md) |
+| `eq:kl` | eq | [`04_correspondences.md`](manuscript/04_correspondences.md) | [`04_correspondences.md`](manuscript/04_correspondences.md) |
+| `eq:routh` | eq | [`05_disagreements.md`](manuscript/05_disagreements.md) | [`05_disagreements.md`](manuscript/05_disagreements.md) |
 
 ## Values
 
@@ -593,6 +593,6 @@ argue by key.
 | `{{VORONOI_VERTICES}}` | `00_00_graphical_abstract.md`, `03_method.md`, `06_complementarities.md` |
 
 311 of the bound values are quoted by the prose. The cover is
-placed by `manuscript/config.yaml`; the accessibility registry that gives
+placed by `docs/manuscript/config.yaml`; the accessibility registry that gives
 each figure its alternative text is `output/figures/figure_registry.json`,
 written by `scripts/make_figures.py`.

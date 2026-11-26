@@ -17,13 +17,13 @@ scope limits there are part of the deliverable, not caveats to be trimmed.
 | a number the prose will quote | `manuscript_variables/values.py`, as a `BoundValue` with its source |
 | a source pin or a licence term | `data/sources.json` |
 | a terminology comparison for the ontology supplement | `data/ontology_concordance.json` |
-| a manuscript section | `manuscript/<nn>_<name>.md`, with a `{#sec:…}` label on its top-level heading |
+| a manuscript section | `docs/manuscript/<nn>_<name>.md`, with a `{#sec:…}` label on its top-level heading |
 | a figure | a builder in `scripts/make_figures.py`, plotted only from package functions |
-| a citation | `manuscript/references.bib`, cited from a section and nowhere else |
+| a citation | `docs/manuscript/references.bib`, cited from a section and nowhere else |
 | a test | `tests/`, named for the layer it exercises |
 
 `docs/CORRESPONDENCES.md`, `docs/MANUSCRIPT_VALUES.md`, `docs/CONCORDANCE.md`
-and `manuscript/90_ontology_concordance.md` are **generated**. Edit their data
+and `docs/manuscript/90_ontology_concordance.md` are **generated**. Edit their data
 or manuscript sources and regenerate them with `scripts/render_docs.py`.
 
 ## Invariants
@@ -64,7 +64,7 @@ or manuscript sources and regenerate them with `scripts/render_docs.py`.
    Where the source cannot be reproduced from its text, record
    `not-reproduced` and say why.
 9. **The prose quotes tokens, never numbers.** Every numeric claim in
-   `manuscript/` is a `{{TOKEN}}` bound to a `BoundValue`. The hydration script
+   `docs/manuscript/` is a `{{TOKEN}}` bound to a `BoundValue`. The hydration script
    fails when a token survives, and a test asserts that the tokens the prose
    uses and the values the package publishes are the same set. Never paste a
    literal number into a section, and never widen a tolerance so that a token
@@ -74,7 +74,7 @@ or manuscript sources and regenerate them with `scripts/render_docs.py`.
     `[@prop:key]`. The template's `formalism.lua` owns the counters.
     Cross-references follow the labels when statement numbers change.
 11. **Citations are exact in both directions.** Every `[@key]` resolves in
-    `manuscript/references.bib`, and every entry there is cited somewhere. A
+    `docs/manuscript/references.bib`, and every entry there is cited somewhere. A
     test asserts the two sets are equal. Authored sections also refer to every
     numbered figure, table, equation and formal statement. The generated
     concordance reports the source sections for these references.
@@ -98,7 +98,7 @@ or manuscript sources and regenerate them with `scripts/render_docs.py`.
     claim and caption.
 16. **The front matter is placed on purpose, and the tests check the page
     positions.** Page 1 is the cover, pages 2 to 6 are the five panels of
-    `manuscript/00_00_graphical_abstract.md` (one panel per page, held in place
+    `docs/manuscript/00_00_graphical_abstract.md` (one panel per page, held in place
     by `\floatplacement{figure}{H}`), and the contents page is re-emitted by
     `\ophContentsPage` at the end of that file because `preamble.md` keeps the
     renderer's automatic `\tableofcontents` from landing between the cover and

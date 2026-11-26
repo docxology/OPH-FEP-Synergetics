@@ -59,12 +59,28 @@ def main() -> int:
         )
         return 1
 
+    from oph_fep_synergetics.core.carrier import icosahedral_carrier
+    from oph_fep_synergetics.geometry.solids import tetravolume_ratio_squared_exact
     from oph_fep_synergetics.manuscript_variables import as_tokens
 
     tokens = as_tokens()
     out_path = PROJECT_ROOT / "output" / "data" / "manuscript_variables.json"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(tokens, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    # The strict method table also prints exact formula components. Export
+    # their numerical evidence separately from the string-valued render tokens.
+    constant, sqrt5 = tetravolume_ratio_squared_exact()
+    evidence = {
+        "mean_repair_denominator": 2 * icosahedral_carrier().seam_count,
+        "squared_tetravolume": {
+            "constant": {"numerator": constant.numerator, "denominator": constant.denominator},
+            "sqrt5_coefficient": {"numerator": sqrt5.numerator, "denominator": sqrt5.denominator},
+        },
+    }
+    (out_path.parent / "exact_formula_evidence.json").write_text(
+        json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
 
     resolved_root = write_resolved_manuscript_tree(PROJECT_ROOT, tokens)
     print(out_path)

@@ -17,7 +17,7 @@ _FENCE = re.compile(r"^ {0,3}(?P<marker>`{3,}|~{3,})[^\n]*\n.*?^ {0,3}(?P=marker
                     re.MULTILINE | re.DOTALL)
 _INLINE_CODE = re.compile(r"(?P<ticks>`+)[^\n]*?(?P=ticks)")
 _FIGURE = re.compile(
-    r"^!\[(?P<caption>.*?)\]\(\.\./output/figures/(?P<filename>fig_[a-z0-9_]+\.png)\)"
+    r"^!\[(?P<caption>.*?)\]\(\.\./\.\./output/figures/(?P<filename>fig_[a-z0-9_]+\.png)\)"
     r"\{(?P<attrs>[^{}\n]+)\}",
     re.MULTILINE | re.DOTALL,
 )
