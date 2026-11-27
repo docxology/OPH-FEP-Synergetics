@@ -21,8 +21,8 @@ subdirectory of `output`.
 |:-------------------------------------------|:-------------|:------------------------------------------|
 | Main manuscript sections | yes | never |
 | `data/ontology_concordance.json` | yes | never |
-| `manuscript/90_ontology_concordance.md` | no | `scripts/render_docs.py` |
-| `references.bib` | yes | never |
+| `docs/manuscript/90_ontology_concordance.md` | no | `scripts/render_docs.py` |
+| `docs/manuscript/references.bib` | yes | never |
 | `src/oph_fep_synergetics/` | yes | never |
 | `uv.lock` | no | `uv lock` |
 | Figure PNGs | no | `scripts/make_figures.py` |
