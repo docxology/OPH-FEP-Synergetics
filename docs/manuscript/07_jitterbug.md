@@ -405,7 +405,7 @@ precision limit and a limit of repair dynamics.
 and dashed lines mark the hull diagonals. Beyond the regular icosahedron the
 diagonals are shorter than the bars. The lower plots show the length ratio
 and compare the conductance that preserves coordinate lag covariance with
-inverse-square weighting and the dotted unit baseline.](../output/figures/fig_jitterbug.png){#fig:jitterbug width=100%}
+inverse-square weighting and the dotted unit baseline.](../../output/figures/fig_jitterbug.png){#fig:jitterbug width=100%}
 
 ## Finite pair means and their hidden contrasts {#sec:jitterbug-finite-projection}
 
@@ -466,7 +466,7 @@ static correction decays with inverse closing weight, while the one-attempt
 clock lag defect decays with inverse weight squared. The separate finite
 pair-load memory result is tested in [@prop:jitterbug-pair-load-memory].
 
-![Two tests of Jitterbug readouts. Left, with the two departure poses fixed, contraction gives a negative residual in the Gaussian Markov covariance identity. A hold gives zero, and reversal gives a positive residual. Right, the finite pair-mean precision has a positive opposite-site entry and the pair-total lag covariance has a positive defect on odd opposite-site modes and zero on even modes. The highlighted conductance is the tuned weight at the middle pose.](../output/figures/fig_jitterbug_observation_limits.png){#fig:jitterbug-observation-limits width=100%}
+![Two tests of Jitterbug readouts. Left, with the two departure poses fixed, contraction gives a negative residual in the Gaussian Markov covariance identity. A hold gives zero, and reversal gives a positive residual. Right, the finite pair-mean precision has a positive opposite-site entry and the pair-total lag covariance has a positive defect on odd opposite-site modes and zero on even modes. The highlighted conductance is the tuned weight at the middle pose.](../../output/figures/fig_jitterbug_observation_limits.png){#fig:jitterbug-observation-limits width=100%}
 
 The same tests extend to prescribed observations on other finite graphs.
 See [@prop:moving-readout-history] for the history criterion and

@@ -4,7 +4,7 @@
 
 The manuscript uses the `docxology/template` rendering pipeline [@template].
 Pandoc produces LaTeX, and BibTeX processes
-[`references.bib`](references.bib). The `pandoc-crossref` and `formalism.lua`
+[`references.bib`](https://github.com/docxology/OPH-FEP-Synergetics/blob/9cf3cd59fdcdc848fb4cfe19ba1604ff3bcb06ba/manuscript/references.bib). The `pandoc-crossref` and `formalism.lua`
 filters use stable labels to generate numbering and cross-references.
 Numbers can change when statements move between editions.
 

@@ -192,7 +192,7 @@ def check(
         lines.append(
             f"{panel} figure on page {expected}: {'ok' if ok else 'FAIL (expected one caption)'}"
         )
-    references = index_references(read_sections(PROJECT / "manuscript"))
+    references = index_references(read_sections(PROJECT / "docs/manuscript"))
     figure_labels = set(references.labels("fig"))
     table_labels = set(references.labels("tbl"))
     for kind, labels in (("Figure", figure_labels), ("Table", table_labels)):

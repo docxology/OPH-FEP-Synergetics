@@ -36,7 +36,7 @@ VALUES_DOC = DOCS / "MANUSCRIPT_VALUES.md"
 CONCORDANCE_DOC = DOCS / "CONCORDANCE.md"
 ONTOLOGY_SOURCE = ROOT / "data" / "ontology_concordance.json"
 ONTOLOGY_FILENAME = "90_ontology_concordance.md"
-ONTOLOGY_DOC = ROOT / "manuscript" / ONTOLOGY_FILENAME
+ONTOLOGY_DOC = ROOT / "docs/manuscript" / ONTOLOGY_FILENAME
 
 #: The manuscript's value tokens, as they appear in prose and figure captions.
 TOKEN_CAPTION = re.compile(r"\{\{([A-Z][A-Z0-9_]*)\}\}")
@@ -172,7 +172,7 @@ def render_concordance() -> str:
     key by construction, so its table rows are stripped before scanning that
     section; what survives is where a claim is argued in prose.
     """
-    manuscript = ROOT / "manuscript"
+    manuscript = ROOT / "docs/manuscript"
     # Only main prose can supply the primary location of a registry claim.
     sections = read_sections(manuscript)
     sections[ONTOLOGY_FILENAME] = render_ontology()
@@ -236,7 +236,7 @@ def render_concordance() -> str:
     ]
 
     def chapters(names: Sequence[str]) -> str:
-        return ", ".join(f"[`{name}`](../manuscript/{name})" for name in names) if names else "*never cited*"
+        return ", ".join(f"[`{name}`](manuscript/{name})" for name in names) if names else "*never cited*"
 
     probe_of_token = {
         token_for(entry.key): entry.source.split(":")[1]
@@ -288,7 +288,7 @@ def render_concordance() -> str:
     lines += [
         "",
         f"{len(quoted)} of the bound values are quoted by the prose. The cover is",
-        "placed by `manuscript/config.yaml`; the accessibility registry that gives",
+        "placed by `docs/manuscript/config.yaml`; the accessibility registry that gives",
         "each figure its alternative text is `output/figures/figure_registry.json`,",
         "written by `scripts/make_figures.py`.",
         "",
@@ -311,7 +311,7 @@ def render_ontology() -> str:
         "geometric-comparison": "Geometric comparison",
     }
     registry_keys = {entry.key for entry in CORRESPONDENCES}
-    references = (ROOT / "manuscript" / "references.bib").read_text(encoding="utf-8")
+    references = (ROOT / "docs/manuscript" / "references.bib").read_text(encoding="utf-8")
     bibliography_keys = set(re.findall(r"(?m)^\s*@\w+\{\s*([^,\s]+)\s*,", references))
     sources = {pin.id: pin for pin in load_sources(ROOT / "data" / "sources.json")}
     group_ids: set[str] = set()

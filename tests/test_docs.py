@@ -42,7 +42,7 @@ def test_rendered_concordance_document_is_current():
 
 def test_rendered_ontology_supplement_is_current():
     renderer = _load_renderer()
-    current = (ROOT / "manuscript" / "90_ontology_concordance.md").read_text(encoding="utf-8")
+    current = (ROOT / "docs/manuscript" / "90_ontology_concordance.md").read_text(encoding="utf-8")
     assert current == renderer.render_ontology()
 
 
@@ -74,7 +74,7 @@ def test_ontology_supplement_rejects_unresolved_evidence(tmp_path, monkeypatch):
 
 def test_the_outline_names_every_registered_claim():
     renderer = _load_renderer()
-    outline = (ROOT / "manuscript" / "MANUSCRIPT_STATUS.md").read_text(encoding="utf-8")
+    outline = (ROOT / "docs/manuscript" / "MANUSCRIPT_STATUS.md").read_text(encoding="utf-8")
     missing = [entry.key for entry in renderer.CORRESPONDENCES if f"`{entry.key}`" not in outline]
     assert missing == []
 
@@ -125,8 +125,8 @@ def test_the_concordance_reports_no_uncited_formal_statement():
     renderer = _load_renderer()
     concordance = renderer.render_concordance()
     assert "never cited" not in concordance
-    assert ("| `prop:ivm` | prop | [`02_framework.md`](../manuscript/02_framework.md) | "
-            "[`01_introduction.md`](../manuscript/01_introduction.md)") in concordance
+    assert ("| `prop:ivm` | prop | [`02_framework.md`](manuscript/02_framework.md) | "
+            "[`01_introduction.md`](manuscript/01_introduction.md)") in concordance
 
 
 def test_format_probe_value_renders_containers_and_scalars():

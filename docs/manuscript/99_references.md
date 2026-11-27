@@ -1,6 +1,6 @@
 # References {#sec:references}
 
-The PDF bibliography is generated from [`references.bib`](references.bib).
+The PDF bibliography is generated from [`references.bib`](https://github.com/docxology/OPH-FEP-Synergetics/blob/9cf3cd59fdcdc848fb4cfe19ba1604ff3bcb06ba/manuscript/references.bib).
 Pandoc converts the manuscript citations to LaTeX commands, and BibTeX resolves
 their keys.
 

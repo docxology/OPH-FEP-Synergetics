@@ -3,7 +3,7 @@
 This is the prose skeleton. Every number in it is written as a bound key from
 `manuscript_variables/values.py`, so the text cannot quote a value the code does
 not produce. When a sentence needs a number, add or reuse a `BoundValue` and
-render [docs/MANUSCRIPT_VALUES.md](../docs/MANUSCRIPT_VALUES.md).
+render [docs/MANUSCRIPT_VALUES.md](../MANUSCRIPT_VALUES.md).
 
 Each section names the registry entries it rests on. A section may not claim
 more than its entries' statuses.
@@ -13,7 +13,7 @@ The cover is on page 1. The five graphical abstract panels in
 page 6 follows the linkage to octahedral coalescence. The contents starts on
 page 7. Each entry has one of three pairwise scopes or the three-way scope.
 Use `oph-fep-synergetics verify --pair` to select a scope and `--kind` to
-select a claim kind. The [generated concordance](../docs/CONCORDANCE.md)
+select a claim kind. The [generated concordance](../CONCORDANCE.md)
 records where prose invokes each numbered figure, table, equation or formal
 statement.
 
@@ -197,7 +197,7 @@ forest counts, and test spectral geometry and planar duality on two solids.
   probabilities are reproduced exactly from the protocols in OPH's public model
   (`reduction-criterion`, `pr01-obstruction`).
 
-See [docs/SCOPE.md](../docs/SCOPE.md) for the full statement.
+See [docs/SCOPE.md](../SCOPE.md) for the full statement.
 
 ## Three-way correspondences and counterexamples
 

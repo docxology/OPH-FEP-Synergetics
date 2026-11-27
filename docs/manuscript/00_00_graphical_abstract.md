@@ -21,7 +21,7 @@ Each edge shows the total for one pair. For each claim, specify the finite
 model, derive a comparison and check it with the executable probe. Run
 `oph-fep-synergetics verify --pair` with the scope name to check its entries.
 
-![Pairwise claim totals and representative results. The guide below the triangle gives the workflow from model to probe. The centre counts claims that use all three frameworks.](../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
+![Pairwise claim totals and representative results. The guide below the triangle gives the workflow from model to probe. The centre counts claims that use all three frameworks.](../../output/figures/fig_ga_triangle.png){#fig:ga-triangle width=100%}
 
 - `spectral-gap` links mean repair and Gaussian precision through one Laplacian.
 - `jitterbug-rigid-motion` reaches the regular carrier hull along a fixed-bar branch.
@@ -42,7 +42,7 @@ two ports are conditionally dependent given the rest exactly when they share a
 seam. The graph also determines the spanning-tree count and the agreement
 sheaf's cohomology dimensions ([@prop:sheaf]; [@prop:cohomology]).
 
-![An icosahedral port and its Markov blanket. A dark diamond marks the target, and blue circles and seams mark its neighbours. Solid and dashed lines distinguish the front and rear of the carrier. The ledger gives graph, sheaf, symmetry and Gaussian quantities.](../output/figures/fig_ga_carrier.png){#fig:ga-carrier width=100%}
+![An icosahedral port and its Markov blanket. A dark diamond marks the target, and blue circles and seams mark its neighbours. Solid and dashed lines distinguish the front and rear of the carrier. The ledger gives graph, sheaf, symmetry and Gaussian quantities.](../../output/figures/fig_ga_carrier.png){#fig:ga-carrier width=100%}
 
 The reduced Laplacian has determinant {{CARRIER_TREE_NUMBER}}. By the
 matrix-tree theorem, it equals the carrier's spanning-tree count. The count
@@ -74,7 +74,7 @@ Native repair acts on a configuration, a seam and a coin outcome. Of the
 leave the state unchanged. The repair rule commutes with the carrier
 symmetries, so the census is invariant under their action.
 
-![Native repair attempts by outcome, with a seam transition that lowers the load energy. The adjacent chart gives unit-covariance Gaussian costs on coordination shells. Open diamonds and dotted guides mark shared costs, and the dashed curve joins the shell maxima.](../output/figures/fig_ga_descent.png){#fig:ga-descent width=100%}
+![Native repair attempts by outcome, with a seam transition that lowers the load energy. The adjacent chart gives unit-covariance Gaussian costs on coordination shells. Open diamonds and dotted guides mark shared costs, and the dashed curve joins the shell maxima.](../../output/figures/fig_ga_descent.png){#fig:ga-descent width=100%}
 
 Gaussian divergence at unit covariance is half the squared distance between
 the means. One lattice step has squared length {{KL_STEP_SQUARED_DISTANCE}}
@@ -96,7 +96,7 @@ nearest-neighbour distance. Its selected solids have integer tetravolumes
 tetrahedra of its own edge length, has tetravolume
 $(5/2)(3\sqrt{2} + \sqrt{10}) \approx {{ICOSAHEDRON_TETRAVOLUME}}$.
 
-![Exact IVM tetravolumes and the carrier icosahedron's approximate tetravolume on a logarithmic axis. The Voronoi cell highlights a face triangle with dotted segments to the cell centre, showing one tetrahedron in the volume calculation.](../output/figures/fig_ga_synergetics.png){#fig:ga-synergetics width=100%}
+![Exact IVM tetravolumes and the carrier icosahedron's approximate tetravolume on a logarithmic axis. The Voronoi cell highlights a face triangle with dotted segments to the cell centre, showing one tetrahedron in the volume calculation.](../../output/figures/fig_ga_synergetics.png){#fig:ga-synergetics width=100%}
 
 The IVM Voronoi cell is a rhombic dodecahedron with {{VORONOI_VERTICES}}
 vertices, {{VORONOI_FACES}} faces and {{VORONOI_EDGES}} edges. Triangulating
@@ -116,7 +116,7 @@ units and number systems in the three comparisons.
 
 ## Panel 5 — Fuller's Jitterbug and the OPH carrier {#sec:ga-jitterbug}
 
-![Fuller's hinged triangles pass the regular icosahedral OPH carrier on their way to paired octahedral sites. The geometric hull diagonals become the entire nearest-pair graph, while the hull stays connected. Tuned weights preserve coordinate lag covariances at fixed poses. Changing the pose on both legs introduces a covariance residual. At the limit the Gaussian restricts to common site values, and pair-load repair requires an accelerated clock. See [@sec:jitterbug] and [@fig:readout-transfer] for the Jitterbug and transfer tests.](../output/figures/fig_ga_jitterbug.png){#fig:ga-jitterbug height=82%}
+![Fuller's hinged triangles pass the regular icosahedral OPH carrier on their way to paired octahedral sites. The geometric hull diagonals become the entire nearest-pair graph, while the hull stays connected. Tuned weights preserve coordinate lag covariances at fixed poses. Changing the pose on both legs introduces a covariance residual. At the limit the Gaussian restricts to common site values, and pair-load repair requires an accelerated clock. See [@sec:jitterbug] and [@fig:readout-transfer] for the Jitterbug and transfer tests.](../../output/figures/fig_ga_jitterbug.png){#fig:ga-jitterbug height=82%}
 
 \floatplacement{figure}{tbp}
 

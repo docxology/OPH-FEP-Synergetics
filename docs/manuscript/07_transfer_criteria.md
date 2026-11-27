@@ -138,7 +138,7 @@ of two occupied ports and a separate weighted vertex calculation agree
 on the entire lag-two defect matrix. [@fig:repair-transfer] compares this
 defect with the distance and resistance tests on the other graphs.
 
-![Repair transfer to the cube, bipartite and periodic FCC graphs, and the twenty-four-cell. The periodic FCC witness has two one-step rates {{TRANSFER_PERIODIC_FCC_JUMPS}} from the same variance class. The weighted twenty-four-cell has a nonzero two-lag defect {{TRANSFER_24CELL_LAG_DEFECT}}.](../output/figures/fig_repair_transfer.png){#fig:repair-transfer width=100%}
+![Repair transfer to the cube, bipartite and periodic FCC graphs, and the twenty-four-cell. The periodic FCC witness has two one-step rates {{TRANSFER_PERIODIC_FCC_JUMPS}} from the same variance class. The weighted twenty-four-cell has a nonzero two-lag defect {{TRANSFER_24CELL_LAG_DEFECT}}.](../../output/figures/fig_repair_transfer.png){#fig:repair-transfer width=100%}
 
 ## Moving observations require the whole recorded past {#sec:moving-readout-transfer}
 
@@ -338,7 +338,7 @@ the second. The exact native enumeration checks both results.
 [@fig:readout-transfer] separates the static sign and balance tests
 from the history test under switching.
 
-![Readout transfer on a weighted square, unit paths, an adjacently paired square and the unit tetrahedral graph. Panel A shows consecutive closure with a surviving endpoint residual. Panel B compares the sign of marginal precision with a two-step covariance defect. Panel C compares a stationary square count failure with a complete-graph control. Panel D shows that alternating between balanced tetrahedral pairings can recover information about the first observation.](../output/figures/fig_readout_transfer.png){#fig:readout-transfer width=100%}
+![Readout transfer on a weighted square, unit paths, an adjacently paired square and the unit tetrahedral graph. Panel A shows consecutive closure with a surviving endpoint residual. Panel B compares the sign of marginal precision with a two-step covariance defect. Panel C compares a stationary square count failure with a complete-graph control. Panel D shows that alternating between balanced tetrahedral pairings can recover information about the first observation.](../../output/figures/fig_readout_transfer.png){#fig:readout-transfer width=100%}
 
 ## Closed surfaces leave harmonic covariance {#sec:surface-harmonic-transfer}
 
@@ -491,4 +491,4 @@ weights and {{TRANSFER_TORUS_COPIED_RESIDUAL}} under copied weights. B compares
 diagonal and mixed trace-free quadratic coefficient variances, which coincide
 on the twenty-four-cell ($D_4$). C measures cross-plane dependence when
 conditioning on a noisy global sum after grounding the plane sites. D gives the
-fraction of sites recorded by each plane family and boundary frequency.](../output/figures/fig_geometry_transfer.png){#fig:geometry-transfer width=100%}
+fraction of sites recorded by each plane family and boundary frequency.](../../output/figures/fig_geometry_transfer.png){#fig:geometry-transfer width=100%}

@@ -160,7 +160,7 @@ edges between the programmes. [@tbl:registry] lists individual entries.
 
 ![Correspondence counts by scope. Each row aligns counts by claim kind with
 counts by evidence status and a shared scope total. The matrix labels zeros
-explicitly and reads from the executable registry.](../output/figures/fig_scope_matrix.png){#fig:scope-matrix width=100%}
+explicitly and reads from the executable registry.](../../output/figures/fig_scope_matrix.png){#fig:scope-matrix width=100%}
 
 ## Reading a source without copying it
 

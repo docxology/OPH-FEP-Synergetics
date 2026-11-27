@@ -232,6 +232,39 @@ The figure-only build `.venv/bin/python scripts/make_figures.py` produces
 the Jitterbug PNG used on page 6 and the standalone vector poster at
 `output/figures/OPH-FEP-Synergetics_Jitterbug_Poster.pdf`.
 
+## Render the manuscript
+
+The [canonical source](manuscript/README.md) lives under `docs/manuscript/`.
+Use a disposable project checkout at `projects/working/OPH-FEP-Synergetics`
+in [Template at commit `87704feae0a4490ef7dad9c931d268e8c30273c2`](https://github.com/docxology/template/tree/87704feae0a4490ef7dad9c931d268e8c30273c2).
+The disposable checkout keeps the tracked PDF in your source checkout intact.
+
+From the project checkout, use Python 3.14 and run:
+
+```sh
+uv sync --locked --python 3.14 --extra dev --extra figures
+uv run --no-sync python scripts/render_docs.py --check
+uv run --no-sync python scripts/build.py --template-root /path/to/template
+```
+
+The build computes the figures, resolves the numeric bindings, renders the
+configured PDF and HTML, and runs the project PDF contract. Hydration writes
+the exact formula components used by the method table to
+`output/data/exact_formula_evidence.json` for Stage 04. Prepare the
+Template environment first with `uv sync --locked`. The renderer needs
+compatible Pandoc and pandoc-crossref, Poppler, and TeX with LuaLaTeX and
+support for tagged PDFs.
+
+Run the shared validation stage from the Template checkout:
+
+```sh
+uv run --no-sync python scripts/pipeline/stage_04_validate.py --project working/OPH-FEP-Synergetics
+```
+
+The replay places the tagged PDF at `output/pdf/OPH-FEP-Synergetics_combined.pdf`
+and the HTML at `output/web/index.html` in the disposable project. Stage 04
+writes validation reports and rendered provenance under `output/reports/`.
+
 ## Tolerances and platforms
 
 The numerical contract behind the numbers is exactness by construction. Every counting claim

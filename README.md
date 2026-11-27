@@ -105,13 +105,13 @@ the three kinds and `--pair` to one of the four scopes. The full table, with the
 Synergetics reading of each entry and the values its probe asserts, is generated
 into [docs/CORRESPONDENCES.md](docs/CORRESPONDENCES.md).
 
-The [three-way chapter](manuscript/07_three_way_limits.md) compares the OPH
+The [three-way chapter](docs/manuscript/07_three_way_limits.md) compares the OPH
 carrier and the FCC first shell under the same finite models. It gives exact
 contrast-variance quotients and tests where geometry fails to transfer between
 the shells. A Gaussian process reproduces all lag covariances of the stationary
 centroid on either shell, yet three-time events detect memory.
 
-The [transfer chapter](manuscript/07_transfer_criteria.md) proves when these
+The [transfer chapter](docs/manuscript/07_transfer_criteria.md) proves when these
 claims generalise. It checks a cube quotient, resistance collisions on
 periodic FCC, a weighted twenty-four-cell, harmonic covariance on a torus
 and plane screening under global constraints. A weighted square separates
@@ -119,7 +119,7 @@ consecutive covariance checks from full history. Paired paths and a
 square separate Gaussian precision, linear lag, and count criteria.
 Switching tetrahedral pairings tests all three on a common graph.
 
-The [Jitterbug chapter](manuscript/07_jitterbug.md) reconstructs Fuller's
+The [Jitterbug chapter](docs/manuscript/07_jitterbug.md) reconstructs Fuller's
 fixed-bar path from the cuboctahedron through the regular icosahedron to
 octahedral joint coalescence. The nearest-only graph separates into dimers
 after regularity. Tuning gives Gaussian covariance closure at each fixed
@@ -220,11 +220,13 @@ This project is released under the MIT licence; see [LICENSE](LICENSE).
 
 ## The manuscript
 
+See the [documentation index](docs/README.md) for setup, scope and verification.
+
 The Pandoc and LaTeX pipeline from `docxology/template` builds the paper
-from `manuscript/`. Install the figure and test extras and put Poppler's
+from `docs/manuscript/`. Install the figure and test extras and put Poppler's
 `pdftotext` on your path for the PDF checks.
 
-The [ontology concordance](manuscript/90_ontology_concordance.md) compares
+The [ontology concordance](docs/manuscript/90_ontology_concordance.md) compares
 the meanings of shared terms across the three programmes and links each
 comparison to its domain and executable evidence. The [structured source](data/ontology_concordance.json)
 contains the stable identifiers and source references used to generate it.
@@ -273,7 +275,7 @@ The manuscript checks cover four contracts.
   and the template's `formalism.lua` owns the counters. Cross-references
   follow each statement's label when its number changes.
 - **Every citation resolves.** Pandoc's `--natbib` resolves `[@key]` against
-  `manuscript/references.bib`. A test asserts that the cited keys and the
+  `docs/manuscript/references.bib`. A test asserts that the cited keys and the
   bibliography are the same set: no undefined citation, and no uncited entry.
 - **Numbered material is used in the manuscript.** Authored sections refer
   to every numbered figure, table, equation and formal statement. The
@@ -291,7 +293,7 @@ docs/PROVENANCE.md                   the pins and the reuse rules
 docs/SCOPE.md                        what is reimplemented, what is cited, what is out
 docs/VERIFICATION.md                 the gates and how to run them
 data/ontology_concordance.json       structured terms, comparisons, evidence and limits
-manuscript/                          paper, bibliography and generated ontology supplement
+docs/manuscript/                          paper, bibliography and generated ontology supplement
 scripts/check_local_ci.py           checks the committed tree locally on Python 3.14
 scripts/render_docs.py               regenerates the reference documents and ontology supplement
 scripts/make_figures.py              renders the 32 figures, standalone vector poster and accessibility registry

@@ -200,7 +200,7 @@ grounded determinants over triple record layouts and highlights the greedy
 and optimal choices. C shows the diagonal of the matched edge covariance
 decomposition on the carrier and FCC dual pairs. D compares full Gaussian
 contrast variance and lowest-mode variance over the FCC shell's four pair
-classes. Generated from the exact model censuses.](../output/figures/fig_extensions.png){#fig:extensions width=100%}
+classes. Generated from the exact model censuses.](../../output/figures/fig_extensions.png){#fig:extensions width=100%}
 
 [@fig:extensions] connects the exact transition coefficients, Gaussian record
 design, planar dual covariance and shell geometry in the same finite models.

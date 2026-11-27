@@ -12,7 +12,7 @@ paper:
   date: ""  # left empty: the renderer stamps the build date
   cover:
     # Page 1 summarises the carrier, lattice geometry and executable comparisons.
-    image: "../output/figures/fig_cover.png"
+    image: "../../output/figures/fig_cover.png"
     alt: "The numbered icosahedral carrier and cuboctahedral FCC shell flank a chart of squared chord length and full intrinsic Gaussian contrast variance by graph distance, each divided by its adjacent-port value. Squared chords rise faster. Distance fixes the next distance-class law for fair binary repair on the carrier. Axis and body-diagonal planes separate the FCC halves and fixing on-plane sites screens the grounded fields. The registry ledger includes three-way claims within its total."
 
 # Layout. The front-matter bound is a shade tighter than the ordinary one on
@@ -72,7 +72,7 @@ metadata:
 render:
   formats:
     pdf: true
-    html: false
+    html: true
     slides: false
     docx: false
     epub: false

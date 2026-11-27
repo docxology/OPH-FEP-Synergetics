@@ -15,7 +15,7 @@ from oph_fep_synergetics.manuscript_variables import MANUSCRIPT_TOKENS
 from scripts.manuscript_refs import index_references, read_sections
 
 PROJECT = Path(__file__).resolve().parents[1]
-MANUSCRIPT = PROJECT / "manuscript"
+MANUSCRIPT = PROJECT / "docs/manuscript"
 SECTIONS = sorted(MANUSCRIPT.glob("[0-9]*.md"))
 
 #: Tokens that are part of the published value set but are not inlined in the
@@ -116,6 +116,7 @@ LITERAL_ALLOWLIST = tuple(
         r"\bApache-2\.0\b",
         r"\bMIT\b",
         r"10\.5281/zenodo\.\d+",              # DOIs
+        r"\]\(https://[^\s)]+\)",            # link destinations are identifiers
         r"schema-\d",                         # FEP_Formal's roster schema version
     )
 )
@@ -205,11 +206,12 @@ def test_the_manuscript_status_notes_are_not_a_rendered_section():
     assert not (MANUSCRIPT / "OUTLINE.md").exists()
 
 
-def test_config_is_token_free_and_pdf_only():
+def test_config_is_token_free_and_enables_pdf_html():
     text = CODE_SPAN.sub("", (MANUSCRIPT / "config.yaml").read_text(encoding="utf-8"))
     assert not TOKEN.search(text)
     assert "pdf: true" in text
-    for fmt in ("html", "slides", "docx", "epub"):
+    assert "html: true" in text
+    for fmt in ("slides", "docx", "epub"):
         assert f"{fmt}: false" in text
 
 
@@ -262,7 +264,7 @@ def test_reference_index_handles_attribute_order_and_excludes_examples():
 The proposition.
 :::
 
-![Caption [@fig:picture; @prop:real].](../output/figures/fig_picture.png){#fig:picture}
+![Caption [@fig:picture; @prop:real].](../../output/figures/fig_picture.png){#fig:picture}
 
 `[@fig:inline-example]` and <!-- [@prop:comment] -->
 
